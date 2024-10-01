@@ -7,9 +7,17 @@ from typing import Dict, List, Tuple, Optional
 from tqdm import tqdm
 import logging
 import sys
+import os
+import openai
+import json
+from bs4 import BeautifulSoup
+import backoff
 
 # 設置日誌
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+
+# 設置 OpenAI API key
+openai.api_key = os.getenv("OPENAI_API_KEY")
 
 session = requests.Session()
 headers = {
@@ -21,36 +29,48 @@ headers = {
 }
 session.headers.update(headers)
 
-def get_stock_info(stock_id: str) -> Tuple[str, str, float]:
-    url = f"https://www.twse.com.tw/rwd/zh/afterTrading/STOCK_DAY?date={datetime.now().strftime('%Y%m%d')}&stockNo={stock_id}&response=json"
-    max_retries = 5
-    for attempt in range(max_retries):
-        try:
-            logging.info(f"正在獲取股票 {stock_id} 的信息 (嘗試 {attempt + 1})")
-            response = session.get(url, timeout=60)
-            data = response.json()
-            if data['stat'] == 'OK':
-                full_name = data['title']
-                parts = full_name.split()
-                if len(parts) >= 2:
-                    code, name = parts[1], ' '.join(parts[2:])
-                    name = name.replace('各日成交資訊', '').strip()
-                    
-                    # 獲取昨天的收盤價
-                    if len(data['data']) > 1:
-                        yesterday_close = float(data['data'][-2][6].replace(',', ''))
-                    else:
-                        yesterday_close = float(data['data'][-1][6].replace(',', ''))
-                    
-                    logging.info(f"成功獲取股票 {stock_id} 的信息: {code} {name}, 昨日收盤價: {yesterday_close}")
-                    return code, name, yesterday_close
-            else:
-                logging.warning(f"無法獲取股票 {stock_id} 的信息: {data['stat']}")
-        except Exception as e:
-            logging.error(f"獲取股票 {stock_id} 信息時發生錯誤 (嘗試 {attempt + 1}): {str(e)}")
-        if attempt < max_retries - 1:
-            time.sleep(random.uniform(5, 10))
+def get_valid_date(days_back: int = 0) -> str:
+    current_date = datetime.now().date() - timedelta(days=days_back)
+    while current_date.weekday() >= 5:  # Saturday = 5, Sunday = 6
+        current_date -= timedelta(days=1)
+    return current_date.strftime('%Y%m%d')
+
+def get_stock_info(stock_id: str, max_retries: int = 5) -> Tuple[str, str, float]:
+    for days_back in range(30):  # Try up to 30 days back
+        date = get_valid_date(days_back)
+        url = f"https://www.twse.com.tw/rwd/zh/afterTrading/STOCK_DAY?date={date}&stockNo={stock_id}&response=json"
+        
+        for attempt in range(max_retries):
+            try:
+                logging.info(f"正在獲取股票 {stock_id} 的信息 (嘗試 {attempt + 1}，日期 {date})")
+                response = session.get(url, timeout=60)
+                data = response.json()
+                if data['stat'] == 'OK':
+                    full_name = data['title']
+                    parts = full_name.split()
+                    if len(parts) >= 2:
+                        code, name = parts[1], ' '.join(parts[2:])
+                        name = name.replace('各日成交資訊', '').strip()
+                        
+                        # 獲取最後一個交易日的收盤價
+                        last_close = float(data['data'][-1][6].replace(',', ''))
+                        
+                        logging.info(f"成功獲取股票 {stock_id} 的信息: {code} {name}, 最後收盤價: {last_close}")
+                        return code, name, last_close
+                else:
+                    logging.warning(f"無法獲取股票 {stock_id} 的信息: {data['stat']}")
+            except Exception as e:
+                logging.error(f"獲取股票 {stock_id} 信息時發生錯誤 (嘗試 {attempt + 1}): {str(e)}")
+            if attempt < max_retries - 1:
+                time.sleep(random.uniform(5, 10))
     return stock_id, "未知", 0.0
+
+@backoff.on_exception(backoff.expo, requests.exceptions.RequestException, max_tries=5)
+def fetch_url(url: str) -> requests.Response:
+    logging.info(f"正在請求 URL: {url}")
+    response = session.get(url, timeout=60)
+    response.raise_for_status()
+    return response
 
 def fetch_stock_data(date: str, cache: Dict[str, Dict[str, Tuple[int, int]]]) -> Optional[Dict[str, Tuple[int, int]]]:
     if date in cache:
@@ -129,7 +149,7 @@ def get_top_stocks(num_stocks: int = 10, num_days: int = 10) -> Tuple[List[Tuple
     pbar = tqdm(total=num_days, desc="正在獲取股票數據")
     
     while days_with_data < num_days and (end_date - current_date).days < 30:
-        date_str = current_date.strftime('%Y%m%d')
+        date_str = get_valid_date((end_date - current_date).days)
         logging.info(f"正在處理日期: {date_str}")
         data = fetch_stock_data(date_str, cache)
         if data is not None:
@@ -172,6 +192,68 @@ def get_top_stocks(num_stocks: int = 10, num_days: int = 10) -> Tuple[List[Tuple
     
     return sorted_stocks, start_date, end_date
 
+def analyze_stock_with_openai(stock_code: str, stock_name: str) -> str:
+    prompt = f"請分析台灣股票 {stock_code} ({stock_name}) 的前景。請提供簡潔的分析，包括公司的主要業務、市場地位、未來成長潛力，以及可能影響公司表現的主要風險因素。"
+    
+    try:
+        logging.info(f"開始使用 OpenAI 分析股票 {stock_code}")
+        response = openai.ChatCompletion.create(
+            model="gpt-3.5-turbo",
+            messages=[
+                {"role": "system", "content": "You are a financial analyst specializing in Taiwan stock market."},
+                {"role": "user", "content": prompt}
+            ]
+        )
+        analysis = response.choices[0].message['content']
+        logging.info(f"成功獲取 OpenAI 對股票 {stock_code} 的分析")
+        return analysis.strip()
+    except Exception as e:
+        logging.error(f"使用 OpenAI 分析股票 {stock_code} 時發生錯誤: {str(e)}")
+        return f"無法獲取分析結果。錯誤: {str(e)}"
+
+def fetch_recent_news(stock_code: str, stock_name: str) -> List[str]:
+    url = f"https://news.google.com/rss/search?q={stock_code}+OR+{stock_name}+site:cnyes.com+OR+site:money.udn.com+when:1m&hl=zh-TW&gl=TW&ceid=TW:zh-Hant"
+    
+    try:
+        response = requests.get(url)
+        response.raise_for_status()
+        soup = BeautifulSoup(response.content, 'xml')
+        items = soup.find_all('item')
+        
+        news = []
+        for item in items[:5]:  # 只取前5條新聞
+            title = item.title.text
+            link = item.link.text
+            news.append(f"{title} ({link})")
+        
+        return news
+    except Exception as e:
+        logging.error(f"獲取股票 {stock_code} 的新聞時發生錯誤: {str(e)}")
+        return []
+
+def analyze_news_with_openai(stock_code: str, stock_name: str, news: List[str]) -> str:
+    if not news:
+        return "無法獲取相關新聞。"
+    
+    news_text = "\n".join(news)
+    prompt = f"以下是關於台灣股票 {stock_code} ({stock_name}) 的最近新聞：\n\n{news_text}\n\n請根據這些新聞，簡要分析這支股票最近的表現和可能的未來趨勢。"
+    
+    try:
+        logging.info(f"開始使用 OpenAI 分析股票 {stock_code} 的新聞")
+        response = openai.ChatCompletion.create(
+            model="gpt-3.5-turbo",
+            messages=[
+                {"role": "system", "content": "You are a financial analyst specializing in Taiwan stock market."},
+                {"role": "user", "content": prompt}
+            ]
+        )
+        analysis = response.choices[0].message['content']
+        logging.info(f"成功獲取 OpenAI 對股票 {stock_code} 新聞的分析")
+        return analysis.strip()
+    except Exception as e:
+        logging.error(f"使用 OpenAI 分析股票 {stock_code} 的新聞時發生錯誤: {str(e)}")
+        return f"無法獲取新聞分析結果。錯誤: {str(e)}"
+
 if __name__ == "__main__":
     try:
         logging.info("程序開始運行")
@@ -187,11 +269,19 @@ if __name__ == "__main__":
         for rank, (stock_id, buy_amount, sell_amount, failed_dates) in enumerate(top_stocks, 1):
             try:
                 print(f"正在處理第 {rank} 名股票 (股票代碼: {stock_id})...")
-                stock_code, stock_name, yesterday_close = get_stock_info(stock_id)
+                stock_code, stock_name, last_close = get_stock_info(stock_id)
                 price_change = get_stock_price_change(stock_id)
                 net_buy = buy_amount - sell_amount
                 failed_dates_str = ', '.join(failed_dates) if failed_dates else 'None'
-                results.append((rank, stock_code, stock_name, buy_amount, sell_amount, net_buy, price_change, yesterday_close, failed_dates_str))
+                
+                # 使用 OpenAI 進行分析
+                analysis = analyze_stock_with_openai(stock_code, stock_name)
+                
+                # 獲取並分析最近新聞
+                recent_news = fetch_recent_news(stock_code, stock_name)
+                news_analysis = analyze_news_with_openai(stock_code, stock_name, recent_news)
+                
+                results.append((rank, stock_code, stock_name, buy_amount, sell_amount, net_buy, price_change, last_close, failed_dates_str, analysis, news_analysis, recent_news))
             except Exception as e:
                 logging.error(f"處理股票 {stock_id} 時發生錯誤: {str(e)}")
                 problem_stocks.append((stock_id, str(e)))
@@ -202,11 +292,15 @@ if __name__ == "__main__":
             sys.exit(0)
         
         print(f"\n近 3 日外資買進前10名 (資料區間 {start_date.strftime('%Y-%m-%d')} 至 {end_date.strftime('%Y-%m-%d')}):")
-        print(f"{'排名':^4}{'股票代碼':^6}{'股票名稱':^10}{'買進股數':>12}{'賣出股數':>12}{'淨買入':>12}{'漲幅':>8}{'昨收':>8}{'抓取失敗日期':^20}")
-        print("-" * 98)
+        print(f"{'排名':^4}{'股票代碼':^6}{'股票名稱':^10}{'買進股數':>12}{'賣出股數':>12}{'淨買入':>12}{'漲幅':>8}{'收盤價':>8}{'抓取失敗日期':^20}")
+        print("-" * 100)
         
-        for rank, stock_code, stock_name, buy_amount, sell_amount, net_buy, price_change, yesterday_close, failed_dates in results:
-            print(f"{rank:^4}{stock_code:^6}{stock_name:^10}{buy_amount:>12,}{sell_amount:>12,}{net_buy:>12,}{price_change:>7.2f}%{yesterday_close:>8.2f} {failed_dates:^20}")
+        for rank, stock_code, stock_name, buy_amount, sell_amount, net_buy, price_change, last_close, failed_dates, analysis, news_analysis, recent_news in results:
+            print(f"{rank:^4}{stock_code:^6}{stock_name:^10}{buy_amount:>12,}{sell_amount:>12,}{net_buy:>12,}{price_change:>7.2f}%{last_close:>8.2f} {failed_dates:^20}")
+            print(f"\nOpenAI 分析:\n{analysis}\n")
+            print(f"最近新聞:\n" + "\n".join(recent_news) + "\n")
+            print(f"新聞分析:\n{news_analysis}\n")
+            print("-" * 100)
         
         if problem_stocks:
             print("\n無法獲取資料的股票:")
