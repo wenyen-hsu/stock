@@ -6,12 +6,22 @@ from dotenv import load_dotenv
 from datetime import datetime, timedelta
 import requests
 from bs4 import BeautifulSoup
+import json
+import re
 
 # Load environment variables
 load_dotenv()
 
 # Set up OpenAI API key
 openai.api_key = os.getenv("OPENAI_API_KEY")
+
+def get_company_name(stock_code):
+    url = f"https://www.twse.com.tw/zh/api/codeQuery?query={stock_code}"
+    response = requests.get(url)
+    data = json.loads(response.text)
+    if data['suggestions']:
+        return data['suggestions'][0].split('\t')[1]
+    return None
 
 def analyze_financial_data(symbol, financial_data, news_data):
     prompt = f"""作為一名金融分析師，請對以下 {symbol} 的財務數據和新聞進行簡要分析：
@@ -57,7 +67,13 @@ def get_monthly_revenue(stock):
     return monthly_revenue.sort_index(ascending=False)
 
 def fetch_recent_news(stock_code: str, stock_name: str) -> list:
-    url = f"https://news.google.com/rss/search?q={stock_code}+OR+{stock_name}+site:cnyes.com+OR+site:money.udn.com+when:1m&hl=zh-TW&gl=TW&ceid=TW:zh-Hant"
+    company_name = get_company_name(stock_code)
+    if company_name:
+        search_query = f"{stock_code} OR {company_name}"
+    else:
+        search_query = f"{stock_code} OR {stock_name}"
+    
+    url = f"https://news.google.com/rss/search?q={search_query}+site:cnyes.com+OR+site:money.udn.com+when:7d&hl=zh-TW&gl=TW&ceid=TW:zh-Hant"
     
     try:
         print(f"正在從以下 URL 獲取新聞: {url}")  # Debug information
@@ -67,12 +83,16 @@ def fetch_recent_news(stock_code: str, stock_name: str) -> list:
         items = soup.find_all('item')
         
         news = []
-        for item in items[:5]:  # 只取前5條新聞
+        for item in items:
             title = item.title.text
             link = item.link.text
-            news.append(f"{title} ({link})")
+            # Check if the title contains the stock code, company name, or stock name
+            if re.search(f"{stock_code}|{company_name}|{stock_name}", title, re.IGNORECASE):
+                news.append(f"{title} ({link})")
+            if len(news) == 5:  # Only get 5 relevant news items
+                break
         
-        print(f"成功獲取 {len(news)} 條新聞")  # Debug information
+        print(f"成功獲取 {len(news)} 條相關新聞")  # Debug information
         return news
     except Exception as e:
         print(f"獲取股票 {stock_code} 的新聞時發生錯誤: {str(e)}")
@@ -93,7 +113,7 @@ def get_stock_reports(symbol):
     # Fetch recent news
     stock_name = stock.info.get('longName', '')
     print(f"正在獲取 {symbol} ({stock_name}) 的新聞...")  # Debug information
-    recent_news = fetch_recent_news(symbol, stock_name)
+    recent_news = fetch_recent_news(symbol.replace('.TW', ''), stock_name)
     
     # Additional metrics
     key_stats = {
@@ -194,18 +214,19 @@ def chat_with_ai(analysis, financial_summary, news_summary):
     return False
 
 # 主程序
-while True:
-    symbol = input("請輸入股票代碼（或輸入'q'退出程序）：").upper()
-    if symbol == 'Q':
-        break
-    
-    try:
-        analysis, financial_summary, news_summary = get_stock_reports(symbol)
-        new_stock = chat_with_ai(analysis, financial_summary, news_summary)
-        if not new_stock:
+if __name__ == "__main__":
+    while True:
+        symbol = input("請輸入股票代碼（或輸入'q'退出程序）：").upper()
+        if symbol == 'Q':
+            break
+        
+        try:
+            analysis, financial_summary, news_summary = get_stock_reports(symbol)
+            new_stock = chat_with_ai(analysis, financial_summary, news_summary)
+            if not new_stock:
+                print("\n" + "="*50 + "\n")
+        except Exception as e:
+            print(f"獲取股票數據時發生錯誤：{e}")
             print("\n" + "="*50 + "\n")
-    except Exception as e:
-        print(f"獲取股票數據時發生錯誤：{e}")
-        print("\n" + "="*50 + "\n")
 
-print("感謝您使用高級股票分析程序！")
+    print("感謝您使用高級股票分析程序！")

@@ -63,11 +63,16 @@ def save_results():
         status_bar.config(text=f"結果已保存到 {file_path}")
 
 def show_about():
-    about_text = "股票分析 GUI\n\n版本 1.1\n\n作者：Claude Dev"
+    about_text = "股票分析 GUI\n\n版本 1.2\n\n作者：Claude Dev"
     messagebox.showinfo("關於", about_text)
 
 def on_enter_key(event):
     analyze_stock()
+
+def on_symbol_entry_focus_in(event):
+    if symbol_entry.get().strip() != "":
+        symbol_entry.delete(0, tk.END)
+        clear_all()
 
 # Create main window
 root = tk.Tk()
@@ -98,6 +103,7 @@ ttk.Label(frame, text="輸入股票代碼：").grid(row=0, column=0, sticky=tk.W
 symbol_entry = ttk.Entry(frame, width=20)
 symbol_entry.grid(row=0, column=1, sticky=(tk.W, tk.E), pady=5)
 symbol_entry.bind("<Return>", on_enter_key)
+symbol_entry.bind("<FocusIn>", on_symbol_entry_focus_in)
 
 button_frame = ttk.Frame(frame)
 button_frame.grid(row=1, column=0, columnspan=2, pady=10)
