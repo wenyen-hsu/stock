@@ -123,7 +123,7 @@ def fetch_stock_data(date: str, cache: Dict[str, Dict[str, Tuple[int, int]]]) ->
             time.sleep(random.uniform(10, 20))
     return None
 
-def monthly_report(year, month, name_use):
+def monthly_report(year, month):
     if year > 1990:
         year -= 1911
 
@@ -137,95 +137,74 @@ def monthly_report(year, month, name_use):
     r.encoding = 'big5'
 
     try:
-        # 默认值为空的 DataFrame
         dfs = pd.read_html(StringIO(r.text), encoding='big5')
-        # 如果找不到表格数据，直接返回空的 DataFrame
         if not dfs:
-            print(f"未找到表格数据: {url}")
+            print(f"未找到表格數據: {url}")
             return pd.DataFrame()
     except Exception as e:
-        print(f"解析 HTML 数据时出错: {str(e)}")
-        return pd.DataFrame()  # 出错时返回空的 DataFrame
+        print(f"解析 HTML 數據時出錯: {str(e)}")
+        return pd.DataFrame()
 
-    # 合并并选择合适的表格
     try:
         df = pd.concat([df for df in dfs if df.shape[1] <= 11 and df.shape[1] > 5], ignore_index=True)
 
-        # 处理多重索引
         if isinstance(df.columns, pd.MultiIndex):
-            df.columns = df.columns.get_level_values(1)  # 简化多重索引
- 
+            df.columns = df.columns.get_level_values(1)
 
-        # 打印列名以调试
-        print("表格列名:", df.columns)
+        #print("表格列名:", df.columns)
 
-        if '公司 代號' not in df.columns:
-            print("未找到 '公司 代號' 列")
-            return pd.DataFrame()
-
-        if '當月營收' not in df.columns:
-            print("未找到 '當月營收' 列")
+        if '公司 代號' not in df.columns or '當月營收' not in df.columns:
+            print("未找到必要的列")
             return pd.DataFrame()
 
         df['當月營收'] = pd.to_numeric(df['當月營收'], errors='coerce')
         df = df[~df['當月營收'].isnull()]
-        df = df[df['公司 代號'] != '合計']  # 移除汇总行
+        df = df[df['公司 代號'] != '合計']
         return df
 
     except Exception as e:
-        print(f"合并表格时出错: {str(e)}")
-        return pd.DataFrame()  # 出错时返回空的 DataFrame
+        print(f"處理表格時出錯: {str(e)}")
+        return pd.DataFrame()
 
 def get_monthly_revenue(stock_code):
-    # 使用正确的公司名称
     company_name = get_company_name(stock_code)
     if company_name:
-        name_use = company_name.strip()  # 去掉多余的空格
+        name_use = company_name.strip()
         print(f"使用公司名稱進行查找: {name_use}")
     else:
-        # 如果公司名称不可用，使用股票代码
-        name_use = stock_code.split(".")[0]  # 使用股票代号
+        name_use = stock_code.split(".")[0]
         print(f"找不到公司名稱，使用股票代號進行查找: {name_use}")
-
-    # 檢查是否為 ETF 或槓桿產品
-    if "ETF" in name_use or "正2" in name_use or "反1" in name_use:
-        print(f"{name_use} 可能是 ETF 或槓桿產品，不提供月營收數據")
-        return pd.Series()  # 返回空的 Series
 
     now = datetime.now()
     revenues = []
     
-    # 获取过去12个月的月营收数据
     for i in range(12):
         date = now - timedelta(days=30 * i)
         year, month = date.year, date.month - 1
-        if month == 0:  # 如果月份为0，调整为前一年的12月
+        if month == 0:
             month = 12
             year -= 1
 
-        #print(f"查询年份: {year}, 月份: {month}")
-        df = monthly_report(year, month, name_use)
+        df = monthly_report(year, month)
 
         if df.empty:
-            print(f"月份 {year}/{month} 的数据为空")
+            print(f"月份 {year}/{month} 的數據為空")
             continue
 
-        # 使用包含匹配而不是精确匹配
-        revenue = df[df['公司名稱'].str.contains(name_use, na=False, regex=False)]['當月營收'].values
-        if len(revenue) > 0:
-            revenues.append((f"{year}/{month}", revenue[0]))
-        else:
-            print(f"找不到名稱 {name_use} 的營收數據")
+        # 使用部分匹配而不是精確匹配
+        matching_rows = df[df['公司名稱'].str.contains(name_use, na=False, regex=False) | 
+                           (df['公司 代號'] == stock_code.split(".")[0])]
         
+        if not matching_rows.empty:
+            revenue = matching_rows['當月營收'].values[0]
+            revenues.append((f"{year}/{month}", revenue))
+            print(f"找到 {name_use} {month}月的營收數據: {revenue}")
+        else:
+            print(f"在 {year}/{month} 找不到名稱 {name_use} 或代碼 {stock_code} 的營收數據")
+
         if len(revenues) >= 12:
             break
-    
-    # 打印查询到的营收数据
-    #if revenues:
-    #    print(f"找到的營收數據: {revenues}")
-    #else:
-    #    print(f"未找到股票代號 {stock_code} 的任何月營收數據")
-    
+
     return pd.Series(dict(revenues[::-1]))
 
 def get_financial_statement(stock_id, year, season):
@@ -274,6 +253,7 @@ def analyze_financial_data_with_openai(stock_code: str, stock_name: str, financi
 
     月營收(最近12個月):
     {monthly_revenue.to_string()}
+    
 
     請提供以下分析:
     1. 公司財務健康狀況
@@ -516,8 +496,14 @@ if __name__ == "__main__":
             print(f"財務報表摘要:")
             for key, value in financial_statement.items():
                 print(f"{key}: {value}")
-            print("\n月營收（最近12個月）：")
-            print(monthly_revenue)
+            #print("\n月營收（最近12個月）：")
+            print("\n月營收（最近12個月）表格：")
+            print(f"{'月份':<10} {'營收 (元)':<15}")
+            print("-" * 25)
+            for month, revenue in monthly_revenue.items():
+                print(f"{month:<10} {revenue:<15}")
+            print("-" * 25)
+            #print(monthly_revenue)
             print("-" * 100)
         
         if problem_stocks:
