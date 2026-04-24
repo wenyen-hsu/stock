@@ -219,9 +219,104 @@
       "ma5": 27.47,
       "ma60": null,
       "volume_lot": 49.68
+    },
+    {
+      "avg_price": 27.883324304634524,
+      "close": 27.85,
+      "date": "2026-04-20",
+      "ma10": 27.125,
+      "ma20": 26.7775,
+      "ma5": 27.74,
+      "ma60": null,
+      "volume_lot": 53.53
+    },
+    {
+      "avg_price": 27.640890150371398,
+      "close": 27.5,
+      "date": "2026-04-21",
+      "ma10": 27.245,
+      "ma20": 26.84,
+      "ma5": 27.88,
+      "ma60": null,
+      "volume_lot": 33.12
+    },
+    {
+      "avg_price": 27.696219773221774,
+      "close": 27.9,
+      "date": "2026-04-22",
+      "ma10": 27.39,
+      "ma20": 26.935,
+      "ma5": 28.0,
+      "ma60": null,
+      "volume_lot": 56.53
+    },
+    {
+      "avg_price": 27.27302916255761,
+      "close": 26.95,
+      "date": "2026-04-23",
+      "ma10": 27.425,
+      "ma20": 26.9675,
+      "ma5": 27.71,
+      "ma60": null,
+      "volume_lot": 49.69
+    },
+    {
+      "avg_price": 26.976293537346486,
+      "close": 26.8,
+      "date": "2026-04-24",
+      "ma10": 27.435,
+      "ma20": 26.9825,
+      "ma5": 27.4,
+      "ma60": null,
+      "volume_lot": 19.87
     }
   ],
   "daily": [
+    {
+      "avg_price": 26.976293537346486,
+      "close": 26.8,
+      "date": "2026-04-24",
+      "dealer_net_lot": 0.0,
+      "foreign_net_lot": 4.0,
+      "trust_net_lot": 0.0,
+      "volume_lot": 19.87
+    },
+    {
+      "avg_price": 27.27302916255761,
+      "close": 26.95,
+      "date": "2026-04-23",
+      "dealer_net_lot": -1.0,
+      "foreign_net_lot": -8.0,
+      "trust_net_lot": 0.0,
+      "volume_lot": 49.69
+    },
+    {
+      "avg_price": 27.696219773221774,
+      "close": 27.9,
+      "date": "2026-04-22",
+      "dealer_net_lot": -1.0,
+      "foreign_net_lot": -6.0,
+      "trust_net_lot": 0.0,
+      "volume_lot": 56.53
+    },
+    {
+      "avg_price": 27.640890150371398,
+      "close": 27.5,
+      "date": "2026-04-21",
+      "dealer_net_lot": 2.0,
+      "foreign_net_lot": 11.0,
+      "trust_net_lot": 0.0,
+      "volume_lot": 33.12
+    },
+    {
+      "avg_price": 27.883324304634524,
+      "close": 27.85,
+      "date": "2026-04-20",
+      "dealer_net_lot": 0.0,
+      "foreign_net_lot": 17.0,
+      "trust_net_lot": 0.0,
+      "volume_lot": 53.53
+    },
     {
       "avg_price": 28.13743961352657,
       "close": 28.35,
@@ -356,65 +451,20 @@
       "foreign_net_lot": -1.0,
       "trust_net_lot": 0.0,
       "volume_lot": 22.1
-    },
-    {
-      "avg_price": 26.378764869653253,
-      "close": 26.5,
-      "date": "2026-03-25",
-      "dealer_net_lot": -3.05,
-      "foreign_net_lot": -8.0,
-      "trust_net_lot": 0.0,
-      "volume_lot": 47.41
-    },
-    {
-      "avg_price": 26.18686459739091,
-      "close": 26.3,
-      "date": "2026-03-24",
-      "dealer_net_lot": 0.0,
-      "foreign_net_lot": 0.0,
-      "trust_net_lot": 0.0,
-      "volume_lot": 11.12
-    },
-    {
-      "avg_price": 26.003084112149534,
-      "close": 26.0,
-      "date": "2026-03-23",
-      "dealer_net_lot": -3.0,
-      "foreign_net_lot": -10.9,
-      "trust_net_lot": 0.0,
-      "volume_lot": 32.1
-    },
-    {
-      "avg_price": 26.331939457297395,
-      "close": 26.25,
-      "date": "2026-03-20",
-      "dealer_net_lot": 0.0,
-      "foreign_net_lot": -1.0,
-      "trust_net_lot": 0.0,
-      "volume_lot": 22.0
-    },
-    {
-      "avg_price": 26.435183636407082,
-      "close": 26.3,
-      "date": "2026-03-19",
-      "dealer_net_lot": -1.0,
-      "foreign_net_lot": -7.0,
-      "trust_net_lot": 0.0,
-      "volume_lot": 41.85
     }
   ],
   "news": [],
   "revenues": [],
   "stock": {
-    "avg_price": 26.876,
-    "close": 28.35,
-    "foreign_net_lot": 20.51,
+    "avg_price": 27.2242,
+    "close": 26.8,
+    "foreign_net_lot": 65.41,
     "in_watchlist": false,
-    "latest_date": "2026-04-17",
+    "latest_date": "2026-04-24",
     "market": "TWSE",
     "name": "亞崴",
     "stock_id": "1530",
     "trust_net_lot": 0.0,
-    "volume_lot": 622.35
+    "volume_lot": 680.61
   }
 }

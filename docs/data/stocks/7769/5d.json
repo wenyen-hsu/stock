@@ -219,67 +219,117 @@
       "ma5": 4268.0,
       "ma60": null,
       "volume_lot": 1896.44
+    },
+    {
+      "avg_price": 4492.0259668236395,
+      "close": 4445.0,
+      "date": "2026-04-20",
+      "ma10": 4250.0,
+      "ma20": 4034.25,
+      "ma5": 4337.0,
+      "ma60": null,
+      "volume_lot": 1056.66
+    },
+    {
+      "avg_price": 4370.78555495164,
+      "close": 4465.0,
+      "date": "2026-04-21",
+      "ma10": 4295.5,
+      "ma20": 4052.25,
+      "ma5": 4393.0,
+      "ma60": null,
+      "volume_lot": 1166.46
+    },
+    {
+      "avg_price": 4657.054341146145,
+      "close": 4745.0,
+      "date": "2026-04-22",
+      "ma10": 4344.0,
+      "ma20": 4092.0,
+      "ma5": 4490.0,
+      "ma60": null,
+      "volume_lot": 1640.21
+    },
+    {
+      "avg_price": 4789.960908623118,
+      "close": 4810.0,
+      "date": "2026-04-23",
+      "ma10": 4400.5,
+      "ma20": 4146.5,
+      "ma5": 4593.0,
+      "ma60": null,
+      "volume_lot": 2376.74
+    },
+    {
+      "avg_price": 4761.301391483297,
+      "close": 4730.0,
+      "date": "2026-04-24",
+      "ma10": 4453.5,
+      "ma20": 4189.75,
+      "ma5": 4639.0,
+      "ma60": null,
+      "volume_lot": 1463.62
     }
   ],
   "daily": [
     {
-      "avg_price": 4445.219083601159,
-      "close": 4500.0,
-      "date": "2026-04-17",
-      "dealer_net_lot": 22.9,
-      "foreign_net_lot": 562.32,
-      "trust_net_lot": 13.99,
-      "volume_lot": 1896.44
+      "avg_price": 4761.301391483297,
+      "close": 4730.0,
+      "date": "2026-04-24",
+      "dealer_net_lot": 1.7,
+      "foreign_net_lot": -78.28,
+      "trust_net_lot": 16.97,
+      "volume_lot": 1463.62
     },
     {
-      "avg_price": 4321.630139740625,
-      "close": 4295.0,
-      "date": "2026-04-16",
-      "dealer_net_lot": 8.75,
-      "foreign_net_lot": 208.9,
-      "trust_net_lot": -130.9,
-      "volume_lot": 1084.22
+      "avg_price": 4789.960908623118,
+      "close": 4810.0,
+      "date": "2026-04-23",
+      "dealer_net_lot": 5.91,
+      "foreign_net_lot": 286.13,
+      "trust_net_lot": 51.99,
+      "volume_lot": 2376.74
     },
     {
-      "avg_price": 4275.152904559358,
-      "close": 4260.0,
-      "date": "2026-04-15",
-      "dealer_net_lot": 2.37,
-      "foreign_net_lot": 335.45,
-      "trust_net_lot": -130.93,
-      "volume_lot": 1004.35
+      "avg_price": 4657.054341146145,
+      "close": 4745.0,
+      "date": "2026-04-22",
+      "dealer_net_lot": 14.04,
+      "foreign_net_lot": 516.71,
+      "trust_net_lot": 86.05,
+      "volume_lot": 1640.21
     },
     {
-      "avg_price": 4183.660607348803,
-      "close": 4185.0,
-      "date": "2026-04-14",
-      "dealer_net_lot": -3.85,
-      "foreign_net_lot": 426.55,
-      "trust_net_lot": -357.31,
-      "volume_lot": 1378.48
+      "avg_price": 4370.78555495164,
+      "close": 4465.0,
+      "date": "2026-04-21",
+      "dealer_net_lot": 15.79,
+      "foreign_net_lot": 23.8,
+      "trust_net_lot": -199.5,
+      "volume_lot": 1166.46
     },
     {
-      "avg_price": 4117.001415366726,
-      "close": 4100.0,
-      "date": "2026-04-13",
-      "dealer_net_lot": -0.05,
-      "foreign_net_lot": 99.83,
-      "trust_net_lot": -73.97,
-      "volume_lot": 760.23
+      "avg_price": 4492.0259668236395,
+      "close": 4445.0,
+      "date": "2026-04-20",
+      "dealer_net_lot": 16.49,
+      "foreign_net_lot": 23.57,
+      "trust_net_lot": 14.82,
+      "volume_lot": 1056.66
     }
   ],
   "news": [],
   "revenues": [],
   "stock": {
-    "avg_price": 4295.8202,
-    "close": 4500.0,
-    "foreign_net_lot": 1633.05,
+    "avg_price": 4651.8831,
+    "close": 4730.0,
+    "foreign_net_lot": 771.94,
     "in_watchlist": false,
-    "latest_date": "2026-04-17",
+    "latest_date": "2026-04-24",
     "market": "TWSE",
     "name": "鴻勁",
     "stock_id": "7769",
-    "trust_net_lot": -679.13,
-    "volume_lot": 6123.73
+    "trust_net_lot": -29.67,
+    "volume_lot": 7703.69
   }
 }

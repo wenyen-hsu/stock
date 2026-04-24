@@ -219,9 +219,104 @@
       "ma5": 29.5,
       "ma60": null,
       "volume_lot": 23.13
+    },
+    {
+      "avg_price": 29.114989391354996,
+      "close": 29.0,
+      "date": "2026-04-20",
+      "ma10": 29.325,
+      "ma20": 29.3225,
+      "ma5": 29.43,
+      "ma60": null,
+      "volume_lot": 24.04
+    },
+    {
+      "avg_price": 28.868147414585838,
+      "close": 28.7,
+      "date": "2026-04-21",
+      "ma10": 29.32,
+      "ma20": 29.2525,
+      "ma5": 29.26,
+      "ma60": null,
+      "volume_lot": 14.14
+    },
+    {
+      "avg_price": 28.695388669301714,
+      "close": 28.7,
+      "date": "2026-04-22",
+      "ma10": 29.265,
+      "ma20": 29.2025,
+      "ma5": 29.1,
+      "ma60": null,
+      "volume_lot": 22.77
+    },
+    {
+      "avg_price": 28.552606331947555,
+      "close": 28.4,
+      "date": "2026-04-23",
+      "ma10": 29.175,
+      "ma20": 29.125,
+      "ma5": 28.86,
+      "ma60": null,
+      "volume_lot": 9.38
+    },
+    {
+      "avg_price": 28.402613630447235,
+      "close": 28.6,
+      "date": "2026-04-24",
+      "ma10": 29.09,
+      "ma20": 29.04,
+      "ma5": 28.68,
+      "ma60": null,
+      "volume_lot": 19.21
     }
   ],
   "daily": [
+    {
+      "avg_price": 28.402613630447235,
+      "close": 28.6,
+      "date": "2026-04-24",
+      "dealer_net_lot": 0.0,
+      "foreign_net_lot": 4.0,
+      "trust_net_lot": 0.0,
+      "volume_lot": 19.21
+    },
+    {
+      "avg_price": 28.552606331947555,
+      "close": 28.4,
+      "date": "2026-04-23",
+      "dealer_net_lot": 0.0,
+      "foreign_net_lot": -3.0,
+      "trust_net_lot": 0.0,
+      "volume_lot": 9.38
+    },
+    {
+      "avg_price": 28.695388669301714,
+      "close": 28.7,
+      "date": "2026-04-22",
+      "dealer_net_lot": 0.0,
+      "foreign_net_lot": 15.0,
+      "trust_net_lot": 0.0,
+      "volume_lot": 22.77
+    },
+    {
+      "avg_price": 28.868147414585838,
+      "close": 28.7,
+      "date": "2026-04-21",
+      "dealer_net_lot": -2.0,
+      "foreign_net_lot": 4.0,
+      "trust_net_lot": 0.0,
+      "volume_lot": 14.14
+    },
+    {
+      "avg_price": 29.114989391354996,
+      "close": 29.0,
+      "date": "2026-04-20",
+      "dealer_net_lot": 0.0,
+      "foreign_net_lot": 9.0,
+      "trust_net_lot": 0.0,
+      "volume_lot": 24.04
+    },
     {
       "avg_price": 29.386794084580128,
       "close": 29.5,
@@ -356,65 +451,20 @@
       "foreign_net_lot": 1.0,
       "trust_net_lot": 0.0,
       "volume_lot": 33.68
-    },
-    {
-      "avg_price": 30.229611280487806,
-      "close": 30.3,
-      "date": "2026-03-25",
-      "dealer_net_lot": 1.0,
-      "foreign_net_lot": -1.0,
-      "trust_net_lot": 0.0,
-      "volume_lot": 10.5
-    },
-    {
-      "avg_price": 29.725648740127866,
-      "close": 29.95,
-      "date": "2026-03-24",
-      "dealer_net_lot": 0.0,
-      "foreign_net_lot": 0.0,
-      "trust_net_lot": 0.0,
-      "volume_lot": 10.64
-    },
-    {
-      "avg_price": 29.61553227893002,
-      "close": 29.7,
-      "date": "2026-03-23",
-      "dealer_net_lot": -1.0,
-      "foreign_net_lot": -4.0,
-      "trust_net_lot": 0.0,
-      "volume_lot": 23.96
-    },
-    {
-      "avg_price": 30.125692429438143,
-      "close": 30.1,
-      "date": "2026-03-20",
-      "dealer_net_lot": 0.0,
-      "foreign_net_lot": -8.0,
-      "trust_net_lot": 0.0,
-      "volume_lot": 15.16
-    },
-    {
-      "avg_price": 30.392927308447938,
-      "close": 30.1,
-      "date": "2026-03-19",
-      "dealer_net_lot": 0.0,
-      "foreign_net_lot": -5.0,
-      "trust_net_lot": 0.0,
-      "volume_lot": 12.22
     }
   ],
   "news": [],
   "revenues": [],
   "stock": {
-    "avg_price": 29.4014,
-    "close": 29.5,
-    "foreign_net_lot": 12.11,
+    "avg_price": 29.0823,
+    "close": 28.6,
+    "foreign_net_lot": 59.11,
     "in_watchlist": false,
-    "latest_date": "2026-04-17",
+    "latest_date": "2026-04-24",
     "market": "TWSE",
     "name": "天仁",
     "stock_id": "1233",
     "trust_net_lot": 0.0,
-    "volume_lot": 290.1
+    "volume_lot": 307.16
   }
 }

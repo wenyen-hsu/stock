@@ -219,9 +219,104 @@
       "ma5": 38.78,
       "ma60": null,
       "volume_lot": 32.52
+    },
+    {
+      "avg_price": 38.683930389138936,
+      "close": 38.75,
+      "date": "2026-04-20",
+      "ma10": 38.855,
+      "ma20": 38.79,
+      "ma5": 38.8,
+      "ma60": null,
+      "volume_lot": 81.54
+    },
+    {
+      "avg_price": 38.688911472448055,
+      "close": 38.65,
+      "date": "2026-04-21",
+      "ma10": 38.835,
+      "ma20": 38.785,
+      "ma5": 38.78,
+      "ma60": null,
+      "volume_lot": 44.28
+    },
+    {
+      "avg_price": 38.68698884758364,
+      "close": 38.7,
+      "date": "2026-04-22",
+      "ma10": 38.8,
+      "ma20": 38.7875,
+      "ma5": 38.73,
+      "ma60": null,
+      "volume_lot": 16.14
+    },
+    {
+      "avg_price": 38.54880260771273,
+      "close": 38.55,
+      "date": "2026-04-23",
+      "ma10": 38.755,
+      "ma20": 38.7775,
+      "ma5": 38.67,
+      "ma60": null,
+      "volume_lot": 38.04
+    },
+    {
+      "avg_price": 38.62115395800617,
+      "close": 38.65,
+      "date": "2026-04-24",
+      "ma10": 38.72,
+      "ma20": 38.7725,
+      "ma5": 38.66,
+      "ma60": null,
+      "volume_lot": 34.39
     }
   ],
   "daily": [
+    {
+      "avg_price": 38.62115395800617,
+      "close": 38.65,
+      "date": "2026-04-24",
+      "dealer_net_lot": -0.04,
+      "foreign_net_lot": -2.0,
+      "trust_net_lot": 0.0,
+      "volume_lot": 34.39
+    },
+    {
+      "avg_price": 38.54880260771273,
+      "close": 38.55,
+      "date": "2026-04-23",
+      "dealer_net_lot": -0.0,
+      "foreign_net_lot": -14.0,
+      "trust_net_lot": 0.0,
+      "volume_lot": 38.04
+    },
+    {
+      "avg_price": 38.68698884758364,
+      "close": 38.7,
+      "date": "2026-04-22",
+      "dealer_net_lot": 0.0,
+      "foreign_net_lot": 0.0,
+      "trust_net_lot": 0.0,
+      "volume_lot": 16.14
+    },
+    {
+      "avg_price": 38.688911472448055,
+      "close": 38.65,
+      "date": "2026-04-21",
+      "dealer_net_lot": 0.0,
+      "foreign_net_lot": -2.0,
+      "trust_net_lot": 0.0,
+      "volume_lot": 44.28
+    },
+    {
+      "avg_price": 38.683930389138936,
+      "close": 38.75,
+      "date": "2026-04-20",
+      "dealer_net_lot": -13.04,
+      "foreign_net_lot": 14.0,
+      "trust_net_lot": 0.0,
+      "volume_lot": 81.54
+    },
     {
       "avg_price": 38.65073800738007,
       "close": 38.7,
@@ -356,65 +451,20 @@
       "foreign_net_lot": -2.0,
       "trust_net_lot": 0.0,
       "volume_lot": 66.34
-    },
-    {
-      "avg_price": 38.78426204819277,
-      "close": 38.75,
-      "date": "2026-03-25",
-      "dealer_net_lot": 0.0,
-      "foreign_net_lot": 0.0,
-      "trust_net_lot": 0.0,
-      "volume_lot": 13.28
-    },
-    {
-      "avg_price": 38.72653354059548,
-      "close": 38.75,
-      "date": "2026-03-24",
-      "dealer_net_lot": 0.0,
-      "foreign_net_lot": 0.0,
-      "trust_net_lot": 0.0,
-      "volume_lot": 8.36
-    },
-    {
-      "avg_price": 38.60619771663072,
-      "close": 38.65,
-      "date": "2026-03-23",
-      "dealer_net_lot": -0.29,
-      "foreign_net_lot": -10.0,
-      "trust_net_lot": 0.0,
-      "volume_lot": 38.01
-    },
-    {
-      "avg_price": 38.80889791856705,
-      "close": 38.75,
-      "date": "2026-03-20",
-      "dealer_net_lot": 0.0,
-      "foreign_net_lot": -4.0,
-      "trust_net_lot": 0.0,
-      "volume_lot": 24.12
-    },
-    {
-      "avg_price": 38.8015837855798,
-      "close": 38.75,
-      "date": "2026-03-19",
-      "dealer_net_lot": 0.0,
-      "foreign_net_lot": -7.0,
-      "trust_net_lot": 0.0,
-      "volume_lot": 36.12
     }
   ],
   "news": [],
   "revenues": [],
   "stock": {
-    "avg_price": 38.7307,
-    "close": 38.7,
-    "foreign_net_lot": 95.35,
+    "avg_price": 38.7078,
+    "close": 38.65,
+    "foreign_net_lot": 112.35,
     "in_watchlist": false,
-    "latest_date": "2026-04-17",
+    "latest_date": "2026-04-24",
     "market": "TWSE",
     "name": "凱撒衛",
     "stock_id": "1817",
     "trust_net_lot": 0.0,
-    "volume_lot": 666.18
+    "volume_lot": 760.68
   }
 }

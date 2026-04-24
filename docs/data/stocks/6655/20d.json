@@ -219,9 +219,104 @@
       "ma5": 134.5,
       "ma60": null,
       "volume_lot": 10.62
+    },
+    {
+      "avg_price": 137.2758658244391,
+      "close": 138.0,
+      "date": "2026-04-20",
+      "ma10": 132.65,
+      "ma20": null,
+      "ma5": 135.7,
+      "ma60": null,
+      "volume_lot": 9.18
+    },
+    {
+      "avg_price": 139.85387238188017,
+      "close": 140.0,
+      "date": "2026-04-21",
+      "ma10": 133.85,
+      "ma20": null,
+      "ma5": 137.0,
+      "ma60": null,
+      "volume_lot": 10.27
+    },
+    {
+      "avg_price": 139.14888164026095,
+      "close": 140.0,
+      "date": "2026-04-22",
+      "ma10": 134.95,
+      "ma20": null,
+      "ma5": 138.0,
+      "ma60": null,
+      "volume_lot": 4.29
+    },
+    {
+      "avg_price": 139.05647938600808,
+      "close": 138.0,
+      "date": "2026-04-23",
+      "ma10": 135.85,
+      "ma20": null,
+      "ma5": 138.5,
+      "ma60": null,
+      "volume_lot": 10.16
+    },
+    {
+      "avg_price": 140.0698555377207,
+      "close": 140.5,
+      "date": "2026-04-24",
+      "ma10": 136.9,
+      "ma20": null,
+      "ma5": 139.3,
+      "ma60": null,
+      "volume_lot": 15.57
     }
   ],
   "daily": [
+    {
+      "avg_price": 140.0698555377207,
+      "close": 140.5,
+      "date": "2026-04-24",
+      "dealer_net_lot": 0.0,
+      "foreign_net_lot": 1.0,
+      "trust_net_lot": 0.0,
+      "volume_lot": 15.57
+    },
+    {
+      "avg_price": 139.05647938600808,
+      "close": 138.0,
+      "date": "2026-04-23",
+      "dealer_net_lot": 0.0,
+      "foreign_net_lot": 0.0,
+      "trust_net_lot": 0.0,
+      "volume_lot": 10.16
+    },
+    {
+      "avg_price": 139.14888164026095,
+      "close": 140.0,
+      "date": "2026-04-22",
+      "dealer_net_lot": 0.0,
+      "foreign_net_lot": 0.0,
+      "trust_net_lot": 0.0,
+      "volume_lot": 4.29
+    },
+    {
+      "avg_price": 139.85387238188017,
+      "close": 140.0,
+      "date": "2026-04-21",
+      "dealer_net_lot": 1.0,
+      "foreign_net_lot": 7.0,
+      "trust_net_lot": 0.0,
+      "volume_lot": 10.27
+    },
+    {
+      "avg_price": 137.2758658244391,
+      "close": 138.0,
+      "date": "2026-04-20",
+      "dealer_net_lot": -0.02,
+      "foreign_net_lot": 9.0,
+      "trust_net_lot": 0.0,
+      "volume_lot": 9.18
+    },
     {
       "avg_price": 135.8367077879273,
       "close": 136.5,
@@ -356,65 +451,20 @@
       "foreign_net_lot": 0.0,
       "trust_net_lot": 0.0,
       "volume_lot": 0.07
-    },
-    {
-      "avg_price": 128.63125619983768,
-      "close": 128.0,
-      "date": "2026-03-25",
-      "dealer_net_lot": 0.0,
-      "foreign_net_lot": 2.0,
-      "trust_net_lot": 0.0,
-      "volume_lot": 11.09
-    },
-    {
-      "avg_price": 128.03089036947304,
-      "close": 128.0,
-      "date": "2026-03-24",
-      "dealer_net_lot": -0.09,
-      "foreign_net_lot": 0.0,
-      "trust_net_lot": 0.0,
-      "volume_lot": 8.26
-    },
-    {
-      "avg_price": 128.66611295681062,
-      "close": 129.0,
-      "date": "2026-03-23",
-      "dealer_net_lot": 0.0,
-      "foreign_net_lot": -2.0,
-      "trust_net_lot": 0.0,
-      "volume_lot": 3.01
-    },
-    {
-      "avg_price": 128.6395096213532,
-      "close": 129.5,
-      "date": "2026-03-20",
-      "dealer_net_lot": 0.0,
-      "foreign_net_lot": 0.0,
-      "trust_net_lot": 0.0,
-      "volume_lot": 6.44
-    },
-    {
-      "avg_price": 130.22222222222223,
-      "close": 130.0,
-      "date": "2026-03-19",
-      "dealer_net_lot": 0.0,
-      "foreign_net_lot": -5.0,
-      "trust_net_lot": 0.0,
-      "volume_lot": 9.0
     }
   ],
   "news": [],
   "revenues": [],
   "stock": {
-    "avg_price": 130.6113,
-    "close": 136.5,
-    "foreign_net_lot": 25.37,
+    "avg_price": 133.3698,
+    "close": 140.5,
+    "foreign_net_lot": 47.37,
     "in_watchlist": false,
-    "latest_date": "2026-04-17",
+    "latest_date": "2026-04-24",
     "market": "TWSE",
     "name": "科定",
     "stock_id": "6655",
     "trust_net_lot": 0.0,
-    "volume_lot": 166.38
+    "volume_lot": 178.06
   }
 }
