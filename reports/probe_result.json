@@ -1,0 +1,108 @@
+{
+  "generated_at": "2026-04-17T22:10:39",
+  "watchlist": {
+    "2376": "技嘉",
+    "2382": "廣達",
+    "2324": "仁寶",
+    "6196": "帆宣"
+  },
+  "trading_days": [
+    "2026-04-09",
+    "2026-04-13",
+    "2026-04-14",
+    "2026-04-15",
+    "2026-04-16"
+  ],
+  "official_data": {
+    "status": "ok",
+    "message": "TWSE 官方可取得日成交、成交均價、外資與投信買賣超。"
+  },
+  "public_branch_data": {
+    "source": "TWSE BSR public",
+    "status": "blocked",
+    "message": "TWSE 買賣日報表查詢系統明確要求每檔查詢輸入驗證碼，不能當成穩定自動化來源。",
+    "sample_rows": 0,
+    "top_buy_branches": null,
+    "top_sell_branches": null
+  },
+  "finmind_branch_data": {
+    "2376": {
+      "source": "FinMind",
+      "status": "skipped",
+      "message": "未設定 FINMIND_TOKEN；先跳過。文件顯示分點資料需要 sponsor 權限。",
+      "sample_rows": 0,
+      "top_buy_branches": null,
+      "top_sell_branches": null
+    },
+    "2382": {
+      "source": "FinMind",
+      "status": "skipped",
+      "message": "未設定 FINMIND_TOKEN；先跳過。文件顯示分點資料需要 sponsor 權限。",
+      "sample_rows": 0,
+      "top_buy_branches": null,
+      "top_sell_branches": null
+    },
+    "2324": {
+      "source": "FinMind",
+      "status": "skipped",
+      "message": "未設定 FINMIND_TOKEN；先跳過。文件顯示分點資料需要 sponsor 權限。",
+      "sample_rows": 0,
+      "top_buy_branches": null,
+      "top_sell_branches": null
+    },
+    "6196": {
+      "source": "FinMind",
+      "status": "skipped",
+      "message": "未設定 FINMIND_TOKEN；先跳過。文件顯示分點資料需要 sponsor 權限。",
+      "sample_rows": 0,
+      "top_buy_branches": null,
+      "top_sell_branches": null
+    }
+  },
+  "summary": [
+    {
+      "stock_id": "2376",
+      "name": "技嘉",
+      "latest_date": "2026-04-16",
+      "close": 281.0,
+      "5d_avg_price": 271.0967,
+      "5d_foreign_net_lot": "15,540",
+      "5d_trust_net_lot": "1,529",
+      "latest_foreign_net_lot": "2,027",
+      "latest_trust_net_lot": "249"
+    },
+    {
+      "stock_id": "2382",
+      "name": "廣達",
+      "latest_date": "2026-04-16",
+      "close": 318.5,
+      "5d_avg_price": 314.0414,
+      "5d_foreign_net_lot": "16,192",
+      "5d_trust_net_lot": "-2,140",
+      "latest_foreign_net_lot": "7,637",
+      "latest_trust_net_lot": "-748"
+    },
+    {
+      "stock_id": "2324",
+      "name": "仁寶",
+      "latest_date": "2026-04-16",
+      "close": 29.4,
+      "5d_avg_price": 29.1719,
+      "5d_foreign_net_lot": "2,110",
+      "5d_trust_net_lot": "-25,129",
+      "latest_foreign_net_lot": "-6,926",
+      "latest_trust_net_lot": "-11,475"
+    },
+    {
+      "stock_id": "6196",
+      "name": "帆宣",
+      "latest_date": "2026-04-16",
+      "close": 340.0,
+      "5d_avg_price": 329.8816,
+      "5d_foreign_net_lot": "2,151",
+      "5d_trust_net_lot": "-33",
+      "latest_foreign_net_lot": "-623",
+      "latest_trust_net_lot": "-5"
+    }
+  ]
+}

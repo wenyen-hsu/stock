@@ -1,0 +1,13 @@
+.DS_Store
+__pycache__/
+*.py[cod]
+*.log
+
+# Local database and transient SQLite files stay on this machine.
+data/*.sqlite
+data/*.sqlite-*
+
+# Local runtime output.
+.venv/
+venv/
+/tmp/
