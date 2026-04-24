@@ -75,6 +75,14 @@ python3 -m stock_chip.branch --days 10 --top 80 --daily --watchlist 2376,2382,23
 python3 -m stock_chip.revenue --months 24 --watchlist 2376,2382,2324,6196
 ```
 
+更新自選股新聞標題與連結：
+
+```bash
+python3 -m stock_chip.news --watchlist 2376,2382,2324,6196 --limit 5
+```
+
+預設只抓 Yahoo 股市 RSS 標題、連結與摘要。若要同時抓文章內文摘錄，可加上 `--content`；批次更新中心預設不抓內文。
+
 分批更新上市/上櫃全市場分點 Top N：
 
 ```bash

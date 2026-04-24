@@ -4,6 +4,8 @@ import datetime as dt
 import html
 import re
 import sqlite3
+import argparse
+import time
 import xml.etree.ElementTree as ET
 from dataclasses import dataclass
 from email.utils import parsedate_to_datetime
@@ -219,3 +221,66 @@ def refresh_stock_news(db_path: Path, stock_id: str, limit: int = 8) -> dict[str
         "fetched_at": rows[0].fetched_at if rows else now_text(),
         "rows": cached,
     }
+
+
+def refresh_many_stock_news(
+    db_path: Path,
+    stock_ids: list[str],
+    limit: int = 5,
+    fetch_content: bool = False,
+    sleep_seconds: float = 0.4,
+) -> dict[str, object]:
+    output: list[dict[str, object]] = []
+    total = 0
+    for stock_id in [item.strip() for item in stock_ids if item.strip()]:
+        try:
+            rows = fetch_yahoo_news(stock_id, limit=limit, fetch_content=fetch_content)
+            with sqlite3.connect(db_path) as conn:
+                upsert_news(conn, rows)
+            total += len(rows)
+            output.append({"stock_id": stock_id, "status": "success", "fetched_count": len(rows), "error": ""})
+        except Exception as exc:
+            output.append({"stock_id": stock_id, "status": "failed", "fetched_count": 0, "error": str(exc)})
+        if sleep_seconds > 0:
+            time.sleep(sleep_seconds)
+    return {
+        "stock_count": len(output),
+        "fetched_count": total,
+        "fetch_content": fetch_content,
+        "fetched_at": now_text(),
+        "rows": output,
+    }
+
+
+def parse_args() -> argparse.Namespace:
+    parser = argparse.ArgumentParser(description="Fetch Yahoo stock news into the local SQLite cache.")
+    parser.add_argument("--db", default="data/stock_chip.sqlite")
+    parser.add_argument("--watchlist", required=True, help="Comma-separated stock ids.")
+    parser.add_argument("--limit", type=int, default=5)
+    parser.add_argument("--sleep", type=float, default=0.4)
+    parser.add_argument("--content", action="store_true", help="Also fetch article excerpts. Default only fetches RSS titles.")
+    return parser.parse_args()
+
+
+def main() -> None:
+    args = parse_args()
+    result = refresh_many_stock_news(
+        Path(args.db),
+        [item for item in args.watchlist.split(",") if item.strip()],
+        limit=args.limit,
+        fetch_content=args.content,
+        sleep_seconds=args.sleep,
+    )
+    print(
+        f"Fetched {result['fetched_count']} news items for {result['stock_count']} stocks "
+        f"at {result['fetched_at']}"
+    )
+    failed = [row for row in result["rows"] if row["status"] != "success"]
+    if failed:
+        for row in failed:
+            print(f"{row['stock_id']} failed: {row['error']}")
+        raise SystemExit(1)
+
+
+if __name__ == "__main__":
+    main()

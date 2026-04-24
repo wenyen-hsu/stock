@@ -1542,6 +1542,11 @@ UPDATE_TASKS = [
         "description": "補自選股最近 10 個交易日的 HiStock 單日分點頁，只抓缺漏資料。",
     },
     {
+        "id": "watchlist_news",
+        "title": "自選股新聞標題",
+        "description": "更新自選股 Yahoo 股市 RSS 標題與連結；文章內文保留到個股頁手動抓取。",
+    },
+    {
         "id": "top100_branch",
         "title": "排行前 100 區間分點",
         "description": "依目前 20 日總分排行取前 100 檔，更新區間買超前十分點，再重算排行。",
@@ -1576,6 +1581,10 @@ def data_update_times() -> dict[str, str]:
             """,
             watchlist,
         ).fetchone()[0]
+        news = conn.execute(
+            f"SELECT MAX(fetched_at) FROM stock_news WHERE stock_id IN ({placeholders})",
+            watchlist,
+        ).fetchone()[0]
         top100_branch = conn.execute(
             """
             SELECT MAX(updated_at)
@@ -1588,6 +1597,7 @@ def data_update_times() -> dict[str, str]:
         "official_scan": normalize_time(official),
         "watchlist_revenue": normalize_time(revenue),
         "watchlist_branch_daily": normalize_time(branch_daily),
+        "watchlist_news": normalize_time(news),
         "top100_branch": normalize_time(top100_branch),
     }
 
@@ -1769,6 +1779,26 @@ def update_steps(task_id: str, days: int) -> tuple[str, list[tuple[str, list[str
                         "1.2",
                         "--retry-sleeps",
                         "8,20,45",
+                    ],
+                )
+            ],
+        )
+    if task_id == "watchlist_news":
+        return (
+            "自選股新聞標題",
+            [
+                (
+                    "更新 Yahoo 股市 RSS 標題",
+                    [
+                        py,
+                        "-m",
+                        "stock_chip.news",
+                        "--watchlist",
+                        watchlist,
+                        "--limit",
+                        "5",
+                        "--sleep",
+                        "0.5",
                     ],
                 )
             ],
