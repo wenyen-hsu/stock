@@ -239,6 +239,10 @@ INDEX_HTML = """<!doctype html>
       padding: 14px;
       background: #fff;
     }
+    .job-card.primary-job {
+      border-color: #9ccdc8;
+      background: #f6fbfa;
+    }
     .job-title { font-weight: 850; margin-bottom: 6px; }
     .job-desc { color: var(--muted); font-size: 13px; line-height: 1.5; min-height: 38px; }
     .job-time { color: var(--muted); font-size: 12px; margin-top: 8px; line-height: 1.5; }
@@ -1037,12 +1041,12 @@ INDEX_HTML = """<!doctype html>
         return;
       }
       document.querySelector("#update-tasks").innerHTML = tasks.map(task => `
-        <div class="job-card">
+        <div class="job-card ${task.id === "all_data" ? "primary-job" : ""}">
           <div class="job-title">${esc(task.title)}</div>
           <div class="job-desc">${esc(task.description)}</div>
           <div class="job-time">最後更新：${esc(task.last_updated_at || "尚未更新")}</div>
           <div class="job-time">資料更新：${esc(task.last_data_updated_at || "尚無資料")}</div>
-          <button data-task="${esc(task.id)}" ${running ? "disabled" : ""}>${running ? "執行中" : "開始更新"}</button>
+          <button class="${task.id === "all_data" ? "" : "secondary"}" data-task="${esc(task.id)}" ${running ? "disabled" : ""}>${running ? "執行中" : task.id === "all_data" ? "一鍵更新" : "開始更新"}</button>
         </div>
       `).join("");
       document.querySelectorAll("[data-task]").forEach(btn => btn.addEventListener("click", async () => {
@@ -1527,6 +1531,11 @@ def db_meta(days: int) -> dict[str, object]:
 
 UPDATE_TASKS = [
     {
+        "id": "all_data",
+        "title": "一鍵更新全部資料",
+        "description": "依序更新官方行情排行、營收、新聞標題、自選股分點與排行前 100 區間分點。",
+    },
+    {
         "id": "official_scan",
         "title": "官方行情與排行",
         "description": "更新上市上櫃近 20 個交易日行情、法人買賣超，並重算 20 日與 5 日排行。",
@@ -1593,13 +1602,15 @@ def data_update_times() -> dict[str, str]:
               AND source = 'histock'
             """
         ).fetchone()[0]
-    return {
+    times = {
         "official_scan": normalize_time(official),
         "watchlist_revenue": normalize_time(revenue),
         "watchlist_branch_daily": normalize_time(branch_daily),
         "watchlist_news": normalize_time(news),
         "top100_branch": normalize_time(top100_branch),
     }
+    times["all_data"] = max((value for value in times.values() if value), default="")
+    return times
 
 
 def persist_job(job: dict[str, object]) -> None:
@@ -1733,6 +1744,18 @@ def top_stock_ids_from_report(days: int, limit: int) -> list[str]:
 def update_steps(task_id: str, days: int) -> tuple[str, list[tuple[str, list[str]]]]:
     py = sys.executable
     watchlist = ",".join(current_watchlist_ids())
+    if task_id == "all_data":
+        steps: list[tuple[str, list[str]]] = []
+        for child_task in ("official_scan", "watchlist_revenue", "watchlist_news", "watchlist_branch_daily", "top100_branch"):
+            _title, child_steps = update_steps(child_task, days)
+            steps.extend(child_steps)
+        steps.append(
+            (
+                "匯出 GitHub Pages 靜態資料",
+                [py, "-m", "stock_chip.export_static", "--out", "docs"],
+            )
+        )
+        return ("一鍵更新全部資料", steps)
     if task_id == "official_scan":
         return (
             "官方行情與排行",
