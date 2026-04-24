@@ -1,13 +1,165 @@
 {
   "branch_daily": [],
-  "branch_daily_status": [],
-  "branch_top": [],
+  "branch_daily_status": [
+    {
+      "attempts": 0,
+      "error": null,
+      "row_count": 0,
+      "status": "missing",
+      "trade_date": "2026-04-24"
+    },
+    {
+      "attempts": 0,
+      "error": null,
+      "row_count": 0,
+      "status": "missing",
+      "trade_date": "2026-04-23"
+    },
+    {
+      "attempts": 0,
+      "error": null,
+      "row_count": 0,
+      "status": "missing",
+      "trade_date": "2026-04-22"
+    },
+    {
+      "attempts": 0,
+      "error": null,
+      "row_count": 0,
+      "status": "missing",
+      "trade_date": "2026-04-21"
+    },
+    {
+      "attempts": 0,
+      "error": null,
+      "row_count": 0,
+      "status": "missing",
+      "trade_date": "2026-04-20"
+    },
+    {
+      "attempts": 0,
+      "error": null,
+      "row_count": 0,
+      "status": "missing",
+      "trade_date": "2026-04-17"
+    },
+    {
+      "attempts": 0,
+      "error": null,
+      "row_count": 0,
+      "status": "missing",
+      "trade_date": "2026-04-16"
+    },
+    {
+      "attempts": 0,
+      "error": null,
+      "row_count": 0,
+      "status": "missing",
+      "trade_date": "2026-04-15"
+    },
+    {
+      "attempts": 0,
+      "error": null,
+      "row_count": 0,
+      "status": "missing",
+      "trade_date": "2026-04-14"
+    },
+    {
+      "attempts": 0,
+      "error": null,
+      "row_count": 0,
+      "status": "missing",
+      "trade_date": "2026-04-13"
+    }
+  ],
+  "branch_top": [
+    {
+      "avg_price": 42.15,
+      "broker_name": "兆豐-板橋",
+      "buy_lot": 20.0,
+      "net_lot": 20.0,
+      "rank_no": 1,
+      "sell_lot": null
+    },
+    {
+      "avg_price": 41.33,
+      "broker_name": "元大",
+      "buy_lot": 18.0,
+      "net_lot": 16.0,
+      "rank_no": 2,
+      "sell_lot": 2.0
+    },
+    {
+      "avg_price": 40.88,
+      "broker_name": "元大-員林中山",
+      "buy_lot": 15.0,
+      "net_lot": 15.0,
+      "rank_no": 3,
+      "sell_lot": null
+    },
+    {
+      "avg_price": 41.77,
+      "broker_name": "花旗環球",
+      "buy_lot": 16.0,
+      "net_lot": 15.0,
+      "rank_no": 4,
+      "sell_lot": 1.0
+    },
+    {
+      "avg_price": 40.82,
+      "broker_name": "玉山-板橋",
+      "buy_lot": 10.0,
+      "net_lot": 10.0,
+      "rank_no": 5,
+      "sell_lot": null
+    },
+    {
+      "avg_price": 41.81,
+      "broker_name": "摩根大通",
+      "buy_lot": 13.0,
+      "net_lot": 10.0,
+      "rank_no": 6,
+      "sell_lot": 3.0
+    },
+    {
+      "avg_price": 41.54,
+      "broker_name": "台灣摩根士丹利",
+      "buy_lot": 8.0,
+      "net_lot": 7.0,
+      "rank_no": 7,
+      "sell_lot": 1.0
+    },
+    {
+      "avg_price": 42.1,
+      "broker_name": "元大-蘆洲",
+      "buy_lot": 6.0,
+      "net_lot": 6.0,
+      "rank_no": 8,
+      "sell_lot": null
+    },
+    {
+      "avg_price": 40.73,
+      "broker_name": "凱基-湖口",
+      "buy_lot": 6.0,
+      "net_lot": 6.0,
+      "rank_no": 9,
+      "sell_lot": null
+    },
+    {
+      "avg_price": 41.04,
+      "broker_name": "兆豐-來福",
+      "buy_lot": 5.0,
+      "net_lot": 5.0,
+      "rank_no": 10,
+      "sell_lot": null
+    }
+  ],
   "branch_top_status": {
-    "attempts": 0,
+    "attempts": 1,
     "error": null,
-    "row_count": 0,
-    "status": "missing",
-    "updated_at": ""
+    "row_count": 20,
+    "status": "success",
+    "updated_at": "2026-04-24 22:42:14"
   },
   "chart": [
     {

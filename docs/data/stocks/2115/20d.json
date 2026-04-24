@@ -1,13 +1,165 @@
 {
   "branch_daily": [],
-  "branch_daily_status": [],
-  "branch_top": [],
+  "branch_daily_status": [
+    {
+      "attempts": 0,
+      "error": null,
+      "row_count": 0,
+      "status": "missing",
+      "trade_date": "2026-04-24"
+    },
+    {
+      "attempts": 0,
+      "error": null,
+      "row_count": 0,
+      "status": "missing",
+      "trade_date": "2026-04-23"
+    },
+    {
+      "attempts": 0,
+      "error": null,
+      "row_count": 0,
+      "status": "missing",
+      "trade_date": "2026-04-22"
+    },
+    {
+      "attempts": 0,
+      "error": null,
+      "row_count": 0,
+      "status": "missing",
+      "trade_date": "2026-04-21"
+    },
+    {
+      "attempts": 0,
+      "error": null,
+      "row_count": 0,
+      "status": "missing",
+      "trade_date": "2026-04-20"
+    },
+    {
+      "attempts": 0,
+      "error": null,
+      "row_count": 0,
+      "status": "missing",
+      "trade_date": "2026-04-17"
+    },
+    {
+      "attempts": 0,
+      "error": null,
+      "row_count": 0,
+      "status": "missing",
+      "trade_date": "2026-04-16"
+    },
+    {
+      "attempts": 0,
+      "error": null,
+      "row_count": 0,
+      "status": "missing",
+      "trade_date": "2026-04-15"
+    },
+    {
+      "attempts": 0,
+      "error": null,
+      "row_count": 0,
+      "status": "missing",
+      "trade_date": "2026-04-14"
+    },
+    {
+      "attempts": 0,
+      "error": null,
+      "row_count": 0,
+      "status": "missing",
+      "trade_date": "2026-04-13"
+    }
+  ],
+  "branch_top": [
+    {
+      "avg_price": 21.56,
+      "broker_name": "凱基-台北",
+      "buy_lot": 224.0,
+      "net_lot": 133.0,
+      "rank_no": 1,
+      "sell_lot": 91.0
+    },
+    {
+      "avg_price": 21.57,
+      "broker_name": "玉山-台中",
+      "buy_lot": 119.0,
+      "net_lot": 119.0,
+      "rank_no": 2,
+      "sell_lot": null
+    },
+    {
+      "avg_price": 21.46,
+      "broker_name": "犇亞-鑫豐",
+      "buy_lot": 62.0,
+      "net_lot": 57.0,
+      "rank_no": 3,
+      "sell_lot": 5.0
+    },
+    {
+      "avg_price": 21.49,
+      "broker_name": "中國信託-高雄",
+      "buy_lot": 58.0,
+      "net_lot": 52.0,
+      "rank_no": 4,
+      "sell_lot": 6.0
+    },
+    {
+      "avg_price": 21.56,
+      "broker_name": "台灣企銀-屏東",
+      "buy_lot": 52.0,
+      "net_lot": 52.0,
+      "rank_no": 5,
+      "sell_lot": null
+    },
+    {
+      "avg_price": 21.55,
+      "broker_name": "花旗環球",
+      "buy_lot": 35.0,
+      "net_lot": 31.0,
+      "rank_no": 6,
+      "sell_lot": 4.0
+    },
+    {
+      "avg_price": 21.53,
+      "broker_name": "國泰-新竹",
+      "buy_lot": 71.0,
+      "net_lot": 30.0,
+      "rank_no": 7,
+      "sell_lot": 41.0
+    },
+    {
+      "avg_price": 21.49,
+      "broker_name": "台新-三民",
+      "buy_lot": 37.0,
+      "net_lot": 29.0,
+      "rank_no": 8,
+      "sell_lot": 8.0
+    },
+    {
+      "avg_price": 21.57,
+      "broker_name": "宏遠-館前",
+      "buy_lot": 45.0,
+      "net_lot": 27.0,
+      "rank_no": 9,
+      "sell_lot": 18.0
+    },
+    {
+      "avg_price": 21.52,
+      "broker_name": "第一金-高雄",
+      "buy_lot": 26.0,
+      "net_lot": 24.0,
+      "rank_no": 10,
+      "sell_lot": 2.0
+    }
+  ],
   "branch_top_status": {
-    "attempts": 0,
+    "attempts": 1,
     "error": null,
-    "row_count": 0,
-    "status": "missing",
-    "updated_at": ""
+    "row_count": 20,
+    "status": "success",
+    "updated_at": "2026-04-24 22:42:14"
   },
   "chart": [
     {

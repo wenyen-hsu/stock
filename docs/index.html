@@ -198,6 +198,10 @@
       padding: 14px;
       background: #fff;
     }
+    .job-card.primary-job {
+      border-color: #9ccdc8;
+      background: #f6fbfa;
+    }
     .job-title { font-weight: 850; margin-bottom: 6px; }
     .job-desc { color: var(--muted); font-size: 13px; line-height: 1.5; min-height: 38px; }
     .job-time { color: var(--muted); font-size: 12px; margin-top: 8px; line-height: 1.5; }
@@ -269,6 +273,22 @@
     .news-title:hover { color: var(--accent-dark); text-decoration: underline; }
     .news-meta { color: var(--muted); font-size: 12px; margin: 5px 0 7px; }
     .news-text { color: #344054; font-size: 13px; line-height: 1.65; white-space: pre-wrap; }
+    .tag-list { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 6px; }
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      min-height: 24px;
+      padding: 3px 8px;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      color: #344054;
+      background: #f8fafb;
+      font-size: 12px;
+      font-weight: 700;
+    }
+    .tag.good { color: var(--good); border-color: #bfe3d0; background: #f3fbf6; }
+    .tag.bad { color: var(--danger); border-color: #efc4c0; background: #fff6f5; }
+    .tag.ai { color: var(--accent-dark); border-color: #b8d9d5; background: #f0faf8; }
     pre {
       margin: 0;
       padding: 14px;
@@ -350,6 +370,7 @@
       <button class="tab active" data-tab="ranking">排行</button>
       <button class="tab" data-tab="watchlist">自選股</button>
       <button class="tab" data-tab="detail">個股</button>
+      <button class="tab" data-tab="us-news">美股新聞</button>
       <button class="tab" data-tab="coverage">資料狀態</button>
     </section>
 
@@ -454,6 +475,73 @@
       </section>
     </section>
 
+    <section id="us-news-view" style="display:none;">
+      <section class="panel">
+        <div class="panel-head">
+          <div>
+            <div class="panel-title">美股新聞</div>
+            <div class="muted" id="us-news-note">來源：Yahoo Finance 個股 RSS、CNBC 與 MarketWatch 市場 RSS；預設用本機規則快速分類，實際 LLM token 為 0。</div>
+          </div>
+          <div class="news-actions">
+            <button class="secondary" id="refresh-us-news">抓取美股新聞</button>
+          </div>
+        </div>
+        <div class="panel-body">
+          <section class="controls" style="padding:0; margin-bottom:12px;">
+            <div>
+              <label for="us-news-mode">抓取模式</label>
+              <select id="us-news-mode">
+                <option value="market" selected>市場新聞</option>
+                <option value="symbols">指定個股 + 市場新聞</option>
+              </select>
+            </div>
+            <div>
+              <label for="us-symbols">美股代號（選填）</label>
+              <input id="us-symbols" value="" placeholder="AAPL,NVDA,TSLA" />
+            </div>
+            <div>
+              <label for="us-industry">產業</label>
+              <select id="us-industry">
+                <option value="">全部</option>
+                <option value="半導體 / AI">半導體 / AI</option>
+                <option value="AI / 伺服器">AI / 伺服器</option>
+                <option value="軟體雲端">軟體雲端</option>
+                <option value="電動車">電動車</option>
+                <option value="金融">金融</option>
+                <option value="能源">能源</option>
+                <option value="生技醫療">生技醫療</option>
+                <option value="消費零售">消費零售</option>
+                <option value="原物料">原物料</option>
+                <option value="總體經濟">總體經濟</option>
+                <option value="其他">其他</option>
+              </select>
+            </div>
+            <div>
+              <label for="us-limit">每來源筆數</label>
+              <select id="us-limit">
+                <option value="3">3</option>
+                <option value="5" selected>5</option>
+                <option value="8">8</option>
+              </select>
+            </div>
+            <label class="toggle" style="align-self:end; min-height:42px;">
+              <input type="checkbox" id="us-use-ollama" /> Ollama 分類
+            </label>
+          </section>
+          <div class="job-meta" style="margin-bottom:12px;">
+            <div>
+              <div class="panel-title">Obsidian Vault</div>
+              <div class="muted" id="obsidian-note">讀取 Obsidian 同步狀態...</div>
+            </div>
+            <div class="publish-actions">
+              <button class="secondary" id="export-obsidian">同步 Obsidian</button>
+            </div>
+          </div>
+          <div id="us-news-list"></div>
+        </div>
+      </section>
+    </section>
+
     <section id="coverage-view" class="panel" style="display:none;">
       <div class="panel-head">
         <div class="panel-title">更新中心</div>
@@ -506,6 +594,11 @@
       個股新聞採手動按鈕觸發，來源為
       <a href="https://tw.stock.yahoo.com/" target="_blank" rel="noreferrer">Yahoo 股市</a>
       RSS 與公開文章頁，本機只保留標題、連結與內文摘錄。
+      美股新聞採手動按鈕觸發，來源為
+      <a href="https://finance.yahoo.com/" target="_blank" rel="noreferrer">Yahoo Finance</a>、
+      <a href="https://www.cnbc.com/" target="_blank" rel="noreferrer">CNBC</a>、
+      <a href="https://www.marketwatch.com/" target="_blank" rel="noreferrer">MarketWatch</a>
+      RSS；產業分類預設由本機關鍵字規則快速判斷，可選擇 Ollama 模型輔助分類並記錄 token 數。
     </section>
   </main>
 
@@ -513,7 +606,7 @@
     window.STOCK_CHIP_STATIC = true;
   </script>
   <script>
-    const state = { tab: "ranking", previousTab: "ranking", detail: null, broker: "", lastDataUpdatedAt: "", chartRange: 20, rankingRows: [], rankingSort: null };
+    const state = { tab: "ranking", previousTab: "ranking", detail: null, broker: "", lastDataUpdatedAt: "", chartRange: 20, rankingRows: [], rankingSort: null, usNewsRows: [] };
     const STATIC_MODE = window.STOCK_CHIP_STATIC === true;
     const staticCache = {};
     const chartColors = { close: "#0f766e", ma5: "#b42318", ma10: "#175cd3", ma20: "#f59e0b", ma60: "#7a5af8" };
@@ -594,6 +687,13 @@
       if (parsed.pathname === "/api/update-tasks") {
         const meta = await staticData("data/meta.json");
         return {running: false, latest_job: null, latest_data_updated_at: meta.exported_at || "", tasks: []};
+      }
+      if (parsed.pathname === "/api/us-news") {
+        const data = await staticData("data/us_news.json");
+        const industry = parsed.searchParams.get("industry") || "";
+        const limit = Number(parsed.searchParams.get("limit") || 80);
+        const rows = (data.rows || []).filter(row => !industry || row.industry === industry).slice(0, limit);
+        return {rows};
       }
       throw new Error(`靜態版不支援：${parsed.pathname}`);
     }
@@ -849,6 +949,112 @@
         btn.textContent = "抓取新聞";
       }
     }
+    function renderUSNews(rows) {
+      const target = document.querySelector("#us-news-list");
+      const note = document.querySelector("#us-news-note");
+      if (!target || !note) return;
+      const latestFetch = rows.map(row => row.fetched_at).filter(Boolean).sort().at(-1);
+      const aiCount = rows.filter(row => String(row.classified_by || "").startsWith("ollama:")).length;
+      const tokenTotal = rows.reduce((sum, row) => sum + Number(row.classification_total_tokens || 0), 0);
+      note.textContent = latestFetch
+        ? `本機快取 ${rows.length} 則，最後抓取 ${latestFetch}，Ollama 分類 ${aiCount} 則，分類 token ${fmt(tokenTotal)}`
+        : "尚無快取；按「抓取美股新聞」後會抓 Yahoo Finance、CNBC、MarketWatch RSS，預設用 0 token 規則分類";
+      if (!rows.length) {
+        target.innerHTML = `<div class="empty">${STATIC_MODE ? "靜態版目前未匯出美股新聞。" : "尚無美股新聞快取。"}</div>`;
+        return;
+      }
+      target.innerHTML = `<div class="news-list">${rows.map(row => {
+        const sentimentClass = row.sentiment === "偏多" ? "good" : row.sentiment === "偏空" ? "bad" : "";
+        const classifierClass = String(row.classified_by || "").startsWith("ollama:") ? "ai" : "";
+        return `<article class="news-item">
+          <a class="news-title" href="${esc(row.url)}" target="_blank" rel="noreferrer">${esc(row.title)}</a>
+          <div class="news-meta">${esc(row.symbol || "MARKET")} · ${esc(row.source || "")} · ${esc(row.published_at || "")} · 抓取 ${esc(row.fetched_at || "")}</div>
+          <div class="tag-list">
+            <span class="tag">${esc(row.industry || "其他")}</span>
+            <span class="tag">${esc(row.event_type || "一般新聞")}</span>
+            <span class="tag ${sentimentClass}">${esc(row.sentiment || "中性")}</span>
+            <span class="tag ${classifierClass}">${esc(row.classified_by || "rules")}</span>
+            <span class="tag">信心 ${esc(fmt(row.confidence || 0))}</span>
+            <span class="tag">token ${esc(fmt(row.classification_total_tokens || 0))}</span>
+          </div>
+          <div class="news-text">${esc(row.reason || row.summary || "")}</div>
+        </article>`;
+      }).join("")}</div>`;
+    }
+    function renderObsidianStatus(data) {
+      const note = document.querySelector("#obsidian-note");
+      if (!note) return;
+      if (!data?.exists) {
+        note.textContent = "尚未建立 vault；按「同步 Obsidian」會建立 obsidian/news-vault。";
+        return;
+      }
+      note.textContent = `${data.vault_dir || "obsidian/news-vault"} · raw ${fmt(data.raw_count || 0)} 則 · daily ${fmt(data.daily_count || 0)} 檔 · 產業 ${fmt(data.industry_count || 0)} 檔 · 最後同步 ${data.updated_at || "-"}`;
+    }
+    async function loadObsidianStatus() {
+      if (STATIC_MODE) {
+        renderObsidianStatus({exists:false});
+        return;
+      }
+      try {
+        renderObsidianStatus(await getJSON("/api/obsidian/status"));
+      } catch (err) {
+        const note = document.querySelector("#obsidian-note");
+        if (note) note.textContent = `Obsidian 狀態讀取失敗：${err.message}`;
+      }
+    }
+    async function exportObsidian(btn) {
+      if (!btn) return;
+      const original = btn.textContent;
+      btn.disabled = true;
+      btn.textContent = "同步中";
+      const note = document.querySelector("#obsidian-note");
+      if (note) note.textContent = "正在依 SQLite 快取重建 Obsidian vault...";
+      try {
+        const result = await postJSON("/api/obsidian/export", {});
+        renderObsidianStatus(result.status || result);
+      } catch (err) {
+        if (note) note.textContent = `Obsidian 同步失敗：${err.message}`;
+      } finally {
+        btn.disabled = false;
+        btn.textContent = original;
+      }
+    }
+    async function loadUSNews() {
+      const industry = document.querySelector("#us-industry")?.value || "";
+      const [data] = await Promise.all([
+        getJSON(`/api/us-news?industry=${encodeURIComponent(industry)}&limit=80`),
+        loadObsidianStatus()
+      ]);
+      state.usNewsRows = data.rows || [];
+      renderUSNews(state.usNewsRows);
+    }
+    async function refreshUSNews() {
+      const btn = document.querySelector("#refresh-us-news");
+      if (!btn) return;
+      const original = btn.textContent;
+      btn.disabled = true;
+      btn.textContent = "抓取中";
+      document.querySelector("#us-news-note").textContent = document.querySelector("#us-use-ollama").checked
+        ? "正在抓取 RSS 並執行 Ollama 分類，第一次可能需要較久..."
+        : "正在抓取 RSS 並執行本機規則快速分類，分類 token 為 0...";
+      try {
+        const mode = document.querySelector("#us-news-mode").value;
+        const symbols = mode === "symbols"
+          ? document.querySelector("#us-symbols").value.split(",").map(item => item.trim()).filter(Boolean)
+          : [];
+        const limit = Number(document.querySelector("#us-limit").value || 5);
+        const useOllama = document.querySelector("#us-use-ollama").checked;
+        const result = await postJSON("/api/us-news/refresh", { symbols, limit, use_ollama: useOllama, include_symbol_news: mode === "symbols" });
+        state.usNewsRows = result.rows || [];
+        renderUSNews(state.usNewsRows);
+        if (result.obsidian) renderObsidianStatus(result.obsidian);
+      } catch (err) {
+        document.querySelector("#us-news-note").textContent = `抓取失敗：${err.message}`;
+      } finally {
+        btn.disabled = false;
+        btn.textContent = original;
+      }
+    }
     async function refreshSingleSection(section, btn) {
       const stock = state.detail?.stock?.stock_id || document.querySelector("#detail-stock").value.trim();
       const days = Number(document.querySelector("#days").value || 20);
@@ -996,12 +1202,12 @@
         return;
       }
       document.querySelector("#update-tasks").innerHTML = tasks.map(task => `
-        <div class="job-card">
+        <div class="job-card ${task.id === "all_data" ? "primary-job" : ""}">
           <div class="job-title">${esc(task.title)}</div>
           <div class="job-desc">${esc(task.description)}</div>
           <div class="job-time">最後更新：${esc(task.last_updated_at || "尚未更新")}</div>
           <div class="job-time">資料更新：${esc(task.last_data_updated_at || "尚無資料")}</div>
-          <button data-task="${esc(task.id)}" ${running ? "disabled" : ""}>${running ? "執行中" : "開始更新"}</button>
+          <button class="${task.id === "all_data" ? "" : "secondary"}" data-task="${esc(task.id)}" ${running ? "disabled" : ""}>${running ? "執行中" : task.id === "all_data" ? "一鍵更新" : "開始更新"}</button>
         </div>
       `).join("");
       document.querySelectorAll("[data-task]").forEach(btn => btn.addEventListener("click", async () => {
@@ -1233,10 +1439,12 @@
       await loadMeta();
       document.querySelector("#ranking-view").style.display = state.tab === "ranking" || state.tab === "watchlist" ? "" : "none";
       document.querySelector("#detail-view").style.display = state.tab === "detail" ? "" : "none";
+      document.querySelector("#us-news-view").style.display = state.tab === "us-news" ? "" : "none";
       document.querySelector("#coverage-view").style.display = state.tab === "coverage" ? "" : "none";
       if (state.tab === "ranking") await loadRanking(false);
       if (state.tab === "watchlist") await loadRanking(true);
       if (state.tab === "detail") await loadDetail();
+      if (state.tab === "us-news") await loadUSNews();
       if (state.tab === "coverage") {
         await loadCoverage();
         startJobPolling();
@@ -1250,6 +1458,9 @@
     document.querySelector("#load-detail").addEventListener("click", loadDetail);
     document.querySelector("#watchlist-toggle").addEventListener("click", toggleWatchlist);
     document.querySelector("#refresh-news").addEventListener("click", refreshNews);
+    document.querySelector("#refresh-us-news").addEventListener("click", refreshUSNews);
+    document.querySelector("#export-obsidian").addEventListener("click", event => exportObsidian(event.target));
+    document.querySelector("#us-industry").addEventListener("change", loadUSNews);
     document.querySelector("#static-export").addEventListener("click", event => runStaticAction("export", event.target));
     document.querySelector("#static-publish").addEventListener("click", event => runStaticAction("publish", event.target));
     document.querySelector("#detail-stock").addEventListener("change", loadDetail);
@@ -1259,7 +1470,7 @@
       btn.addEventListener("click", () => refreshSingleSection(btn.dataset.section, btn));
     });
     if (STATIC_MODE) {
-      document.querySelectorAll(".single-refresh, #refresh-news").forEach(btn => btn.style.display = "none");
+      document.querySelectorAll(".single-refresh, #refresh-news, #refresh-us-news, #export-obsidian, #us-use-ollama").forEach(btn => btn.style.display = "none");
       document.querySelector("#static-publish-box").style.display = "none";
       document.querySelector("#watchlist-toggle").title = "靜態版自選股儲存在此瀏覽器";
     }
