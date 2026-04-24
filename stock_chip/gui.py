@@ -243,6 +243,15 @@ INDEX_HTML = """<!doctype html>
     .job-desc { color: var(--muted); font-size: 13px; line-height: 1.5; min-height: 38px; }
     .job-time { color: var(--muted); font-size: 12px; margin-top: 8px; line-height: 1.5; }
     .job-card button { margin-top: 12px; min-width: 120px; }
+    .publish-box {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 14px;
+      background: #fff;
+      margin-bottom: 14px;
+    }
+    .publish-actions { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 10px; }
+    .publish-actions button { min-width: 140px; }
     .status-pill {
       display: inline-flex;
       align-items: center;
@@ -493,6 +502,20 @@ INDEX_HTML = """<!doctype html>
       </div>
       <div class="panel-body">
         <div class="update-grid" id="update-tasks"></div>
+        <div class="publish-box" id="static-publish-box">
+          <div class="job-meta">
+            <div>
+              <div class="panel-title">GitHub Pages 發布</div>
+              <div class="muted" id="static-publish-note">讀取發布狀態...</div>
+            </div>
+            <span class="status-pill" id="static-publish-status">讀取中</span>
+          </div>
+          <div class="publish-actions">
+            <button class="secondary" id="static-export">匯出靜態頁</button>
+            <button id="static-publish">發布到 GitHub Pages</button>
+          </div>
+          <pre class="log-box" id="static-publish-log">尚未執行。</pre>
+        </div>
         <div class="layout-2">
           <div>
             <div class="panel-title" style="margin-bottom:8px;">已抓區間分點排行</div>
@@ -1006,6 +1029,7 @@ INDEX_HTML = """<!doctype html>
         {key:"total_stocks", label:"總數"},
         {key:"remaining", label:"剩餘"}
       ]);
+      await loadStaticPublishStatus();
     }
     function renderUpdateTasks(tasks, running) {
       if (STATIC_MODE) {
@@ -1055,6 +1079,62 @@ INDEX_HTML = """<!doctype html>
         job.finished_at ? `結束：${job.finished_at}` : "",
         job.error ? `錯誤：${job.error}` : "",
       ].filter(Boolean).join("\\n");
+    }
+    function renderStaticPublishStatus(data, message = "") {
+      const status = document.querySelector("#static-publish-status");
+      const note = document.querySelector("#static-publish-note");
+      const log = document.querySelector("#static-publish-log");
+      if (!status || !note || !log) return;
+      const dirty = Number(data?.docs_changed || 0) + Number(data?.reports_changed || 0);
+      status.className = `status-pill ${dirty ? "running" : "done"}`;
+      status.textContent = dirty ? "有未發布變更" : "已同步";
+      note.innerHTML = [
+        data?.pages_url ? `<a href="${esc(data.pages_url)}" target="_blank" rel="noreferrer">${esc(data.pages_url)}</a>` : "",
+        data?.exported_at ? `靜態資料匯出：${esc(data.exported_at)}` : "",
+        data?.commit ? `目前 commit：${esc(data.commit)}` : "",
+      ].filter(Boolean).join(" · ") || "尚無發布資訊";
+      log.textContent = message || [
+        `分支：${data?.branch || "-"}`,
+        `docs 變更：${fmt(data?.docs_changed || 0)} 個檔案`,
+        `reports 變更：${fmt(data?.reports_changed || 0)} 個檔案`,
+        `Pages：${data?.pages_url || "-"}`,
+      ].join("\\n");
+    }
+    async function loadStaticPublishStatus() {
+      if (STATIC_MODE) return;
+      try {
+        renderStaticPublishStatus(await getJSON("/api/static/status"));
+      } catch (err) {
+        const status = document.querySelector("#static-publish-status");
+        const log = document.querySelector("#static-publish-log");
+        if (status) {
+          status.className = "status-pill failed";
+          status.textContent = "讀取失敗";
+        }
+        if (log) log.textContent = err.message;
+      }
+    }
+    async function runStaticAction(action, btn) {
+      if (!btn) return;
+      const original = btn.textContent;
+      document.querySelectorAll("#static-export, #static-publish").forEach(item => item.disabled = true);
+      btn.textContent = action === "publish" ? "發布中" : "匯出中";
+      renderStaticPublishStatus({}, action === "publish" ? "正在匯出、提交並推送..." : "正在重新匯出 docs/ 靜態資料...");
+      try {
+        const result = await postJSON(action === "publish" ? "/api/static/publish" : "/api/static/export", {});
+        renderStaticPublishStatus(result.status, result.message || "完成");
+      } catch (err) {
+        const status = document.querySelector("#static-publish-status");
+        const log = document.querySelector("#static-publish-log");
+        if (status) {
+          status.className = "status-pill failed";
+          status.textContent = "失敗";
+        }
+        if (log) log.textContent = err.message;
+      } finally {
+        btn.textContent = original;
+        document.querySelectorAll("#static-export, #static-publish").forEach(item => item.disabled = false);
+      }
     }
     function startJobPolling() {
       clearInterval(window.__jobPoll);
@@ -1211,6 +1291,8 @@ INDEX_HTML = """<!doctype html>
     document.querySelector("#load-detail").addEventListener("click", loadDetail);
     document.querySelector("#watchlist-toggle").addEventListener("click", toggleWatchlist);
     document.querySelector("#refresh-news").addEventListener("click", refreshNews);
+    document.querySelector("#static-export").addEventListener("click", event => runStaticAction("export", event.target));
+    document.querySelector("#static-publish").addEventListener("click", event => runStaticAction("publish", event.target));
     document.querySelector("#detail-stock").addEventListener("change", loadDetail);
     document.querySelectorAll(".ma-toggle").forEach(input => input.addEventListener("change", renderPriceChart));
     document.querySelector("#close-toggle").addEventListener("change", renderPriceChart);
@@ -1219,6 +1301,7 @@ INDEX_HTML = """<!doctype html>
     });
     if (STATIC_MODE) {
       document.querySelectorAll(".single-refresh, #refresh-news").forEach(btn => btn.style.display = "none");
+      document.querySelector("#static-publish-box").style.display = "none";
       document.querySelector("#watchlist-toggle").title = "靜態版自選股儲存在此瀏覽器";
     }
     document.querySelector("#chart-range").addEventListener("change", event => setChartRange(event.target.value));
@@ -1821,6 +1904,111 @@ def start_update_task(task_id: str, days: int) -> dict[str, object]:
     return dict(job)
 
 
+def run_git(args: list[str], timeout: int = 120) -> str:
+    proc = subprocess.run(
+        ["git", *args],
+        cwd=ROOT,
+        text=True,
+        capture_output=True,
+        timeout=timeout,
+        check=False,
+    )
+    if proc.returncode != 0:
+        detail = (proc.stderr or proc.stdout or "").strip()
+        raise RuntimeError(detail or f"git {' '.join(args)} 失敗")
+    return proc.stdout.strip()
+
+
+def pages_url_from_remote(remote_url: str) -> str:
+    text = remote_url.strip()
+    if not text:
+        return ""
+    owner_repo = ""
+    if text.startswith("git@github.com:"):
+        owner_repo = text.removeprefix("git@github.com:")
+    elif "github.com/" in text:
+        owner_repo = text.split("github.com/", 1)[1]
+    owner_repo = owner_repo.removesuffix(".git").strip("/")
+    parts = owner_repo.split("/")
+    if len(parts) >= 2:
+        return f"https://{parts[0]}.github.io/{parts[1]}/"
+    return ""
+
+
+def git_changed_count(paths: list[str]) -> int:
+    output = run_git(["status", "--porcelain", "--", *paths])
+    return len([line for line in output.splitlines() if line.strip()])
+
+
+def static_publish_status() -> dict[str, object]:
+    meta_path = ROOT / "docs" / "data" / "meta.json"
+    meta: dict[str, object] = {}
+    if meta_path.exists():
+        try:
+            meta = json.loads(meta_path.read_text(encoding="utf-8"))
+        except json.JSONDecodeError:
+            meta = {}
+    remote = run_git(["config", "--get", "remote.origin.url"]) if (ROOT / ".git").exists() else ""
+    return {
+        "git_repo": (ROOT / ".git").exists(),
+        "branch": run_git(["branch", "--show-current"]) if (ROOT / ".git").exists() else "",
+        "remote": remote,
+        "pages_url": pages_url_from_remote(remote),
+        "commit": run_git(["rev-parse", "--short", "HEAD"]) if (ROOT / ".git").exists() else "",
+        "exported_at": meta.get("exported_at", ""),
+        "latest_date": meta.get("latest_date", ""),
+        "static_stock_count": meta.get("static_stock_count", 0),
+        "docs_changed": git_changed_count(["docs"]) if (ROOT / ".git").exists() else 0,
+        "reports_changed": git_changed_count(["reports"]) if (ROOT / ".git").exists() else 0,
+    }
+
+
+def export_static_pages() -> dict[str, object]:
+    proc = subprocess.run(
+        [sys.executable, "-m", "stock_chip.export_static", "--out", "docs"],
+        cwd=ROOT,
+        text=True,
+        capture_output=True,
+        timeout=10 * 60,
+        check=False,
+    )
+    if proc.returncode != 0:
+        detail = (proc.stderr or proc.stdout or "").strip()
+        raise RuntimeError(detail or "匯出靜態頁失敗")
+    return {
+        "message": proc.stdout.strip() or "已匯出 docs/ 靜態資料。",
+        "status": static_publish_status(),
+    }
+
+
+def publish_static_pages() -> dict[str, object]:
+    export_result = export_static_pages()
+    run_git(["add", "docs", "reports"])
+    staged = subprocess.run(
+        ["git", "diff", "--cached", "--quiet", "--", "docs", "reports"],
+        cwd=ROOT,
+        check=False,
+    )
+    if staged.returncode == 0:
+        status = static_publish_status()
+        return {
+            "message": f"沒有靜態資料變更需要發布。{export_result['message']}",
+            "status": status,
+            "published": False,
+        }
+    if staged.returncode not in {0, 1}:
+        raise RuntimeError("檢查 staged 變更失敗")
+    message = f"Update static stock data {now_text()}"
+    run_git(["commit", "-m", message], timeout=120)
+    run_git(["push", "origin", run_git(["branch", "--show-current"])], timeout=10 * 60)
+    status = static_publish_status()
+    return {
+        "message": f"已發布到 GitHub Pages：{status.get('pages_url') or '-'}",
+        "status": status,
+        "published": True,
+    }
+
+
 def refresh_stock_section(stock_id: str, section: str, days: int) -> dict[str, object]:
     stock_id = stock_id.strip()
     if not stock_id:
@@ -2319,6 +2507,9 @@ class GUIHandler(BaseHTTPRequestHandler):
             if parsed.path == "/api/update-tasks":
                 json_response(self, update_task_state())
                 return
+            if parsed.path == "/api/static/status":
+                json_response(self, static_publish_status())
+                return
             json_response(self, {"error": "not found"}, HTTPStatus.NOT_FOUND)
         except Exception as exc:
             json_response(self, {"error": str(exc)}, HTTPStatus.INTERNAL_SERVER_ERROR)
@@ -2360,6 +2551,12 @@ class GUIHandler(BaseHTTPRequestHandler):
                 query = str(payload.get("query") or "")
                 days = int(payload.get("days") or 20)
                 json_response(self, ensure_stock_data(query, days))
+                return
+            if parsed.path == "/api/static/export":
+                json_response(self, export_static_pages())
+                return
+            if parsed.path == "/api/static/publish":
+                json_response(self, publish_static_pages())
                 return
             json_response(self, {"error": "not found"}, HTTPStatus.NOT_FOUND)
         except Exception as exc:
