@@ -258,19 +258,55 @@
       margin-left: 8px;
       vertical-align: middle;
     }
-    .news-list { display: grid; gap: 12px; }
-    .news-item {
-      border-bottom: 1px solid #edf1f4;
-      padding-bottom: 12px;
+    .obsidian-status {
+      display: flex;
+      justify-content: space-between;
+      gap: 14px;
+      align-items: flex-start;
+      margin: 4px 0 16px;
+      padding: 12px 14px;
+      border: 1px solid #d8e2ea;
+      border-radius: 8px;
+      background: #f6f8fa;
     }
-    .news-item:last-child { border-bottom: 0; padding-bottom: 0; }
+    .obsidian-kicker {
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 800;
+      margin-bottom: 4px;
+    }
+    .obsidian-text { color: #344054; font-size: 13px; line-height: 1.55; }
+    .news-section-title {
+      margin: 16px 0 10px;
+      color: var(--ink);
+      font-size: 15px;
+      font-weight: 850;
+    }
+    .news-list { display: grid; gap: 10px; }
+    .news-item {
+      padding: 14px;
+      border: 1px solid #dce5ec;
+      border-radius: 8px;
+      background: #fbfdff;
+    }
+    .news-item:nth-child(even) { background: #f7fafc; }
     .news-title {
+      display: block;
       color: var(--ink);
       font-weight: 850;
       text-decoration: none;
       line-height: 1.45;
     }
     .news-title:hover { color: var(--accent-dark); text-decoration: underline; }
+    .news-open {
+      display: inline-flex;
+      margin-top: 4px;
+      color: var(--accent-dark);
+      font-size: 12px;
+      font-weight: 800;
+      text-decoration: none;
+    }
+    .news-open:hover { text-decoration: underline; }
     .news-meta { color: var(--muted); font-size: 12px; margin: 5px 0 7px; }
     .news-text { color: #344054; font-size: 13px; line-height: 1.65; white-space: pre-wrap; }
     .tag-list { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 6px; }
@@ -500,7 +536,21 @@
               <input id="us-symbols" value="" placeholder="AAPL,NVDA,TSLA" />
             </div>
             <div>
-              <label for="us-industry">產業</label>
+              <label for="us-limit">每個 RSS 最多幾則</label>
+              <select id="us-limit">
+                <option value="5" selected>5</option>
+                <option value="8">8</option>
+                <option value="15">15</option>
+                <option value="25">25</option>
+              </select>
+            </div>
+            <label class="toggle" style="align-self:end; min-height:42px;">
+              <input type="checkbox" id="us-use-ollama" /> Ollama 分類
+            </label>
+          </section>
+          <section class="controls" style="padding:0; margin-bottom:12px;">
+            <div>
+              <label for="us-industry">產業篩選</label>
               <select id="us-industry">
                 <option value="">全部</option>
                 <option value="半導體 / AI">半導體 / AI</option>
@@ -516,27 +566,17 @@
                 <option value="其他">其他</option>
               </select>
             </div>
-            <div>
-              <label for="us-limit">每來源筆數</label>
-              <select id="us-limit">
-                <option value="3">3</option>
-                <option value="5" selected>5</option>
-                <option value="8">8</option>
-              </select>
+            <div style="align-self:end;">
+              <div class="muted">先抓來源 RSS，再依標題與摘要關鍵字分類；產業選單只篩選已抓結果。</div>
             </div>
-            <label class="toggle" style="align-self:end; min-height:42px;">
-              <input type="checkbox" id="us-use-ollama" /> Ollama 分類
-            </label>
           </section>
-          <div class="job-meta" style="margin-bottom:12px;">
+          <div class="obsidian-status">
             <div>
-              <div class="panel-title">Obsidian Vault</div>
-              <div class="muted" id="obsidian-note">讀取 Obsidian 同步狀態...</div>
-            </div>
-            <div class="publish-actions">
-              <button class="secondary" id="export-obsidian">同步 Obsidian</button>
+              <div class="obsidian-kicker">Obsidian Vault 同步狀態</div>
+              <div class="obsidian-text" id="obsidian-note">讀取 Obsidian 同步狀態...</div>
             </div>
           </div>
+          <div class="news-section-title">新聞列表</div>
           <div id="us-news-list"></div>
         </div>
       </section>
@@ -923,7 +963,8 @@
       target.innerHTML = `<div class="news-list">${rows.map(row => {
         const text = row.content_excerpt || row.summary || "";
         return `<article class="news-item">
-          <a class="news-title" href="${esc(row.url)}" target="_blank" rel="noreferrer">${esc(row.title)}</a>
+          <a class="news-title" href="${esc(row.url)}" target="_self" rel="noreferrer">${esc(row.title)}</a>
+          <a class="news-open" href="${esc(row.url)}" target="_self" rel="noreferrer">開啟原文</a>
           <div class="news-meta">${esc(row.source || "Yahoo股市")} · ${esc(row.published_at || "")} · 抓取 ${esc(row.fetched_at || "")}</div>
           <div class="news-text">${esc(text)}</div>
         </article>`;
@@ -967,7 +1008,8 @@
         const sentimentClass = row.sentiment === "偏多" ? "good" : row.sentiment === "偏空" ? "bad" : "";
         const classifierClass = String(row.classified_by || "").startsWith("ollama:") ? "ai" : "";
         return `<article class="news-item">
-          <a class="news-title" href="${esc(row.url)}" target="_blank" rel="noreferrer">${esc(row.title)}</a>
+          <a class="news-title" href="${esc(row.url)}" target="_self" rel="noreferrer">${esc(row.title)}</a>
+          <a class="news-open" href="${esc(row.url)}" target="_self" rel="noreferrer">開啟原文</a>
           <div class="news-meta">${esc(row.symbol || "MARKET")} · ${esc(row.source || "")} · ${esc(row.published_at || "")} · 抓取 ${esc(row.fetched_at || "")}</div>
           <div class="tag-list">
             <span class="tag">${esc(row.industry || "其他")}</span>
@@ -985,10 +1027,16 @@
       const note = document.querySelector("#obsidian-note");
       if (!note) return;
       if (!data?.exists) {
-        note.textContent = "尚未建立 vault；按「同步 Obsidian」會建立 obsidian/news-vault。";
+        note.innerHTML = "尚未建立 vault；抓取美股新聞後會自動建立 <strong>obsidian/news-vault</strong>。";
         return;
       }
-      note.textContent = `${data.vault_dir || "obsidian/news-vault"} · raw ${fmt(data.raw_count || 0)} 則 · daily ${fmt(data.daily_count || 0)} 檔 · 產業 ${fmt(data.industry_count || 0)} 檔 · 最後同步 ${data.updated_at || "-"}`;
+      note.innerHTML = `
+        <strong>${esc(data.vault_dir || "obsidian/news-vault")}</strong>
+        <span>raw ${esc(fmt(data.raw_count || 0))} 則（保留近 ${esc(fmt(data.retention_days || 3))} 日）</span>
+        <span>daily ${esc(fmt(data.daily_count || 0))} 檔</span>
+        <span>產業 ${esc(fmt(data.industry_count || 0))} 檔</span>
+        <span>最後同步 ${esc(data.updated_at || "-")}</span>
+      `;
     }
     async function loadObsidianStatus() {
       if (STATIC_MODE) {
@@ -1000,23 +1048,6 @@
       } catch (err) {
         const note = document.querySelector("#obsidian-note");
         if (note) note.textContent = `Obsidian 狀態讀取失敗：${err.message}`;
-      }
-    }
-    async function exportObsidian(btn) {
-      if (!btn) return;
-      const original = btn.textContent;
-      btn.disabled = true;
-      btn.textContent = "同步中";
-      const note = document.querySelector("#obsidian-note");
-      if (note) note.textContent = "正在依 SQLite 快取重建 Obsidian vault...";
-      try {
-        const result = await postJSON("/api/obsidian/export", {});
-        renderObsidianStatus(result.status || result);
-      } catch (err) {
-        if (note) note.textContent = `Obsidian 同步失敗：${err.message}`;
-      } finally {
-        btn.disabled = false;
-        btn.textContent = original;
       }
     }
     async function loadUSNews() {
@@ -1437,6 +1468,9 @@
     }
     async function reload() {
       await loadMeta();
+      const showTwStockOverview = state.tab === "ranking" || state.tab === "watchlist" || state.tab === "detail";
+      document.querySelector(".toolbar").style.display = showTwStockOverview ? "" : "none";
+      document.querySelector("#metrics").style.display = showTwStockOverview ? "" : "none";
       document.querySelector("#ranking-view").style.display = state.tab === "ranking" || state.tab === "watchlist" ? "" : "none";
       document.querySelector("#detail-view").style.display = state.tab === "detail" ? "" : "none";
       document.querySelector("#us-news-view").style.display = state.tab === "us-news" ? "" : "none";
@@ -1459,7 +1493,6 @@
     document.querySelector("#watchlist-toggle").addEventListener("click", toggleWatchlist);
     document.querySelector("#refresh-news").addEventListener("click", refreshNews);
     document.querySelector("#refresh-us-news").addEventListener("click", refreshUSNews);
-    document.querySelector("#export-obsidian").addEventListener("click", event => exportObsidian(event.target));
     document.querySelector("#us-industry").addEventListener("change", loadUSNews);
     document.querySelector("#static-export").addEventListener("click", event => runStaticAction("export", event.target));
     document.querySelector("#static-publish").addEventListener("click", event => runStaticAction("publish", event.target));
@@ -1470,7 +1503,7 @@
       btn.addEventListener("click", () => refreshSingleSection(btn.dataset.section, btn));
     });
     if (STATIC_MODE) {
-      document.querySelectorAll(".single-refresh, #refresh-news, #refresh-us-news, #export-obsidian, #us-use-ollama").forEach(btn => btn.style.display = "none");
+      document.querySelectorAll(".single-refresh, #refresh-news, #refresh-us-news, #us-use-ollama").forEach(btn => btn.style.display = "none");
       document.querySelector("#static-publish-box").style.display = "none";
       document.querySelector("#watchlist-toggle").title = "靜態版自選股儲存在此瀏覽器";
     }
