@@ -1,24 +1,24 @@
 {
   "branch_coverage_by_days": {
     "20": {
-      "branch_covered": 47,
+      "branch_covered": 36,
       "rows": [
         {
-          "attempted": 17,
-          "empty_count": 12,
+          "attempted": 20,
+          "empty_count": 14,
           "failed_count": 0,
           "market": "TPEX",
           "remaining": 878,
-          "stocks_with_branch": 5,
-          "total_stocks": 883
+          "stocks_with_branch": 6,
+          "total_stocks": 884
         },
         {
-          "attempted": 83,
-          "empty_count": 41,
+          "attempted": 80,
+          "empty_count": 50,
           "failed_count": 0,
           "market": "TWSE",
-          "remaining": 1035,
-          "stocks_with_branch": 42,
+          "remaining": 1047,
+          "stocks_with_branch": 30,
           "total_stocks": 1077
         }
       ]
@@ -27,13 +27,13 @@
       "branch_covered": 0,
       "rows": [
         {
-          "attempted": 0,
-          "empty_count": 0,
+          "attempted": 1,
+          "empty_count": 1,
           "failed_count": 0,
           "market": "TPEX",
-          "remaining": 883,
+          "remaining": 884,
           "stocks_with_branch": 0,
-          "total_stocks": 883
+          "total_stocks": 884
         },
         {
           "attempted": 0,
@@ -47,27 +47,27 @@
       ]
     }
   },
-  "branch_covered": 47,
+  "branch_covered": 36,
   "days": [
     5,
     20
   ],
-  "esb_count": 349,
-  "exported_at": "2026-04-25 13:41:42",
+  "esb_count": 348,
+  "exported_at": "2026-04-28 00:53:00",
   "include_all_details": false,
-  "latest_date": "2026-04-24",
+  "latest_date": "2026-04-27",
   "missing_details": [],
   "search_market_counts": {
-    "TPEX": 882,
+    "TPEX": 883,
     "TWSE": 1075
   },
   "static_search_count_by_days": {
-    "20": 392,
-    "5": 392
+    "20": 405,
+    "5": 405
   },
-  "static_stock_count": 392,
-  "stock_count": 1960,
-  "tpex_count": 883,
+  "static_stock_count": 405,
+  "stock_count": 1961,
+  "tpex_count": 884,
   "twse_count": 1077,
   "watchlist": [
     "2376",

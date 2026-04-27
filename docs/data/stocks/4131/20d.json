@@ -259,9 +259,28 @@
       "ma5": 35.33,
       "ma60": null,
       "volume_lot": 57.0
+    },
+    {
+      "avg_price": 35.5453125,
+      "close": 35.6,
+      "date": "2026-04-27",
+      "ma10": 35.51,
+      "ma20": 35.475,
+      "ma5": 35.45,
+      "ma60": null,
+      "volume_lot": 64.0
     }
   ],
   "daily": [
+    {
+      "avg_price": 35.5453125,
+      "close": 35.6,
+      "date": "2026-04-27",
+      "dealer_net_lot": 0.0,
+      "foreign_net_lot": 16.0,
+      "trust_net_lot": 0.0,
+      "volume_lot": 64.0
+    },
     {
       "avg_price": 36.09473684210526,
       "close": 35.7,
@@ -432,29 +451,62 @@
       "foreign_net_lot": -2.0,
       "trust_net_lot": 0.0,
       "volume_lot": 83.0
-    },
-    {
-      "avg_price": 35.194117647058825,
-      "close": 35.5,
-      "date": "2026-03-26",
-      "dealer_net_lot": 0.0,
-      "foreign_net_lot": 17.0,
-      "trust_net_lot": 0.0,
-      "volume_lot": 51.0
     }
   ],
+  "margin": [],
   "news": [],
   "revenues": [],
-  "stock": {
-    "avg_price": 35.3378,
-    "close": 35.7,
-    "foreign_net_lot": -83.0,
-    "in_watchlist": false,
-    "latest_date": "2026-04-24",
+  "selection": {
+    "avg_price": 35.3478,
+    "branch_score": 0.0,
+    "chip_score": -1.44,
+    "close": 35.6,
+    "close_vs_top_buy_avg_pct": 0.0,
+    "confluence_branch_score": 0.0,
+    "confluence_direction_score": 0.0,
+    "confluence_inst_score": 0.0,
+    "confluence_price_score": 0.0,
+    "confluence_score": 0.0,
+    "confluence_streak_score": 0.0,
+    "foreign_buy_streak": 7.0,
+    "foreign_net_lot": -84.0,
+    "inst_net_lot": -84.0,
+    "inst_net_volume_pct": 0.0,
+    "latest_date": "2026-04-27",
     "market": "TPEX",
     "name": "浩泰",
+    "observed_days": 20,
+    "revenue_cumulative_yoy_pct": 0.0,
+    "revenue_mom_pct": 0.0,
+    "revenue_momentum_score": 0.0,
+    "revenue_month": "",
+    "revenue_yoy_pct": 0.0,
+    "selection_reason": "資料不足或法人與分點未同向",
+    "selection_score": 0.0,
+    "stock_id": "4131",
+    "top_buy_branch_avg_price": 0.0,
+    "top_buy_branch_name": "",
+    "top_buy_branch_net_lot": 0.0,
+    "top_buy_branch_volume_pct": 0.0,
+    "top_sell_branch_avg_price": 0.0,
+    "top_sell_branch_name": "",
+    "top_sell_branch_net_lot": 0.0,
+    "total_score": -1.44,
+    "trust_buy_streak": 0.0,
+    "trust_net_lot": 0.0
+  },
+  "stock": {
+    "avg_price": 35.3478,
+    "close": 35.6,
+    "foreign_net_lot": -84.0,
+    "in_watchlist": false,
+    "latest_date": "2026-04-27",
+    "margin_balance_change_lot": null,
+    "market": "TPEX",
+    "name": "浩泰",
+    "short_balance_change_lot": null,
     "stock_id": "4131",
     "trust_net_lot": 0.0,
-    "volume_lot": 2043.0
+    "volume_lot": 2056.0
   }
 }

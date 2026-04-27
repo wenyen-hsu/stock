@@ -97,6 +97,28 @@
     }
     .metric .label { color: var(--muted); font-size: 13px; }
     .metric .value { font-size: 24px; font-weight: 850; margin-top: 4px; }
+    .assist-grid {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(120px, 1fr));
+      gap: 10px;
+      padding: 14px;
+    }
+    .assist-card {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 10px;
+      background: #fbfdff;
+    }
+    .assist-label { color: var(--muted); font-size: 12px; font-weight: 800; }
+    .assist-value { color: var(--ink); font-size: 22px; font-weight: 900; margin-top: 4px; }
+    .assist-note { color: var(--muted); font-size: 12px; line-height: 1.45; margin-top: 6px; }
+    .assist-reason {
+      border-top: 1px solid var(--line);
+      padding: 12px 14px;
+      color: #344054;
+      font-size: 13px;
+      line-height: 1.6;
+    }
     .panel {
       background: var(--panel);
       border: 1px solid var(--line);
@@ -202,9 +224,18 @@
       border-color: #9ccdc8;
       background: #f6fbfa;
     }
+    .job-card.stale-warn {
+      border-color: #f6c76d;
+      background: #fffbf0;
+    }
+    .job-card.stale-bad {
+      border-color: #efb3ad;
+      background: #fff7f6;
+    }
     .job-title { font-weight: 850; margin-bottom: 6px; }
     .job-desc { color: var(--muted); font-size: 13px; line-height: 1.5; min-height: 38px; }
     .job-time { color: var(--muted); font-size: 12px; margin-top: 8px; line-height: 1.5; }
+    .job-extra { color: #344054; font-size: 12px; margin-top: 8px; line-height: 1.5; }
     .job-card button { margin-top: 12px; min-width: 120px; }
     .publish-box {
       border: 1px solid var(--line);
@@ -229,6 +260,8 @@
     .status-pill.running { background: #fff4e5; color: var(--warn); }
     .status-pill.failed { background: #fff1f0; color: var(--danger); }
     .status-pill.done { background: #ecfdf3; color: var(--good); }
+    .status-pill.warn { background: #fff4e5; color: var(--warn); }
+    .status-pill.bad { background: #fff1f0; color: var(--danger); }
     .job-meta {
       display: flex;
       justify-content: space-between;
@@ -309,6 +342,7 @@
     .news-open:hover { text-decoration: underline; }
     .news-meta { color: var(--muted); font-size: 12px; margin: 5px 0 7px; }
     .news-text { color: #344054; font-size: 13px; line-height: 1.65; white-space: pre-wrap; }
+    .news-match { color: #475467; font-size: 12px; line-height: 1.5; margin-top: 6px; }
     .tag-list { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 6px; }
     .tag {
       display: inline-flex;
@@ -334,6 +368,8 @@
       border-radius: 8px;
       font-size: 13px;
     }
+    pre a { color: #93c5fd; font-weight: 800; }
+    pre a:hover { color: #bfdbfe; }
     .empty { padding: 20px; color: var(--muted); }
     .sources {
       margin-top: 18px;
@@ -349,7 +385,7 @@
     @media (max-width: 1000px) {
       main { padding: 14px; }
       .toolbar { grid-template-columns: repeat(2, minmax(140px, 1fr)); }
-      .metrics, .layout-2, .update-grid { grid-template-columns: 1fr; }
+      .metrics, .layout-2, .update-grid, .assist-grid { grid-template-columns: 1fr; }
     }
   </style>
 </head>
@@ -373,6 +409,8 @@
           <option value="total_score">總分</option>
           <option value="chip_score">法人籌碼分數</option>
           <option value="branch_score">分點分數</option>
+          <option value="confluence_score">法人 + 分點共振</option>
+          <option value="selection_score">籌碼 + 營收動能</option>
           <option value="foreign_buy">外資買超</option>
           <option value="trust_buy">投信買超</option>
           <option value="inst_buy">外資 + 投信</option>
@@ -439,6 +477,15 @@
         </div>
       </div>
       <section class="metrics" id="detail-metrics"></section>
+      <section class="panel" id="selection-panel">
+        <div class="panel-head">
+          <div>
+            <div class="panel-title">選股輔助</div>
+            <div class="muted">共振分拆解：法人方向、分點集中、成本位置、連買續航與綜合理由</div>
+          </div>
+        </div>
+        <div id="selection-assist"></div>
+      </section>
       <section class="panel">
         <div class="panel-head">
           <div class="panel-title">股價走勢</div>
@@ -491,6 +538,16 @@
           </div>
           <div class="table-wrap" id="revenue-table"></div>
         </div>
+      </section>
+      <section class="panel">
+        <div class="panel-head">
+          <div>
+            <div class="panel-title">融資融券餘額</div>
+            <div class="muted" id="margin-note">取自 TWSE / TPEx 信用交易公開資料，單位為張</div>
+          </div>
+          <div class="panel-actions"><button class="secondary single-refresh" data-section="daily">更新融資融券</button></div>
+        </div>
+        <div class="table-wrap" id="margin-table"></div>
       </section>
       <section class="panel">
         <div class="panel-head">
@@ -613,6 +670,9 @@
               <div class="panel-title">最近任務</div>
               <span class="status-pill" id="job-status">尚未執行</span>
             </div>
+            <div class="publish-actions" id="job-actions" style="display:none;">
+              <button class="secondary" id="cancel-update">停止目前更新</button>
+            </div>
             <pre class="log-box" id="job-log">尚未執行更新任務。</pre>
           </div>
         </div>
@@ -624,7 +684,7 @@
       每日行情、成交均價、外資、投信、自營商買賣超取自
       <a href="https://www.twse.com.tw/" target="_blank" rel="noreferrer">TWSE 臺灣證券交易所</a>
       與 <a href="https://www.tpex.org.tw/" target="_blank" rel="noreferrer">TPEx 櫃買中心</a>
-      公開資料；區間外資、投信、均價、排行分數由本機 SQLite 依最近交易日重新彙總。
+      公開資料；融資融券取自 TWSE / TPEx 信用交易公開資料；區間外資、投信、均價、排行分數由本機 SQLite 依最近交易日重新彙總。
       月營收 24 個月歷史目前使用
       <a href="https://finmindtrade.com/" target="_blank" rel="noreferrer">FinMind</a>
       免費 API，月增率與年增率由本機依月營收與去年同期計算。
@@ -658,6 +718,23 @@
     };
     const cls = (v) => Number(v) > 0 ? "pos" : Number(v) < 0 ? "neg" : "";
     const esc = (v) => String(v ?? "").replace(/[&<>"']/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
+    function linkifyUrls(text) {
+      return esc(text).replace(/(https?:[/][/][^\s]+)/g, url => `<a href="${url}" target="_blank" rel="noreferrer">${url}</a>`);
+    }
+    function parseLocalTime(value) {
+      if (!value) return null;
+      const text = String(value).replace(" ", "T");
+      const date = new Date(text);
+      return Number.isNaN(date.getTime()) ? null : date;
+    }
+    function freshness(value, warnHours = 24, badHours = 48) {
+      const date = parseLocalTime(value);
+      if (!date) return { klass: "bad", label: "尚無資料", detail: "" };
+      const hours = Math.max(0, (Date.now() - date.getTime()) / 36e5);
+      if (hours >= badHours) return { klass: "bad", label: "過期", detail: `${Math.round(hours)} 小時前` };
+      if (hours >= warnHours) return { klass: "warn", label: "偏舊", detail: `${Math.round(hours)} 小時前` };
+      return { klass: "done", label: "新鮮", detail: `${Math.round(hours)} 小時前` };
+    }
     function staticWatchlistIds() {
       try {
         const saved = JSON.parse(localStorage.getItem("stockChipWatchlist") || "null");
@@ -1019,6 +1096,7 @@
             <span class="tag">信心 ${esc(fmt(row.confidence || 0))}</span>
             <span class="tag">token ${esc(fmt(row.classification_total_tokens || 0))}</span>
           </div>
+          ${row.matched_keywords ? `<div class="news-match">命中詞：${esc(row.matched_keywords)}</div>` : ""}
           <div class="news-text">${esc(row.reason || row.summary || "")}</div>
         </article>`;
       }).join("")}</div>`;
@@ -1113,14 +1191,24 @@
       {key:"close", label:"收盤"},
       {key:"observed_days", label:"資料日"},
       {key:"total_score", label:"總分", signed:true},
+      {key:"selection_score", label:"選股分", signed:true},
       {key:"chip_score", label:"法人分", signed:true},
       {key:"branch_score", label:"分點分", signed:true},
+      {key:"confluence_score", label:"共振分", signed:true},
+      {key:"revenue_momentum_score", label:"營收分", signed:true},
+      {key:"confluence_direction_score", label:"同向", signed:true},
+      {key:"confluence_branch_score", label:"集中", signed:true},
+      {key:"confluence_price_score", label:"成本", signed:true},
+      {key:"confluence_streak_score", label:"續買", signed:true},
       {key:"foreign_net_lot", label:"外資", signed:true},
       {key:"trust_net_lot", label:"投信", signed:true},
       {key:"avg_price", label:"均價"},
       {key:"top_buy_branch_name", label:"買超分點", sortType:"text"},
       {key:"top_buy_branch_net_lot", label:"買超", signed:true},
-      {key:"top_buy_branch_avg_price", label:"買超均價"}
+      {key:"top_buy_branch_avg_price", label:"買超均價"},
+      {key:"revenue_month", label:"營收月", sortType:"text"},
+      {key:"revenue_yoy_pct", label:"年增%", signed:true},
+      {key:"selection_reason", label:"理由", sortType:"text"}
     ];
     async function loadMeta() {
       const meta = await getJSON("/api/meta?days=" + document.querySelector("#days").value);
@@ -1164,6 +1252,34 @@
         }
       });
     }
+    function renderSelectionAssist(selection) {
+      const target = document.querySelector("#selection-assist");
+      if (!target) return;
+      if (!selection || (!Number(selection.confluence_score) && !Number(selection.revenue_momentum_score))) {
+        target.innerHTML = `<div class="empty">目前沒有足夠的區間分點或法人同向資料可計算共振。</div>`;
+        return;
+      }
+      const cards = [
+        ["選股分", selection.selection_score, "共振分 + 營收動能"],
+        ["法人方向", selection.confluence_direction_score, `法人占量 ${fmt(selection.inst_net_volume_pct)}%`],
+        ["分點集中", selection.confluence_branch_score, `前大分點占量 ${fmt(selection.top_buy_branch_volume_pct)}%`],
+        ["成本位置", selection.confluence_price_score, `距分點均價 ${fmt(selection.close_vs_top_buy_avg_pct)}%`],
+        ["連買續航", selection.confluence_streak_score, `外資 ${fmt(selection.foreign_buy_streak)} 日 / 投信 ${fmt(selection.trust_buy_streak)} 日`],
+        ["營收動能", selection.revenue_momentum_score, `${esc(selection.revenue_month || "無月份")} 年增 ${fmt(selection.revenue_yoy_pct)}%`],
+      ];
+      target.innerHTML = `
+        <div class="assist-grid">
+          ${cards.map(([label, value, note]) => `
+            <div class="assist-card">
+              <div class="assist-label">${esc(label)}</div>
+              <div class="assist-value ${cls(value)}">${esc(fmt(value))}</div>
+              <div class="assist-note">${esc(note)}</div>
+            </div>
+          `).join("")}
+        </div>
+        <div class="assist-reason">${esc(selection.selection_reason || "")}</div>
+      `;
+    }
     async function expandStockFromSearch() {
       const q = document.querySelector("#query").value.trim();
       const btn = document.querySelector("#expand-stock");
@@ -1181,6 +1297,32 @@
         btn.textContent = "補資料失敗";
         document.querySelector("#ranking-table").innerHTML = `<div class="empty">補進資料庫失敗：${esc(err.message)}</div>`;
       }
+    }
+    async function openStockFromQuery() {
+      const q = document.querySelector("#query").value.trim();
+      if (!q) return false;
+      try {
+        const data = await getJSON(`/api/stock/resolve?query=${encodeURIComponent(q)}`);
+        if (data.stock_id) {
+          await openDetail(data.stock_id);
+          return true;
+        }
+      } catch (err) {
+        if (!STATIC_MODE) {
+          try {
+            const days = Number(document.querySelector("#days").value || 20);
+            const result = await postJSON("/api/stock/ensure", { query: q, days });
+            document.querySelector("#query").value = result.stock_id;
+            await loadMeta();
+            await openDetail(result.stock_id);
+            return true;
+          } catch (ensureErr) {
+            document.querySelector("#detail-title").textContent = "找不到股票";
+            document.querySelector("#detail-subtitle").textContent = ensureErr.message;
+          }
+        }
+      }
+      return false;
     }
     function updateWatchlistButton() {
       const btn = document.querySelector("#watchlist-toggle");
@@ -1233,13 +1375,27 @@
         return;
       }
       document.querySelector("#update-tasks").innerHTML = tasks.map(task => `
-        <div class="job-card ${task.id === "all_data" ? "primary-job" : ""}">
+        ${(() => {
+          const stale = freshness(task.last_data_updated_at, task.warn_hours || 24, task.bad_hours || 48);
+          const staleClass = stale.klass === "warn" ? "stale-warn" : stale.klass === "bad" ? "stale-bad" : "";
+          const runState = task.run_state || "";
+          const runLabel = task.run_label || "";
+          const runClass = runState === "done" ? "done" : runState === "running" ? "running" : runState === "pending" ? "warn" : "";
+          const buttonLabel = running
+            ? (runLabel || "等待中")
+            : task.id === "all_data" ? "一鍵更新" : "開始更新";
+          const extra = task.extra_status ? `<div class="job-extra">${esc(task.extra_status)}</div>` : "";
+          return `<div class="job-card ${task.id === "all_data" ? "primary-job" : ""} ${staleClass}">
           <div class="job-title">${esc(task.title)}</div>
           <div class="job-desc">${esc(task.description)}</div>
+          ${runLabel ? `<div class="job-time"><span class="status-pill ${runClass}">${esc(runLabel)}</span></div>` : ""}
           <div class="job-time">最後更新：${esc(task.last_updated_at || "尚未更新")}</div>
           <div class="job-time">資料更新：${esc(task.last_data_updated_at || "尚無資料")}</div>
-          <button class="${task.id === "all_data" ? "" : "secondary"}" data-task="${esc(task.id)}" ${running ? "disabled" : ""}>${running ? "執行中" : task.id === "all_data" ? "一鍵更新" : "開始更新"}</button>
-        </div>
+          <div class="job-time"><span class="status-pill ${stale.klass}">${esc(stale.label)}</span> ${esc(stale.detail)}</div>
+          ${extra}
+          <button class="${task.id === "all_data" ? "" : "secondary"}" data-task="${esc(task.id)}" ${running ? "disabled" : ""}>${esc(buttonLabel)}</button>
+        </div>`;
+        })()}
       `).join("");
       document.querySelectorAll("[data-task]").forEach(btn => btn.addEventListener("click", async () => {
         btn.disabled = true;
@@ -1257,24 +1413,48 @@
     function renderJob(job) {
       const status = document.querySelector("#job-status");
       const log = document.querySelector("#job-log");
+      const actions = document.querySelector("#job-actions");
       if (!job) {
         status.className = "status-pill";
         status.textContent = `尚未執行 · 最後更新 ${state.lastDataUpdatedAt || "-"}`;
+        if (actions) actions.style.display = "none";
         log.textContent = state.lastDataUpdatedAt
           ? `最後資料更新：${state.lastDataUpdatedAt}`
           : "尚未執行更新任務。";
         return;
       }
-      const statusText = {queued:"排隊中", running:"執行中", done:"完成", failed:"失敗"}[job.status] || job.status;
-      status.className = `status-pill ${job.status === "done" ? "done" : job.status === "failed" ? "failed" : job.status === "running" ? "running" : ""}`;
+      const statusText = {queued:"排隊中", running:"執行中", done:"完成", failed:"失敗", interrupted:"未正常結束"}[job.status] || job.status;
+      status.className = `status-pill ${job.status === "done" ? "done" : job.status === "failed" ? "failed" : job.possible_stuck ? "bad" : job.status === "running" ? "running" : job.status === "interrupted" ? "warn" : ""}`;
       status.textContent = `${statusText} · ${job.title || ""} · 最後更新 ${job.updated_at || "-"}`;
+      if (actions) actions.style.display = job.status === "running" ? "" : "none";
+      const health = job.health || {};
       log.textContent = [
         job.current_step ? `目前步驟：${job.current_step}` : "",
         job.started_at ? `開始：${job.started_at}` : "",
         job.updated_at ? `最後更新：${job.updated_at}` : "",
+        job.current_process_pid ? `子程序 PID：${job.current_process_pid}` : "",
+        health.last_write_at ? `分點最後寫入：${health.last_write_at}` : "",
+        health.stale_minutes !== undefined ? `距離最後寫入：約 ${health.stale_minutes} 分鐘` : "",
+        health.status_summary ? `分點進度：${health.status_summary}` : "",
+        job.possible_stuck ? "狀態判斷：可能卡住，建議停止後重新分批更新。" : "",
         job.finished_at ? `結束：${job.finished_at}` : "",
         job.error ? `錯誤：${job.error}` : "",
       ].filter(Boolean).join("\n");
+    }
+    async function cancelCurrentUpdate() {
+      const btn = document.querySelector("#cancel-update");
+      if (!btn) return;
+      btn.disabled = true;
+      btn.textContent = "停止中";
+      try {
+        await postJSON("/api/update/cancel", {});
+        startJobPolling();
+      } catch (err) {
+        document.querySelector("#job-log").textContent = `停止失敗：${err.message}`;
+      } finally {
+        btn.disabled = false;
+        btn.textContent = "停止目前更新";
+      }
     }
     function renderStaticPublishStatus(data, message = "") {
       const status = document.querySelector("#static-publish-status");
@@ -1287,14 +1467,15 @@
       note.innerHTML = [
         data?.pages_url ? `<a href="${esc(data.pages_url)}" target="_blank" rel="noreferrer">${esc(data.pages_url)}</a>` : "",
         data?.exported_at ? `靜態資料匯出：${esc(data.exported_at)}` : "",
+        data?.ci_news?.generated_at ? `CI 新聞：${esc(data.ci_news.generated_at)}（${esc(fmt(data.ci_news.row_count || 0))} 則）` : "",
         data?.commit ? `目前 commit：${esc(data.commit)}` : "",
       ].filter(Boolean).join(" · ") || "尚無發布資訊";
-      log.textContent = message || [
+      log.innerHTML = linkifyUrls(message || [
         `分支：${data?.branch || "-"}`,
         `docs 變更：${fmt(data?.docs_changed || 0)} 個檔案`,
         `reports 變更：${fmt(data?.reports_changed || 0)} 個檔案`,
         `Pages：${data?.pages_url || "-"}`,
-      ].join("\n");
+      ].join("\n"));
     }
     async function loadStaticPublishStatus() {
       if (STATIC_MODE) return;
@@ -1307,7 +1488,7 @@
           status.className = "status-pill failed";
           status.textContent = "讀取失敗";
         }
-        if (log) log.textContent = err.message;
+        if (log) log.innerHTML = linkifyUrls(err.message);
       }
     }
     async function runStaticAction(action, btn) {
@@ -1326,7 +1507,7 @@
           status.className = "status-pill failed";
           status.textContent = "失敗";
         }
-        if (log) log.textContent = err.message;
+        if (log) log.innerHTML = linkifyUrls(err.message);
       } finally {
         btn.textContent = original;
         document.querySelectorAll("#static-export, #static-publish").forEach(item => item.disabled = false);
@@ -1384,8 +1565,11 @@
         ["收盤", fmt(data.stock.close)],
         [`${days}日均價`, fmt(data.stock.avg_price)],
         [`${days}日外資`, fmt(data.stock.foreign_net_lot), cls(data.stock.foreign_net_lot)],
-        [`${days}日投信`, fmt(data.stock.trust_net_lot), cls(data.stock.trust_net_lot)]
+        [`${days}日投信`, fmt(data.stock.trust_net_lot), cls(data.stock.trust_net_lot)],
+        [`${days}日融資`, fmt(data.stock.margin_balance_change_lot), cls(data.stock.margin_balance_change_lot)],
+        [`${days}日融券`, fmt(data.stock.short_balance_change_lot), cls(data.stock.short_balance_change_lot)]
       ]);
+      renderSelectionAssist(data.selection);
       renderPriceChart();
       renderNews();
       renderTable(document.querySelector("#daily-table"), data.daily, [
@@ -1404,6 +1588,24 @@
         {key:"mom_pct", label:"月增%", signed:true},
         {key:"yoy_pct", label:"年增%", signed:true},
         {key:"last_year_revenue_million", label:"去年同期"}
+      ]);
+      const marginLatest = data.margin?.[0];
+      document.querySelector("#margin-note").textContent = marginLatest
+        ? `最新 ${marginLatest.date}，融資餘額 ${fmt(marginLatest.margin_balance_lot)} 張，融券餘額 ${fmt(marginLatest.short_balance_lot)} 張`
+        : "沒有資料時可按右側更新，或先執行官方行情與排行。";
+      renderTable(document.querySelector("#margin-table"), data.margin || [], [
+        {key:"date", label:"日期"},
+        {key:"margin_buy_lot", label:"資買"},
+        {key:"margin_sell_lot", label:"資賣"},
+        {key:"margin_cash_repay_lot", label:"現償"},
+        {key:"margin_balance_lot", label:"融資餘額"},
+        {key:"margin_change_lot", label:"資增減", signed:true},
+        {key:"short_sell_lot", label:"券賣"},
+        {key:"short_buy_lot", label:"券買"},
+        {key:"short_stock_repay_lot", label:"券償"},
+        {key:"short_balance_lot", label:"融券餘額"},
+        {key:"short_change_lot", label:"券增減", signed:true},
+        {key:"offset_lot", label:"資券互抵"}
       ]);
       const branchTopStatus = data.branch_top_status;
       const branchTopNote = document.querySelector("#branch-top-note");
@@ -1486,7 +1688,18 @@
     }
     document.querySelectorAll(".tab").forEach(btn => btn.addEventListener("click", () => setTab(btn.dataset.tab)));
     ["days","ranking","market","limit"].forEach(id => document.querySelector("#" + id).addEventListener("change", reload));
-    document.querySelector("#query").addEventListener("input", () => { clearTimeout(window.__q); window.__q = setTimeout(reload, 250); });
+    document.querySelector("#query").addEventListener("input", () => {
+      clearTimeout(window.__q);
+      window.__q = setTimeout(() => {
+        if (state.tab === "detail") openStockFromQuery();
+        else reload();
+      }, 300);
+    });
+    document.querySelector("#query").addEventListener("keydown", event => {
+      if (event.key !== "Enter") return;
+      event.preventDefault();
+      if (state.tab === "detail") openStockFromQuery();
+    });
     document.querySelector("#refresh").addEventListener("click", reload);
     document.querySelector("#back-detail").addEventListener("click", goBackFromDetail);
     document.querySelector("#load-detail").addEventListener("click", loadDetail);
@@ -1496,6 +1709,7 @@
     document.querySelector("#us-industry").addEventListener("change", loadUSNews);
     document.querySelector("#static-export").addEventListener("click", event => runStaticAction("export", event.target));
     document.querySelector("#static-publish").addEventListener("click", event => runStaticAction("publish", event.target));
+    document.querySelector("#cancel-update").addEventListener("click", cancelCurrentUpdate);
     document.querySelector("#detail-stock").addEventListener("change", loadDetail);
     document.querySelectorAll(".ma-toggle").forEach(input => input.addEventListener("change", renderPriceChart));
     document.querySelector("#close-toggle").addEventListener("change", renderPriceChart);

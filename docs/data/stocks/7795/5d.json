@@ -269,9 +269,28 @@
       "ma5": 416.1,
       "ma60": null,
       "volume_lot": 832.94
+    },
+    {
+      "avg_price": 385.1298686082266,
+      "close": 395.5,
+      "date": "2026-04-27",
+      "ma10": 405.65,
+      "ma20": 377.325,
+      "ma5": 407.6,
+      "ma60": null,
+      "volume_lot": 665.72
     }
   ],
   "daily": [
+    {
+      "avg_price": 385.1298686082266,
+      "close": 395.5,
+      "date": "2026-04-27",
+      "dealer_net_lot": 0.0,
+      "foreign_net_lot": 114.3,
+      "trust_net_lot": 0.0,
+      "volume_lot": 665.72
+    },
     {
       "avg_price": 408.4400274209756,
       "close": 390.5,
@@ -307,29 +326,62 @@
       "foreign_net_lot": 236.0,
       "trust_net_lot": 0.0,
       "volume_lot": 1391.58
-    },
-    {
-      "avg_price": 421.42098220947724,
-      "close": 438.0,
-      "date": "2026-04-20",
-      "dealer_net_lot": 12.34,
-      "foreign_net_lot": 679.0,
-      "trust_net_lot": 0.0,
-      "volume_lot": 1983.53
     }
   ],
+  "margin": [],
   "news": [],
   "revenues": [],
-  "stock": {
-    "avg_price": 420.9193,
-    "close": 390.5,
-    "foreign_net_lot": 1057.0,
-    "in_watchlist": false,
-    "latest_date": "2026-04-24",
+  "selection": {
+    "avg_price": 415.2693,
+    "branch_score": 0.0,
+    "chip_score": 37.97,
+    "close": 395.5,
+    "close_vs_top_buy_avg_pct": 0.0,
+    "confluence_branch_score": 0.0,
+    "confluence_direction_score": 0.0,
+    "confluence_inst_score": 0.0,
+    "confluence_price_score": 0.0,
+    "confluence_score": 0.0,
+    "confluence_streak_score": 0.0,
+    "foreign_buy_streak": 3.0,
+    "foreign_net_lot": 492.3,
+    "inst_net_lot": 492.3,
+    "inst_net_volume_pct": 0.0,
+    "latest_date": "2026-04-27",
     "market": "TWSE",
     "name": "長廣",
+    "observed_days": 5,
+    "revenue_cumulative_yoy_pct": 0.0,
+    "revenue_mom_pct": 0.0,
+    "revenue_momentum_score": 0.0,
+    "revenue_month": "",
+    "revenue_yoy_pct": 0.0,
+    "selection_reason": "資料不足或法人與分點未同向",
+    "selection_score": 0.0,
+    "stock_id": "7795",
+    "top_buy_branch_avg_price": 0.0,
+    "top_buy_branch_name": "",
+    "top_buy_branch_net_lot": 0.0,
+    "top_buy_branch_volume_pct": 0.0,
+    "top_sell_branch_avg_price": 0.0,
+    "top_sell_branch_name": "",
+    "top_sell_branch_net_lot": 0.0,
+    "total_score": 37.97,
+    "trust_buy_streak": 0.0,
+    "trust_net_lot": 0.0
+  },
+  "stock": {
+    "avg_price": 415.2693,
+    "close": 395.5,
+    "foreign_net_lot": 492.3,
+    "in_watchlist": false,
+    "latest_date": "2026-04-27",
+    "margin_balance_change_lot": null,
+    "market": "TWSE",
+    "name": "長廣",
+    "short_balance_change_lot": null,
     "stock_id": "7795",
     "trust_net_lot": 0.0,
-    "volume_lot": 5710.87
+    "volume_lot": 4393.06
   }
 }

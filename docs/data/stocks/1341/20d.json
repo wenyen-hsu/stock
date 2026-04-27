@@ -3,11 +3,11 @@
   "branch_daily_status": [],
   "branch_top": [],
   "branch_top_status": {
-    "attempts": 4,
+    "attempts": 3,
     "error": "empty parseable branch table",
     "row_count": 0,
     "status": "empty",
-    "updated_at": "2026-04-24 22:42:14"
+    "updated_at": "2026-04-28 00:45:25"
   },
   "chart": [
     {
@@ -269,9 +269,28 @@
       "ma5": 60.94,
       "ma60": null,
       "volume_lot": 3.0
+    },
+    {
+      "avg_price": 60.74229287090559,
+      "close": 60.2,
+      "date": "2026-04-27",
+      "ma10": 60.6,
+      "ma20": 59.845,
+      "ma5": 60.8,
+      "ma60": null,
+      "volume_lot": 4.15
     }
   ],
   "daily": [
+    {
+      "avg_price": 60.74229287090559,
+      "close": 60.2,
+      "date": "2026-04-27",
+      "dealer_net_lot": -1.0,
+      "foreign_net_lot": -2.0,
+      "trust_net_lot": 0.0,
+      "volume_lot": 4.15
+    },
     {
       "avg_price": 60.19926691102966,
       "close": 61.0,
@@ -430,7 +449,7 @@
       "close": 58.4,
       "date": "2026-03-30",
       "dealer_net_lot": 0.0,
-      "foreign_net_lot": 2.0,
+      "foreign_net_lot": -1.0,
       "trust_net_lot": 0.0,
       "volume_lot": 6.01
     },
@@ -442,29 +461,62 @@
       "foreign_net_lot": 0.0,
       "trust_net_lot": 0.0,
       "volume_lot": 1.0
-    },
-    {
-      "avg_price": 58.06724367509987,
-      "close": 58.1,
-      "date": "2026-03-26",
-      "dealer_net_lot": 0.0,
-      "foreign_net_lot": 0.0,
-      "trust_net_lot": 0.0,
-      "volume_lot": 3.0
     }
   ],
+  "margin": [],
   "news": [],
   "revenues": [],
-  "stock": {
-    "avg_price": 59.8754,
-    "close": 61.0,
-    "foreign_net_lot": 32.13,
-    "in_watchlist": false,
-    "latest_date": "2026-04-24",
+  "selection": {
+    "avg_price": 59.9428,
+    "branch_score": 0.0,
+    "chip_score": 36.0,
+    "close": 60.2,
+    "close_vs_top_buy_avg_pct": 0.0,
+    "confluence_branch_score": 0.0,
+    "confluence_direction_score": 0.0,
+    "confluence_inst_score": 0.0,
+    "confluence_price_score": 0.0,
+    "confluence_score": 0.0,
+    "confluence_streak_score": 0.0,
+    "foreign_buy_streak": 0.0,
+    "foreign_net_lot": 27.13,
+    "inst_net_lot": 27.13,
+    "inst_net_volume_pct": 0.0,
+    "latest_date": "2026-04-27",
     "market": "TWSE",
     "name": "富林-KY",
+    "observed_days": 20,
+    "revenue_cumulative_yoy_pct": 0.0,
+    "revenue_mom_pct": 0.0,
+    "revenue_momentum_score": 0.0,
+    "revenue_month": "",
+    "revenue_yoy_pct": 0.0,
+    "selection_reason": "資料不足或法人與分點未同向",
+    "selection_score": 0.0,
+    "stock_id": "1341",
+    "top_buy_branch_avg_price": 0.0,
+    "top_buy_branch_name": "",
+    "top_buy_branch_net_lot": 0.0,
+    "top_buy_branch_volume_pct": 0.0,
+    "top_sell_branch_avg_price": 0.0,
+    "top_sell_branch_name": "",
+    "top_sell_branch_net_lot": 0.0,
+    "total_score": 36.0,
+    "trust_buy_streak": 0.0,
+    "trust_net_lot": 0.0
+  },
+  "stock": {
+    "avg_price": 59.9428,
+    "close": 60.2,
+    "foreign_net_lot": 27.13,
+    "in_watchlist": false,
+    "latest_date": "2026-04-27",
+    "margin_balance_change_lot": null,
+    "market": "TWSE",
+    "name": "富林-KY",
+    "short_balance_change_lot": null,
     "stock_id": "1341",
     "trust_net_lot": 0.0,
-    "volume_lot": 132.95
+    "volume_lot": 134.1
   }
 }

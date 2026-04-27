@@ -1,13 +1,165 @@
 {
   "branch_daily": [],
-  "branch_daily_status": [],
-  "branch_top": [],
+  "branch_daily_status": [
+    {
+      "attempts": 0,
+      "error": null,
+      "row_count": 0,
+      "status": "missing",
+      "trade_date": "2026-04-27"
+    },
+    {
+      "attempts": 0,
+      "error": null,
+      "row_count": 0,
+      "status": "missing",
+      "trade_date": "2026-04-24"
+    },
+    {
+      "attempts": 0,
+      "error": null,
+      "row_count": 0,
+      "status": "missing",
+      "trade_date": "2026-04-23"
+    },
+    {
+      "attempts": 0,
+      "error": null,
+      "row_count": 0,
+      "status": "missing",
+      "trade_date": "2026-04-22"
+    },
+    {
+      "attempts": 0,
+      "error": null,
+      "row_count": 0,
+      "status": "missing",
+      "trade_date": "2026-04-21"
+    },
+    {
+      "attempts": 0,
+      "error": null,
+      "row_count": 0,
+      "status": "missing",
+      "trade_date": "2026-04-20"
+    },
+    {
+      "attempts": 0,
+      "error": null,
+      "row_count": 0,
+      "status": "missing",
+      "trade_date": "2026-04-17"
+    },
+    {
+      "attempts": 0,
+      "error": null,
+      "row_count": 0,
+      "status": "missing",
+      "trade_date": "2026-04-16"
+    },
+    {
+      "attempts": 0,
+      "error": null,
+      "row_count": 0,
+      "status": "missing",
+      "trade_date": "2026-04-15"
+    },
+    {
+      "attempts": 0,
+      "error": null,
+      "row_count": 0,
+      "status": "missing",
+      "trade_date": "2026-04-14"
+    }
+  ],
+  "branch_top": [
+    {
+      "avg_price": 182.43,
+      "broker_name": "元大-中壢",
+      "buy_lot": 781.0,
+      "net_lot": 648.0,
+      "rank_no": 1,
+      "sell_lot": 132.0
+    },
+    {
+      "avg_price": 181.07,
+      "broker_name": "美商高盛",
+      "buy_lot": 603.0,
+      "net_lot": 370.0,
+      "rank_no": 2,
+      "sell_lot": 233.0
+    },
+    {
+      "avg_price": 180.97,
+      "broker_name": "台灣摩根士丹利",
+      "buy_lot": 557.0,
+      "net_lot": 242.0,
+      "rank_no": 3,
+      "sell_lot": 315.0
+    },
+    {
+      "avg_price": 183.4,
+      "broker_name": "新加坡商瑞銀",
+      "buy_lot": 513.0,
+      "net_lot": 241.0,
+      "rank_no": 4,
+      "sell_lot": 272.0
+    },
+    {
+      "avg_price": 183.1,
+      "broker_name": "美林",
+      "buy_lot": 507.0,
+      "net_lot": 150.0,
+      "rank_no": 5,
+      "sell_lot": 357.0
+    },
+    {
+      "avg_price": 182.06,
+      "broker_name": "花旗環球",
+      "buy_lot": 139.0,
+      "net_lot": 139.0,
+      "rank_no": 6,
+      "sell_lot": null
+    },
+    {
+      "avg_price": 185.87,
+      "broker_name": "元大-台中中港",
+      "buy_lot": 103.0,
+      "net_lot": 101.0,
+      "rank_no": 7,
+      "sell_lot": 2.0
+    },
+    {
+      "avg_price": 181.98,
+      "broker_name": "第一金-桃園",
+      "buy_lot": 108.0,
+      "net_lot": 93.0,
+      "rank_no": 8,
+      "sell_lot": 15.0
+    },
+    {
+      "avg_price": 186.33,
+      "broker_name": "香港上海匯豐",
+      "buy_lot": 90.0,
+      "net_lot": 90.0,
+      "rank_no": 9,
+      "sell_lot": null
+    },
+    {
+      "avg_price": 177.85,
+      "broker_name": "兆豐-松德",
+      "buy_lot": 77.0,
+      "net_lot": 70.0,
+      "rank_no": 10,
+      "sell_lot": 7.0
+    }
+  ],
   "branch_top_status": {
-    "attempts": 0,
+    "attempts": 1,
     "error": null,
-    "row_count": 0,
-    "status": "missing",
-    "updated_at": ""
+    "row_count": 20,
+    "status": "success",
+    "updated_at": "2026-04-28 00:35:25"
   },
   "chart": [
     {
@@ -209,9 +361,28 @@
       "ma5": 180.9,
       "ma60": null,
       "volume_lot": 436.12
+    },
+    {
+      "avg_price": 172.54802636617993,
+      "close": 173.5,
+      "date": "2026-04-27",
+      "ma10": 179.25,
+      "ma20": 180.675,
+      "ma5": 178.7,
+      "ma60": null,
+      "volume_lot": 443.9
     }
   ],
   "daily": [
+    {
+      "avg_price": 172.54802636617993,
+      "close": 173.5,
+      "date": "2026-04-27",
+      "dealer_net_lot": -18.0,
+      "foreign_net_lot": 118.0,
+      "trust_net_lot": 0.0,
+      "volume_lot": 443.9
+    },
     {
       "avg_price": 176.75013298970018,
       "close": 175.0,
@@ -236,7 +407,7 @@
       "date": "2026-04-22",
       "dealer_net_lot": -21.0,
       "foreign_net_lot": 144.0,
-      "trust_net_lot": 0.0,
+      "trust_net_lot": 21.0,
       "volume_lot": 466.82
     },
     {
@@ -382,29 +553,62 @@
       "foreign_net_lot": 75.7,
       "trust_net_lot": 0.0,
       "volume_lot": 988.13
-    },
-    {
-      "avg_price": 192.9064258845885,
-      "close": 187.5,
-      "date": "2026-03-26",
-      "dealer_net_lot": 0.0,
-      "foreign_net_lot": -2.99,
-      "trust_net_lot": 0.0,
-      "volume_lot": 4659.48
     }
   ],
+  "margin": [],
   "news": [],
   "revenues": [],
-  "stock": {
-    "avg_price": 184.4688,
-    "close": 175.0,
-    "foreign_net_lot": 1158.0,
-    "in_watchlist": false,
-    "latest_date": "2026-04-24",
+  "selection": {
+    "avg_price": 181.4026,
+    "branch_score": 7.81,
+    "chip_score": 45.39,
+    "close": 173.5,
+    "close_vs_top_buy_avg_pct": -4.9,
+    "confluence_branch_score": 5.35,
+    "confluence_direction_score": 14.0,
+    "confluence_inst_score": 19.45,
+    "confluence_price_score": 0.0,
+    "confluence_score": 41.19,
+    "confluence_streak_score": 2.4,
+    "foreign_buy_streak": 2.0,
+    "foreign_net_lot": 1278.99,
+    "inst_net_lot": 1885.99,
+    "inst_net_volume_pct": 12.96,
+    "latest_date": "2026-04-27",
     "market": "TWSE",
     "name": "世紀風電",
+    "observed_days": 20,
+    "revenue_cumulative_yoy_pct": 0.0,
+    "revenue_mom_pct": 0.0,
+    "revenue_momentum_score": 0.0,
+    "revenue_month": "",
+    "revenue_yoy_pct": 0.0,
+    "selection_reason": "外資與投信同買；前大買超分點約占成交 4.45%；收盤距區間均價 -4.36%；收盤距分點均價 -4.9%；連買：外2 / 投0",
+    "selection_score": 41.19,
     "stock_id": "2072",
-    "trust_net_lot": 586.0,
-    "volume_lot": 18763.38
+    "top_buy_branch_avg_price": 182.43,
+    "top_buy_branch_name": "元大-中壢",
+    "top_buy_branch_net_lot": 648.0,
+    "top_buy_branch_volume_pct": 4.45,
+    "top_sell_branch_avg_price": 183.16,
+    "top_sell_branch_name": "永豐金-松山",
+    "top_sell_branch_net_lot": -448.0,
+    "total_score": 53.2,
+    "trust_buy_streak": 0.0,
+    "trust_net_lot": 607.0
+  },
+  "stock": {
+    "avg_price": 181.4026,
+    "close": 173.5,
+    "foreign_net_lot": 1278.99,
+    "in_watchlist": false,
+    "latest_date": "2026-04-27",
+    "margin_balance_change_lot": null,
+    "market": "TWSE",
+    "name": "世紀風電",
+    "short_balance_change_lot": null,
+    "stock_id": "2072",
+    "trust_net_lot": 607.0,
+    "volume_lot": 14547.8
   }
 }

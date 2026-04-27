@@ -269,9 +269,28 @@
       "ma5": 26.1,
       "ma60": null,
       "volume_lot": 51.7
+    },
+    {
+      "avg_price": 22.579679258351536,
+      "close": 24.0,
+      "date": "2026-04-27",
+      "ma10": 25.66,
+      "ma20": 22.1075,
+      "ma5": 25.24,
+      "ma60": null,
+      "volume_lot": 37.54
     }
   ],
   "daily": [
+    {
+      "avg_price": 22.579679258351536,
+      "close": 24.0,
+      "date": "2026-04-27",
+      "dealer_net_lot": -1.0,
+      "foreign_net_lot": 1.0,
+      "trust_net_lot": 0.0,
+      "volume_lot": 37.54
+    },
     {
       "avg_price": 24.63107603628697,
       "close": 24.3,
@@ -307,29 +326,62 @@
       "foreign_net_lot": 66.0,
       "trust_net_lot": 0.0,
       "volume_lot": 112.52
-    },
-    {
-      "avg_price": 28.102223576596415,
-      "close": 28.3,
-      "date": "2026-04-20",
-      "dealer_net_lot": 2.0,
-      "foreign_net_lot": 63.0,
-      "trust_net_lot": 0.0,
-      "volume_lot": 101.73
     }
   ],
+  "margin": [],
   "news": [],
   "revenues": [],
-  "stock": {
-    "avg_price": 26.7355,
-    "close": 24.3,
-    "foreign_net_lot": 215.0,
-    "in_watchlist": false,
-    "latest_date": "2026-04-24",
+  "selection": {
+    "avg_price": 25.8932,
+    "branch_score": 0.0,
+    "chip_score": 45.0,
+    "close": 24.0,
+    "close_vs_top_buy_avg_pct": 0.0,
+    "confluence_branch_score": 0.0,
+    "confluence_direction_score": 0.0,
+    "confluence_inst_score": 0.0,
+    "confluence_price_score": 0.0,
+    "confluence_score": 0.0,
+    "confluence_streak_score": 0.0,
+    "foreign_buy_streak": 5.0,
+    "foreign_net_lot": 153.0,
+    "inst_net_lot": 153.0,
+    "inst_net_volume_pct": 0.0,
+    "latest_date": "2026-04-27",
     "market": "TWSE",
     "name": "鼎固-KY",
+    "observed_days": 5,
+    "revenue_cumulative_yoy_pct": 0.0,
+    "revenue_mom_pct": 0.0,
+    "revenue_momentum_score": 0.0,
+    "revenue_month": "",
+    "revenue_yoy_pct": 0.0,
+    "selection_reason": "資料不足或法人與分點未同向",
+    "selection_score": 0.0,
+    "stock_id": "2923",
+    "top_buy_branch_avg_price": 0.0,
+    "top_buy_branch_name": "",
+    "top_buy_branch_net_lot": 0.0,
+    "top_buy_branch_volume_pct": 0.0,
+    "top_sell_branch_avg_price": 0.0,
+    "top_sell_branch_name": "",
+    "top_sell_branch_net_lot": 0.0,
+    "total_score": 45.0,
+    "trust_buy_streak": 0.0,
+    "trust_net_lot": 0.0
+  },
+  "stock": {
+    "avg_price": 25.8932,
+    "close": 24.0,
+    "foreign_net_lot": 153.0,
+    "in_watchlist": false,
+    "latest_date": "2026-04-27",
+    "margin_balance_change_lot": null,
+    "market": "TWSE",
+    "name": "鼎固-KY",
+    "short_balance_change_lot": null,
     "stock_id": "2923",
     "trust_net_lot": 0.0,
-    "volume_lot": 414.45
+    "volume_lot": 350.26
   }
 }

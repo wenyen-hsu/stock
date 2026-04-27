@@ -259,9 +259,28 @@
       "ma5": 827.4,
       "ma60": null,
       "volume_lot": 1170.0
+    },
+    {
+      "avg_price": 681.3015228426395,
+      "close": 695.0,
+      "date": "2026-04-27",
+      "ma10": 833.6,
+      "ma20": 818.1,
+      "ma5": 792.8,
+      "ma60": null,
+      "volume_lot": 985.0
     }
   ],
   "daily": [
+    {
+      "avg_price": 681.3015228426395,
+      "close": 695.0,
+      "date": "2026-04-27",
+      "dealer_net_lot": -5.0,
+      "foreign_net_lot": 239.97,
+      "trust_net_lot": 40.0,
+      "volume_lot": 985.0
+    },
     {
       "avg_price": 740.2931623931624,
       "close": 721.0,
@@ -297,29 +316,62 @@
       "foreign_net_lot": 20.2,
       "trust_net_lot": 5.0,
       "volume_lot": 1013.0
-    },
-    {
-      "avg_price": 898.6730486008837,
-      "close": 868.0,
-      "date": "2026-04-20",
-      "dealer_net_lot": 0.3,
-      "foreign_net_lot": -35.35,
-      "trust_net_lot": 0.0,
-      "volume_lot": 679.0
     }
   ],
+  "margin": [],
   "news": [],
   "revenues": [],
-  "stock": {
-    "avg_price": 827.9212,
-    "close": 721.0,
-    "foreign_net_lot": -56.55,
-    "in_watchlist": false,
-    "latest_date": "2026-04-24",
+  "selection": {
+    "avg_price": 788.9299,
+    "branch_score": 0.0,
+    "chip_score": 43.13,
+    "close": 695.0,
+    "close_vs_top_buy_avg_pct": 0.0,
+    "confluence_branch_score": 0.0,
+    "confluence_direction_score": 0.0,
+    "confluence_inst_score": 0.0,
+    "confluence_price_score": 0.0,
+    "confluence_score": 0.0,
+    "confluence_streak_score": 0.0,
+    "foreign_buy_streak": 2.0,
+    "foreign_net_lot": 218.77,
+    "inst_net_lot": 498.77,
+    "inst_net_volume_pct": 0.0,
+    "latest_date": "2026-04-27",
     "market": "TPEX",
     "name": "萊德光電-KY",
+    "observed_days": 5,
+    "revenue_cumulative_yoy_pct": 0.0,
+    "revenue_mom_pct": 0.0,
+    "revenue_momentum_score": 0.0,
+    "revenue_month": "",
+    "revenue_yoy_pct": 0.0,
+    "selection_reason": "資料不足或法人與分點未同向",
+    "selection_score": 0.0,
     "stock_id": "7717",
-    "trust_net_lot": 240.0,
-    "volume_lot": 4630.0
+    "top_buy_branch_avg_price": 0.0,
+    "top_buy_branch_name": "",
+    "top_buy_branch_net_lot": 0.0,
+    "top_buy_branch_volume_pct": 0.0,
+    "top_sell_branch_avg_price": 0.0,
+    "top_sell_branch_name": "",
+    "top_sell_branch_net_lot": 0.0,
+    "total_score": 43.13,
+    "trust_buy_streak": 2.0,
+    "trust_net_lot": 280.0
+  },
+  "stock": {
+    "avg_price": 788.9299,
+    "close": 695.0,
+    "foreign_net_lot": 218.77,
+    "in_watchlist": false,
+    "latest_date": "2026-04-27",
+    "margin_balance_change_lot": null,
+    "market": "TPEX",
+    "name": "萊德光電-KY",
+    "short_balance_change_lot": null,
+    "stock_id": "7717",
+    "trust_net_lot": 280.0,
+    "volume_lot": 4936.0
   }
 }

@@ -1,16 +1,6 @@
 {
   "branch_daily": [
     {
-      "avg_price": 583.3,
-      "broker_name": "元大",
-      "buy_lot": 1795.0,
-      "net_lot": -309.0,
-      "rank_no": 4,
-      "rank_side": "sell",
-      "sell_lot": 2105.0,
-      "trade_date": "2026-04-23"
-    },
-    {
       "avg_price": 581.66,
       "broker_name": "凱基-台北",
       "buy_lot": 1018.0,
@@ -28,6 +18,16 @@
       "rank_no": 3,
       "rank_side": "buy",
       "sell_lot": 162.0,
+      "trade_date": "2026-04-23"
+    },
+    {
+      "avg_price": 573.38,
+      "broker_name": "宏遠",
+      "buy_lot": 59.0,
+      "net_lot": 52.0,
+      "rank_no": 9,
+      "rank_side": "buy",
+      "sell_lot": 6.0,
       "trade_date": "2026-04-23"
     },
     {
@@ -71,13 +71,13 @@
       "trade_date": "2026-04-23"
     },
     {
-      "avg_price": 600.66,
-      "broker_name": "元大",
-      "buy_lot": 676.0,
-      "net_lot": -183.0,
-      "rank_no": 4,
+      "avg_price": 596.33,
+      "broker_name": "中國信託",
+      "buy_lot": 30.0,
+      "net_lot": -112.0,
+      "rank_no": 5,
       "rank_side": "sell",
-      "sell_lot": 859.0,
+      "sell_lot": 142.0,
       "trade_date": "2026-04-22"
     },
     {
@@ -98,6 +98,16 @@
       "rank_no": 4,
       "rank_side": "buy",
       "sell_lot": 180.0,
+      "trade_date": "2026-04-22"
+    },
+    {
+      "avg_price": 594.51,
+      "broker_name": "宏遠",
+      "buy_lot": 31.0,
+      "net_lot": 20.0,
+      "rank_no": 13,
+      "rank_side": "buy",
+      "sell_lot": 11.0,
       "trade_date": "2026-04-22"
     },
     {
@@ -131,16 +141,6 @@
       "trade_date": "2026-04-22"
     },
     {
-      "avg_price": 602.79,
-      "broker_name": "港商麥格理",
-      "buy_lot": 42.0,
-      "net_lot": 42.0,
-      "rank_no": 10,
-      "rank_side": "buy",
-      "sell_lot": null,
-      "trade_date": "2026-04-22"
-    },
-    {
       "avg_price": 603.96,
       "broker_name": "美商高盛",
       "buy_lot": 530.0,
@@ -161,13 +161,13 @@
       "trade_date": "2026-04-22"
     },
     {
-      "avg_price": 582.08,
-      "broker_name": "元大",
-      "buy_lot": 1974.0,
-      "net_lot": 625.0,
-      "rank_no": 1,
+      "avg_price": 583.47,
+      "broker_name": "中國信託",
+      "buy_lot": 282.0,
+      "net_lot": 248.0,
+      "rank_no": 6,
       "rank_side": "buy",
-      "sell_lot": 1348.0,
+      "sell_lot": 34.0,
       "trade_date": "2026-04-21"
     },
     {
@@ -219,16 +219,6 @@
       "rank_side": "sell",
       "sell_lot": 426.0,
       "trade_date": "2026-04-21"
-    },
-    {
-      "avg_price": 540.43,
-      "broker_name": "元大",
-      "buy_lot": 837.0,
-      "net_lot": 373.0,
-      "rank_no": 5,
-      "rank_side": "buy",
-      "sell_lot": 464.0,
-      "trade_date": "2026-04-20"
     },
     {
       "avg_price": 544.22,
@@ -291,16 +281,6 @@
       "trade_date": "2026-04-20"
     },
     {
-      "avg_price": 518.87,
-      "broker_name": "元大",
-      "buy_lot": 356.0,
-      "net_lot": -781.0,
-      "rank_no": 1,
-      "rank_side": "sell",
-      "sell_lot": 1137.0,
-      "trade_date": "2026-04-17"
-    },
-    {
       "avg_price": 522.54,
       "broker_name": "凱基-台北",
       "buy_lot": 97.0,
@@ -318,6 +298,16 @@
       "rank_no": 4,
       "rank_side": "sell",
       "sell_lot": 301.0,
+      "trade_date": "2026-04-17"
+    },
+    {
+      "avg_price": 518.19,
+      "broker_name": "宏遠",
+      "buy_lot": 24.0,
+      "net_lot": 22.0,
+      "rank_no": 14,
+      "rank_side": "buy",
+      "sell_lot": 2.0,
       "trade_date": "2026-04-17"
     },
     {
@@ -351,16 +341,6 @@
       "trade_date": "2026-04-17"
     },
     {
-      "avg_price": 533.52,
-      "broker_name": "港商麥格理",
-      "buy_lot": 31.0,
-      "net_lot": 31.0,
-      "rank_no": 10,
-      "rank_side": "buy",
-      "sell_lot": null,
-      "trade_date": "2026-04-17"
-    },
-    {
       "avg_price": 523.45,
       "broker_name": "美商高盛",
       "buy_lot": 104.0,
@@ -369,16 +349,6 @@
       "rank_side": "sell",
       "sell_lot": 250.0,
       "trade_date": "2026-04-17"
-    },
-    {
-      "avg_price": 527.01,
-      "broker_name": "元大",
-      "buy_lot": 1097.0,
-      "net_lot": 484.0,
-      "rank_no": 2,
-      "rank_side": "buy",
-      "sell_lot": 613.0,
-      "trade_date": "2026-04-16"
     },
     {
       "avg_price": 529.68,
@@ -441,16 +411,6 @@
       "trade_date": "2026-04-16"
     },
     {
-      "avg_price": 525.36,
-      "broker_name": "元大",
-      "buy_lot": 801.0,
-      "net_lot": -65.0,
-      "rank_no": 9,
-      "rank_side": "sell",
-      "sell_lot": 867.0,
-      "trade_date": "2026-04-15"
-    },
-    {
       "avg_price": 524.18,
       "broker_name": "凱基-台北",
       "buy_lot": 2324.0,
@@ -468,6 +428,16 @@
       "rank_no": 2,
       "rank_side": "buy",
       "sell_lot": 158.0,
+      "trade_date": "2026-04-15"
+    },
+    {
+      "avg_price": 525.47,
+      "broker_name": "宏遠",
+      "buy_lot": 32.0,
+      "net_lot": -56.0,
+      "rank_no": 10,
+      "rank_side": "sell",
+      "sell_lot": 88.0,
       "trade_date": "2026-04-15"
     },
     {
@@ -521,13 +491,13 @@
       "trade_date": "2026-04-15"
     },
     {
-      "avg_price": 507.65,
-      "broker_name": "元大",
-      "buy_lot": 282.0,
-      "net_lot": -188.0,
-      "rank_no": 1,
-      "rank_side": "sell",
-      "sell_lot": 471.0,
+      "avg_price": 503.86,
+      "broker_name": "中國信託",
+      "buy_lot": 215.0,
+      "net_lot": 212.0,
+      "rank_no": 4,
+      "rank_side": "buy",
+      "sell_lot": 2.0,
       "trade_date": "2026-04-14"
     },
     {
@@ -599,86 +569,6 @@
       "rank_side": "sell",
       "sell_lot": 123.0,
       "trade_date": "2026-04-14"
-    },
-    {
-      "avg_price": 506.91,
-      "broker_name": "元大",
-      "buy_lot": 2064.0,
-      "net_lot": 691.0,
-      "rank_no": 1,
-      "rank_side": "buy",
-      "sell_lot": 1372.0,
-      "trade_date": "2026-04-13"
-    },
-    {
-      "avg_price": 501.32,
-      "broker_name": "凱基-台北",
-      "buy_lot": 731.0,
-      "net_lot": 117.0,
-      "rank_no": 6,
-      "rank_side": "buy",
-      "sell_lot": 613.0,
-      "trade_date": "2026-04-13"
-    },
-    {
-      "avg_price": 498.17,
-      "broker_name": "富邦",
-      "buy_lot": 214.0,
-      "net_lot": -235.0,
-      "rank_no": 2,
-      "rank_side": "sell",
-      "sell_lot": 449.0,
-      "trade_date": "2026-04-13"
-    },
-    {
-      "avg_price": 495.15,
-      "broker_name": "摩根大通",
-      "buy_lot": 202.0,
-      "net_lot": 133.0,
-      "rank_no": 5,
-      "rank_side": "buy",
-      "sell_lot": 69.0,
-      "trade_date": "2026-04-13"
-    },
-    {
-      "avg_price": 501.47,
-      "broker_name": "新加坡商瑞銀",
-      "buy_lot": 382.0,
-      "net_lot": 47.0,
-      "rank_no": 13,
-      "rank_side": "buy",
-      "sell_lot": 335.0,
-      "trade_date": "2026-04-13"
-    },
-    {
-      "avg_price": 504.35,
-      "broker_name": "永豐金",
-      "buy_lot": 574.0,
-      "net_lot": 411.0,
-      "rank_no": 2,
-      "rank_side": "buy",
-      "sell_lot": 162.0,
-      "trade_date": "2026-04-13"
-    },
-    {
-      "avg_price": 506.55,
-      "broker_name": "美商高盛",
-      "buy_lot": 242.0,
-      "net_lot": -90.0,
-      "rank_no": 8,
-      "rank_side": "sell",
-      "sell_lot": 332.0,
-      "trade_date": "2026-04-13"
-    },
-    {
-      "avg_price": 497.23,
-      "broker_name": "花旗環球",
-      "buy_lot": 30.0,
-      "net_lot": -141.0,
-      "rank_no": 5,
-      "rank_side": "sell",
-      "sell_lot": 171.0,
-      "trade_date": "2026-04-13"
     }
   ],
   "branch_daily_status": [
@@ -687,152 +577,152 @@
       "error": "empty parseable branch table",
       "row_count": 0,
       "status": "empty",
+      "trade_date": "2026-04-27"
+    },
+    {
+      "attempts": 3,
+      "error": "empty parseable branch table",
+      "row_count": 0,
+      "status": "empty",
       "trade_date": "2026-04-24"
     },
     {
-      "attempts": 1,
-      "error": null,
-      "row_count": 30,
-      "status": "success",
+      "attempts": 3,
+      "error": "empty parseable branch table",
+      "row_count": 0,
+      "status": "empty",
       "trade_date": "2026-04-23"
     },
     {
-      "attempts": 1,
-      "error": null,
-      "row_count": 30,
-      "status": "success",
+      "attempts": 3,
+      "error": "empty parseable branch table",
+      "row_count": 0,
+      "status": "empty",
       "trade_date": "2026-04-22"
     },
     {
-      "attempts": 1,
-      "error": null,
-      "row_count": 30,
-      "status": "success",
+      "attempts": 3,
+      "error": "empty parseable branch table",
+      "row_count": 0,
+      "status": "empty",
       "trade_date": "2026-04-21"
     },
     {
-      "attempts": 1,
-      "error": null,
-      "row_count": 30,
-      "status": "success",
+      "attempts": 3,
+      "error": "empty parseable branch table",
+      "row_count": 0,
+      "status": "empty",
       "trade_date": "2026-04-20"
     },
     {
-      "attempts": 1,
-      "error": null,
-      "row_count": 30,
-      "status": "success",
+      "attempts": 3,
+      "error": "empty parseable branch table",
+      "row_count": 0,
+      "status": "empty",
       "trade_date": "2026-04-17"
     },
     {
-      "attempts": 1,
-      "error": null,
-      "row_count": 30,
-      "status": "success",
+      "attempts": 3,
+      "error": "empty parseable branch table",
+      "row_count": 0,
+      "status": "empty",
       "trade_date": "2026-04-16"
     },
     {
-      "attempts": 1,
-      "error": null,
-      "row_count": 30,
-      "status": "success",
+      "attempts": 3,
+      "error": "empty parseable branch table",
+      "row_count": 0,
+      "status": "empty",
       "trade_date": "2026-04-15"
     },
     {
-      "attempts": 1,
-      "error": null,
-      "row_count": 30,
-      "status": "success",
+      "attempts": 3,
+      "error": "empty parseable branch table",
+      "row_count": 0,
+      "status": "empty",
       "trade_date": "2026-04-14"
-    },
-    {
-      "attempts": 1,
-      "error": null,
-      "row_count": 30,
-      "status": "success",
-      "trade_date": "2026-04-13"
     }
   ],
   "branch_top": [
     {
-      "avg_price": 513.05,
+      "avg_price": 519.85,
       "broker_name": "台灣摩根士丹利",
-      "buy_lot": 7537.0,
-      "net_lot": 3379.0,
+      "buy_lot": 8172.0,
+      "net_lot": 3927.0,
       "rank_no": 1,
-      "sell_lot": 4157.0
+      "sell_lot": 4244.0
     },
     {
-      "avg_price": 518.27,
+      "avg_price": 528.91,
       "broker_name": "美商高盛",
-      "buy_lot": 5471.0,
-      "net_lot": 2153.0,
+      "buy_lot": 6243.0,
+      "net_lot": 2960.0,
       "rank_no": 2,
-      "sell_lot": 3318.0
+      "sell_lot": 3282.0
     },
     {
-      "avg_price": 516.42,
+      "avg_price": 516.63,
       "broker_name": "富邦",
-      "buy_lot": 3774.0,
+      "buy_lot": 3779.0,
       "net_lot": 2138.0,
       "rank_no": 3,
-      "sell_lot": 1636.0
+      "sell_lot": 1640.0
     },
     {
-      "avg_price": 522.55,
-      "broker_name": "凱基-台北",
-      "buy_lot": 10004.0,
-      "net_lot": 1611.0,
-      "rank_no": 4,
-      "sell_lot": 8392.0
-    },
-    {
-      "avg_price": 508.37,
+      "avg_price": 514.94,
       "broker_name": "新加坡商瑞銀",
-      "buy_lot": 4563.0,
-      "net_lot": 1559.0,
+      "buy_lot": 4893.0,
+      "net_lot": 1863.0,
+      "rank_no": 4,
+      "sell_lot": 3030.0
+    },
+    {
+      "avg_price": 529.32,
+      "broker_name": "凱基-台北",
+      "buy_lot": 10511.0,
+      "net_lot": 1570.0,
       "rank_no": 5,
-      "sell_lot": 3004.0
+      "sell_lot": 8941.0
     },
     {
-      "avg_price": 492.85,
+      "avg_price": 500.85,
       "broker_name": "永豐金",
-      "buy_lot": 2859.0,
-      "net_lot": 1243.0,
+      "buy_lot": 3118.0,
+      "net_lot": 1391.0,
       "rank_no": 6,
-      "sell_lot": 1615.0
+      "sell_lot": 1726.0
     },
     {
-      "avg_price": 510.52,
+      "avg_price": 516.97,
       "broker_name": "摩根大通",
-      "buy_lot": 2906.0,
-      "net_lot": 1121.0,
+      "buy_lot": 2955.0,
+      "net_lot": 1003.0,
       "rank_no": 7,
-      "sell_lot": 1784.0
+      "sell_lot": 1951.0
     },
     {
-      "avg_price": 521.79,
-      "broker_name": "元大",
-      "buy_lot": 13538.0,
-      "net_lot": 1034.0,
-      "rank_no": 8,
-      "sell_lot": 12504.0
-    },
-    {
-      "avg_price": 520.16,
+      "avg_price": 522.37,
       "broker_name": "花旗環球",
-      "buy_lot": 1768.0,
-      "net_lot": 753.0,
-      "rank_no": 9,
-      "sell_lot": 1015.0
+      "buy_lot": 1774.0,
+      "net_lot": 842.0,
+      "rank_no": 8,
+      "sell_lot": 932.0
     },
     {
-      "avg_price": 455.33,
-      "broker_name": "港商麥格理",
-      "buy_lot": 750.0,
-      "net_lot": 715.0,
+      "avg_price": 509.19,
+      "broker_name": "中國信託",
+      "buy_lot": 1136.0,
+      "net_lot": 710.0,
+      "rank_no": 9,
+      "sell_lot": 426.0
+    },
+    {
+      "avg_price": 494.01,
+      "broker_name": "宏遠",
+      "buy_lot": 1149.0,
+      "net_lot": 696.0,
       "rank_no": 10,
-      "sell_lot": 35.0
+      "sell_lot": 452.0
     }
   ],
   "branch_top_status": {
@@ -840,7 +730,7 @@
     "error": null,
     "row_count": 20,
     "status": "success",
-    "updated_at": "2026-04-24 22:42:14"
+    "updated_at": "2026-04-28 00:34:56"
   },
   "chart": [
     {
@@ -1092,9 +982,28 @@
       "ma5": 580.4,
       "ma60": null,
       "volume_lot": 9150.0
+    },
+    {
+      "avg_price": 614.5165337783546,
+      "close": 620.0,
+      "date": "2026-04-27",
+      "ma10": 558.4,
+      "ma20": 499.875,
+      "ma5": 594.2,
+      "ma60": null,
+      "volume_lot": 16179.0
     }
   ],
   "daily": [
+    {
+      "avg_price": 614.5165337783546,
+      "close": 620.0,
+      "date": "2026-04-27",
+      "dealer_net_lot": 123.44,
+      "foreign_net_lot": 968.53,
+      "trust_net_lot": 45.19,
+      "volume_lot": 16179.0
+    },
     {
       "avg_price": 591.8965027322405,
       "close": 582.0,
@@ -1265,29 +1174,773 @@
       "foreign_net_lot": -418.17,
       "trust_net_lot": 0.0,
       "volume_lot": 1662.0
-    },
-    {
-      "avg_price": 463.58804044630403,
-      "close": 454.5,
-      "date": "2026-03-26",
-      "dealer_net_lot": -6.43,
-      "foreign_net_lot": -308.08,
-      "trust_net_lot": 380.0,
-      "volume_lot": 2868.0
     }
   ],
-  "news": [],
-  "revenues": [],
-  "stock": {
-    "avg_price": 523.4035,
-    "close": 582.0,
-    "foreign_net_lot": 15862.83,
-    "in_watchlist": false,
-    "latest_date": "2026-04-24",
+  "margin": [
+    {
+      "date": "2026-04-27",
+      "margin_balance_lot": 4399,
+      "margin_buy_lot": 1122,
+      "margin_cash_repay_lot": 4,
+      "margin_change_lot": 703,
+      "margin_prev_balance_lot": 3696,
+      "margin_sell_lot": 415,
+      "note": "",
+      "offset_lot": 6,
+      "short_balance_lot": 168,
+      "short_buy_lot": 7,
+      "short_change_lot": 27,
+      "short_prev_balance_lot": 141,
+      "short_sell_lot": 34,
+      "short_stock_repay_lot": 0
+    },
+    {
+      "date": "2026-04-24",
+      "margin_balance_lot": 3696,
+      "margin_buy_lot": 626,
+      "margin_cash_repay_lot": 0,
+      "margin_change_lot": -56,
+      "margin_prev_balance_lot": 3752,
+      "margin_sell_lot": 682,
+      "note": "",
+      "offset_lot": 12,
+      "short_balance_lot": 141,
+      "short_buy_lot": 13,
+      "short_change_lot": -1,
+      "short_prev_balance_lot": 142,
+      "short_sell_lot": 12,
+      "short_stock_repay_lot": 0
+    },
+    {
+      "date": "2026-04-23",
+      "margin_balance_lot": 3752,
+      "margin_buy_lot": 423,
+      "margin_cash_repay_lot": 0,
+      "margin_change_lot": -273,
+      "margin_prev_balance_lot": 4025,
+      "margin_sell_lot": 696,
+      "note": "",
+      "offset_lot": 8,
+      "short_balance_lot": 142,
+      "short_buy_lot": 48,
+      "short_change_lot": -40,
+      "short_prev_balance_lot": 182,
+      "short_sell_lot": 8,
+      "short_stock_repay_lot": 0
+    },
+    {
+      "date": "2026-04-22",
+      "margin_balance_lot": 4025,
+      "margin_buy_lot": 585,
+      "margin_cash_repay_lot": 1,
+      "margin_change_lot": -281,
+      "margin_prev_balance_lot": 4306,
+      "margin_sell_lot": 865,
+      "note": "",
+      "offset_lot": 9,
+      "short_balance_lot": 182,
+      "short_buy_lot": 7,
+      "short_change_lot": 13,
+      "short_prev_balance_lot": 169,
+      "short_sell_lot": 20,
+      "short_stock_repay_lot": 0
+    },
+    {
+      "date": "2026-04-21",
+      "margin_balance_lot": 4306,
+      "margin_buy_lot": 1220,
+      "margin_cash_repay_lot": 0,
+      "margin_change_lot": 25,
+      "margin_prev_balance_lot": 4281,
+      "margin_sell_lot": 1195,
+      "note": "",
+      "offset_lot": 11,
+      "short_balance_lot": 169,
+      "short_buy_lot": 14,
+      "short_change_lot": 45,
+      "short_prev_balance_lot": 124,
+      "short_sell_lot": 59,
+      "short_stock_repay_lot": 0
+    },
+    {
+      "date": "2026-04-20",
+      "margin_balance_lot": 4281,
+      "margin_buy_lot": 1057,
+      "margin_cash_repay_lot": 1,
+      "margin_change_lot": 327,
+      "margin_prev_balance_lot": 3954,
+      "margin_sell_lot": 729,
+      "note": "",
+      "offset_lot": 21,
+      "short_balance_lot": 124,
+      "short_buy_lot": 1,
+      "short_change_lot": 43,
+      "short_prev_balance_lot": 81,
+      "short_sell_lot": 44,
+      "short_stock_repay_lot": 0
+    },
+    {
+      "date": "2026-04-17",
+      "margin_balance_lot": 3954,
+      "margin_buy_lot": 495,
+      "margin_cash_repay_lot": 3,
+      "margin_change_lot": 167,
+      "margin_prev_balance_lot": 3787,
+      "margin_sell_lot": 325,
+      "note": "",
+      "offset_lot": 13,
+      "short_balance_lot": 81,
+      "short_buy_lot": 23,
+      "short_change_lot": -23,
+      "short_prev_balance_lot": 104,
+      "short_sell_lot": 0,
+      "short_stock_repay_lot": 0
+    },
+    {
+      "date": "2026-04-16",
+      "margin_balance_lot": 3787,
+      "margin_buy_lot": 814,
+      "margin_cash_repay_lot": 0,
+      "margin_change_lot": 361,
+      "margin_prev_balance_lot": 3426,
+      "margin_sell_lot": 453,
+      "note": "",
+      "offset_lot": 4,
+      "short_balance_lot": 104,
+      "short_buy_lot": 0,
+      "short_change_lot": 30,
+      "short_prev_balance_lot": 74,
+      "short_sell_lot": 30,
+      "short_stock_repay_lot": 0
+    },
+    {
+      "date": "2026-04-15",
+      "margin_balance_lot": 3426,
+      "margin_buy_lot": 458,
+      "margin_cash_repay_lot": 0,
+      "margin_change_lot": -138,
+      "margin_prev_balance_lot": 3564,
+      "margin_sell_lot": 596,
+      "note": "",
+      "offset_lot": 2,
+      "short_balance_lot": 74,
+      "short_buy_lot": 1,
+      "short_change_lot": 7,
+      "short_prev_balance_lot": 67,
+      "short_sell_lot": 12,
+      "short_stock_repay_lot": 4
+    },
+    {
+      "date": "2026-04-14",
+      "margin_balance_lot": 3566,
+      "margin_buy_lot": 285,
+      "margin_cash_repay_lot": 0,
+      "margin_change_lot": -184,
+      "margin_prev_balance_lot": 3750,
+      "margin_sell_lot": 469,
+      "note": "",
+      "offset_lot": 1,
+      "short_balance_lot": 67,
+      "short_buy_lot": 6,
+      "short_change_lot": -3,
+      "short_prev_balance_lot": 70,
+      "short_sell_lot": 3,
+      "short_stock_repay_lot": 0
+    },
+    {
+      "date": "2026-04-13",
+      "margin_balance_lot": 3750,
+      "margin_buy_lot": 834,
+      "margin_cash_repay_lot": 0,
+      "margin_change_lot": -23,
+      "margin_prev_balance_lot": 3773,
+      "margin_sell_lot": 857,
+      "note": "",
+      "offset_lot": 16,
+      "short_balance_lot": 70,
+      "short_buy_lot": 10,
+      "short_change_lot": 0,
+      "short_prev_balance_lot": 70,
+      "short_sell_lot": 10,
+      "short_stock_repay_lot": 0
+    },
+    {
+      "date": "2026-04-10",
+      "margin_balance_lot": 3773,
+      "margin_buy_lot": 734,
+      "margin_cash_repay_lot": 4,
+      "margin_change_lot": -33,
+      "margin_prev_balance_lot": 3806,
+      "margin_sell_lot": 763,
+      "note": "",
+      "offset_lot": 6,
+      "short_balance_lot": 70,
+      "short_buy_lot": 16,
+      "short_change_lot": 20,
+      "short_prev_balance_lot": 50,
+      "short_sell_lot": 36,
+      "short_stock_repay_lot": 0
+    },
+    {
+      "date": "2026-04-09",
+      "margin_balance_lot": 3806,
+      "margin_buy_lot": 53,
+      "margin_cash_repay_lot": 0,
+      "margin_change_lot": -228,
+      "margin_prev_balance_lot": 4034,
+      "margin_sell_lot": 281,
+      "note": "",
+      "offset_lot": 1,
+      "short_balance_lot": 50,
+      "short_buy_lot": 4,
+      "short_change_lot": 1,
+      "short_prev_balance_lot": 49,
+      "short_sell_lot": 5,
+      "short_stock_repay_lot": 0
+    },
+    {
+      "date": "2026-04-08",
+      "margin_balance_lot": 4038,
+      "margin_buy_lot": 95,
+      "margin_cash_repay_lot": 1,
+      "margin_change_lot": -73,
+      "margin_prev_balance_lot": 4111,
+      "margin_sell_lot": 167,
+      "note": "",
+      "offset_lot": 2,
+      "short_balance_lot": 49,
+      "short_buy_lot": 74,
+      "short_change_lot": -71,
+      "short_prev_balance_lot": 120,
+      "short_sell_lot": 3,
+      "short_stock_repay_lot": 0
+    },
+    {
+      "date": "2026-04-07",
+      "margin_balance_lot": 4111,
+      "margin_buy_lot": 49,
+      "margin_cash_repay_lot": 2,
+      "margin_change_lot": -41,
+      "margin_prev_balance_lot": 4152,
+      "margin_sell_lot": 88,
+      "note": "",
+      "offset_lot": 2,
+      "short_balance_lot": 120,
+      "short_buy_lot": 21,
+      "short_change_lot": -12,
+      "short_prev_balance_lot": 132,
+      "short_sell_lot": 9,
+      "short_stock_repay_lot": 0
+    },
+    {
+      "date": "2026-04-02",
+      "margin_balance_lot": 4152,
+      "margin_buy_lot": 73,
+      "margin_cash_repay_lot": 3,
+      "margin_change_lot": -32,
+      "margin_prev_balance_lot": 4184,
+      "margin_sell_lot": 102,
+      "note": "",
+      "offset_lot": 0,
+      "short_balance_lot": 132,
+      "short_buy_lot": 76,
+      "short_change_lot": -42,
+      "short_prev_balance_lot": 174,
+      "short_sell_lot": 34,
+      "short_stock_repay_lot": 0
+    },
+    {
+      "date": "2026-04-01",
+      "margin_balance_lot": 4184,
+      "margin_buy_lot": 396,
+      "margin_cash_repay_lot": 2,
+      "margin_change_lot": 320,
+      "margin_prev_balance_lot": 3864,
+      "margin_sell_lot": 74,
+      "note": "",
+      "offset_lot": 2,
+      "short_balance_lot": 174,
+      "short_buy_lot": 68,
+      "short_change_lot": -59,
+      "short_prev_balance_lot": 233,
+      "short_sell_lot": 9,
+      "short_stock_repay_lot": 0
+    },
+    {
+      "date": "2026-03-31",
+      "margin_balance_lot": 3864,
+      "margin_buy_lot": 116,
+      "margin_cash_repay_lot": 0,
+      "margin_change_lot": 6,
+      "margin_prev_balance_lot": 3858,
+      "margin_sell_lot": 110,
+      "note": "",
+      "offset_lot": 0,
+      "short_balance_lot": 233,
+      "short_buy_lot": 4,
+      "short_change_lot": 20,
+      "short_prev_balance_lot": 213,
+      "short_sell_lot": 24,
+      "short_stock_repay_lot": 0
+    },
+    {
+      "date": "2026-03-30",
+      "margin_balance_lot": 3858,
+      "margin_buy_lot": 48,
+      "margin_cash_repay_lot": 1,
+      "margin_change_lot": -25,
+      "margin_prev_balance_lot": 3883,
+      "margin_sell_lot": 72,
+      "note": "",
+      "offset_lot": 0,
+      "short_balance_lot": 213,
+      "short_buy_lot": 9,
+      "short_change_lot": 26,
+      "short_prev_balance_lot": 187,
+      "short_sell_lot": 35,
+      "short_stock_repay_lot": 0
+    },
+    {
+      "date": "2026-03-27",
+      "margin_balance_lot": 3883,
+      "margin_buy_lot": 95,
+      "margin_cash_repay_lot": 0,
+      "margin_change_lot": 44,
+      "margin_prev_balance_lot": 3839,
+      "margin_sell_lot": 51,
+      "note": "",
+      "offset_lot": 0,
+      "short_balance_lot": 187,
+      "short_buy_lot": 0,
+      "short_change_lot": 116,
+      "short_prev_balance_lot": 71,
+      "short_sell_lot": 116,
+      "short_stock_repay_lot": 0
+    }
+  ],
+  "news": [
+    {
+      "content_excerpt": "主 旨：環球晶召開2026Q1英文線上法說會 1.召開法人說明會之日期：115/05/05 2.召開法人說明會之時間：16 時 00 分 3.召開法人說明會之地點：https://www.surveycake.com/s/Mb9GB 4.法人說明會擇要訊息：本公司召開2026Q1英文線上法說會 5.其他應敘明事項：請線上註冊取得會議ID及密碼，註冊後，與會者將會收到會議連結及會議密碼。 完整財務業務資訊請至公開資訊觀測站之法人說明會一覽表或法說會項目下查閱。",
+      "fetched_at": "2026-04-28 00:41:56",
+      "published_at": "2026-04-21 15:23:12",
+      "source": "Yahoo股市",
+      "stock_id": "6488",
+      "summary": "日 期：2026年04月21日公司名稱：環球晶(6488)主 旨：環球晶召開2026Q1英文線上法說會發言人：彭欣瑜說 明：符合條款第四條第XX款：12事實發生日：115/05/051.召開法人說明會",
+      "title": "【公告】環球晶召開2026Q1英文線上法說會",
+      "url": "https://tw.stock.yahoo.com/news/%E5%85%AC%E5%91%8A-%E7%92%B0%E7%90%83%E6%99%B6%E5%8F%AC%E9%96%8B2026q1%E8%8B%B1%E6%96%87%E7%B7%9A%E4%B8%8A%E6%B3%95%E8%AA%AA%E6%9C%83-072312340.html"
+    },
+    {
+      "content_excerpt": "日期： 2026 年 04 月 09日 【公告】環球晶 2026年3月合併營收 (單位：仟元)",
+      "fetched_at": "2026-04-28 00:41:56",
+      "published_at": "2026-04-09 17:13:11",
+      "source": "Yahoo股市",
+      "stock_id": "6488",
+      "summary": "日期： 2026 年 04 月 09日上櫃公司：環球晶(6488)單位：仟元 【公告】環球晶 2026年3月合併營收 (單位：仟元)項目合併營業收入淨額本月5,445,917去年同期5,440,926",
+      "title": "【公告】環球晶 2026年3月合併營收54.46億元 年增0.09%",
+      "url": "https://tw.stock.yahoo.com/news/%E5%85%AC%E5%91%8A-%E7%92%B0%E7%90%83%E6%99%B6-2026%E5%B9%B43%E6%9C%88%E5%90%88%E4%BD%B5%E7%87%9F%E6%94%B654-46%E5%84%84%E5%85%83-%E5%B9%B4%E5%A2%9E0-091311696.html"
+    },
+    {
+      "content_excerpt": "（中央社記者張建中台北2026年3月12日電）美股主要指數11日漲跌互見，道瓊工業指數下跌289.24點，那斯達克指數上漲19.03點。法人表示，台積電美國存託憑證（ADR）上漲2.15%，不過，台指期夜盤下跌297點，台股可能隨著震盪，指數面臨34000點保衛戰。 美國通膨數據溫和，不過美以聯軍與伊朗衝突升級，美股11日漲跌互見。道瓊工業指數下跌289.24點，跌幅0.61%。標普500指數下跌5.68點，跌幅0.08%。那斯達克指數上漲19.03點，漲幅0.08%。費城半導體指數上漲49.45點，漲幅0.63%。 國內外產業訊息方面，半導體矽晶圓廠環球晶 (6488) 指出，市場需求正在增強，不過，客戶展望依然保守，預期2026年營收將較2025年持平或略增。 代工廠和碩 (4938) 2025年歸屬母公司業主淨利約新台幣144.03億元，年減14.7%，每股純益5.39元；董事會決議配發現金股利每股4元。和碩表示，今年伺服器業務可望逐季成長，下半年動能更強，全年有望成長10倍以上。 散熱廠奇鋐 (3017) 2025年營收1396.39億元，年增94.59%，歸屬母公司淨利191.86億元，年增1.34倍，每股純益49.17元。奇鋐指出，2026年營運可望維持強勁成長。 半導體探針卡和測試設備商旺矽 (6223) 2025年歸屬母公司業主淨利31.77億元，每股純益33.49元，均創下歷史新高，董事會決議每股配發22元現金股利。 中華航空 (2610) 2025年營收和獲利均創下歷史新高，每股純益2.42元，華航表示，今年迎接新787機隊，並陸續引進A350-900、A321neo及777F等，擴充運能及布局航網。 統包工程廠中鼎工程 (9933) 統計，在建工程規模達4500億元，創歷史新高，確保未來數年的營運高能見度。",
+      "fetched_at": "2026-04-28 00:41:56",
+      "published_at": "2026-03-12 08:29:28",
+      "source": "Yahoo股市",
+      "stock_id": "6488",
+      "summary": "（中央社記者張建中台北2026年3月12日電）美股主要指數11日漲跌互見，道瓊工業指數下跌289.24點，那斯達克指數上漲19.03點。法人表示，台積電美國存託憑證（ADR）上漲2.15%，不過，台指",
+      "title": "【盤前焦點】台指期夜盤挫297點 台股34000點保衛戰",
+      "url": "https://tw.stock.yahoo.com/news/%E7%9B%A4%E5%89%8D%E7%84%A6%E9%BB%9E-%E5%8F%B0%E6%8C%87%E6%9C%9F%E5%A4%9C%E7%9B%A4%E6%8C%AB297%E9%BB%9E-%E5%8F%B0%E8%82%A134000%E9%BB%9E%E4%BF%9D%E8%A1%9B%E6%88%B0-002928196.html"
+    },
+    {
+      "content_excerpt": "（中央社記者張建中新竹2026年03月11日電）半導體矽晶圓廠環球晶 (6488) 今天表示，市場需求正在增強，不過，客戶展望依然保守，預期2026年營收將較2025年持平或略增。太陽能廠中美晶 (5483) 則預期，營運將更加穩定。 環球晶與中美晶下午召開線上法人說明會，環球晶指出，市場狀況有一些改善，美國及其他地區急單數量增加，不過，客戶展望依然謹慎保守，觀望地緣政治影響以及能源成本波動情況。 環球晶表示，目前無法確定是因為客戶庫存水位低，回補庫存，或是需求驅動急單增加，將持續關注後續急單情況。初步預期2026年營收將較2025年持平或略增。 環球晶指出，義大利12吋新晶圓廠目前處於驗證與出貨階段，3月初獲得義大利政府補貼2990萬歐元，預期將有助於折舊費用減少，以及毛利率小幅提升。 中美晶表示，隨著半導體矽晶圓市場逐步復甦，再生能源服務業務可望成長，加上海外製造擴張，預期整體營運可望更加穩定。",
+      "fetched_at": "2026-04-28 00:41:56",
+      "published_at": "2026-03-11 17:34:32",
+      "source": "Yahoo股市",
+      "stock_id": "6488",
+      "summary": "（中央社記者張建中新竹2026年03月11日電）半導體矽晶圓廠環球晶(6488)今天表示，市場需求正在增強，不過，客戶展望依然保守，預期2026年營收將較2025年持平或略增。太陽能廠中美晶(5483",
+      "title": "環球晶估2026年營收持平或略增 中美晶營運趨穩定",
+      "url": "https://tw.stock.yahoo.com/news/%E7%92%B0%E7%90%83%E6%99%B6%E4%BC%B02026%E5%B9%B4%E7%87%9F%E6%94%B6%E6%8C%81%E5%B9%B3%E6%88%96%E7%95%A5%E5%A2%9E-%E4%B8%AD%E7%BE%8E%E6%99%B6%E7%87%9F%E9%81%8B%E8%B6%A8%E7%A9%A9%E5%AE%9A-093432255.html"
+    },
+    {
+      "content_excerpt": "（中央社記者張建中新竹2026年03月11日電）中東局勢緊張，半導體矽晶圓廠環球晶 (6488) 及太陽能廠中美晶 (5483) 今天表示，目前對於營運影響有限，不過，將持續關注後續局勢發展，包括能源價格波動等。 環球晶和中美晶下午舉行線上法人說明會，法人關心中東緊張局勢對於兩公司營運的影響情況。中美晶指出，觀察部分原料價格可能出現波動，不過，已與客戶協商因應。 中美晶表示，產品運輸不需要經過荷莫茲海峽（Strait of Hormuz），目前對於整體營運影響有限。 環球晶指出，因事先調整物流策略，避開高風險路線，同時對關鍵材料庫存進行盤點，材料庫存充足，目前對於晶圓出貨及營運並無影響。 中美晶及環球晶皆表示，將持續關注中東局勢後續發展，包括能源價格波動，以及材料和物流成本的影響。",
+      "fetched_at": "2026-04-28 00:41:56",
+      "published_at": "2026-03-11 17:23:53",
+      "source": "Yahoo股市",
+      "stock_id": "6488",
+      "summary": "（中央社記者張建中新竹2026年03月11日電）中東局勢緊張，半導體矽晶圓廠環球晶(6488)及太陽能廠中美晶(5483)今天表示，目前對於營運影響有限，不過，將持續關注後續局勢發展，包括能源價格波動",
+      "title": "中東局勢緊張 環球晶中美晶：目前營運影響有限",
+      "url": "https://tw.stock.yahoo.com/news/%E4%B8%AD%E6%9D%B1%E5%B1%80%E5%8B%A2%E7%B7%8A%E5%BC%B5-%E7%92%B0%E7%90%83%E6%99%B6%E4%B8%AD%E7%BE%8E%E6%99%B6-%E7%9B%AE%E5%89%8D%E7%87%9F%E9%81%8B%E5%BD%B1%E9%9F%BF%E6%9C%89%E9%99%90-092353198.html"
+    },
+    {
+      "content_excerpt": "日期： 2026 年 03 月 06日 【公告】環球晶 2026年2月合併營收 (單位：仟元)",
+      "fetched_at": "2026-04-28 00:41:56",
+      "published_at": "2026-03-06 17:13:25",
+      "source": "Yahoo股市",
+      "stock_id": "6488",
+      "summary": "日期： 2026 年 03 月 06日上櫃公司：環球晶(6488)單位：仟元 【公告】環球晶 2026年2月合併營收 (單位：仟元)項目合併營業收入淨額本月4,399,603去年同期5,324,413",
+      "title": "【公告】環球晶 2026年2月合併營收44億元 年增-17.37%",
+      "url": "https://tw.stock.yahoo.com/news/%E5%85%AC%E5%91%8A-%E7%92%B0%E7%90%83%E6%99%B6-2026%E5%B9%B42%E6%9C%88%E5%90%88%E4%BD%B5%E7%87%9F%E6%94%B644%E5%84%84%E5%85%83-%E5%B9%B4%E5%A2%9E-17-091325067.html"
+    },
+    {
+      "content_excerpt": "1. 董事會決議日期：115/03/03 2. 股利所屬年(季)度：114年 下半年 3. 股利所屬期間：114/07/01 至 114/12/31 (1)盈餘分配之現金股利(元/股)：5.70000000 (2)法定盈餘公積發放之現金(元/股)：0 (3)資本公積發放之現金(元/股)：0 (4)股東配發之現金(股利)總金額(元)：2,725,248,233 (6)法定盈餘公積轉增資配股(元/股)：0 (7)資本公積轉增資配股(元/股)：0 6. 普通股每股面額欄位：新台幣10.0000元",
+      "fetched_at": "2026-04-28 00:41:56",
+      "published_at": "2026-03-03 16:28:27",
+      "source": "Yahoo股市",
+      "stock_id": "6488",
+      "summary": "日 期：2026年03月03日公司名稱：環球晶(6488)主 旨：環球晶董事會決議股利分派發言人：彭欣瑜說 明：1. 董事會決議日期：115/03/032. 股利所屬年(季)度：114年 下半年3.",
+      "title": "【公告】環球晶董事會決議股利分派",
+      "url": "https://tw.stock.yahoo.com/news/%E5%85%AC%E5%91%8A-%E7%92%B0%E7%90%83%E6%99%B6%E8%91%A3%E4%BA%8B%E6%9C%83%E6%B1%BA%E8%AD%B0%E8%82%A1%E5%88%A9%E5%88%86%E6%B4%BE-082827467.html"
+    },
+    {
+      "content_excerpt": "主 旨：環球晶與中美矽晶製品股份有限公司聯合召開FY2025英文線上法說會 1.召開法人說明會之日期：115/03/11 2.召開法人說明會之時間：15 時 00 分 3.召開法人說明會之地點：https://www.surveycake.com/s/6AKQD 4.法人說明會擇要訊息：本公司與中美矽晶製品股份有限公司聯合召開FY2025英文線上法說會 5.其他應敘明事項：請線上註冊取得會議ID及密碼，註冊後，與會者將會收到會議連結及會議密碼。 完整財務業務資訊請至公開資訊觀測站之法人說明會一覽表或法說會項目下查閱。",
+      "fetched_at": "2026-04-28 00:41:56",
+      "published_at": "2026-02-25 15:24:07",
+      "source": "Yahoo股市",
+      "stock_id": "6488",
+      "summary": "日 期：2026年02月25日公司名稱：環球晶(6488)主 旨：環球晶與中美矽晶製品股份有限公司聯合召開FY2025英文線上法說會發言人：彭欣瑜說 明：符合條款第四條第XX款：12事實發生日：115",
+      "title": "【公告】環球晶與中美矽晶製品股份有限公司聯合召開FY2025英文線上法說會",
+      "url": "https://tw.stock.yahoo.com/news/%E5%85%AC%E5%91%8A-%E7%92%B0%E7%90%83%E6%99%B6%E8%88%87%E4%B8%AD%E7%BE%8E%E7%9F%BD%E6%99%B6%E8%A3%BD%E5%93%81%E8%82%A1%E4%BB%BD%E6%9C%89%E9%99%90%E5%85%AC%E5%8F%B8%E8%81%AF%E5%90%88%E5%8F%AC%E9%96%8Bfy2025%E8%8B%B1%E6%96%87%E7%B7%9A%E4%B8%8A%E6%B3%95%E8%AA%AA%E6%9C%83-072407451.html"
+    }
+  ],
+  "revenues": [
+    {
+      "cumulative_revenue_million": 13984.8,
+      "cumulative_yoy_pct": -10.32,
+      "last_year_cumulative_revenue_million": 15594.52,
+      "last_year_revenue_million": 5440.93,
+      "mom_pct": 23.78,
+      "prev_month_revenue_million": 4399.6,
+      "revenue_million": 5445.92,
+      "revenue_month": "2026-03",
+      "source": "finmind",
+      "yoy_pct": 0.09
+    },
+    {
+      "cumulative_revenue_million": 8538.88,
+      "cumulative_yoy_pct": -15.9,
+      "last_year_cumulative_revenue_million": 10153.6,
+      "last_year_revenue_million": 5324.41,
+      "mom_pct": 6.29,
+      "prev_month_revenue_million": 4139.28,
+      "revenue_million": 4399.6,
+      "revenue_month": "2026-02",
+      "source": "finmind",
+      "yoy_pct": -17.37
+    },
+    {
+      "cumulative_revenue_million": 4139.28,
+      "cumulative_yoy_pct": -14.29,
+      "last_year_cumulative_revenue_million": 4829.18,
+      "last_year_revenue_million": 4829.18,
+      "mom_pct": -24.82,
+      "prev_month_revenue_million": 5505.81,
+      "revenue_million": 4139.28,
+      "revenue_month": "2026-01",
+      "source": "finmind",
+      "yoy_pct": -14.29
+    },
+    {
+      "cumulative_revenue_million": 60597.94,
+      "cumulative_yoy_pct": -3.24,
+      "last_year_cumulative_revenue_million": 62626.0,
+      "last_year_revenue_million": 5491.19,
+      "mom_pct": 16.86,
+      "prev_month_revenue_million": 4711.63,
+      "revenue_million": 5505.81,
+      "revenue_month": "2025-12",
+      "source": "finmind",
+      "yoy_pct": 0.27
+    },
+    {
+      "cumulative_revenue_million": 55092.12,
+      "cumulative_yoy_pct": -3.58,
+      "last_year_cumulative_revenue_million": 57134.82,
+      "last_year_revenue_million": 5118.18,
+      "mom_pct": 9.97,
+      "prev_month_revenue_million": 4284.63,
+      "revenue_million": 4711.63,
+      "revenue_month": "2025-11",
+      "source": "finmind",
+      "yoy_pct": -7.94
+    },
+    {
+      "cumulative_revenue_million": 50380.5,
+      "cumulative_yoy_pct": -3.15,
+      "last_year_cumulative_revenue_million": 52016.64,
+      "last_year_revenue_million": 5733.97,
+      "mom_pct": -27.42,
+      "prev_month_revenue_million": 5903.53,
+      "revenue_million": 4284.63,
+      "revenue_month": "2025-10",
+      "source": "finmind",
+      "yoy_pct": -25.28
+    },
+    {
+      "cumulative_revenue_million": 46095.86,
+      "cumulative_yoy_pct": -0.4,
+      "last_year_cumulative_revenue_million": 46282.67,
+      "last_year_revenue_million": 5151.54,
+      "mom_pct": 33.33,
+      "prev_month_revenue_million": 4427.62,
+      "revenue_million": 5903.53,
+      "revenue_month": "2025-09",
+      "source": "finmind",
+      "yoy_pct": 14.6
+    },
+    {
+      "cumulative_revenue_million": 40192.33,
+      "cumulative_yoy_pct": -2.28,
+      "last_year_cumulative_revenue_million": 41131.13,
+      "last_year_revenue_million": 5359.42,
+      "mom_pct": 6.37,
+      "prev_month_revenue_million": 4162.28,
+      "revenue_million": 4427.62,
+      "revenue_month": "2025-08",
+      "source": "finmind",
+      "yoy_pct": -17.39
+    },
+    {
+      "cumulative_revenue_million": 35764.71,
+      "cumulative_yoy_pct": -0.02,
+      "last_year_cumulative_revenue_million": 35771.71,
+      "last_year_revenue_million": 5359.02,
+      "mom_pct": -27.2,
+      "prev_month_revenue_million": 5717.33,
+      "revenue_million": 4162.28,
+      "revenue_month": "2025-07",
+      "source": "finmind",
+      "yoy_pct": -22.33
+    },
+    {
+      "cumulative_revenue_million": 31602.43,
+      "cumulative_yoy_pct": 3.91,
+      "last_year_cumulative_revenue_million": 30412.69,
+      "last_year_revenue_million": 5339.56,
+      "mom_pct": 14.18,
+      "prev_month_revenue_million": 5007.21,
+      "revenue_million": 5717.33,
+      "revenue_month": "2025-06",
+      "source": "finmind",
+      "yoy_pct": 7.07
+    },
+    {
+      "cumulative_revenue_million": 25885.1,
+      "cumulative_yoy_pct": 3.24,
+      "last_year_cumulative_revenue_million": 25073.13,
+      "last_year_revenue_million": 5201.31,
+      "mom_pct": -5.23,
+      "prev_month_revenue_million": 5283.37,
+      "revenue_million": 5007.21,
+      "revenue_month": "2025-05",
+      "source": "finmind",
+      "yoy_pct": -3.73
+    },
+    {
+      "cumulative_revenue_million": 20877.89,
+      "cumulative_yoy_pct": 5.06,
+      "last_year_cumulative_revenue_million": 19871.82,
+      "last_year_revenue_million": 4784.76,
+      "mom_pct": -2.9,
+      "prev_month_revenue_million": 5440.93,
+      "revenue_million": 5283.37,
+      "revenue_month": "2025-04",
+      "source": "finmind",
+      "yoy_pct": 10.42
+    },
+    {
+      "cumulative_revenue_million": 15594.52,
+      "cumulative_yoy_pct": 3.36,
+      "last_year_cumulative_revenue_million": 15087.06,
+      "last_year_revenue_million": 5661.86,
+      "mom_pct": 2.19,
+      "prev_month_revenue_million": 5324.41,
+      "revenue_million": 5440.93,
+      "revenue_month": "2025-03",
+      "source": "finmind",
+      "yoy_pct": -3.9
+    },
+    {
+      "cumulative_revenue_million": 10153.6,
+      "cumulative_yoy_pct": 7.73,
+      "last_year_cumulative_revenue_million": 9425.2,
+      "last_year_revenue_million": 5028.83,
+      "mom_pct": 10.25,
+      "prev_month_revenue_million": 4829.18,
+      "revenue_million": 5324.41,
+      "revenue_month": "2025-02",
+      "source": "finmind",
+      "yoy_pct": 5.88
+    },
+    {
+      "cumulative_revenue_million": 4829.18,
+      "cumulative_yoy_pct": 9.84,
+      "last_year_cumulative_revenue_million": 4396.38,
+      "last_year_revenue_million": 4396.38,
+      "mom_pct": -12.06,
+      "prev_month_revenue_million": 5491.19,
+      "revenue_million": 4829.18,
+      "revenue_month": "2025-01",
+      "source": "finmind",
+      "yoy_pct": 9.84
+    },
+    {
+      "cumulative_revenue_million": 62626.0,
+      "cumulative_yoy_pct": -11.36,
+      "last_year_cumulative_revenue_million": 70651.59,
+      "last_year_revenue_million": 6433.77,
+      "mom_pct": 7.29,
+      "prev_month_revenue_million": 5118.18,
+      "revenue_million": 5491.19,
+      "revenue_month": "2024-12",
+      "source": "finmind",
+      "yoy_pct": -14.65
+    },
+    {
+      "cumulative_revenue_million": 57134.82,
+      "cumulative_yoy_pct": -11.03,
+      "last_year_cumulative_revenue_million": 64217.82,
+      "last_year_revenue_million": 5242.97,
+      "mom_pct": -10.74,
+      "prev_month_revenue_million": 5733.97,
+      "revenue_million": 5118.18,
+      "revenue_month": "2024-11",
+      "source": "finmind",
+      "yoy_pct": -2.38
+    },
+    {
+      "cumulative_revenue_million": 52016.64,
+      "cumulative_yoy_pct": -11.8,
+      "last_year_cumulative_revenue_million": 58974.86,
+      "last_year_revenue_million": 5086.53,
+      "mom_pct": 11.31,
+      "prev_month_revenue_million": 5151.54,
+      "revenue_million": 5733.97,
+      "revenue_month": "2024-10",
+      "source": "finmind",
+      "yoy_pct": 12.73
+    },
+    {
+      "cumulative_revenue_million": 46282.67,
+      "cumulative_yoy_pct": -14.11,
+      "last_year_cumulative_revenue_million": 53888.32,
+      "last_year_revenue_million": 6428.93,
+      "mom_pct": -3.88,
+      "prev_month_revenue_million": 5359.42,
+      "revenue_million": 5151.54,
+      "revenue_month": "2024-09",
+      "source": "finmind",
+      "yoy_pct": -19.87
+    },
+    {
+      "cumulative_revenue_million": 41131.13,
+      "cumulative_yoy_pct": -13.33,
+      "last_year_cumulative_revenue_million": 47459.4,
+      "last_year_revenue_million": 5462.08,
+      "mom_pct": 0.01,
+      "prev_month_revenue_million": 5359.02,
+      "revenue_million": 5359.42,
+      "revenue_month": "2024-08",
+      "source": "finmind",
+      "yoy_pct": -1.88
+    },
+    {
+      "cumulative_revenue_million": 35771.71,
+      "cumulative_yoy_pct": -14.82,
+      "last_year_cumulative_revenue_million": 41997.32,
+      "last_year_revenue_million": 5484.9,
+      "mom_pct": 0.36,
+      "prev_month_revenue_million": 5339.56,
+      "revenue_million": 5359.02,
+      "revenue_month": "2024-07",
+      "source": "finmind",
+      "yoy_pct": -2.29
+    },
+    {
+      "cumulative_revenue_million": 30412.69,
+      "cumulative_yoy_pct": -16.71,
+      "last_year_cumulative_revenue_million": 36512.42,
+      "last_year_revenue_million": 6305.47,
+      "mom_pct": 2.66,
+      "prev_month_revenue_million": 5201.31,
+      "revenue_million": 5339.56,
+      "revenue_month": "2024-06",
+      "source": "finmind",
+      "yoy_pct": -15.32
+    },
+    {
+      "cumulative_revenue_million": 25073.13,
+      "cumulative_yoy_pct": -17.0,
+      "last_year_cumulative_revenue_million": 30206.95,
+      "last_year_revenue_million": 5957.26,
+      "mom_pct": 8.71,
+      "prev_month_revenue_million": 4784.76,
+      "revenue_million": 5201.31,
+      "revenue_month": "2024-05",
+      "source": "finmind",
+      "yoy_pct": -12.69
+    },
+    {
+      "cumulative_revenue_million": 19871.82,
+      "cumulative_yoy_pct": -18.05,
+      "last_year_cumulative_revenue_million": 24249.69,
+      "last_year_revenue_million": 5633.54,
+      "mom_pct": -15.49,
+      "prev_month_revenue_million": 5661.86,
+      "revenue_million": 4784.76,
+      "revenue_month": "2024-04",
+      "source": "finmind",
+      "yoy_pct": -15.07
+    }
+  ],
+  "selection": {
+    "avg_price": 535.3653,
+    "branch_score": -1.18,
+    "chip_score": 55.88,
+    "close": 620.0,
+    "close_vs_top_buy_avg_pct": 19.27,
+    "confluence_branch_score": 3.43,
+    "confluence_direction_score": 14.0,
+    "confluence_inst_score": 22.5,
+    "confluence_price_score": -11.0,
+    "confluence_score": 38.13,
+    "confluence_streak_score": 9.2,
+    "foreign_buy_streak": 6.0,
+    "foreign_net_lot": 17139.44,
+    "inst_net_lot": 24225.44,
+    "inst_net_volume_pct": 17.61,
+    "latest_date": "2026-04-27",
     "market": "TPEX",
     "name": "環球晶",
+    "observed_days": 20,
+    "revenue_cumulative_yoy_pct": -10.32,
+    "revenue_mom_pct": 23.78,
+    "revenue_momentum_score": 1.22,
+    "revenue_month": "2026-03",
+    "revenue_yoy_pct": 0.09,
+    "selection_reason": "外資與投信同買；前大買超分點約占成交 2.85%；收盤距區間均價 15.81%；收盤距分點均價 19.27%；連買：外6 / 投2；營收 2026-03，月增 23.78%，年增 0.09%，累計年增 -10.32%",
+    "selection_score": 39.35,
     "stock_id": "6488",
-    "trust_net_lot": 7420.81,
-    "volume_lot": 124267.0
+    "top_buy_branch_avg_price": 519.85,
+    "top_buy_branch_name": "台灣摩根士丹利",
+    "top_buy_branch_net_lot": 3927.0,
+    "top_buy_branch_volume_pct": 2.85,
+    "top_sell_branch_avg_price": 555.53,
+    "top_sell_branch_name": "合庫",
+    "top_sell_branch_net_lot": -1669.0,
+    "total_score": 54.7,
+    "trust_buy_streak": 2.0,
+    "trust_net_lot": 7086.0
+  },
+  "stock": {
+    "avg_price": 535.3653,
+    "close": 620.0,
+    "foreign_net_lot": 17139.44,
+    "in_watchlist": false,
+    "latest_date": "2026-04-27",
+    "margin_balance_change_lot": 560,
+    "market": "TPEX",
+    "name": "環球晶",
+    "short_balance_change_lot": 97,
+    "stock_id": "6488",
+    "trust_net_lot": 7086.0,
+    "volume_lot": 137578.0
   }
 }

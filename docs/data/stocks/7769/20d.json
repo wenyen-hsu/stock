@@ -269,9 +269,28 @@
       "ma5": 4639.0,
       "ma60": null,
       "volume_lot": 1463.62
+    },
+    {
+      "avg_price": 4912.119684595727,
+      "close": 4970.0,
+      "date": "2026-04-27",
+      "ma10": 4540.5,
+      "ma20": 4245.75,
+      "ma5": 4744.0,
+      "ma60": null,
+      "volume_lot": 1750.01
     }
   ],
   "daily": [
+    {
+      "avg_price": 4912.119684595727,
+      "close": 4970.0,
+      "date": "2026-04-27",
+      "dealer_net_lot": 7.68,
+      "foreign_net_lot": 675.26,
+      "trust_net_lot": 15.94,
+      "volume_lot": 1750.01
+    },
     {
       "avg_price": 4761.301391483297,
       "close": 4730.0,
@@ -429,9 +448,9 @@
       "avg_price": 3650.1238259896827,
       "close": 3710.0,
       "date": "2026-03-30",
-      "dealer_net_lot": -74.59,
-      "foreign_net_lot": -215.54,
-      "trust_net_lot": -10.15,
+      "dealer_net_lot": -0.62,
+      "foreign_net_lot": 231.31,
+      "trust_net_lot": -96.74,
       "volume_lot": 961.87
     },
     {
@@ -442,29 +461,62 @@
       "foreign_net_lot": 189.94,
       "trust_net_lot": -88.8,
       "volume_lot": 723.96
-    },
-    {
-      "avg_price": 3883.976984839594,
-      "close": 3850.0,
-      "date": "2026-03-26",
-      "dealer_net_lot": 1.15,
-      "foreign_net_lot": -12.17,
-      "trust_net_lot": -23.89,
-      "volume_lot": 848.66
     }
   ],
+  "margin": [],
   "news": [],
   "revenues": [],
-  "stock": {
-    "avg_price": 4253.5072,
-    "close": 4730.0,
-    "foreign_net_lot": 3304.26,
-    "in_watchlist": false,
-    "latest_date": "2026-04-24",
+  "selection": {
+    "avg_price": 4312.6582,
+    "branch_score": 0.0,
+    "chip_score": 31.36,
+    "close": 4970.0,
+    "close_vs_top_buy_avg_pct": 0.0,
+    "confluence_branch_score": 0.0,
+    "confluence_direction_score": 0.0,
+    "confluence_inst_score": 0.0,
+    "confluence_price_score": 0.0,
+    "confluence_score": 0.0,
+    "confluence_streak_score": 0.0,
+    "foreign_buy_streak": 1.0,
+    "foreign_net_lot": 4438.55,
+    "inst_net_lot": 3614.57,
+    "inst_net_volume_pct": 0.0,
+    "latest_date": "2026-04-27",
     "market": "TWSE",
     "name": "鴻勁",
+    "observed_days": 20,
+    "revenue_cumulative_yoy_pct": 0.0,
+    "revenue_mom_pct": 0.0,
+    "revenue_momentum_score": 0.0,
+    "revenue_month": "",
+    "revenue_yoy_pct": 0.0,
+    "selection_reason": "資料不足或法人與分點未同向",
+    "selection_score": 0.0,
     "stock_id": "7769",
-    "trust_net_lot": -777.22,
-    "volume_lot": 23885.76
+    "top_buy_branch_avg_price": 0.0,
+    "top_buy_branch_name": "",
+    "top_buy_branch_net_lot": 0.0,
+    "top_buy_branch_volume_pct": 0.0,
+    "top_sell_branch_avg_price": 0.0,
+    "top_sell_branch_name": "",
+    "top_sell_branch_net_lot": 0.0,
+    "total_score": 31.36,
+    "trust_buy_streak": 4.0,
+    "trust_net_lot": -823.98
+  },
+  "stock": {
+    "avg_price": 4312.6582,
+    "close": 4970.0,
+    "foreign_net_lot": 4438.55,
+    "in_watchlist": false,
+    "latest_date": "2026-04-27",
+    "margin_balance_change_lot": null,
+    "market": "TWSE",
+    "name": "鴻勁",
+    "short_balance_change_lot": null,
+    "stock_id": "7769",
+    "trust_net_lot": -823.98,
+    "volume_lot": 24787.11
   }
 }
