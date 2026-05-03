@@ -406,11 +406,8 @@
       <div>
         <label for="ranking">排行</label>
         <select id="ranking">
-          <option value="total_score">總分</option>
+          <option value="total_score">基礎選股分</option>
           <option value="chip_score">法人籌碼分數</option>
-          <option value="branch_score">分點分數</option>
-          <option value="confluence_score">法人 + 分點共振</option>
-          <option value="selection_score">籌碼 + 營收動能</option>
           <option value="foreign_buy">外資買超</option>
           <option value="trust_buy">投信買超</option>
           <option value="inst_buy">外資 + 投信</option>
@@ -551,17 +548,17 @@
       </section>
       <section class="panel">
         <div class="panel-head">
-          <div><div class="panel-title">區間合計買超前十分點</div><div class="muted" id="branch-top-note">點分點看最近 10 日</div></div>
+          <div><div class="panel-title">區間合計買超前十分點</div><div class="muted" id="branch-top-note">點分點看每日明細</div></div>
           <div class="panel-actions"><button class="secondary single-refresh" data-section="branch_top">更新分點排行</button></div>
         </div>
         <div class="table-wrap" id="branch-top-table"></div>
       </section>
       <section class="panel">
         <div class="panel-head">
-          <div class="panel-title" id="broker-title">分點最近 10 日</div>
+          <div class="panel-title" id="broker-title">分點每日明細</div>
           <div class="panel-actions">
             <div class="broker-list" id="broker-list"></div>
-            <button class="secondary single-refresh" data-section="branch_daily">更新近10日</button>
+            <button class="secondary single-refresh" data-section="branch_daily">更新每日明細</button>
           </div>
         </div>
         <div class="table-wrap" id="broker-daily-table"></div>
@@ -1190,25 +1187,19 @@
       {key:"market", label:"市場", sortType:"text"},
       {key:"close", label:"收盤"},
       {key:"observed_days", label:"資料日"},
-      {key:"total_score", label:"總分", signed:true},
-      {key:"selection_score", label:"選股分", signed:true},
+      {key:"total_score", label:"基礎分", signed:true},
       {key:"chip_score", label:"法人分", signed:true},
-      {key:"branch_score", label:"分點分", signed:true},
-      {key:"confluence_score", label:"共振分", signed:true},
       {key:"revenue_momentum_score", label:"營收分", signed:true},
-      {key:"confluence_direction_score", label:"同向", signed:true},
-      {key:"confluence_branch_score", label:"集中", signed:true},
-      {key:"confluence_price_score", label:"成本", signed:true},
-      {key:"confluence_streak_score", label:"續買", signed:true},
+      {key:"margin_score", label:"融資分", signed:true},
       {key:"foreign_net_lot", label:"外資", signed:true},
       {key:"trust_net_lot", label:"投信", signed:true},
+      {key:"margin_balance_change_lot", label:"融資增減", signed:true},
+      {key:"short_balance_change_lot", label:"融券增減", signed:true},
       {key:"avg_price", label:"均價"},
-      {key:"top_buy_branch_name", label:"買超分點", sortType:"text"},
-      {key:"top_buy_branch_net_lot", label:"買超", signed:true},
-      {key:"top_buy_branch_avg_price", label:"買超均價"},
+      {key:"branch_status", label:"分點狀態", sortType:"text"},
       {key:"revenue_month", label:"營收月", sortType:"text"},
       {key:"revenue_yoy_pct", label:"年增%", signed:true},
-      {key:"selection_reason", label:"理由", sortType:"text"}
+      {key:"base_reason", label:"理由", sortType:"text"}
     ];
     async function loadMeta() {
       const meta = await getJSON("/api/meta?days=" + document.querySelector("#days").value);
@@ -1255,29 +1246,31 @@
     function renderSelectionAssist(selection) {
       const target = document.querySelector("#selection-assist");
       if (!target) return;
-      if (!selection || (!Number(selection.confluence_score) && !Number(selection.revenue_momentum_score))) {
-        target.innerHTML = `<div class="empty">目前沒有足夠的區間分點或法人同向資料可計算共振。</div>`;
+      if (!selection) {
+        target.innerHTML = `<div class="empty">目前沒有足夠資料可計算選股輔助。</div>`;
         return;
       }
       const cards = [
-        ["選股分", selection.selection_score, "共振分 + 營收動能"],
-        ["法人方向", selection.confluence_direction_score, `法人占量 ${fmt(selection.inst_net_volume_pct)}%`],
-        ["分點集中", selection.confluence_branch_score, `前大分點占量 ${fmt(selection.top_buy_branch_volume_pct)}%`],
-        ["成本位置", selection.confluence_price_score, `距分點均價 ${fmt(selection.close_vs_top_buy_avg_pct)}%`],
-        ["連買續航", selection.confluence_streak_score, `外資 ${fmt(selection.foreign_buy_streak)} 日 / 投信 ${fmt(selection.trust_buy_streak)} 日`],
+        ["基礎選股分", selection.total_score, "法人 + 融資融券 + 營收"],
+        ["法人分", selection.chip_score, `法人占量 ${fmt(selection.inst_net_volume_pct)}%`],
+        ["融資分", selection.margin_score, `融資 ${fmt(selection.margin_balance_change_lot)} / 融券 ${fmt(selection.short_balance_change_lot)}`],
         ["營收動能", selection.revenue_momentum_score, `${esc(selection.revenue_month || "無月份")} 年增 ${fmt(selection.revenue_yoy_pct)}%`],
+        ["分點狀態", selection.branch_status || "未取得", "分點分只作個股進階確認"],
+        ["分點分", selection.branch_score, `買超分點 ${esc(selection.top_buy_branch_name || "未取得")}`],
+        ["共振分", selection.confluence_score, `距分點均價 ${fmt(selection.close_vs_top_buy_avg_pct)}%`],
+        ["完整籌碼分", selection.complete_chip_score, "基礎選股分 + 共振分"],
       ];
       target.innerHTML = `
         <div class="assist-grid">
           ${cards.map(([label, value, note]) => `
             <div class="assist-card">
               <div class="assist-label">${esc(label)}</div>
-              <div class="assist-value ${cls(value)}">${esc(fmt(value))}</div>
+              <div class="assist-value ${cls(value)}">${esc(typeof value === "number" ? fmt(value) : value)}</div>
               <div class="assist-note">${esc(note)}</div>
             </div>
           `).join("")}
         </div>
-        <div class="assist-reason">${esc(selection.selection_reason || "")}</div>
+        <div class="assist-reason">${esc(selection.base_reason || selection.selection_reason || "")}</div>
       `;
     }
     async function expandStockFromSearch() {
@@ -1616,7 +1609,7 @@
         document.querySelector("#branch-top-table").innerHTML =
           `<div class="empty">區間分點排行狀態：${esc(statusText)}，最後更新：${esc(branchTopStatus.updated_at || "-")}${esc(detail)}</div>`;
       } else {
-        if (branchTopNote) branchTopNote.textContent = "點分點看最近 10 日";
+        if (branchTopNote) branchTopNote.textContent = `這是 ${days} 日區間合計；點分點看最近 ${days} 個交易日明細`;
         renderTable(document.querySelector("#branch-top-table"), data.branch_top, [
           {key:"rank_no", label:"排名"},
           {key:"broker_name", label:"分點"},
@@ -1644,7 +1637,8 @@
         state.broker = btn.dataset.broker;
         renderBrokerDaily();
       }));
-      document.querySelector("#broker-title").textContent = state.broker ? `${state.broker} 最近 10 日` : "分點最近 10 日";
+      const days = document.querySelector("#days").value;
+      document.querySelector("#broker-title").textContent = state.broker ? `${state.broker} 最近 ${days} 個交易日` : `分點最近 ${days} 個交易日`;
       const rows = (data?.branch_daily || []).filter(row => row.broker_name === state.broker);
       const statuses = data?.branch_daily_status || [];
       const success = statuses.filter(row => row.status === "success").length;
@@ -1653,8 +1647,8 @@
         const message = failed.length
           ? `尚缺 ${failed.length} 個交易日分點日資料；狀態：${failed.map(row => `${row.trade_date} ${row.status}`).join("、")}`
           : success
-            ? "單日分點頁已抓取，但此分點最近 10 日未進入 HiStock 可解析的單日前排行。"
-            : "尚未抓取分點最近 10 日資料。";
+            ? `單日分點頁已抓取，但此分點最近 ${days} 個交易日未進入 HiStock 可解析的單日前排行。`
+            : `尚未抓取分點最近 ${days} 個交易日資料。`;
         document.querySelector("#broker-daily-table").innerHTML = `<div class="empty">${esc(message)}</div>`;
         return;
       }

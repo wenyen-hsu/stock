@@ -1,22 +1,22 @@
 {
   "coverage": [
     {
-      "attempted": 20,
-      "empty_count": 14,
+      "attempted": 19,
+      "empty_count": 15,
       "failed_count": 0,
       "market": "TPEX",
-      "remaining": 878,
-      "stocks_with_branch": 6,
+      "remaining": 880,
+      "stocks_with_branch": 4,
       "total_stocks": 884
     },
     {
-      "attempted": 80,
-      "empty_count": 50,
+      "attempted": 83,
+      "empty_count": 59,
       "failed_count": 0,
       "market": "TWSE",
-      "remaining": 1047,
-      "stocks_with_branch": 30,
-      "total_stocks": 1077
+      "remaining": 1055,
+      "stocks_with_branch": 24,
+      "total_stocks": 1079
     }
   ]
 }

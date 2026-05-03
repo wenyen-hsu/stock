@@ -1,736 +1,13 @@
 {
-  "branch_daily": [
-    {
-      "avg_price": 581.66,
-      "broker_name": "凱基-台北",
-      "buy_lot": 1018.0,
-      "net_lot": 84.0,
-      "rank_no": 7,
-      "rank_side": "buy",
-      "sell_lot": 934.0,
-      "trade_date": "2026-04-23"
-    },
-    {
-      "avg_price": 579.96,
-      "broker_name": "台灣摩根士丹利",
-      "buy_lot": 645.0,
-      "net_lot": 483.0,
-      "rank_no": 3,
-      "rank_side": "buy",
-      "sell_lot": 162.0,
-      "trade_date": "2026-04-23"
-    },
-    {
-      "avg_price": 573.38,
-      "broker_name": "宏遠",
-      "buy_lot": 59.0,
-      "net_lot": 52.0,
-      "rank_no": 9,
-      "rank_side": "buy",
-      "sell_lot": 6.0,
-      "trade_date": "2026-04-23"
-    },
-    {
-      "avg_price": 577.33,
-      "broker_name": "摩根大通",
-      "buy_lot": 353.0,
-      "net_lot": 195.0,
-      "rank_no": 4,
-      "rank_side": "buy",
-      "sell_lot": 158.0,
-      "trade_date": "2026-04-23"
-    },
-    {
-      "avg_price": 583.85,
-      "broker_name": "新加坡商瑞銀",
-      "buy_lot": 971.0,
-      "net_lot": 745.0,
-      "rank_no": 2,
-      "rank_side": "buy",
-      "sell_lot": 226.0,
-      "trade_date": "2026-04-23"
-    },
-    {
-      "avg_price": 580.3,
-      "broker_name": "永豐金",
-      "buy_lot": 41.0,
-      "net_lot": -45.0,
-      "rank_no": 9,
-      "rank_side": "sell",
-      "sell_lot": 86.0,
-      "trade_date": "2026-04-23"
-    },
-    {
-      "avg_price": 589.11,
-      "broker_name": "美商高盛",
-      "buy_lot": 1267.0,
-      "net_lot": 1198.0,
-      "rank_no": 1,
-      "rank_side": "buy",
-      "sell_lot": 69.0,
-      "trade_date": "2026-04-23"
-    },
-    {
-      "avg_price": 596.33,
-      "broker_name": "中國信託",
-      "buy_lot": 30.0,
-      "net_lot": -112.0,
-      "rank_no": 5,
-      "rank_side": "sell",
-      "sell_lot": 142.0,
-      "trade_date": "2026-04-22"
-    },
-    {
-      "avg_price": 601.98,
-      "broker_name": "凱基-台北",
-      "buy_lot": 753.0,
-      "net_lot": 276.0,
-      "rank_no": 3,
-      "rank_side": "buy",
-      "sell_lot": 476.0,
-      "trade_date": "2026-04-22"
-    },
-    {
-      "avg_price": 600.33,
-      "broker_name": "台灣摩根士丹利",
-      "buy_lot": 369.0,
-      "net_lot": 189.0,
-      "rank_no": 4,
-      "rank_side": "buy",
-      "sell_lot": 180.0,
-      "trade_date": "2026-04-22"
-    },
-    {
-      "avg_price": 594.51,
-      "broker_name": "宏遠",
-      "buy_lot": 31.0,
-      "net_lot": 20.0,
-      "rank_no": 13,
-      "rank_side": "buy",
-      "sell_lot": 11.0,
-      "trade_date": "2026-04-22"
-    },
-    {
-      "avg_price": 597.64,
-      "broker_name": "富邦",
-      "buy_lot": 18.0,
-      "net_lot": -54.0,
-      "rank_no": 13,
-      "rank_side": "sell",
-      "sell_lot": 73.0,
-      "trade_date": "2026-04-22"
-    },
-    {
-      "avg_price": 600.18,
-      "broker_name": "新加坡商瑞銀",
-      "buy_lot": 178.0,
-      "net_lot": -60.0,
-      "rank_no": 11,
-      "rank_side": "sell",
-      "sell_lot": 239.0,
-      "trade_date": "2026-04-22"
-    },
-    {
-      "avg_price": 600.65,
-      "broker_name": "永豐金",
-      "buy_lot": 168.0,
-      "net_lot": 75.0,
-      "rank_no": 7,
-      "rank_side": "buy",
-      "sell_lot": 92.0,
-      "trade_date": "2026-04-22"
-    },
-    {
-      "avg_price": 603.96,
-      "broker_name": "美商高盛",
-      "buy_lot": 530.0,
-      "net_lot": 340.0,
-      "rank_no": 2,
-      "rank_side": "buy",
-      "sell_lot": 190.0,
-      "trade_date": "2026-04-22"
-    },
-    {
-      "avg_price": 607.68,
-      "broker_name": "花旗環球",
-      "buy_lot": 800.0,
-      "net_lot": 789.0,
-      "rank_no": 1,
-      "rank_side": "buy",
-      "sell_lot": 11.0,
-      "trade_date": "2026-04-22"
-    },
-    {
-      "avg_price": 583.47,
-      "broker_name": "中國信託",
-      "buy_lot": 282.0,
-      "net_lot": 248.0,
-      "rank_no": 6,
-      "rank_side": "buy",
-      "sell_lot": 34.0,
-      "trade_date": "2026-04-21"
-    },
-    {
-      "avg_price": 582.1,
-      "broker_name": "凱基-台北",
-      "buy_lot": 1198.0,
-      "net_lot": -125.0,
-      "rank_no": 7,
-      "rank_side": "sell",
-      "sell_lot": 1323.0,
-      "trade_date": "2026-04-21"
-    },
-    {
-      "avg_price": 587.51,
-      "broker_name": "台灣摩根士丹利",
-      "buy_lot": 834.0,
-      "net_lot": 489.0,
-      "rank_no": 4,
-      "rank_side": "buy",
-      "sell_lot": 345.0,
-      "trade_date": "2026-04-21"
-    },
-    {
-      "avg_price": 586.29,
-      "broker_name": "富邦",
-      "buy_lot": 745.0,
-      "net_lot": 543.0,
-      "rank_no": 3,
-      "rank_side": "buy",
-      "sell_lot": 201.0,
-      "trade_date": "2026-04-21"
-    },
-    {
-      "avg_price": 591.07,
-      "broker_name": "永豐金",
-      "buy_lot": 344.0,
-      "net_lot": 284.0,
-      "rank_no": 5,
-      "rank_side": "buy",
-      "sell_lot": 59.0,
-      "trade_date": "2026-04-21"
-    },
-    {
-      "avg_price": 582.66,
-      "broker_name": "美商高盛",
-      "buy_lot": 218.0,
-      "net_lot": -208.0,
-      "rank_no": 3,
-      "rank_side": "sell",
-      "sell_lot": 426.0,
-      "trade_date": "2026-04-21"
-    },
-    {
-      "avg_price": 544.22,
-      "broker_name": "凱基-台北",
-      "buy_lot": 643.0,
-      "net_lot": 34.0,
-      "rank_no": 15,
-      "rank_side": "buy",
-      "sell_lot": 608.0,
-      "trade_date": "2026-04-20"
-    },
-    {
-      "avg_price": 545.24,
-      "broker_name": "台灣摩根士丹利",
-      "buy_lot": 838.0,
-      "net_lot": 802.0,
-      "rank_no": 1,
-      "rank_side": "buy",
-      "sell_lot": 36.0,
-      "trade_date": "2026-04-20"
-    },
-    {
-      "avg_price": 545.65,
-      "broker_name": "富邦",
-      "buy_lot": 631.0,
-      "net_lot": 581.0,
-      "rank_no": 2,
-      "rank_side": "buy",
-      "sell_lot": 50.0,
-      "trade_date": "2026-04-20"
-    },
-    {
-      "avg_price": 545.36,
-      "broker_name": "摩根大通",
-      "buy_lot": 402.0,
-      "net_lot": 332.0,
-      "rank_no": 6,
-      "rank_side": "buy",
-      "sell_lot": 70.0,
-      "trade_date": "2026-04-20"
-    },
-    {
-      "avg_price": 543.99,
-      "broker_name": "新加坡商瑞銀",
-      "buy_lot": 252.0,
-      "net_lot": 230.0,
-      "rank_no": 7,
-      "rank_side": "buy",
-      "sell_lot": 22.0,
-      "trade_date": "2026-04-20"
-    },
-    {
-      "avg_price": 540.97,
-      "broker_name": "美商高盛",
-      "buy_lot": 581.0,
-      "net_lot": 481.0,
-      "rank_no": 3,
-      "rank_side": "buy",
-      "sell_lot": 100.0,
-      "trade_date": "2026-04-20"
-    },
-    {
-      "avg_price": 522.54,
-      "broker_name": "凱基-台北",
-      "buy_lot": 97.0,
-      "net_lot": -208.0,
-      "rank_no": 5,
-      "rank_side": "sell",
-      "sell_lot": 306.0,
-      "trade_date": "2026-04-17"
-    },
-    {
-      "avg_price": 516.31,
-      "broker_name": "台灣摩根士丹利",
-      "buy_lot": 82.0,
-      "net_lot": -219.0,
-      "rank_no": 4,
-      "rank_side": "sell",
-      "sell_lot": 301.0,
-      "trade_date": "2026-04-17"
-    },
-    {
-      "avg_price": 518.19,
-      "broker_name": "宏遠",
-      "buy_lot": 24.0,
-      "net_lot": 22.0,
-      "rank_no": 14,
-      "rank_side": "buy",
-      "sell_lot": 2.0,
-      "trade_date": "2026-04-17"
-    },
-    {
-      "avg_price": 518.32,
-      "broker_name": "富邦",
-      "buy_lot": 164.0,
-      "net_lot": 40.0,
-      "rank_no": 6,
-      "rank_side": "buy",
-      "sell_lot": 123.0,
-      "trade_date": "2026-04-17"
-    },
-    {
-      "avg_price": 515.24,
-      "broker_name": "摩根大通",
-      "buy_lot": 64.0,
-      "net_lot": -278.0,
-      "rank_no": 3,
-      "rank_side": "sell",
-      "sell_lot": 342.0,
-      "trade_date": "2026-04-17"
-    },
-    {
-      "avg_price": 517.24,
-      "broker_name": "新加坡商瑞銀",
-      "buy_lot": 22.0,
-      "net_lot": -326.0,
-      "rank_no": 2,
-      "rank_side": "sell",
-      "sell_lot": 348.0,
-      "trade_date": "2026-04-17"
-    },
-    {
-      "avg_price": 523.45,
-      "broker_name": "美商高盛",
-      "buy_lot": 104.0,
-      "net_lot": -145.0,
-      "rank_no": 8,
-      "rank_side": "sell",
-      "sell_lot": 250.0,
-      "trade_date": "2026-04-17"
-    },
-    {
-      "avg_price": 529.68,
-      "broker_name": "凱基-台北",
-      "buy_lot": 695.0,
-      "net_lot": 184.0,
-      "rank_no": 5,
-      "rank_side": "buy",
-      "sell_lot": 511.0,
-      "trade_date": "2026-04-16"
-    },
-    {
-      "avg_price": 534.66,
-      "broker_name": "台灣摩根士丹利",
-      "buy_lot": 1120.0,
-      "net_lot": 1009.0,
-      "rank_no": 1,
-      "rank_side": "buy",
-      "sell_lot": 111.0,
-      "trade_date": "2026-04-16"
-    },
-    {
-      "avg_price": 523.27,
-      "broker_name": "富邦",
-      "buy_lot": 363.0,
-      "net_lot": 350.0,
-      "rank_no": 3,
-      "rank_side": "buy",
-      "sell_lot": 13.0,
-      "trade_date": "2026-04-16"
-    },
-    {
-      "avg_price": 528.7,
-      "broker_name": "摩根大通",
-      "buy_lot": 63.0,
-      "net_lot": -81.0,
-      "rank_no": 2,
-      "rank_side": "sell",
-      "sell_lot": 145.0,
-      "trade_date": "2026-04-16"
-    },
-    {
-      "avg_price": 534.11,
-      "broker_name": "新加坡商瑞銀",
-      "buy_lot": 231.0,
-      "net_lot": 122.0,
-      "rank_no": 9,
-      "rank_side": "buy",
-      "sell_lot": 109.0,
-      "trade_date": "2026-04-16"
-    },
-    {
-      "avg_price": 526.93,
-      "broker_name": "美商高盛",
-      "buy_lot": 342.0,
-      "net_lot": 122.0,
-      "rank_no": 8,
-      "rank_side": "buy",
-      "sell_lot": 220.0,
-      "trade_date": "2026-04-16"
-    },
-    {
-      "avg_price": 524.18,
-      "broker_name": "凱基-台北",
-      "buy_lot": 2324.0,
-      "net_lot": 1562.0,
-      "rank_no": 1,
-      "rank_side": "buy",
-      "sell_lot": 761.0,
-      "trade_date": "2026-04-15"
-    },
-    {
-      "avg_price": 524.48,
-      "broker_name": "台灣摩根士丹利",
-      "buy_lot": 1098.0,
-      "net_lot": 940.0,
-      "rank_no": 2,
-      "rank_side": "buy",
-      "sell_lot": 158.0,
-      "trade_date": "2026-04-15"
-    },
-    {
-      "avg_price": 525.47,
-      "broker_name": "宏遠",
-      "buy_lot": 32.0,
-      "net_lot": -56.0,
-      "rank_no": 10,
-      "rank_side": "sell",
-      "sell_lot": 88.0,
-      "trade_date": "2026-04-15"
-    },
-    {
-      "avg_price": 524.94,
-      "broker_name": "富邦",
-      "buy_lot": 581.0,
-      "net_lot": 535.0,
-      "rank_no": 4,
-      "rank_side": "buy",
-      "sell_lot": 46.0,
-      "trade_date": "2026-04-15"
-    },
-    {
-      "avg_price": 522.99,
-      "broker_name": "摩根大通",
-      "buy_lot": 217.0,
-      "net_lot": 81.0,
-      "rank_no": 9,
-      "rank_side": "buy",
-      "sell_lot": 136.0,
-      "trade_date": "2026-04-15"
-    },
-    {
-      "avg_price": 525.25,
-      "broker_name": "新加坡商瑞銀",
-      "buy_lot": 739.0,
-      "net_lot": 576.0,
-      "rank_no": 3,
-      "rank_side": "buy",
-      "sell_lot": 163.0,
-      "trade_date": "2026-04-15"
-    },
-    {
-      "avg_price": 523.19,
-      "broker_name": "永豐金",
-      "buy_lot": 137.0,
-      "net_lot": -127.0,
-      "rank_no": 2,
-      "rank_side": "sell",
-      "sell_lot": 264.0,
-      "trade_date": "2026-04-15"
-    },
-    {
-      "avg_price": 524.01,
-      "broker_name": "美商高盛",
-      "buy_lot": 315.0,
-      "net_lot": 69.0,
-      "rank_no": 10,
-      "rank_side": "buy",
-      "sell_lot": 246.0,
-      "trade_date": "2026-04-15"
-    },
-    {
-      "avg_price": 503.86,
-      "broker_name": "中國信託",
-      "buy_lot": 215.0,
-      "net_lot": 212.0,
-      "rank_no": 4,
-      "rank_side": "buy",
-      "sell_lot": 2.0,
-      "trade_date": "2026-04-14"
-    },
-    {
-      "avg_price": 506.12,
-      "broker_name": "台灣摩根士丹利",
-      "buy_lot": 235.0,
-      "net_lot": -53.0,
-      "rank_no": 6,
-      "rank_side": "sell",
-      "sell_lot": 289.0,
-      "trade_date": "2026-04-14"
-    },
-    {
-      "avg_price": 505.35,
-      "broker_name": "富邦",
-      "buy_lot": 374.0,
-      "net_lot": 69.0,
-      "rank_no": 5,
-      "rank_side": "buy",
-      "sell_lot": 304.0,
-      "trade_date": "2026-04-14"
-    },
-    {
-      "avg_price": 508.2,
-      "broker_name": "摩根大通",
-      "buy_lot": 400.0,
-      "net_lot": 376.0,
-      "rank_no": 2,
-      "rank_side": "buy",
-      "sell_lot": 24.0,
-      "trade_date": "2026-04-14"
-    },
-    {
-      "avg_price": 503.91,
-      "broker_name": "新加坡商瑞銀",
-      "buy_lot": 230.0,
-      "net_lot": 15.0,
-      "rank_no": 15,
-      "rank_side": "buy",
-      "sell_lot": 215.0,
-      "trade_date": "2026-04-14"
-    },
-    {
-      "avg_price": 504.49,
-      "broker_name": "永豐金",
-      "buy_lot": 48.0,
-      "net_lot": -24.0,
-      "rank_no": 12,
-      "rank_side": "sell",
-      "sell_lot": 73.0,
-      "trade_date": "2026-04-14"
-    },
-    {
-      "avg_price": 504.43,
-      "broker_name": "美商高盛",
-      "buy_lot": 431.0,
-      "net_lot": 362.0,
-      "rank_no": 3,
-      "rank_side": "buy",
-      "sell_lot": 69.0,
-      "trade_date": "2026-04-14"
-    },
-    {
-      "avg_price": 504.96,
-      "broker_name": "花旗環球",
-      "buy_lot": 39.0,
-      "net_lot": -84.0,
-      "rank_no": 4,
-      "rank_side": "sell",
-      "sell_lot": 123.0,
-      "trade_date": "2026-04-14"
-    }
-  ],
-  "branch_daily_status": [
-    {
-      "attempts": 3,
-      "error": "empty parseable branch table",
-      "row_count": 0,
-      "status": "empty",
-      "trade_date": "2026-04-27"
-    },
-    {
-      "attempts": 3,
-      "error": "empty parseable branch table",
-      "row_count": 0,
-      "status": "empty",
-      "trade_date": "2026-04-24"
-    },
-    {
-      "attempts": 3,
-      "error": "empty parseable branch table",
-      "row_count": 0,
-      "status": "empty",
-      "trade_date": "2026-04-23"
-    },
-    {
-      "attempts": 3,
-      "error": "empty parseable branch table",
-      "row_count": 0,
-      "status": "empty",
-      "trade_date": "2026-04-22"
-    },
-    {
-      "attempts": 3,
-      "error": "empty parseable branch table",
-      "row_count": 0,
-      "status": "empty",
-      "trade_date": "2026-04-21"
-    },
-    {
-      "attempts": 3,
-      "error": "empty parseable branch table",
-      "row_count": 0,
-      "status": "empty",
-      "trade_date": "2026-04-20"
-    },
-    {
-      "attempts": 3,
-      "error": "empty parseable branch table",
-      "row_count": 0,
-      "status": "empty",
-      "trade_date": "2026-04-17"
-    },
-    {
-      "attempts": 3,
-      "error": "empty parseable branch table",
-      "row_count": 0,
-      "status": "empty",
-      "trade_date": "2026-04-16"
-    },
-    {
-      "attempts": 3,
-      "error": "empty parseable branch table",
-      "row_count": 0,
-      "status": "empty",
-      "trade_date": "2026-04-15"
-    },
-    {
-      "attempts": 3,
-      "error": "empty parseable branch table",
-      "row_count": 0,
-      "status": "empty",
-      "trade_date": "2026-04-14"
-    }
-  ],
-  "branch_top": [
-    {
-      "avg_price": 519.85,
-      "broker_name": "台灣摩根士丹利",
-      "buy_lot": 8172.0,
-      "net_lot": 3927.0,
-      "rank_no": 1,
-      "sell_lot": 4244.0
-    },
-    {
-      "avg_price": 528.91,
-      "broker_name": "美商高盛",
-      "buy_lot": 6243.0,
-      "net_lot": 2960.0,
-      "rank_no": 2,
-      "sell_lot": 3282.0
-    },
-    {
-      "avg_price": 516.63,
-      "broker_name": "富邦",
-      "buy_lot": 3779.0,
-      "net_lot": 2138.0,
-      "rank_no": 3,
-      "sell_lot": 1640.0
-    },
-    {
-      "avg_price": 514.94,
-      "broker_name": "新加坡商瑞銀",
-      "buy_lot": 4893.0,
-      "net_lot": 1863.0,
-      "rank_no": 4,
-      "sell_lot": 3030.0
-    },
-    {
-      "avg_price": 529.32,
-      "broker_name": "凱基-台北",
-      "buy_lot": 10511.0,
-      "net_lot": 1570.0,
-      "rank_no": 5,
-      "sell_lot": 8941.0
-    },
-    {
-      "avg_price": 500.85,
-      "broker_name": "永豐金",
-      "buy_lot": 3118.0,
-      "net_lot": 1391.0,
-      "rank_no": 6,
-      "sell_lot": 1726.0
-    },
-    {
-      "avg_price": 516.97,
-      "broker_name": "摩根大通",
-      "buy_lot": 2955.0,
-      "net_lot": 1003.0,
-      "rank_no": 7,
-      "sell_lot": 1951.0
-    },
-    {
-      "avg_price": 522.37,
-      "broker_name": "花旗環球",
-      "buy_lot": 1774.0,
-      "net_lot": 842.0,
-      "rank_no": 8,
-      "sell_lot": 932.0
-    },
-    {
-      "avg_price": 509.19,
-      "broker_name": "中國信託",
-      "buy_lot": 1136.0,
-      "net_lot": 710.0,
-      "rank_no": 9,
-      "sell_lot": 426.0
-    },
-    {
-      "avg_price": 494.01,
-      "broker_name": "宏遠",
-      "buy_lot": 1149.0,
-      "net_lot": 696.0,
-      "rank_no": 10,
-      "sell_lot": 452.0
-    }
-  ],
+  "branch_daily": [],
+  "branch_daily_status": [],
+  "branch_top": [],
   "branch_top_status": {
-    "attempts": 1,
-    "error": null,
-    "row_count": 20,
-    "status": "success",
-    "updated_at": "2026-04-28 00:34:56"
+    "attempts": 3,
+    "error": "empty parseable branch table",
+    "row_count": 0,
+    "status": "empty",
+    "updated_at": "2026-05-03 21:49:24"
   },
   "chart": [
     {
@@ -992,9 +269,66 @@
       "ma5": 594.2,
       "ma60": null,
       "volume_lot": 16179.0
+    },
+    {
+      "avg_price": 579.0321270751224,
+      "close": 580.0,
+      "date": "2026-04-28",
+      "ma10": 566.3,
+      "ma20": 506.5,
+      "ma5": 590.8,
+      "ma60": null,
+      "volume_lot": 8373.0
+    },
+    {
+      "avg_price": 543.2299631120054,
+      "close": 536.0,
+      "date": "2026-04-29",
+      "ma10": 568.3,
+      "ma20": 511.45,
+      "ma5": 578.0,
+      "ma60": null,
+      "volume_lot": 11928.0
+    },
+    {
+      "avg_price": 577.1772524240114,
+      "close": 580.0,
+      "date": "2026-04-30",
+      "ma10": 572.3,
+      "ma20": 519.425,
+      "ma5": 579.6,
+      "ma60": null,
+      "volume_lot": 9179.0
     }
   ],
   "daily": [
+    {
+      "avg_price": 577.1772524240114,
+      "close": 580.0,
+      "date": "2026-04-30",
+      "dealer_net_lot": -123.91,
+      "foreign_net_lot": 2524.06,
+      "trust_net_lot": 824.0,
+      "volume_lot": 9179.0
+    },
+    {
+      "avg_price": 543.2299631120054,
+      "close": 536.0,
+      "date": "2026-04-29",
+      "dealer_net_lot": -151.86,
+      "foreign_net_lot": -396.88,
+      "trust_net_lot": -958.63,
+      "volume_lot": 11928.0
+    },
+    {
+      "avg_price": 579.0321270751224,
+      "close": 580.0,
+      "date": "2026-04-28",
+      "dealer_net_lot": -86.86,
+      "foreign_net_lot": -2116.29,
+      "trust_net_lot": -316.62,
+      "volume_lot": 8373.0
+    },
     {
       "avg_price": 614.5165337783546,
       "close": 620.0,
@@ -1147,36 +481,60 @@
       "foreign_net_lot": -775.22,
       "trust_net_lot": -837.0,
       "volume_lot": 4777.0
-    },
-    {
-      "avg_price": 428.3268900343643,
-      "close": 420.5,
-      "date": "2026-03-31",
-      "dealer_net_lot": -21.82,
-      "foreign_net_lot": -714.48,
-      "trust_net_lot": 455.0,
-      "volume_lot": 2328.0
-    },
-    {
-      "avg_price": 435.0963669950739,
-      "close": 437.0,
-      "date": "2026-03-30",
-      "dealer_net_lot": -60.45,
-      "foreign_net_lot": 136.94,
-      "trust_net_lot": -199.08,
-      "volume_lot": 1624.0
-    },
-    {
-      "avg_price": 443.6149217809868,
-      "close": 447.5,
-      "date": "2026-03-27",
-      "dealer_net_lot": -160.59,
-      "foreign_net_lot": -418.17,
-      "trust_net_lot": 0.0,
-      "volume_lot": 1662.0
     }
   ],
   "margin": [
+    {
+      "date": "2026-04-30",
+      "margin_balance_lot": 4452,
+      "margin_buy_lot": 342,
+      "margin_cash_repay_lot": 1,
+      "margin_change_lot": -261,
+      "margin_prev_balance_lot": 4713,
+      "margin_sell_lot": 602,
+      "note": "",
+      "offset_lot": 3,
+      "short_balance_lot": 185,
+      "short_buy_lot": 5,
+      "short_change_lot": 79,
+      "short_prev_balance_lot": 106,
+      "short_sell_lot": 84,
+      "short_stock_repay_lot": 0
+    },
+    {
+      "date": "2026-04-29",
+      "margin_balance_lot": 4713,
+      "margin_buy_lot": 551,
+      "margin_cash_repay_lot": 3,
+      "margin_change_lot": 247,
+      "margin_prev_balance_lot": 4466,
+      "margin_sell_lot": 301,
+      "note": "",
+      "offset_lot": 1,
+      "short_balance_lot": 106,
+      "short_buy_lot": 41,
+      "short_change_lot": -31,
+      "short_prev_balance_lot": 137,
+      "short_sell_lot": 10,
+      "short_stock_repay_lot": 0
+    },
+    {
+      "date": "2026-04-28",
+      "margin_balance_lot": 4466,
+      "margin_buy_lot": 607,
+      "margin_cash_repay_lot": 0,
+      "margin_change_lot": 67,
+      "margin_prev_balance_lot": 4399,
+      "margin_sell_lot": 540,
+      "note": "",
+      "offset_lot": 10,
+      "short_balance_lot": 137,
+      "short_buy_lot": 38,
+      "short_change_lot": -31,
+      "short_prev_balance_lot": 168,
+      "short_sell_lot": 7,
+      "short_stock_repay_lot": 0
+    },
     {
       "date": "2026-04-27",
       "margin_balance_lot": 4399,
@@ -1464,57 +822,6 @@
       "short_change_lot": -59,
       "short_prev_balance_lot": 233,
       "short_sell_lot": 9,
-      "short_stock_repay_lot": 0
-    },
-    {
-      "date": "2026-03-31",
-      "margin_balance_lot": 3864,
-      "margin_buy_lot": 116,
-      "margin_cash_repay_lot": 0,
-      "margin_change_lot": 6,
-      "margin_prev_balance_lot": 3858,
-      "margin_sell_lot": 110,
-      "note": "",
-      "offset_lot": 0,
-      "short_balance_lot": 233,
-      "short_buy_lot": 4,
-      "short_change_lot": 20,
-      "short_prev_balance_lot": 213,
-      "short_sell_lot": 24,
-      "short_stock_repay_lot": 0
-    },
-    {
-      "date": "2026-03-30",
-      "margin_balance_lot": 3858,
-      "margin_buy_lot": 48,
-      "margin_cash_repay_lot": 1,
-      "margin_change_lot": -25,
-      "margin_prev_balance_lot": 3883,
-      "margin_sell_lot": 72,
-      "note": "",
-      "offset_lot": 0,
-      "short_balance_lot": 213,
-      "short_buy_lot": 9,
-      "short_change_lot": 26,
-      "short_prev_balance_lot": 187,
-      "short_sell_lot": 35,
-      "short_stock_repay_lot": 0
-    },
-    {
-      "date": "2026-03-27",
-      "margin_balance_lot": 3883,
-      "margin_buy_lot": 95,
-      "margin_cash_repay_lot": 0,
-      "margin_change_lot": 44,
-      "margin_prev_balance_lot": 3839,
-      "margin_sell_lot": 51,
-      "note": "",
-      "offset_lot": 0,
-      "short_balance_lot": 187,
-      "short_buy_lot": 0,
-      "short_change_lot": 116,
-      "short_prev_balance_lot": 71,
-      "short_sell_lot": 116,
       "short_stock_repay_lot": 0
     }
   ],
@@ -1891,22 +1198,28 @@
     }
   ],
   "selection": {
-    "avg_price": 535.3653,
-    "branch_score": -1.18,
-    "chip_score": 55.88,
-    "close": 620.0,
-    "close_vs_top_buy_avg_pct": 19.27,
-    "confluence_branch_score": 3.43,
-    "confluence_direction_score": 14.0,
-    "confluence_inst_score": 22.5,
-    "confluence_price_score": -11.0,
-    "confluence_score": 38.13,
-    "confluence_streak_score": 9.2,
-    "foreign_buy_streak": 6.0,
-    "foreign_net_lot": 17139.44,
-    "inst_net_lot": 24225.44,
-    "inst_net_volume_pct": 17.61,
-    "latest_date": "2026-04-27",
+    "avg_price": 544.0849,
+    "base_reason": "外資買超；投信買超；融資增加；營收 2026-03，月增 23.78%，年增 0.09%，累計年增 -10.32%",
+    "base_score": 47.3,
+    "branch_score": 0.0,
+    "branch_status": "未取得",
+    "chip_score": 46.38,
+    "close": 580.0,
+    "close_vs_top_buy_avg_pct": 0.0,
+    "complete_chip_score": 47.3,
+    "confluence_branch_score": 0.0,
+    "confluence_direction_score": 0.0,
+    "confluence_inst_score": 0.0,
+    "confluence_price_score": 0.0,
+    "confluence_score": 0.0,
+    "confluence_streak_score": 0.0,
+    "foreign_buy_streak": 1.0,
+    "foreign_net_lot": 18146.03,
+    "inst_net_lot": 24524.86,
+    "inst_net_volume_pct": 0.0,
+    "latest_date": "2026-04-30",
+    "margin_balance_change_lot": 588.0,
+    "margin_score": -0.3,
     "market": "TPEX",
     "name": "環球晶",
     "observed_days": 20,
@@ -1915,32 +1228,33 @@
     "revenue_momentum_score": 1.22,
     "revenue_month": "2026-03",
     "revenue_yoy_pct": 0.09,
-    "selection_reason": "外資與投信同買；前大買超分點約占成交 2.85%；收盤距區間均價 15.81%；收盤距分點均價 19.27%；連買：外6 / 投2；營收 2026-03，月增 23.78%，年增 0.09%，累計年增 -10.32%",
-    "selection_score": 39.35,
+    "selection_reason": "營收 2026-03，月增 23.78%，年增 0.09%，累計年增 -10.32%",
+    "selection_score": 47.3,
+    "short_balance_change_lot": -48.0,
     "stock_id": "6488",
-    "top_buy_branch_avg_price": 519.85,
-    "top_buy_branch_name": "台灣摩根士丹利",
-    "top_buy_branch_net_lot": 3927.0,
-    "top_buy_branch_volume_pct": 2.85,
-    "top_sell_branch_avg_price": 555.53,
-    "top_sell_branch_name": "合庫",
-    "top_sell_branch_net_lot": -1669.0,
-    "total_score": 54.7,
-    "trust_buy_streak": 2.0,
-    "trust_net_lot": 7086.0
+    "top_buy_branch_avg_price": 0.0,
+    "top_buy_branch_name": "",
+    "top_buy_branch_net_lot": 0.0,
+    "top_buy_branch_volume_pct": 0.0,
+    "top_sell_branch_avg_price": 0.0,
+    "top_sell_branch_name": "",
+    "top_sell_branch_net_lot": 0.0,
+    "total_score": 47.3,
+    "trust_buy_streak": 1.0,
+    "trust_net_lot": 6378.83
   },
   "stock": {
-    "avg_price": 535.3653,
-    "close": 620.0,
-    "foreign_net_lot": 17139.44,
+    "avg_price": 544.0849,
+    "close": 580.0,
+    "foreign_net_lot": 18146.03,
     "in_watchlist": false,
-    "latest_date": "2026-04-27",
-    "margin_balance_change_lot": 560,
+    "latest_date": "2026-04-30",
+    "margin_balance_change_lot": 588,
     "market": "TPEX",
     "name": "環球晶",
-    "short_balance_change_lot": 97,
+    "short_balance_change_lot": -48,
     "stock_id": "6488",
-    "trust_net_lot": 7086.0,
-    "volume_lot": 137578.0
+    "trust_net_lot": 6378.83,
+    "volume_lot": 161444.0
   }
 }
