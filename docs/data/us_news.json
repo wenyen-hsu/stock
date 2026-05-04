@@ -1,6 +1,559 @@
 {
+  "classifier": "rules",
+  "existing_count": 200,
+  "fetched_count": 50,
+  "generated_at": "2026-05-04 16:23:31",
+  "include_symbol_news": false,
+  "row_count": 226,
   "rows": [
     {
+      "canonical_url": "https://www.cnbc.com/2026/05/04/iran-war-uae-trump-ceasefire-missiles.html",
+      "classification_input_tokens": 0,
+      "classification_output_tokens": 0,
+      "classification_total_tokens": 0,
+      "classified_by": "rules",
+      "confidence": 0.51,
+      "event_type": "一般新聞",
+      "fetched_at": "2026-05-04 16:23:28",
+      "industry": "能源",
+      "matched_keywords": "and oil prices",
+      "news_id": "0bc9eada01b70e88",
+      "published_at": "2026-05-05 00:20:51",
+      "reason": "依標題與摘要關鍵字初步分類",
+      "sentiment": "偏空",
+      "source": "CNBC Top News",
+      "summary": "Stock market indices fell, and oil prices rose after the reported attack on the United Arab Emirates by Iran, which came nearly a month into a ceasefire.",
+      "symbol": "MARKET",
+      "title": "UAE says it's under attack from Iranian missiles and drones despite ceasefire",
+      "url": "https://www.cnbc.com/2026/05/04/iran-war-uae-trump-ceasefire-missiles.html"
+    },
+    {
+      "canonical_url": "https://www.marketwatch.com/story/heres-just-how-quickly-micron-has-risen-up-the-ranks-of-the-top-u-s-companies-fd95ae8d",
+      "classification_input_tokens": 0,
+      "classification_output_tokens": 0,
+      "classification_total_tokens": 0,
+      "classified_by": "rules",
+      "confidence": 0.45,
+      "event_type": "一般新聞",
+      "fetched_at": "2026-05-04 16:23:28",
+      "industry": "其他",
+      "matched_keywords": "",
+      "news_id": "41067f36f447e63f",
+      "published_at": "2026-05-05 00:15:00",
+      "reason": "依標題與摘要關鍵字初步分類",
+      "sentiment": "偏多",
+      "source": "MarketWatch Top Stories",
+      "summary": "At the start of last year, Micron wasn’t even among the top 100 U.S. companies. Its fortunes have changed dramatically since then.",
+      "symbol": "MARKET",
+      "title": "Here’s just how quickly Micron has risen up the ranks of the top U.S companies",
+      "url": "https://www.marketwatch.com/story/heres-just-how-quickly-micron-has-risen-up-the-ranks-of-the-top-u-s-companies-fd95ae8d?mod=mw_rss_topstories"
+    },
+    {
+      "canonical_url": "https://www.marketwatch.com/story/oil-prices-climb-after-disputed-report-of-iran-strike-on-u-s-warship-in-the-strait-of-hormuz-e09f44c9",
+      "classification_input_tokens": 0,
+      "classification_output_tokens": 0,
+      "classification_total_tokens": 0,
+      "classified_by": "rules",
+      "confidence": 0.51,
+      "event_type": "一般新聞",
+      "fetched_at": "2026-05-04 16:23:28",
+      "industry": "能源",
+      "matched_keywords": "global oil prices",
+      "news_id": "670854968bbfc94e",
+      "published_at": "2026-05-05 00:10:00",
+      "reason": "依標題與摘要關鍵字初步分類",
+      "sentiment": "偏多",
+      "source": "MarketWatch Top Stories",
+      "summary": "Global oil prices were surging back above $114 per barrel on Monday, with renewed tensions in the Middle East again at the forefront despite the U.S.-Iranian cease-fire agreed to about a month ago.",
+      "symbol": "MARKET",
+      "title": "Global oil prices top $114 a barrel on worries over supply disruptions due to renewed Middle East tensions",
+      "url": "https://www.marketwatch.com/story/oil-prices-climb-after-disputed-report-of-iran-strike-on-u-s-warship-in-the-strait-of-hormuz-e09f44c9?mod=mw_rss_topstories"
+    },
+    {
+      "canonical_url": "https://www.cnbc.com/2026/05/04/bret-taylor-sierra-fundraise-openai.html",
+      "classification_input_tokens": 0,
+      "classification_output_tokens": 0,
+      "classification_total_tokens": 0,
+      "classified_by": "rules",
+      "confidence": 0.45,
+      "event_type": "一般新聞",
+      "fetched_at": "2026-05-04 16:23:28",
+      "industry": "其他",
+      "matched_keywords": "",
+      "news_id": "287705187a3a72ed",
+      "published_at": "2026-05-05 00:06:05",
+      "reason": "依標題與摘要關鍵字初步分類",
+      "sentiment": "中性",
+      "source": "CNBC Top News",
+      "summary": "Sierra's $950 million Series E funding round was led by Tiger and Google's GV, with participation from Benchmark, Sequoia, Greenoaks and others.",
+      "symbol": "MARKET",
+      "title": "Bret Taylor's Sierra raises nearly $1 billion months after last capital push",
+      "url": "https://www.cnbc.com/2026/05/04/bret-taylor-sierra-fundraise-openai.html"
+    },
+    {
+      "canonical_url": "https://www.marketwatch.com/story/ev-drivers-are-taking-a-victory-lap-right-past-the-gas-stations-selling-4-a-gallon-fuel-6931f634",
+      "classification_input_tokens": 0,
+      "classification_output_tokens": 0,
+      "classification_total_tokens": 0,
+      "classified_by": "rules",
+      "confidence": 0.51,
+      "event_type": "一般新聞",
+      "fetched_at": "2026-05-04 16:23:28",
+      "industry": "電動車",
+      "matched_keywords": "much ev drivers",
+      "news_id": "5ff9d3436590ebc0",
+      "published_at": "2026-05-05 00:00:00",
+      "reason": "依標題與摘要關鍵字初步分類",
+      "sentiment": "中性",
+      "source": "MarketWatch Top Stories",
+      "summary": "Electric-vehicle drivers are taking a victory lap as the war in Iran has slowed global oil supplies and pushed up the cost of gasoline.",
+      "symbol": "MARKET",
+      "title": "Here’s how much EV drivers say they’re saving on fuel as gas tops $4 a gallon",
+      "url": "https://www.marketwatch.com/story/ev-drivers-are-taking-a-victory-lap-right-past-the-gas-stations-selling-4-a-gallon-fuel-6931f634?mod=mw_rss_topstories"
+    },
+    {
+      "canonical_url": "https://www.cnbc.com/2026/05/04/gamestop-ebay-takeover-bid-ryan-cohen-gaming-retail-ecommerce.html",
+      "classification_input_tokens": 0,
+      "classification_output_tokens": 0,
+      "classification_total_tokens": 0,
+      "classified_by": "rules",
+      "confidence": 0.51,
+      "event_type": "併購 / 投資",
+      "fetched_at": "2026-05-04 16:23:28",
+      "industry": "其他",
+      "matched_keywords": "stock deal that",
+      "news_id": "32d0ca6321c8bf18",
+      "published_at": "2026-05-04 23:59:33",
+      "reason": "依標題與摘要關鍵字初步分類",
+      "sentiment": "偏多",
+      "source": "CNBC Top News",
+      "summary": "GameStop made a takeover bid for eBay, offering $125 per share in a cash-and-stock deal that values the e-commerce platform at roughly $55.5 billion.",
+      "symbol": "MARKET",
+      "title": "GameStop stock sinks after surprise eBay takeover bid, Cohen's combative CNBC interview",
+      "url": "https://www.cnbc.com/2026/05/04/gamestop-ebay-takeover-bid-ryan-cohen-gaming-retail-ecommerce.html"
+    },
+    {
+      "canonical_url": "https://www.cnbc.com/2026/05/04/berkshire-shares-trade-higher-as-buffett-successor-abel-scores-good-marks-at-meeting-earnings-jump.html",
+      "classification_input_tokens": 0,
+      "classification_output_tokens": 0,
+      "classification_total_tokens": 0,
+      "classified_by": "rules",
+      "confidence": 0.51,
+      "event_type": "財報",
+      "fetched_at": "2026-05-04 16:23:28",
+      "industry": "其他",
+      "matched_keywords": "meeting earnings jump",
+      "news_id": "4c4554529b091999",
+      "published_at": "2026-05-04 23:47:38",
+      "reason": "依標題與摘要關鍵字初步分類",
+      "sentiment": "偏多",
+      "source": "CNBC Top News",
+      "summary": "Many in the investment community were reassured by Abel's firm grasp over Berkshire's sprawling enterprise.",
+      "symbol": "MARKET",
+      "title": "Berkshire shares trade higher as Buffett successor Abel scores good marks at meeting, earnings jump",
+      "url": "https://www.cnbc.com/2026/05/04/berkshire-shares-trade-higher-as-buffett-successor-abel-scores-good-marks-at-meeting-earnings-jump.html"
+    },
+    {
+      "canonical_url": "https://www.cnbc.com/2026/05/04/how-to-buy-a-major-dow-component-at-a-discount.html",
+      "classification_input_tokens": 0,
+      "classification_output_tokens": 0,
+      "classification_total_tokens": 0,
+      "classified_by": "rules",
+      "confidence": 0.45,
+      "event_type": "一般新聞",
+      "fetched_at": "2026-05-04 16:23:28",
+      "industry": "其他",
+      "matched_keywords": "",
+      "news_id": "892674b5001ff40d",
+      "published_at": "2026-05-04 23:43:54",
+      "reason": "依標題與摘要關鍵字初步分類",
+      "sentiment": "中性",
+      "source": "CNBC Top News",
+      "summary": "UnitedHealth is one of the largest U.S. companies in one of the largest sectors that pays a respectable dividend. Mike Khouw still wouldn't buy the stock outright.",
+      "symbol": "MARKET",
+      "title": "How to buy a major Dow component, at a discount",
+      "url": "https://www.cnbc.com/2026/05/04/how-to-buy-a-major-dow-component-at-a-discount.html"
+    },
+    {
+      "canonical_url": "https://www.cnbc.com/2026/05/04/supreme-court-abortion-pill-mifepristone.html",
+      "classification_input_tokens": 0,
+      "classification_output_tokens": 0,
+      "classification_total_tokens": 0,
+      "classified_by": "rules",
+      "confidence": 0.51,
+      "event_type": "法規 / 政策",
+      "fetched_at": "2026-05-04 16:23:28",
+      "industry": "其他",
+      "matched_keywords": "mail ban on",
+      "news_id": "75f076cd15c0a63d",
+      "published_at": "2026-05-04 23:37:07",
+      "reason": "依標題與摘要關鍵字初步分類",
+      "sentiment": "中性",
+      "source": "CNBC Top News",
+      "summary": "Two drugmakers, Danco Laboratories and GenBioPro, over the weekend asked the Supreme Court to restore the ability to order Mifepristone through the mail.",
+      "symbol": "MARKET",
+      "title": "Supreme Court temporarily lifts mail ban on abortion pill mifepristone",
+      "url": "https://www.cnbc.com/2026/05/04/supreme-court-abortion-pill-mifepristone.html"
+    },
+    {
+      "canonical_url": "https://www.marketwatch.com/story/he-is-constantly-criticizing-her-my-son-in-law-told-my-daughter-to-give-up-her-job-do-i-intervene-eaef801a",
+      "classification_input_tokens": 0,
+      "classification_output_tokens": 0,
+      "classification_total_tokens": 0,
+      "classified_by": "rules",
+      "confidence": 0.45,
+      "event_type": "一般新聞",
+      "fetched_at": "2026-05-04 16:23:28",
+      "industry": "其他",
+      "matched_keywords": "",
+      "news_id": "28ce9a6a2d1a30b4",
+      "published_at": "2026-05-04 23:30:00",
+      "reason": "依標題與摘要關鍵字初步分類",
+      "sentiment": "中性",
+      "source": "MarketWatch Top Stories",
+      "summary": "“In 2025, she made $35,000-$40,000 working as a physical therapist.”",
+      "symbol": "MARKET",
+      "title": "‘He is constantly criticizing her’: My son-in-law told my daughter to give up her job. Do I intervene?",
+      "url": "https://www.marketwatch.com/story/he-is-constantly-criticizing-her-my-son-in-law-told-my-daughter-to-give-up-her-job-do-i-intervene-eaef801a?mod=mw_rss_topstories"
+    },
+    {
+      "canonical_url": "https://www.cnbc.com/2026/05/04/were-adding-to-our-position-in-a-stock-that-has-gotten-cheaper-since-earnings.html",
+      "classification_input_tokens": 0,
+      "classification_output_tokens": 0,
+      "classification_total_tokens": 0,
+      "classified_by": "rules",
+      "confidence": 0.57,
+      "event_type": "財報",
+      "fetched_at": "2026-05-04 16:23:28",
+      "industry": "其他",
+      "matched_keywords": "since earnings the, company's earnings report",
+      "news_id": "13d40f39619e8d13",
+      "published_at": "2026-05-04 23:21:08",
+      "reason": "依標題與摘要關鍵字初步分類",
+      "sentiment": "中性",
+      "source": "CNBC Top News",
+      "summary": "The company's earnings report wasn't perfect, but the long-term story is still intact.",
+      "symbol": "MARKET",
+      "title": "We're adding to our position in a stock that has gotten cheaper since earnings",
+      "url": "https://www.cnbc.com/2026/05/04/were-adding-to-our-position-in-a-stock-that-has-gotten-cheaper-since-earnings.html"
+    },
+    {
+      "canonical_url": "https://www.cnbc.com/2026/05/04/the-markets-next-test-could-come-down-to-two-stocks.html",
+      "classification_input_tokens": 0,
+      "classification_output_tokens": 0,
+      "classification_total_tokens": 0,
+      "classified_by": "rules",
+      "confidence": 0.51,
+      "event_type": "一般新聞",
+      "fetched_at": "2026-05-04 16:23:28",
+      "industry": "半導體 / AI",
+      "matched_keywords": "stocks amd and",
+      "news_id": "a00b6a7b7f9c44ed",
+      "published_at": "2026-05-04 23:18:58",
+      "reason": "依標題與摘要關鍵字初步分類",
+      "sentiment": "中性",
+      "source": "CNBC Top News",
+      "summary": "AMD and Palantir results will drive the market this week. Options traders have a bullish tilt on the stocks ahead of the reports.",
+      "symbol": "MARKET",
+      "title": "The market's next test could come down to two stocks",
+      "url": "https://www.cnbc.com/2026/05/04/the-markets-next-test-could-come-down-to-two-stocks.html"
+    },
+    {
+      "canonical_url": "https://www.cnbc.com/2026/05/04/circle-jumps-16percent-on-clarity-act-compromise-that-preserves-stablecoin-rewards.html",
+      "classification_input_tokens": 0,
+      "classification_output_tokens": 0,
+      "classification_total_tokens": 0,
+      "classified_by": "rules",
+      "confidence": 0.51,
+      "event_type": "一般新聞",
+      "fetched_at": "2026-05-04 16:23:28",
+      "industry": "總體經濟",
+      "matched_keywords": "the market structure",
+      "news_id": "5122614c85bbe101",
+      "published_at": "2026-05-04 23:15:23",
+      "reason": "依標題與摘要關鍵字初步分類",
+      "sentiment": "中性",
+      "source": "CNBC Top News",
+      "summary": "Lawmakers over the weekend reached a compromise on the market structure bill known as the CLARITY Act that keeps stablecoin reward programs intact.",
+      "symbol": "MARKET",
+      "title": "Circle jumps 16% on Clarity Act compromise that preserves stablecoin rewards",
+      "url": "https://www.cnbc.com/2026/05/04/circle-jumps-16percent-on-clarity-act-compromise-that-preserves-stablecoin-rewards.html"
+    },
+    {
+      "canonical_url": "https://www.cnbc.com/2026/05/04/college-grads-overestimate-starting-salaries.html",
+      "classification_input_tokens": 0,
+      "classification_output_tokens": 0,
+      "classification_total_tokens": 0,
+      "classified_by": "rules",
+      "confidence": 0.57,
+      "event_type": "財報",
+      "fetched_at": "2026-05-04 16:23:28",
+      "industry": "總體經濟",
+      "matched_keywords": "labor market for, their earnings potential",
+      "news_id": "e1f648db4705e7cd",
+      "published_at": "2026-05-04 23:04:05",
+      "reason": "依標題與摘要關鍵字初步分類",
+      "sentiment": "中性",
+      "source": "CNBC Top News",
+      "summary": "Amid a challenging labor market for those just starting out, new job seekers will likely have to recalibrate their earnings potential.",
+      "symbol": "MARKET",
+      "title": "New college graduates overestimate starting salaries by nearly $24,000, report finds",
+      "url": "https://www.cnbc.com/2026/05/04/college-grads-overestimate-starting-salaries.html"
+    },
+    {
+      "canonical_url": "https://www.cnbc.com/2026/05/04/musk-altman-open-ai-settlement-trial-brockman.html",
+      "classification_input_tokens": 0,
+      "classification_output_tokens": 0,
+      "classification_total_tokens": 0,
+      "classified_by": "rules",
+      "confidence": 0.45,
+      "event_type": "一般新聞",
+      "fetched_at": "2026-05-04 16:23:28",
+      "industry": "其他",
+      "matched_keywords": "",
+      "news_id": "97961b4122d21146",
+      "published_at": "2026-05-04 22:46:55",
+      "reason": "依標題與摘要關鍵字初步分類",
+      "sentiment": "中性",
+      "source": "CNBC Top News",
+      "summary": "Elon Musk co-founded OpenAI in 2015 and sued the company, President Greg Brockman and CEO Sam Altman in 2024.",
+      "symbol": "MARKET",
+      "title": "Musk texted OpenAI's Brockman about settlement two days before trial began",
+      "url": "https://www.cnbc.com/2026/05/04/musk-altman-open-ai-settlement-trial-brockman.html"
+    },
+    {
+      "canonical_url": "https://www.marketwatch.com/story/tesla-just-hit-a-symbolic-self-driving-milestone-real-world-success-will-be-tougher-5fb93525",
+      "classification_input_tokens": 0,
+      "classification_output_tokens": 0,
+      "classification_total_tokens": 0,
+      "classified_by": "rules",
+      "confidence": 0.57,
+      "event_type": "一般新聞",
+      "fetched_at": "2026-05-04 16:23:28",
+      "industry": "電動車",
+      "matched_keywords": "tesla just, tougher tesla has",
+      "news_id": "ea9b5b61c7094778",
+      "published_at": "2026-05-04 22:43:00",
+      "reason": "依標題與摘要關鍵字初步分類",
+      "sentiment": "中性",
+      "source": "MarketWatch Top Stories",
+      "summary": "Tesla has reached the threshold Musk once said would be required to achieve “safe unsupervised self-driving,” but the company still faces various hurdles.",
+      "symbol": "MARKET",
+      "title": "Tesla just hit a ‘symbolic’ self-driving milestone. Real-world success will be tougher.",
+      "url": "https://www.marketwatch.com/story/tesla-just-hit-a-symbolic-self-driving-milestone-real-world-success-will-be-tougher-5fb93525?mod=mw_rss_topstories"
+    },
+    {
+      "canonical_url": "https://www.cnbc.com/2026/05/04/trump-retirement-savings-rich.html",
+      "classification_input_tokens": 0,
+      "classification_output_tokens": 0,
+      "classification_total_tokens": 0,
+      "classified_by": "rules",
+      "confidence": 0.45,
+      "event_type": "一般新聞",
+      "fetched_at": "2026-05-04 16:23:28",
+      "industry": "其他",
+      "matched_keywords": "",
+      "news_id": "33e74e7ea76afe0e",
+      "published_at": "2026-05-04 22:34:11",
+      "reason": "依標題與摘要關鍵字初步分類",
+      "sentiment": "中性",
+      "source": "CNBC Top News",
+      "summary": "President Donald Trump said savers who build a $465,000 nest egg would be \"rich.\" Whether that's true depends on one's perception of wealth.",
+      "symbol": "MARKET",
+      "title": "Trump said $465,000 in retirement savings is 'rich.' Is it?",
+      "url": "https://www.cnbc.com/2026/05/04/trump-retirement-savings-rich.html"
+    },
+    {
+      "canonical_url": "https://www.marketwatch.com/story/become-a-lazy-millionaire-this-one-habit-can-add-a-20-bonus-to-your-retirement-cf7d715a",
+      "classification_input_tokens": 0,
+      "classification_output_tokens": 0,
+      "classification_total_tokens": 0,
+      "classified_by": "rules",
+      "confidence": 0.45,
+      "event_type": "一般新聞",
+      "fetched_at": "2026-05-04 16:23:28",
+      "industry": "其他",
+      "matched_keywords": "",
+      "news_id": "6fc74896cfbd55d0",
+      "published_at": "2026-05-04 22:23:00",
+      "reason": "依標題與摘要關鍵字初步分類",
+      "sentiment": "偏多",
+      "source": "MarketWatch Top Stories",
+      "summary": "The S&P 500 just banked its best month since 2020 — but to keep those gains, stop celebrating and focus long-term.",
+      "symbol": "MARKET",
+      "title": "Become a ‘lazy’ millionaire: This one habit can add a 20% bonus to your retirement",
+      "url": "https://www.marketwatch.com/story/become-a-lazy-millionaire-this-one-habit-can-add-a-20-bonus-to-your-retirement-cf7d715a?mod=mw_rss_topstories"
+    },
+    {
+      "canonical_url": "https://www.cnbc.com/2026/05/04/fed-kevin-warsh-interest-rates.html",
+      "classification_input_tokens": 0,
+      "classification_output_tokens": 0,
+      "classification_total_tokens": 0,
+      "classified_by": "rules",
+      "confidence": 0.69,
+      "event_type": "法規 / 政策",
+      "fetched_at": "2026-05-04 16:23:28",
+      "industry": "金融",
+      "matched_keywords": "on fed independence, concern fed chair, former fed officials, monetary policy many",
+      "news_id": "96c196f121843913",
+      "published_at": "2026-05-04 22:21:20",
+      "reason": "依標題與摘要關鍵字初步分類",
+      "sentiment": "中性",
+      "source": "CNBC Top News",
+      "summary": "Fed chair nominee Kevin Warsh is putting his own spin on the independence of monetary policy. Many former Fed officials aren't sold.",
+      "symbol": "MARKET",
+      "title": "Warsh's take on Fed independence is met with confusion and some concern",
+      "url": "https://www.cnbc.com/2026/05/04/fed-kevin-warsh-interest-rates.html"
+    },
+    {
+      "canonical_url": "https://www.marketwatch.com/story/meet-the-unsinkable-u-s-economy-oil-prices-are-surging-iran-tensions-are-rising-but-it-wont-crack-ee27477f",
+      "classification_input_tokens": 0,
+      "classification_output_tokens": 0,
+      "classification_total_tokens": 0,
+      "classified_by": "rules",
+      "confidence": 0.57,
+      "event_type": "總體 / 利率",
+      "fetched_at": "2026-05-04 16:23:28",
+      "industry": "金融",
+      "matched_keywords": "stubborn inflation government",
+      "news_id": "7a972b6de48b68b2",
+      "published_at": "2026-05-04 22:21:00",
+      "reason": "依標題與摘要關鍵字初步分類",
+      "sentiment": "中性",
+      "source": "MarketWatch Top Stories",
+      "summary": "High tariffs, stubborn inflation, government shutdowns, war with Iran, rising oil prices — nothing in the turbulent past year has poked a hole in a seemingly unsinkable U.S. economy.",
+      "symbol": "MARKET",
+      "title": "Meet the unsinkable U.S. economy — oil prices are surging, Iran tensions are rising, but it won’t crack",
+      "url": "https://www.marketwatch.com/story/meet-the-unsinkable-u-s-economy-oil-prices-are-surging-iran-tensions-are-rising-but-it-wont-crack-ee27477f?mod=mw_rss_topstories"
+    },
+    {
+      "canonical_url": "https://www.marketwatch.com/story/apple-just-gave-a-subtle-clue-that-a-splashy-ai-acquisition-may-be-in-the-cards-110f5ce2",
+      "classification_input_tokens": 0,
+      "classification_output_tokens": 0,
+      "classification_total_tokens": 0,
+      "classified_by": "rules",
+      "confidence": 0.57,
+      "event_type": "併購 / 投資",
+      "fetched_at": "2026-05-04 16:23:28",
+      "industry": "AI / 伺服器",
+      "matched_keywords": "big ai acquisition, ai acquisition may",
+      "news_id": "357e45aaf7baa97b",
+      "published_at": "2026-05-04 22:18:00",
+      "reason": "依標題與摘要關鍵字初步分類",
+      "sentiment": "中性",
+      "source": "MarketWatch Top Stories",
+      "summary": "With Apple officially retiring its net-cash-neutral target, some suspect the company will look to conduct more transformative M&A, beyond the smaller deals it made in the past.",
+      "symbol": "MARKET",
+      "title": "Apple just gave a clue that a big AI acquisition may be in the cards",
+      "url": "https://www.marketwatch.com/story/apple-just-gave-a-subtle-clue-that-a-splashy-ai-acquisition-may-be-in-the-cards-110f5ce2?mod=mw_rss_topstories"
+    },
+    {
+      "canonical_url": "https://www.marketwatch.com/story/i-always-did-the-graveyard-shift-i-worked-for-54-years-why-on-earth-would-i-wait-to-claim-social-security-at-70-d72ee944",
+      "classification_input_tokens": 0,
+      "classification_output_tokens": 0,
+      "classification_total_tokens": 0,
+      "classified_by": "rules",
+      "confidence": 0.45,
+      "event_type": "一般新聞",
+      "fetched_at": "2026-05-04 16:23:28",
+      "industry": "其他",
+      "matched_keywords": "",
+      "news_id": "424d56b514918dc4",
+      "published_at": "2026-05-04 22:18:00",
+      "reason": "依標題與摘要關鍵字初步分類",
+      "sentiment": "中性",
+      "source": "MarketWatch Top Stories",
+      "summary": "The Committee for a Responsible Federal Budget published a paper suggesting capping Social Security at $100,000 for a married couple.",
+      "symbol": "MARKET",
+      "title": "‘I always did the graveyard shift’: I worked for 54 years. Why on earth would I wait to claim Social Security at 70?",
+      "url": "https://www.marketwatch.com/story/i-always-did-the-graveyard-shift-i-worked-for-54-years-why-on-earth-would-i-wait-to-claim-social-security-at-70-d72ee944?mod=mw_rss_topstories"
+    },
+    {
+      "canonical_url": "https://www.marketwatch.com/story/gamestop-launches-a-56-billion-bid-for-ebay-but-the-math-isnt-working-out-66da416e",
+      "classification_input_tokens": 0,
+      "classification_output_tokens": 0,
+      "classification_total_tokens": 0,
+      "classified_by": "rules",
+      "confidence": 0.57,
+      "event_type": "併購 / 投資",
+      "fetched_at": "2026-05-04 16:23:28",
+      "industry": "金融",
+      "matched_keywords": "the financial engineering, to acquire a",
+      "news_id": "bf22cc252c7ebbe8",
+      "published_at": "2026-05-04 21:55:00",
+      "reason": "依標題與摘要關鍵字初步分類",
+      "sentiment": "中性",
+      "source": "MarketWatch Top Stories",
+      "summary": "While eBay shares are rising, Wall Street is questioning the financial engineering that would be required for GameStop to acquire a company nearly three times its size.",
+      "symbol": "MARKET",
+      "title": "GameStop launches a $56 billion bid for eBay — but the math isn’t working out",
+      "url": "https://www.marketwatch.com/story/gamestop-launches-a-56-billion-bid-for-ebay-but-the-math-isnt-working-out-66da416e?mod=mw_rss_topstories"
+    },
+    {
+      "canonical_url": "https://www.cnbc.com/2026/05/04/strait-hormuz-gas-price-oil-shock-recession-risk-economy-iran-us-war.html",
+      "classification_input_tokens": 0,
+      "classification_output_tokens": 0,
+      "classification_total_tokens": 0,
+      "classified_by": "rules",
+      "confidence": 0.57,
+      "event_type": "一般新聞",
+      "fetched_at": "2026-05-04 16:23:28",
+      "industry": "能源",
+      "matched_keywords": "war oil price, soaring oil prices",
+      "news_id": "9c755301a892c859",
+      "published_at": "2026-05-04 20:50:34",
+      "reason": "依標題與摘要關鍵字初步分類",
+      "sentiment": "中性",
+      "source": "CNBC Top News",
+      "summary": "As US equities hit fresh highs, strategists warn that investors are downplaying the impact of soaring oil prices.",
+      "symbol": "MARKET",
+      "title": "‘Misplaced euphoria’: Markets are sleepwalking into a recession amid Iran war oil price shock",
+      "url": "https://www.cnbc.com/2026/05/04/strait-hormuz-gas-price-oil-shock-recession-risk-economy-iran-us-war.html"
+    },
+    {
+      "canonical_url": "https://www.cnbc.com/2026/05/02/spirit-airlines-shutdown-inside-the-final-hours.html",
+      "classification_input_tokens": 0,
+      "classification_output_tokens": 0,
+      "classification_total_tokens": 0,
+      "classified_by": "rules",
+      "confidence": 0.45,
+      "event_type": "一般新聞",
+      "fetched_at": "2026-05-04 16:23:28",
+      "industry": "其他",
+      "matched_keywords": "",
+      "news_id": "bf204a3fecc684b6",
+      "published_at": "2026-05-04 20:31:35",
+      "reason": "依標題與摘要關鍵字初步分類",
+      "sentiment": "中性",
+      "source": "CNBC Business",
+      "summary": "Spirit Airlines ceased operations overnight after a failed government bailout.",
+      "symbol": "MARKET",
+      "title": "'Godspeed my friend': Inside the final hours of Spirit Airlines",
+      "url": "https://www.cnbc.com/2026/05/02/spirit-airlines-shutdown-inside-the-final-hours.html"
+    },
+    {
+      "canonical_url": "https://www.cnbc.com/2026/05/03/pirro-fed-powell.html",
+      "classification_input_tokens": 0,
+      "classification_output_tokens": 0,
+      "classification_total_tokens": 0,
+      "classified_by": "rules",
+      "confidence": 0.57,
+      "event_type": "總體 / 利率",
+      "fetched_at": "2026-05-04 16:23:28",
+      "industry": "金融",
+      "matched_keywords": "of fed chair",
+      "news_id": "47aba36a6df534b7",
+      "published_at": "2026-05-04 02:58:42",
+      "reason": "依標題與摘要關鍵字初步分類",
+      "sentiment": "偏空",
+      "source": "CNBC Top News",
+      "summary": "The U.S. attorney shifted legal strategies in her investigation of Federal Reserve Chairman Jerome Powell just ahead of a deadline.",
+      "symbol": "MARKET",
+      "title": "Pirro appears to drop plans to appeal criminal investigation of Fed Chair Powell",
+      "url": "https://www.cnbc.com/2026/05/03/pirro-fed-powell.html"
+    },
+    {
+      "canonical_url": "https://www.cnbc.com/2026/05/03/ev-ownership-costs.html",
       "classification_input_tokens": 0,
       "classification_output_tokens": 0,
       "classification_total_tokens": 0,
@@ -10,6 +563,7 @@
       "fetched_at": "2026-05-03 21:39:32",
       "industry": "電動車",
       "matched_keywords": "used ev sales, electric vehicle",
+      "news_id": "7d207cace8bc9447",
       "published_at": "2026-05-03 21:30:01",
       "reason": "依標題與摘要關鍵字初步分類",
       "sentiment": "中性",
@@ -20,6 +574,7 @@
       "url": "https://www.cnbc.com/2026/05/03/ev-ownership-costs.html"
     },
     {
+      "canonical_url": "https://www.cnbc.com/2026/05/03/healthcare-costs-parental-paid-leave-employee-benefits-cuts.html",
       "classification_input_tokens": 0,
       "classification_output_tokens": 0,
       "classification_total_tokens": 0,
@@ -29,6 +584,7 @@
       "fetched_at": "2026-05-03 21:39:32",
       "industry": "消費零售",
       "matched_keywords": "a target of",
+      "news_id": "07c5f6e23bec2a2e",
       "published_at": "2026-05-03 21:23:44",
       "reason": "依標題與摘要關鍵字初步分類",
       "sentiment": "偏多",
@@ -39,6 +595,7 @@
       "url": "https://www.cnbc.com/2026/05/03/healthcare-costs-parental-paid-leave-employee-benefits-cuts.html"
     },
     {
+      "canonical_url": "https://www.marketwatch.com/story/i-am-her-scapegoat-my-mother-in-law-squandered-all-her-money-do-we-buy-her-a-house-so-shes-not-homeless-a8cbfa1c",
       "classification_input_tokens": 0,
       "classification_output_tokens": 0,
       "classification_total_tokens": 0,
@@ -48,6 +605,7 @@
       "fetched_at": "2026-05-03 21:39:32",
       "industry": "其他",
       "matched_keywords": "",
+      "news_id": "26bf9a5638c8c90f",
       "published_at": "2026-05-03 21:19:00",
       "reason": "依標題與摘要關鍵字初步分類",
       "sentiment": "中性",
@@ -58,6 +616,7 @@
       "url": "https://www.marketwatch.com/story/i-am-her-scapegoat-my-mother-in-law-squandered-all-her-money-do-we-buy-her-a-house-so-shes-not-homeless-a8cbfa1c?mod=mw_rss_topstories"
     },
     {
+      "canonical_url": "https://www.marketwatch.com/story/were-worried-the-honey-pot-will-run-dry-does-the-trump-administration-use-my-social-security-to-fund-federal-programs-1cd01b8f",
       "classification_input_tokens": 0,
       "classification_output_tokens": 0,
       "classification_total_tokens": 0,
@@ -67,6 +626,7 @@
       "fetched_at": "2026-05-03 21:39:32",
       "industry": "其他",
       "matched_keywords": "",
+      "news_id": "a1a76d7c4fceea3b",
       "published_at": "2026-05-03 21:06:00",
       "reason": "依標題與摘要關鍵字初步分類",
       "sentiment": "中性",
@@ -77,6 +637,7 @@
       "url": "https://www.marketwatch.com/story/were-worried-the-honey-pot-will-run-dry-does-the-trump-administration-use-my-social-security-to-fund-federal-programs-1cd01b8f?mod=mw_rss_topstories"
     },
     {
+      "canonical_url": "https://www.cnbc.com/2026/05/03/why-some-americans-are-buying-simpler-cars.html",
       "classification_input_tokens": 0,
       "classification_output_tokens": 0,
       "classification_total_tokens": 0,
@@ -86,6 +647,7 @@
       "fetched_at": "2026-05-03 21:39:32",
       "industry": "其他",
       "matched_keywords": "",
+      "news_id": "8ff322167b947e04",
       "published_at": "2026-05-03 21:00:01",
       "reason": "依標題與摘要關鍵字初步分類",
       "sentiment": "中性",
@@ -96,6 +658,7 @@
       "url": "https://www.cnbc.com/2026/05/03/why-some-americans-are-buying-simpler-cars.html"
     },
     {
+      "canonical_url": "https://www.marketwatch.com/story/i-hope-to-retire-early-im-56-and-have-80-in-a-traditional-ira-and-20-in-a-roth-am-i-in-trouble-8ec58195",
       "classification_input_tokens": 0,
       "classification_output_tokens": 0,
       "classification_total_tokens": 0,
@@ -105,6 +668,7 @@
       "fetched_at": "2026-05-03 21:39:32",
       "industry": "其他",
       "matched_keywords": "",
+      "news_id": "133b76aeaa7b987e",
       "published_at": "2026-05-03 20:19:00",
       "reason": "依標題與摘要關鍵字初步分類",
       "sentiment": "中性",
@@ -115,6 +679,7 @@
       "url": "https://www.marketwatch.com/story/i-hope-to-retire-early-im-56-and-have-80-in-a-traditional-ira-and-20-in-a-roth-am-i-in-trouble-8ec58195?mod=mw_rss_topstories"
     },
     {
+      "canonical_url": "https://www.cnbc.com/2026/05/03/opec-announces-188000-barrels-per-day-output-increase-.html",
       "classification_input_tokens": 0,
       "classification_output_tokens": 0,
       "classification_total_tokens": 0,
@@ -124,6 +689,7 @@
       "fetched_at": "2026-05-03 21:39:32",
       "industry": "能源",
       "matched_keywords": "opec announces",
+      "news_id": "4afcd038ad259656",
       "published_at": "2026-05-03 19:28:54",
       "reason": "依標題與摘要關鍵字初步分類",
       "sentiment": "中性",
@@ -134,6 +700,7 @@
       "url": "https://www.cnbc.com/2026/05/03/opec-announces-188000-barrels-per-day-output-increase-.html"
     },
     {
+      "canonical_url": "https://www.cnbc.com/2026/05/03/top-street-analysts-like-these-3-stocks-for-their-long-term-prospects.html",
       "classification_input_tokens": 0,
       "classification_output_tokens": 0,
       "classification_total_tokens": 0,
@@ -143,6 +710,7 @@
       "fetched_at": "2026-05-03 21:39:32",
       "industry": "其他",
       "matched_keywords": "",
+      "news_id": "972fc82a74561920",
       "published_at": "2026-05-03 19:13:01",
       "reason": "依標題與摘要關鍵字初步分類",
       "sentiment": "中性",
@@ -153,6 +721,7 @@
       "url": "https://www.cnbc.com/2026/05/03/top-street-analysts-like-these-3-stocks-for-their-long-term-prospects.html"
     },
     {
+      "canonical_url": "https://www.cnbc.com/2026/05/03/us-crude-oil-exports-surge-to-record-as-tankers-flock-to-gulf-coast.html",
       "classification_input_tokens": 0,
       "classification_output_tokens": 0,
       "classification_total_tokens": 0,
@@ -162,6 +731,7 @@
       "fetched_at": "2026-05-03 21:39:32",
       "industry": "能源",
       "matched_keywords": "crude oil exports, war oil exports, s crude oil",
+      "news_id": "92067aa09f30e613",
       "published_at": "2026-05-03 19:08:46",
       "reason": "依標題與摘要關鍵字初步分類",
       "sentiment": "偏多",
@@ -172,6 +742,7 @@
       "url": "https://www.cnbc.com/2026/05/03/us-crude-oil-exports-surge-to-record-as-tankers-flock-to-gulf-coast.html"
     },
     {
+      "canonical_url": "https://www.marketwatch.com/story/there-is-an-imbalance-of-power-my-husband-has-cancer-why-must-we-wait-two-hours-for-a-10-minute-ct-scan-143816e9",
       "classification_input_tokens": 0,
       "classification_output_tokens": 0,
       "classification_total_tokens": 0,
@@ -181,6 +752,7 @@
       "fetched_at": "2026-05-03 21:39:32",
       "industry": "其他",
       "matched_keywords": "",
+      "news_id": "dec07e9bddc2a09a",
       "published_at": "2026-05-03 19:06:00",
       "reason": "依標題與摘要關鍵字初步分類",
       "sentiment": "中性",
@@ -191,6 +763,7 @@
       "url": "https://www.marketwatch.com/story/there-is-an-imbalance-of-power-my-husband-has-cancer-why-must-we-wait-two-hours-for-a-10-minute-ct-scan-143816e9?mod=mw_rss_topstories"
     },
     {
+      "canonical_url": "https://www.cnbc.com/2026/05/03/berkshire-annual-meeting-greg-abel-rules-out-break-up-stressing-continuity-with-buffett.html",
       "classification_input_tokens": 0,
       "classification_output_tokens": 0,
       "classification_total_tokens": 0,
@@ -200,6 +773,7 @@
       "fetched_at": "2026-05-03 21:39:32",
       "industry": "其他",
       "matched_keywords": "",
+      "news_id": "efdc0b3fbde423a8",
       "published_at": "2026-05-03 19:04:43",
       "reason": "依標題與摘要關鍵字初步分類",
       "sentiment": "中性",
@@ -210,34 +784,17 @@
       "url": "https://www.cnbc.com/2026/05/03/berkshire-annual-meeting-greg-abel-rules-out-break-up-stressing-continuity-with-buffett.html"
     },
     {
-      "classification_input_tokens": 0,
-      "classification_output_tokens": 0,
-      "classification_total_tokens": 0,
-      "classified_by": "rules",
-      "confidence": 0.45,
-      "event_type": "一般新聞",
-      "fetched_at": "2026-05-03 21:39:32",
-      "industry": "其他",
-      "matched_keywords": "",
-      "published_at": "2026-05-03 08:26:04",
-      "reason": "依標題與摘要關鍵字初步分類",
-      "sentiment": "中性",
-      "source": "CNBC Top News",
-      "summary": "Spirit Airlines ceased operations overnight after a failed government bailout.",
-      "symbol": "MARKET",
-      "title": "'Godspeed my friend': Inside the final hours of Spirit Airlines",
-      "url": "https://www.cnbc.com/2026/05/02/spirit-airlines-shutdown-inside-the-final-hours.html"
-    },
-    {
+      "canonical_url": "https://www.cnbc.com/2026/05/01/spirit-airlines-trump-bailout.html",
       "classification_input_tokens": 0,
       "classification_output_tokens": 0,
       "classification_total_tokens": 0,
       "classified_by": "rules",
       "confidence": 0.63,
       "event_type": "併購 / 投資",
-      "fetched_at": "2026-05-03 21:39:32",
+      "fetched_at": "2026-05-04 16:23:28",
       "industry": "金融",
       "matched_keywords": "to yield a, bailout deal ending, a deal",
+      "news_id": "3334d9eeb50820d6",
       "published_at": "2026-05-03 07:07:35",
       "reason": "依標題與摘要關鍵字初步分類",
       "sentiment": "中性",
@@ -248,6 +805,7 @@
       "url": "https://www.cnbc.com/2026/05/01/spirit-airlines-trump-bailout.html"
     },
     {
+      "canonical_url": "https://www.marketwatch.com/story/the-numbers-dont-lie-if-i-had-invested-my-social-security-in-the-s-p-500-id-have-4-million-is-the-system-broken-d41b1779",
       "classification_input_tokens": 0,
       "classification_output_tokens": 0,
       "classification_total_tokens": 0,
@@ -257,6 +815,7 @@
       "fetched_at": "2026-05-03 21:39:32",
       "industry": "其他",
       "matched_keywords": "",
+      "news_id": "bb859174cc25bae7",
       "published_at": "2026-05-03 05:00:00",
       "reason": "依標題與摘要關鍵字初步分類",
       "sentiment": "中性",
@@ -267,6 +826,7 @@
       "url": "https://www.marketwatch.com/story/the-numbers-dont-lie-if-i-had-invested-my-social-security-in-the-s-p-500-id-have-4-million-is-the-system-broken-d41b1779?mod=mw_rss_topstories"
     },
     {
+      "canonical_url": "https://www.marketwatch.com/story/how-to-spot-the-silent-fees-and-hidden-costs-your-adviser-isnt-mentioning-c821812a",
       "classification_input_tokens": 0,
       "classification_output_tokens": 0,
       "classification_total_tokens": 0,
@@ -276,6 +836,7 @@
       "fetched_at": "2026-05-03 21:39:32",
       "industry": "金融",
       "matched_keywords": "these financial adviser, from revenue sharing",
+      "news_id": "951a655fb93ea0bf",
       "published_at": "2026-05-03 01:57:00",
       "reason": "依標題與摘要關鍵字初步分類",
       "sentiment": "中性",
@@ -286,6 +847,7 @@
       "url": "https://www.marketwatch.com/story/how-to-spot-the-silent-fees-and-hidden-costs-your-adviser-isnt-mentioning-c821812a?mod=mw_rss_topstories"
     },
     {
+      "canonical_url": "https://www.marketwatch.com/story/higher-inflation-is-on-the-way-the-fed-needs-to-make-this-clearer-before-it-raises-rates-142c6884",
       "classification_input_tokens": 0,
       "classification_output_tokens": 0,
       "classification_total_tokens": 0,
@@ -295,6 +857,7 @@
       "fetched_at": "2026-05-03 21:39:32",
       "industry": "金融",
       "matched_keywords": "the fed needs, rates fed s, raises rates fed, that rates may, higher inflation is",
+      "news_id": "2c2ee76d08683d5f",
       "published_at": "2026-05-03 01:38:00",
       "reason": "依標題與摘要關鍵字初步分類",
       "sentiment": "偏多",
@@ -305,6 +868,7 @@
       "url": "https://www.marketwatch.com/story/higher-inflation-is-on-the-way-the-fed-needs-to-make-this-clearer-before-it-raises-rates-142c6884?mod=mw_rss_topstories"
     },
     {
+      "canonical_url": "https://www.marketwatch.com/story/two-investment-strategies-for-people-who-are-afraid-of-the-stock-market-a68bbe15",
       "classification_input_tokens": 0,
       "classification_output_tokens": 0,
       "classification_total_tokens": 0,
@@ -314,6 +878,7 @@
       "fetched_at": "2026-05-03 21:39:32",
       "industry": "總體經濟",
       "matched_keywords": "stock market etfs, weathering market storms, two investment strategies",
+      "news_id": "c808967bd7dc5139",
       "published_at": "2026-05-03 01:14:00",
       "reason": "依標題與摘要關鍵字初步分類",
       "sentiment": "中性",
@@ -324,6 +889,7 @@
       "url": "https://www.marketwatch.com/story/two-investment-strategies-for-people-who-are-afraid-of-the-stock-market-a68bbe15?mod=mw_rss_topstories"
     },
     {
+      "canonical_url": "https://www.marketwatch.com/story/spirit-airlines-made-this-critical-mistake-that-drove-its-demise-df3ea39d",
       "classification_input_tokens": 0,
       "classification_output_tokens": 0,
       "classification_total_tokens": 0,
@@ -333,6 +899,7 @@
       "fetched_at": "2026-05-03 21:39:32",
       "industry": "其他",
       "matched_keywords": "",
+      "news_id": "393e24a65c70364b",
       "published_at": "2026-05-03 01:12:00",
       "reason": "依標題與摘要關鍵字初步分類",
       "sentiment": "中性",
@@ -343,6 +910,7 @@
       "url": "https://www.marketwatch.com/story/spirit-airlines-made-this-critical-mistake-that-drove-its-demise-df3ea39d?mod=mw_rss_topstories"
     },
     {
+      "canonical_url": "https://www.marketwatch.com/story/private-credit-isnt-safer-than-banks-its-just-better-at-hiding-losses-84937515",
       "classification_input_tokens": 0,
       "classification_output_tokens": 0,
       "classification_total_tokens": 0,
@@ -352,6 +920,7 @@
       "fetched_at": "2026-05-03 21:39:32",
       "industry": "其他",
       "matched_keywords": "of investment skill",
+      "news_id": "6b19721773b1834d",
       "published_at": "2026-05-02 23:55:00",
       "reason": "依標題與摘要關鍵字初步分類",
       "sentiment": "偏空",
@@ -362,6 +931,7 @@
       "url": "https://www.marketwatch.com/story/private-credit-isnt-safer-than-banks-its-just-better-at-hiding-losses-84937515?mod=mw_rss_topstories"
     },
     {
+      "canonical_url": "https://www.cnbc.com/2026/05/02/the-sp-500-and-nasdaq-kept-their-record-rallies-going-here-are-3-key-takeaways-.html",
       "classification_input_tokens": 0,
       "classification_output_tokens": 0,
       "classification_total_tokens": 0,
@@ -371,6 +941,7 @@
       "fetched_at": "2026-05-03 21:39:32",
       "industry": "其他",
       "matched_keywords": "corporate earnings",
+      "news_id": "7cf45651bb5566ef",
       "published_at": "2026-05-02 23:13:09",
       "reason": "依標題與摘要關鍵字初步分類",
       "sentiment": "偏多",
@@ -381,6 +952,7 @@
       "url": "https://www.cnbc.com/2026/05/02/the-sp-500-and-nasdaq-kept-their-record-rallies-going-here-are-3-key-takeaways-.html"
     },
     {
+      "canonical_url": "https://www.cnbc.com/2026/05/02/iran-war-airfare-travel-airlines-plane-tickets-when-to-buy.html",
       "classification_input_tokens": 0,
       "classification_output_tokens": 0,
       "classification_total_tokens": 0,
@@ -390,6 +962,7 @@
       "fetched_at": "2026-05-03 21:39:32",
       "industry": "其他",
       "matched_keywords": "",
+      "news_id": "8539d635301790bd",
       "published_at": "2026-05-02 22:35:02",
       "reason": "依標題與摘要關鍵字初步分類",
       "sentiment": "偏空",
@@ -400,6 +973,7 @@
       "url": "https://www.cnbc.com/2026/05/02/iran-war-airfare-travel-airlines-plane-tickets-when-to-buy.html"
     },
     {
+      "canonical_url": "https://www.cnbc.com/2026/05/02/us-iran-war-credit-score-loans-mortgage-rates.html",
       "classification_input_tokens": 0,
       "classification_output_tokens": 0,
       "classification_total_tokens": 0,
@@ -409,6 +983,7 @@
       "fetched_at": "2026-05-03 21:39:32",
       "industry": "其他",
       "matched_keywords": "",
+      "news_id": "3c011cf1e851b2c4",
       "published_at": "2026-05-02 22:12:35",
       "reason": "依標題與摘要關鍵字初步分類",
       "sentiment": "中性",
@@ -419,6 +994,7 @@
       "url": "https://www.cnbc.com/2026/05/02/us-iran-war-credit-score-loans-mortgage-rates.html"
     },
     {
+      "canonical_url": "https://www.cnbc.com/2026/05/02/health-insurance-deductible-netflix-beef.html",
       "classification_input_tokens": 0,
       "classification_output_tokens": 0,
       "classification_total_tokens": 0,
@@ -428,6 +1004,7 @@
       "fetched_at": "2026-05-03 21:39:32",
       "industry": "生技醫療",
       "matched_keywords": "high health insurance",
+      "news_id": "6e56bec6f92cf2af",
       "published_at": "2026-05-02 21:30:01",
       "reason": "依標題與摘要關鍵字初步分類",
       "sentiment": "中性",
@@ -438,25 +1015,28 @@
       "url": "https://www.cnbc.com/2026/05/02/health-insurance-deductible-netflix-beef.html"
     },
     {
+      "canonical_url": "https://www.cnbc.com/2026/05/02/hair-loss-glp-1s.html",
       "classification_input_tokens": 0,
       "classification_output_tokens": 0,
       "classification_total_tokens": 0,
       "classified_by": "rules",
       "confidence": 0.57,
       "event_type": "一般新聞",
-      "fetched_at": "2026-05-03 21:39:32",
+      "fetched_at": "2026-05-04 16:23:28",
       "industry": "總體經濟",
       "matched_keywords": "treatment market from, growing market for",
+      "news_id": "26a3ced8a8f26640",
       "published_at": "2026-05-02 20:00:01",
       "reason": "依標題與摘要關鍵字初步分類",
       "sentiment": "偏空",
-      "source": "CNBC Top News",
+      "source": "CNBC Business",
       "summary": "A common side effect of many GLP-1 drugs is hair loss. It's creating a formerly untapped but growing market for hair treatment products.",
       "symbol": "MARKET",
       "title": "Weight loss and hair loss: The growing hair treatment market from GLP-1s",
       "url": "https://www.cnbc.com/2026/05/02/hair-loss-glp-1s.html"
     },
     {
+      "canonical_url": "https://www.cnbc.com/2026/05/02/musk-testimony-dominated-first-week-musk-v-altman-trial-in-oakland.html",
       "classification_input_tokens": 0,
       "classification_output_tokens": 0,
       "classification_total_tokens": 0,
@@ -466,6 +1046,7 @@
       "fetched_at": "2026-05-03 21:39:32",
       "industry": "其他",
       "matched_keywords": "",
+      "news_id": "8535ded49e483bcb",
       "published_at": "2026-05-02 20:00:01",
       "reason": "依標題與摘要關鍵字初步分類",
       "sentiment": "偏多",
@@ -476,15 +1057,17 @@
       "url": "https://www.cnbc.com/2026/05/02/musk-testimony-dominated-first-week-musk-v-altman-trial-in-oakland.html"
     },
     {
+      "canonical_url": "https://www.cnbc.com/2026/05/01/spirit-airlines-flights-shut-down.html",
       "classification_input_tokens": 0,
       "classification_output_tokens": 0,
       "classification_total_tokens": 0,
       "classified_by": "rules",
       "confidence": 0.45,
       "event_type": "一般新聞",
-      "fetched_at": "2026-05-03 21:39:32",
+      "fetched_at": "2026-05-04 16:23:28",
       "industry": "其他",
       "matched_keywords": "",
+      "news_id": "17ef72134ac2447b",
       "published_at": "2026-05-02 19:57:32",
       "reason": "依標題與摘要關鍵字初步分類",
       "sentiment": "中性",
@@ -495,6 +1078,7 @@
       "url": "https://www.cnbc.com/2026/05/01/spirit-airlines-flights-shut-down.html"
     },
     {
+      "canonical_url": "https://www.cnbc.com/2026/05/01/epstein-bard-college-president-leon-botstein-retire.html",
       "classification_input_tokens": 0,
       "classification_output_tokens": 0,
       "classification_total_tokens": 0,
@@ -504,6 +1088,7 @@
       "fetched_at": "2026-05-03 21:39:32",
       "industry": "其他",
       "matched_keywords": "",
+      "news_id": "2f534df30e216bc7",
       "published_at": "2026-05-02 11:12:04",
       "reason": "依標題與摘要關鍵字初步分類",
       "sentiment": "中性",
@@ -514,25 +1099,28 @@
       "url": "https://www.cnbc.com/2026/05/01/epstein-bard-college-president-leon-botstein-retire.html"
     },
     {
+      "canonical_url": "https://www.cnbc.com/2026/05/01/trump-eu-auto-tariffs.html",
       "classification_input_tokens": 0,
       "classification_output_tokens": 0,
       "classification_total_tokens": 0,
       "classified_by": "rules",
       "confidence": 0.51,
       "event_type": "併購 / 投資",
-      "fetched_at": "2026-05-03 21:39:32",
+      "fetched_at": "2026-05-04 16:23:28",
       "industry": "其他",
       "matched_keywords": "trade deal with",
+      "news_id": "7eb9dd41aa351b35",
       "published_at": "2026-05-02 05:47:39",
       "reason": "依標題與摘要關鍵字初步分類",
       "sentiment": "中性",
-      "source": "CNBC Top News",
+      "source": "CNBC Business",
       "summary": "The Supreme Court struck down Trump's \"reciprocal\" tariffs earlier this year, and Europe warned that its trade deal with Washington could be in jeopardy.",
       "symbol": "MARKET",
       "title": "Trump says he's raising EU auto tariffs to 25%",
       "url": "https://www.cnbc.com/2026/05/01/trump-eu-auto-tariffs.html"
     },
     {
+      "canonical_url": "https://www.cnbc.com/2026/05/01/trump-rejects-iran-peace-deal.html",
       "classification_input_tokens": 0,
       "classification_output_tokens": 0,
       "classification_total_tokens": 0,
@@ -542,6 +1130,7 @@
       "fetched_at": "2026-05-03 21:39:32",
       "industry": "其他",
       "matched_keywords": "",
+      "news_id": "0b28f7a4986be82a",
       "published_at": "2026-05-02 05:08:03",
       "reason": "依標題與摘要關鍵字初步分類",
       "sentiment": "中性",
@@ -552,6 +1141,7 @@
       "url": "https://www.cnbc.com/2026/05/01/trump-rejects-iran-peace-deal.html"
     },
     {
+      "canonical_url": "https://www.cnbc.com/2026/05/01/fed-dissenters-explain-no-votes-saying-they-disagreed-with-hinting-next-move-would-be-a-cut.html",
       "classification_input_tokens": 0,
       "classification_output_tokens": 0,
       "classification_total_tokens": 0,
@@ -561,6 +1151,7 @@
       "fetched_at": "2026-05-03 21:39:32",
       "industry": "金融",
       "matched_keywords": "fed dissenters, interest rate move",
+      "news_id": "41bfb3f192da7d51",
       "published_at": "2026-05-02 03:15:15",
       "reason": "依標題與摘要關鍵字初步分類",
       "sentiment": "偏多",
@@ -571,6 +1162,7 @@
       "url": "https://www.cnbc.com/2026/05/01/fed-dissenters-explain-no-votes-saying-they-disagreed-with-hinting-next-move-would-be-a-cut.html"
     },
     {
+      "canonical_url": "https://www.cnbc.com/2026/05/01/legislative-action-could-increase-us-retirement-wealth.html",
       "classification_input_tokens": 0,
       "classification_output_tokens": 0,
       "classification_total_tokens": 0,
@@ -580,6 +1172,7 @@
       "fetched_at": "2026-05-03 21:39:32",
       "industry": "其他",
       "matched_keywords": "the deal",
+      "news_id": "81695e5bc0eb2c99",
       "published_at": "2026-05-02 03:00:09",
       "reason": "依標題與摘要關鍵字初步分類",
       "sentiment": "中性",
@@ -590,6 +1183,7 @@
       "url": "https://www.cnbc.com/2026/05/01/legislative-action-could-increase-us-retirement-wealth.html"
     },
     {
+      "canonical_url": "https://www.cnbc.com/2026/05/01/exxon-ceo-iran-war-oil-strait-hormuz.html",
       "classification_input_tokens": 0,
       "classification_output_tokens": 0,
       "classification_total_tokens": 0,
@@ -599,6 +1193,7 @@
       "fetched_at": "2026-05-03 21:39:32",
       "industry": "能源",
       "matched_keywords": "higher oil prices, impact oil prices, exxon mobil",
+      "news_id": "f7c4f1fcba851515",
       "published_at": "2026-05-02 02:58:24",
       "reason": "依標題與摘要關鍵字初步分類",
       "sentiment": "中性",
@@ -609,6 +1204,7 @@
       "url": "https://www.cnbc.com/2026/05/01/exxon-ceo-iran-war-oil-strait-hormuz.html"
     },
     {
+      "canonical_url": "https://www.cnbc.com/2026/05/01/6-months-out-control-of-the-senate-is-50-50-traders-on-kalshi-say.html",
       "classification_input_tokens": 0,
       "classification_output_tokens": 0,
       "classification_total_tokens": 0,
@@ -618,6 +1214,7 @@
       "fetched_at": "2026-05-03 21:39:32",
       "industry": "其他",
       "matched_keywords": "",
+      "news_id": "dfe6efacf434c78e",
       "published_at": "2026-05-02 02:03:21",
       "reason": "依標題與摘要關鍵字初步分類",
       "sentiment": "中性",
@@ -628,15 +1225,17 @@
       "url": "https://www.cnbc.com/2026/05/01/6-months-out-control-of-the-senate-is-50-50-traders-on-kalshi-say.html"
     },
     {
+      "canonical_url": "https://www.cnbc.com/2026/05/01/kentucky-derby-prediction-platforms.html",
       "classification_input_tokens": 0,
       "classification_output_tokens": 0,
       "classification_total_tokens": 0,
       "classified_by": "rules",
       "confidence": 0.51,
       "event_type": "一般新聞",
-      "fetched_at": "2026-05-03 21:39:32",
+      "fetched_at": "2026-05-04 16:23:28",
       "industry": "總體經濟",
       "matched_keywords": "prediction market platforms",
+      "news_id": "415cb4cfbcb2df90",
       "published_at": "2026-05-02 01:11:45",
       "reason": "依標題與摘要關鍵字初步分類",
       "sentiment": "中性",
@@ -647,6 +1246,7 @@
       "url": "https://www.cnbc.com/2026/05/01/kentucky-derby-prediction-platforms.html"
     },
     {
+      "canonical_url": "https://www.cnbc.com/2026/05/01/a-major-mag-7-shift-with-alphabets-market-cap-set-to-pass-nvidias.html",
       "classification_input_tokens": 0,
       "classification_output_tokens": 0,
       "classification_total_tokens": 0,
@@ -656,6 +1256,7 @@
       "fetched_at": "2026-05-03 21:39:32",
       "industry": "半導體 / AI",
       "matched_keywords": "leader nvidia as",
+      "news_id": "abfd9516b22b272c",
       "published_at": "2026-05-01 23:35:47",
       "reason": "依標題與摘要關鍵字初步分類",
       "sentiment": "中性",
@@ -666,6 +1267,7 @@
       "url": "https://www.cnbc.com/2026/05/01/a-major-mag-7-shift-with-alphabets-market-cap-set-to-pass-nvidias.html"
     },
     {
+      "canonical_url": "https://www.cnbc.com/2026/05/01/uk-exports-us-fall-25-trump-tariffs-liberation-day.html",
       "classification_input_tokens": 0,
       "classification_output_tokens": 0,
       "classification_total_tokens": 0,
@@ -675,6 +1277,7 @@
       "fetched_at": "2026-05-03 21:39:32",
       "industry": "其他",
       "matched_keywords": "",
+      "news_id": "ba3d90f035d43e1f",
       "published_at": "2026-05-01 23:11:44",
       "reason": "依標題與摘要關鍵字初步分類",
       "sentiment": "中性",
@@ -685,15 +1288,17 @@
       "url": "https://www.cnbc.com/2026/05/01/uk-exports-us-fall-25-trump-tariffs-liberation-day.html"
     },
     {
+      "canonical_url": "https://www.cnbc.com/2026/04/30/investor-jack-selby-markets-underpricing-middle-east-ai-pullback-risk.html",
       "classification_input_tokens": 0,
       "classification_output_tokens": 0,
       "classification_total_tokens": 0,
       "classified_by": "rules",
       "confidence": 0.63,
       "event_type": "財報",
-      "fetched_at": "2026-05-03 21:39:32",
+      "fetched_at": "2026-05-04 16:23:28",
       "industry": "AI / 伺服器",
       "matched_keywords": "in ai says, global ai investments, a quarter of",
+      "news_id": "e92b8c7fea9e1a11",
       "published_at": "2026-05-01 20:41:24",
       "reason": "依標題與摘要關鍵字初步分類",
       "sentiment": "中性",
@@ -704,15 +1309,17 @@
       "url": "https://www.cnbc.com/2026/04/30/investor-jack-selby-markets-underpricing-middle-east-ai-pullback-risk.html"
     },
     {
+      "canonical_url": "https://www.cnbc.com/2026/05/01/smoothie-king-plots-expansion-as-wellness-trends-boost-sales.html",
       "classification_input_tokens": 0,
       "classification_output_tokens": 0,
       "classification_total_tokens": 0,
       "classified_by": "rules",
       "confidence": 0.45,
       "event_type": "一般新聞",
-      "fetched_at": "2026-05-03 21:39:32",
+      "fetched_at": "2026-05-04 16:23:28",
       "industry": "其他",
       "matched_keywords": "",
+      "news_id": "cd0b531a53df0bf5",
       "published_at": "2026-05-01 20:30:31",
       "reason": "依標題與摘要關鍵字初步分類",
       "sentiment": "中性",
@@ -723,6 +1330,7 @@
       "url": "https://www.cnbc.com/2026/05/01/smoothie-king-plots-expansion-as-wellness-trends-boost-sales.html"
     },
     {
+      "canonical_url": "https://www.cnbc.com/2026/04/30/inside-the-fed-powell-and-warsh-set-to-clash.html",
       "classification_input_tokens": 0,
       "classification_output_tokens": 0,
       "classification_total_tokens": 0,
@@ -732,6 +1340,7 @@
       "fetched_at": "2026-05-03 21:39:32",
       "industry": "金融",
       "matched_keywords": "the fed powell, the fed gathers",
+      "news_id": "5f34dbe8197bddaa",
       "published_at": "2026-05-01 19:12:15",
       "reason": "依標題與摘要關鍵字初步分類",
       "sentiment": "偏多",
@@ -742,15 +1351,17 @@
       "url": "https://www.cnbc.com/2026/04/30/inside-the-fed-powell-and-warsh-set-to-clash.html"
     },
     {
+      "canonical_url": "https://www.cnbc.com/2026/05/01/apollo-sports-capital-tom-dundon-pickleball-investment.html",
       "classification_input_tokens": 0,
       "classification_output_tokens": 0,
       "classification_total_tokens": 0,
       "classified_by": "rules",
       "confidence": 0.57,
       "event_type": "併購 / 投資",
-      "fetched_at": "2026-05-03 21:39:32",
+      "fetched_at": "2026-05-04 16:23:28",
       "industry": "其他",
       "matched_keywords": "million investment in, total investment in",
+      "news_id": "41e6130b60cdd311",
       "published_at": "2026-05-01 19:00:01",
       "reason": "依標題與摘要關鍵字初步分類",
       "sentiment": "中性",
@@ -761,6 +1372,7 @@
       "url": "https://www.cnbc.com/2026/05/01/apollo-sports-capital-tom-dundon-pickleball-investment.html"
     },
     {
+      "canonical_url": "https://www.cnbc.com/2026/05/01/strait-of-hormuz-base-oils-luxury-autos.html",
       "classification_input_tokens": 0,
       "classification_output_tokens": 0,
       "classification_total_tokens": 0,
@@ -770,6 +1382,7 @@
       "fetched_at": "2026-05-03 21:39:32",
       "industry": "其他",
       "matched_keywords": "",
+      "news_id": "5adb2e428ea406c4",
       "published_at": "2026-05-01 17:19:59",
       "reason": "依標題與摘要關鍵字初步分類",
       "sentiment": "中性",
@@ -780,15 +1393,17 @@
       "url": "https://www.cnbc.com/2026/05/01/strait-of-hormuz-base-oils-luxury-autos.html"
     },
     {
+      "canonical_url": "https://www.cnbc.com/2026/04/30/rivian-renegotiates-doe-loan-adjusts-capacity-plans-for-georgia-plant.html",
       "classification_input_tokens": 0,
       "classification_output_tokens": 0,
       "classification_total_tokens": 0,
       "classified_by": "rules",
       "confidence": 0.45,
       "event_type": "一般新聞",
-      "fetched_at": "2026-05-03 21:39:32",
+      "fetched_at": "2026-05-04 16:23:28",
       "industry": "其他",
       "matched_keywords": "",
+      "news_id": "6de2fdf25e2bed29",
       "published_at": "2026-05-01 06:21:00",
       "reason": "依標題與摘要關鍵字初步分類",
       "sentiment": "中性",
@@ -799,15 +1414,17 @@
       "url": "https://www.cnbc.com/2026/04/30/rivian-renegotiates-doe-loan-adjusts-capacity-plans-for-georgia-plant.html"
     },
     {
+      "canonical_url": "https://www.cnbc.com/2026/04/30/blue-owl-shares-private-credit-spacex-gains.html",
       "classification_input_tokens": 0,
       "classification_output_tokens": 0,
       "classification_total_tokens": 0,
       "classified_by": "rules",
       "confidence": 0.51,
       "event_type": "併購 / 投資",
-      "fetched_at": "2026-05-03 21:39:32",
+      "fetched_at": "2026-05-04 16:23:28",
       "industry": "其他",
       "matched_keywords": "its investment in",
+      "news_id": "e5f6c58ac4b9df1f",
       "published_at": "2026-05-01 03:36:55",
       "reason": "依標題與摘要關鍵字初步分類",
       "sentiment": "偏多",
@@ -818,15 +1435,17 @@
       "url": "https://www.cnbc.com/2026/04/30/blue-owl-shares-private-credit-spacex-gains.html"
     },
     {
+      "canonical_url": "https://www.cnbc.com/2026/04/30/pricey-nfl-nba-ownership-stakes-investors-leagues-valuations.html",
       "classification_input_tokens": 0,
       "classification_output_tokens": 0,
       "classification_total_tokens": 0,
       "classified_by": "rules",
       "confidence": 0.45,
       "event_type": "一般新聞",
-      "fetched_at": "2026-05-03 21:39:32",
+      "fetched_at": "2026-05-04 16:23:28",
       "industry": "其他",
       "matched_keywords": "",
+      "news_id": "92380a02b78d5bbd",
       "published_at": "2026-05-01 01:31:30",
       "reason": "依標題與摘要關鍵字初步分類",
       "sentiment": "中性",
@@ -837,15 +1456,17 @@
       "url": "https://www.cnbc.com/2026/04/30/pricey-nfl-nba-ownership-stakes-investors-leagues-valuations.html"
     },
     {
+      "canonical_url": "https://www.cnbc.com/2026/04/30/eli-lilly-lly-earnings-q1-2026.html",
       "classification_input_tokens": 0,
       "classification_output_tokens": 0,
       "classification_total_tokens": 0,
       "classified_by": "rules",
       "confidence": 0.57,
       "event_type": "財報",
-      "fetched_at": "2026-05-03 21:39:32",
+      "fetched_at": "2026-05-04 16:23:28",
       "industry": "其他",
       "matched_keywords": "adjusted profit guidance, profit guidance",
+      "news_id": "25085102848a2aa6",
       "published_at": "2026-05-01 01:22:52",
       "reason": "依標題與摘要關鍵字初步分類",
       "sentiment": "偏多",
@@ -856,6 +1477,7 @@
       "url": "https://www.cnbc.com/2026/04/30/eli-lilly-lly-earnings-q1-2026.html"
     },
     {
+      "canonical_url": "https://www.cnbc.com/2026/04/30/hershey-gum-mints-ozempic-breath.html",
       "classification_input_tokens": 0,
       "classification_output_tokens": 0,
       "classification_total_tokens": 0,
@@ -865,6 +1487,7 @@
       "fetched_at": "2026-05-03 21:39:32",
       "industry": "其他",
       "matched_keywords": "first quarter thanks",
+      "news_id": "212f66700ef4802b",
       "published_at": "2026-04-30 23:49:09",
       "reason": "依標題與摘要關鍵字初步分類",
       "sentiment": "中性",
@@ -875,15 +1498,17 @@
       "url": "https://www.cnbc.com/2026/04/30/hershey-gum-mints-ozempic-breath.html"
     },
     {
+      "canonical_url": "https://www.cnbc.com/2026/04/30/fda-novo-lilly-glp-1s-compounding.html",
       "classification_input_tokens": 0,
       "classification_output_tokens": 0,
       "classification_total_tokens": 0,
       "classified_by": "rules",
       "confidence": 0.57,
       "event_type": "一般新聞",
-      "fetched_at": "2026-05-03 21:39:32",
+      "fetched_at": "2026-05-04 16:23:28",
       "industry": "生技醫療",
       "matched_keywords": "fda proposes, fda's drug shortage",
+      "news_id": "7ac3c7dd5071c3aa",
       "published_at": "2026-04-30 23:02:15",
       "reason": "依標題與摘要關鍵字初步分類",
       "sentiment": "偏空",
@@ -894,6 +1519,7 @@
       "url": "https://www.cnbc.com/2026/04/30/fda-novo-lilly-glp-1s-compounding.html"
     },
     {
+      "canonical_url": "https://www.cnbc.com/2026/04/30/ai-legal-advice-lawyers-risks.html",
       "classification_input_tokens": 0,
       "classification_output_tokens": 0,
       "classification_total_tokens": 0,
@@ -903,6 +1529,7 @@
       "fetched_at": "2026-05-03 21:39:32",
       "industry": "AI / 伺服器",
       "matched_keywords": "that ai legal",
+      "news_id": "b17b682166c7ccca",
       "published_at": "2026-04-30 20:37:13",
       "reason": "依標題與摘要關鍵字初步分類",
       "sentiment": "偏多",
@@ -913,15 +1540,17 @@
       "url": "https://www.cnbc.com/2026/04/30/ai-legal-advice-lawyers-risks.html"
     },
     {
+      "canonical_url": "https://www.cnbc.com/2026/04/30/eli-lilly-foundayo-prescriptions-20000-people-taking-drug-ricks-says.html",
       "classification_input_tokens": 0,
       "classification_output_tokens": 0,
       "classification_total_tokens": 0,
       "classified_by": "rules",
       "confidence": 0.51,
       "event_type": "產品 / 技術",
-      "fetched_at": "2026-05-03 21:39:32",
+      "fetched_at": "2026-05-04 16:23:28",
       "industry": "其他",
       "matched_keywords": "pill launch has",
+      "news_id": "8154185948a07e55",
       "published_at": "2026-04-30 20:30:27",
       "reason": "依標題與摘要關鍵字初步分類",
       "sentiment": "偏空",
@@ -932,6 +1561,7 @@
       "url": "https://www.cnbc.com/2026/04/30/eli-lilly-foundayo-prescriptions-20000-people-taking-drug-ricks-says.html"
     },
     {
+      "canonical_url": "https://www.cnbc.com/2026/04/29/ford-motor-f-earnings-q1-2026.html",
       "classification_input_tokens": 0,
       "classification_output_tokens": 0,
       "classification_total_tokens": 0,
@@ -941,6 +1571,7 @@
       "fetched_at": "2026-05-03 21:39:32",
       "industry": "總體經濟",
       "matched_keywords": "billion tariff refund, from earnings and, 2026 guidance as, 2026 guidance investors",
+      "news_id": "a45ef47eb8423a83",
       "published_at": "2026-04-30 05:44:59",
       "reason": "依標題與摘要關鍵字初步分類",
       "sentiment": "中性",
@@ -951,6 +1582,7 @@
       "url": "https://www.cnbc.com/2026/04/29/ford-motor-f-earnings-q1-2026.html"
     },
     {
+      "canonical_url": "https://www.cnbc.com/2026/04/29/chipotle-mexican-grill-cmg-q1-2026-earnings.html",
       "classification_input_tokens": 0,
       "classification_output_tokens": 0,
       "classification_total_tokens": 0,
@@ -960,6 +1592,7 @@
       "fetched_at": "2026-05-03 21:39:32",
       "industry": "其他",
       "matched_keywords": "",
+      "news_id": "1db1a793aa2d6653",
       "published_at": "2026-04-30 05:40:27",
       "reason": "依標題與摘要關鍵字初步分類",
       "sentiment": "中性",
@@ -970,6 +1603,7 @@
       "url": "https://www.cnbc.com/2026/04/29/chipotle-mexican-grill-cmg-q1-2026-earnings.html"
     },
     {
+      "canonical_url": "https://www.cnbc.com/2026/04/29/carvana-cvna-earnings-q1-2026.html",
       "classification_input_tokens": 0,
       "classification_output_tokens": 0,
       "classification_total_tokens": 0,
@@ -979,6 +1613,7 @@
       "fetched_at": "2026-05-03 21:39:32",
       "industry": "消費零售",
       "matched_keywords": "reported retail sales, first quarter results",
+      "news_id": "05dd7af459173428",
       "published_at": "2026-04-30 05:02:29",
       "reason": "依標題與摘要關鍵字初步分類",
       "sentiment": "偏多",
@@ -989,6 +1624,7 @@
       "url": "https://www.cnbc.com/2026/04/29/carvana-cvna-earnings-q1-2026.html"
     },
     {
+      "canonical_url": "https://www.cnbc.com/2026/04/29/david-ellison-paramount-warner-bros-30-film-releases.html",
       "classification_input_tokens": 0,
       "classification_output_tokens": 0,
       "classification_total_tokens": 0,
@@ -998,6 +1634,7 @@
       "fetched_at": "2026-05-03 21:39:32",
       "industry": "其他",
       "matched_keywords": "",
+      "news_id": "dd060dfd802e163e",
       "published_at": "2026-04-30 04:28:16",
       "reason": "依標題與摘要關鍵字初步分類",
       "sentiment": "中性",
@@ -1008,6 +1645,7 @@
       "url": "https://www.cnbc.com/2026/04/29/david-ellison-paramount-warner-bros-30-film-releases.html"
     },
     {
+      "canonical_url": "https://www.cnbc.com/2026/04/29/paypal-restructures-venmo-standalone-unit.html",
       "classification_input_tokens": 0,
       "classification_output_tokens": 0,
       "classification_total_tokens": 0,
@@ -1017,6 +1655,7 @@
       "fetched_at": "2026-05-03 21:39:32",
       "industry": "軟體雲端",
       "matched_keywords": "apple google and",
+      "news_id": "3e2a589f51643212",
       "published_at": "2026-04-30 03:13:31",
       "reason": "依標題與摘要關鍵字初步分類",
       "sentiment": "中性",
@@ -1027,6 +1666,7 @@
       "url": "https://www.cnbc.com/2026/04/29/paypal-restructures-venmo-standalone-unit.html"
     },
     {
+      "canonical_url": "https://www.cnbc.com/2026/04/29/yum-brands-yum-q1-2026-earnings.html",
       "classification_input_tokens": 0,
       "classification_output_tokens": 0,
       "classification_total_tokens": 0,
@@ -1036,6 +1676,7 @@
       "fetched_at": "2026-05-03 21:39:32",
       "industry": "其他",
       "matched_keywords": "brands earnings top, the quarter fueling",
+      "news_id": "6f1e29a75afccfde",
       "published_at": "2026-04-29 23:19:54",
       "reason": "依標題與摘要關鍵字初步分類",
       "sentiment": "中性",
@@ -1046,44 +1687,7 @@
       "url": "https://www.cnbc.com/2026/04/29/yum-brands-yum-q1-2026-earnings.html"
     },
     {
-      "classification_input_tokens": 0,
-      "classification_output_tokens": 0,
-      "classification_total_tokens": 0,
-      "classified_by": "rules",
-      "confidence": 0.51,
-      "event_type": "一般新聞",
-      "fetched_at": "2026-05-03 21:39:32",
-      "industry": "能源",
-      "matched_keywords": "higher gas prices",
-      "published_at": "2026-04-29 22:14:17",
-      "reason": "依標題與摘要關鍵字初步分類",
-      "sentiment": "中性",
-      "source": "CNBC Business",
-      "summary": "Starbucks' global same-store sales, which only includes cafes open at least a year, increased 6.2%, fueled by more visits to its locations.",
-      "symbol": "MARKET",
-      "title": "Starbucks raises full-year outlook as turnaround takes hold — despite higher gas prices",
-      "url": "https://www.cnbc.com/2026/04/28/starbucks-sbux-q2-2026-earnings.html"
-    },
-    {
-      "classification_input_tokens": 0,
-      "classification_output_tokens": 0,
-      "classification_total_tokens": 0,
-      "classified_by": "rules",
-      "confidence": 0.45,
-      "event_type": "一般新聞",
-      "fetched_at": "2026-05-03 21:39:32",
-      "industry": "其他",
-      "matched_keywords": "",
-      "published_at": "2026-04-29 22:12:57",
-      "reason": "依標題與摘要關鍵字初步分類",
-      "sentiment": "中性",
-      "source": "CNBC Business",
-      "summary": "Executives say travelers keep booking despite big jumps in airfare as they seek to cover the cost of fuel.",
-      "symbol": "MARKET",
-      "title": "U.S. airlines are hiking fares — and travelers keep booking",
-      "url": "https://www.cnbc.com/2026/04/28/airlines-fares-fuel.html"
-    },
-    {
+      "canonical_url": "https://www.cnbc.com/2026/04/29/australia-inflation-q1-rba-rate-hike-outlook.html",
       "classification_input_tokens": 0,
       "classification_output_tokens": 0,
       "classification_total_tokens": 0,
@@ -1093,6 +1697,7 @@
       "fetched_at": "2026-04-29 10:22:37",
       "industry": "金融",
       "matched_keywords": "quarter inflation but, quarter inflation figure, first quarter inflation",
+      "news_id": "8566be7f5e872848",
       "published_at": "2026-04-29 10:15:59",
       "reason": "依標題與摘要關鍵字初步分類",
       "sentiment": "偏多",
@@ -1103,6 +1708,7 @@
       "url": "https://www.cnbc.com/2026/04/29/australia-inflation-q1-rba-rate-hike-outlook.html"
     },
     {
+      "canonical_url": "https://www.cnbc.com/2026/04/29/asia-markets-nikkei-225-kospi-hang-seng-index.html",
       "classification_input_tokens": 0,
       "classification_output_tokens": 0,
       "classification_total_tokens": 0,
@@ -1112,6 +1718,7 @@
       "fetched_at": "2026-04-29 10:22:37",
       "industry": "能源",
       "matched_keywords": "after opec shock, openai's revenue and",
+      "news_id": "30c3993ff6ee31b8",
       "published_at": "2026-04-29 09:45:42",
       "reason": "依標題與摘要關鍵字初步分類",
       "sentiment": "中性",
@@ -1122,6 +1729,7 @@
       "url": "https://www.cnbc.com/2026/04/29/asia-markets-nikkei-225-kospi-hang-seng-index.html"
     },
     {
+      "canonical_url": "https://www.marketwatch.com/story/can-meta-make-money-on-ai-beyond-consumer-ads-thats-a-big-question-going-into-earnings-ff88c78e",
       "classification_input_tokens": 0,
       "classification_output_tokens": 0,
       "classification_total_tokens": 0,
@@ -1131,6 +1739,7 @@
       "fetched_at": "2026-04-29 10:22:37",
       "industry": "AI / 伺服器",
       "matched_keywords": "artificial intelligence, on ai beyond, s ai models, into earnings while",
+      "news_id": "b431c31fb91a9a94",
       "published_at": "2026-04-29 08:59:00",
       "reason": "依標題與摘要關鍵字初步分類",
       "sentiment": "中性",
@@ -1141,6 +1750,7 @@
       "url": "https://www.marketwatch.com/story/can-meta-make-money-on-ai-beyond-consumer-ads-thats-a-big-question-going-into-earnings-ff88c78e?mod=mw_rss_topstories"
     },
     {
+      "canonical_url": "https://www.marketwatch.com/story/u-a-e-is-leaving-opec-but-will-still-need-to-exercise-caution-as-it-increases-oil-production-0979cd87",
       "classification_input_tokens": 0,
       "classification_output_tokens": 0,
       "classification_total_tokens": 0,
@@ -1150,6 +1760,7 @@
       "fetched_at": "2026-04-29 10:22:37",
       "industry": "能源",
       "matched_keywords": "increases oil production, to oil production, leaving opec but",
+      "news_id": "5949e1ec4dcfdcba",
       "published_at": "2026-04-29 08:32:00",
       "reason": "依標題與摘要關鍵字初步分類",
       "sentiment": "偏多",
@@ -1160,6 +1771,7 @@
       "url": "https://www.marketwatch.com/story/u-a-e-is-leaving-opec-but-will-still-need-to-exercise-caution-as-it-increases-oil-production-0979cd87?mod=mw_rss_topstories"
     },
     {
+      "canonical_url": "https://www.marketwatch.com/story/starbucks-is-getting-customers-back-into-its-stores-faster-than-expected-f4ee80ab",
       "classification_input_tokens": 0,
       "classification_output_tokens": 0,
       "classification_total_tokens": 0,
@@ -1169,6 +1781,7 @@
       "fetched_at": "2026-04-29 10:22:37",
       "industry": "消費零售",
       "matched_keywords": "starbucks is",
+      "news_id": "26bc6ef5a6269fa4",
       "published_at": "2026-04-29 08:21:00",
       "reason": "依標題與摘要關鍵字初步分類",
       "sentiment": "偏多",
@@ -1179,6 +1792,7 @@
       "url": "https://www.marketwatch.com/story/starbucks-is-getting-customers-back-into-its-stores-faster-than-expected-f4ee80ab?mod=mw_rss_topstories"
     },
     {
+      "canonical_url": "https://www.marketwatch.com/story/heres-where-robinhoods-retail-traders-have-flocked-as-the-iran-conflict-rages-on-198adc30",
       "classification_input_tokens": 0,
       "classification_output_tokens": 0,
       "classification_total_tokens": 0,
@@ -1188,6 +1802,7 @@
       "fetched_at": "2026-04-29 10:22:37",
       "industry": "消費零售",
       "matched_keywords": "s retail traders",
+      "news_id": "2579570fdb25d774",
       "published_at": "2026-04-29 08:20:00",
       "reason": "依標題與摘要關鍵字初步分類",
       "sentiment": "中性",
@@ -1198,6 +1813,7 @@
       "url": "https://www.marketwatch.com/story/heres-where-robinhoods-retail-traders-have-flocked-as-the-iran-conflict-rages-on-198adc30?mod=mw_rss_topstories"
     },
     {
+      "canonical_url": "https://www.cnbc.com/2026/04/29/can-ai-outperform-doctors-insilico-medicine-biocon-ceos-weigh-in.html",
       "classification_input_tokens": 0,
       "classification_output_tokens": 0,
       "classification_total_tokens": 0,
@@ -1207,6 +1823,7 @@
       "fetched_at": "2026-04-29 10:22:37",
       "industry": "AI / 伺服器",
       "matched_keywords": "can ai outperform, using ai to",
+      "news_id": "5cf98ee615d31b7e",
       "published_at": "2026-04-29 07:16:54",
       "reason": "依標題與摘要關鍵字初步分類",
       "sentiment": "中性",
@@ -1217,6 +1834,7 @@
       "url": "https://www.cnbc.com/2026/04/29/can-ai-outperform-doctors-insilico-medicine-biocon-ceos-weigh-in.html"
     },
     {
+      "canonical_url": "https://www.cnbc.com/2026/04/28/dhs-tsa-shutdown-congress.html",
       "classification_input_tokens": 0,
       "classification_output_tokens": 0,
       "classification_total_tokens": 0,
@@ -1226,6 +1844,7 @@
       "fetched_at": "2026-04-29 10:22:37",
       "industry": "其他",
       "matched_keywords": "",
+      "news_id": "76cf8b24650d4131",
       "published_at": "2026-04-29 06:49:00",
       "reason": "依標題與摘要關鍵字初步分類",
       "sentiment": "中性",
@@ -1236,6 +1855,7 @@
       "url": "https://www.cnbc.com/2026/04/28/dhs-tsa-shutdown-congress.html"
     },
     {
+      "canonical_url": "https://www.marketwatch.com/story/the-stock-markets-comeback-from-the-iran-inspired-selloff-hasnt-been-as-powerful-as-you-might-think-6138bbec",
       "classification_input_tokens": 0,
       "classification_output_tokens": 0,
       "classification_total_tokens": 0,
@@ -1245,6 +1865,7 @@
       "fetched_at": "2026-04-29 10:22:37",
       "industry": "總體經濟",
       "matched_keywords": "stock market s",
+      "news_id": "11f8f23c562f276a",
       "published_at": "2026-04-29 06:31:00",
       "reason": "依標題與摘要關鍵字初步分類",
       "sentiment": "偏多",
@@ -1255,6 +1876,7 @@
       "url": "https://www.marketwatch.com/story/the-stock-markets-comeback-from-the-iran-inspired-selloff-hasnt-been-as-powerful-as-you-might-think-6138bbec?mod=mw_rss_topstories"
     },
     {
+      "canonical_url": "https://www.cnbc.com/2026/04/28/trump-white-house-ballroom-whcd.html",
       "classification_input_tokens": 0,
       "classification_output_tokens": 0,
       "classification_total_tokens": 0,
@@ -1264,6 +1886,7 @@
       "fetched_at": "2026-04-29 10:22:37",
       "industry": "其他",
       "matched_keywords": "",
+      "news_id": "143715cfcc0c4dbc",
       "published_at": "2026-04-29 06:28:11",
       "reason": "依標題與摘要關鍵字初步分類",
       "sentiment": "中性",
@@ -1274,6 +1897,7 @@
       "url": "https://www.cnbc.com/2026/04/28/trump-white-house-ballroom-whcd.html"
     },
     {
+      "canonical_url": "https://www.cnbc.com/2026/04/28/jim-cramer-is-unfazed-by-tuesdays-sell-off-we-want-it.html",
       "classification_input_tokens": 0,
       "classification_output_tokens": 0,
       "classification_total_tokens": 0,
@@ -1283,6 +1907,7 @@
       "fetched_at": "2026-04-29 10:22:37",
       "industry": "總體經濟",
       "matched_keywords": "the market needs",
+      "news_id": "3d921f1aa1f40519",
       "published_at": "2026-04-29 06:20:23",
       "reason": "依標題與摘要關鍵字初步分類",
       "sentiment": "偏多",
@@ -1293,6 +1918,7 @@
       "url": "https://www.cnbc.com/2026/04/28/jim-cramer-is-unfazed-by-tuesdays-sell-off-we-want-it.html"
     },
     {
+      "canonical_url": "https://www.marketwatch.com/story/its-time-for-a-microsoft-reset-heres-what-investors-should-focus-on-now-a5d9e334",
       "classification_input_tokens": 0,
       "classification_output_tokens": 0,
       "classification_total_tokens": 0,
@@ -1302,6 +1928,7 @@
       "fetched_at": "2026-04-29 10:22:37",
       "industry": "軟體雲端",
       "matched_keywords": "a microsoft reset, understood microsoft has, the cloud narrative, around software and",
+      "news_id": "c047335f42b8dbac",
       "published_at": "2026-04-29 06:20:00",
       "reason": "依標題與摘要關鍵字初步分類",
       "sentiment": "中性",
@@ -1312,6 +1939,7 @@
       "url": "https://www.marketwatch.com/story/its-time-for-a-microsoft-reset-heres-what-investors-should-focus-on-now-a5d9e334?mod=mw_rss_topstories"
     },
     {
+      "canonical_url": "https://www.cnbc.com/2026/04/28/james-comey-indicted-trump-seashell-8647.html",
       "classification_input_tokens": 0,
       "classification_output_tokens": 0,
       "classification_total_tokens": 0,
@@ -1321,6 +1949,7 @@
       "fetched_at": "2026-04-29 10:22:37",
       "industry": "其他",
       "matched_keywords": "",
+      "news_id": "19258a14a7c55bf8",
       "published_at": "2026-04-29 06:17:07",
       "reason": "依標題與摘要關鍵字初步分類",
       "sentiment": "中性",
@@ -1331,6 +1960,7 @@
       "url": "https://www.cnbc.com/2026/04/28/james-comey-indicted-trump-seashell-8647.html"
     },
     {
+      "canonical_url": "https://www.marketwatch.com/story/these-two-countries-are-the-most-likely-to-leave-opecs-orbit-next-991b6823",
       "classification_input_tokens": 0,
       "classification_output_tokens": 0,
       "classification_total_tokens": 0,
@@ -1340,6 +1970,7 @@
       "fetched_at": "2026-04-29 10:22:37",
       "industry": "能源",
       "matched_keywords": "leave opec s, leave opec but",
+      "news_id": "2091dd1806922937",
       "published_at": "2026-04-29 06:17:00",
       "reason": "依標題與摘要關鍵字初步分類",
       "sentiment": "中性",
@@ -1350,6 +1981,7 @@
       "url": "https://www.marketwatch.com/story/these-two-countries-are-the-most-likely-to-leave-opecs-orbit-next-991b6823?mod=mw_rss_topstories"
     },
     {
+      "canonical_url": "https://www.marketwatch.com/story/bloom-energy-is-riding-the-ai-wave-with-a-major-lift-from-oracle-200109b4",
       "classification_input_tokens": 0,
       "classification_output_tokens": 0,
       "classification_total_tokens": 0,
@@ -1359,6 +1991,7 @@
       "fetched_at": "2026-04-29 10:22:37",
       "industry": "AI / 伺服器",
       "matched_keywords": "the ai wave, and ai accelerating",
+      "news_id": "dc3a97543a7f946c",
       "published_at": "2026-04-29 06:16:00",
       "reason": "依標題與摘要關鍵字初步分類",
       "sentiment": "中性",
@@ -1369,6 +2002,7 @@
       "url": "https://www.marketwatch.com/story/bloom-energy-is-riding-the-ai-wave-with-a-major-lift-from-oracle-200109b4?mod=mw_rss_topstories"
     },
     {
+      "canonical_url": "https://www.marketwatch.com/story/this-is-the-most-critical-question-facing-u-s-investors-right-now-and-it-has-nothing-to-do-with-iran-45bc8f2e",
       "classification_input_tokens": 0,
       "classification_output_tokens": 0,
       "classification_total_tokens": 0,
@@ -1378,6 +2012,7 @@
       "fetched_at": "2026-04-29 10:22:37",
       "industry": "半導體 / AI",
       "matched_keywords": "iran chip stocks",
+      "news_id": "f8c457559c36524b",
       "published_at": "2026-04-29 05:52:00",
       "reason": "依標題與摘要關鍵字初步分類",
       "sentiment": "中性",
@@ -1388,6 +2023,7 @@
       "url": "https://www.marketwatch.com/story/this-is-the-most-critical-question-facing-u-s-investors-right-now-and-it-has-nothing-to-do-with-iran-45bc8f2e?mod=mw_rss_topstories"
     },
     {
+      "canonical_url": "https://www.marketwatch.com/story/buying-crypto-in-a-bear-market-is-a-cheaper-way-to-play-the-ai-boom-this-former-tiger-management-executive-says-868096eb",
       "classification_input_tokens": 0,
       "classification_output_tokens": 0,
       "classification_total_tokens": 0,
@@ -1397,6 +2033,7 @@
       "fetched_at": "2026-04-29 10:22:37",
       "industry": "AI / 伺服器",
       "matched_keywords": "artificial intelligence, the ai boom",
+      "news_id": "290c7663d803147e",
       "published_at": "2026-04-29 05:43:00",
       "reason": "依標題與摘要關鍵字初步分類",
       "sentiment": "中性",
@@ -1407,6 +2044,7 @@
       "url": "https://www.marketwatch.com/story/buying-crypto-in-a-bear-market-is-a-cheaper-way-to-play-the-ai-boom-this-former-tiger-management-executive-says-868096eb?mod=mw_rss_topstories"
     },
     {
+      "canonical_url": "https://www.cnbc.com/2026/04/28/pentagon-ai-chief-confirms-work-with-google-after-anthropic-blacklist.html",
       "classification_input_tokens": 0,
       "classification_output_tokens": 0,
       "classification_total_tokens": 0,
@@ -1416,6 +2054,7 @@
       "fetched_at": "2026-04-29 10:22:37",
       "industry": "AI / 伺服器",
       "matched_keywords": "pentagon ai chief, pentagon's ai chief, one model never",
+      "news_id": "4084926018a52f82",
       "published_at": "2026-04-29 05:34:49",
       "reason": "依標題與摘要關鍵字初步分類",
       "sentiment": "中性",
@@ -1426,6 +2065,7 @@
       "url": "https://www.cnbc.com/2026/04/28/pentagon-ai-chief-confirms-work-with-google-after-anthropic-blacklist.html"
     },
     {
+      "canonical_url": "https://www.cnbc.com/2026/04/28/starbucks-sbux-q2-2026-earnings.html",
       "classification_input_tokens": 0,
       "classification_output_tokens": 0,
       "classification_total_tokens": 0,
@@ -1435,6 +2075,7 @@
       "fetched_at": "2026-04-29 10:22:37",
       "industry": "能源",
       "matched_keywords": "higher gas prices",
+      "news_id": "7fc0c84801f8b758",
       "published_at": "2026-04-29 05:31:31",
       "reason": "依標題與摘要關鍵字初步分類",
       "sentiment": "中性",
@@ -1445,6 +2086,7 @@
       "url": "https://www.cnbc.com/2026/04/28/starbucks-sbux-q2-2026-earnings.html"
     },
     {
+      "canonical_url": "https://www.cnbc.com/2026/04/28/resorts-world-casino-opens-in-new-york-city.html",
       "classification_input_tokens": 0,
       "classification_output_tokens": 0,
       "classification_total_tokens": 0,
@@ -1454,6 +2096,7 @@
       "fetched_at": "2026-04-29 10:22:37",
       "industry": "其他",
       "matched_keywords": "",
+      "news_id": "49923138aefc6537",
       "published_at": "2026-04-29 05:02:30",
       "reason": "依標題與摘要關鍵字初步分類",
       "sentiment": "中性",
@@ -1464,25 +2107,7 @@
       "url": "https://www.cnbc.com/2026/04/28/resorts-world-casino-opens-in-new-york-city.html"
     },
     {
-      "classification_input_tokens": 0,
-      "classification_output_tokens": 0,
-      "classification_total_tokens": 0,
-      "classified_by": "rules",
-      "confidence": 0.63,
-      "event_type": "財報",
-      "fetched_at": "2026-04-29 10:22:37",
-      "industry": "AI / 伺服器",
-      "matched_keywords": "his ai clone, using ai agents, an earnings call",
-      "published_at": "2026-04-29 04:35:57",
-      "reason": "依標題與摘要關鍵字初步分類",
-      "sentiment": "中性",
-      "source": "CNBC Business",
-      "summary": "It's part of Customers Bank CEO Sam Sidhu's effort to get ahead in the industry's race to transform itself using AI agents as a new digital workforce",
-      "symbol": "MARKET",
-      "title": "This bank CEO let his AI clone handle an earnings call — now he's signing an OpenAI deal",
-      "url": "https://www.cnbc.com/2026/04/27/openai-partners-with-customers-bank-in-push-to-automate-finance.html"
-    },
-    {
+      "canonical_url": "https://www.cnbc.com/2026/04/28/uae-opec-oil-iran.html",
       "classification_input_tokens": 0,
       "classification_output_tokens": 0,
       "classification_total_tokens": 0,
@@ -1492,6 +2117,7 @@
       "fetched_at": "2026-04-29 10:22:37",
       "industry": "能源",
       "matched_keywords": "to oil price, 1 energy chief, leave opec may, leaving opec was, production policy and",
+      "news_id": "996643d6ed768b94",
       "published_at": "2026-04-29 04:30:56",
       "reason": "依標題與摘要關鍵字初步分類",
       "sentiment": "中性",
@@ -1502,6 +2128,7 @@
       "url": "https://www.cnbc.com/2026/04/28/uae-opec-oil-iran.html"
     },
     {
+      "canonical_url": "https://www.cnbc.com/2026/04/28/airlines-fares-fuel.html",
       "classification_input_tokens": 0,
       "classification_output_tokens": 0,
       "classification_total_tokens": 0,
@@ -1511,6 +2138,7 @@
       "fetched_at": "2026-04-29 10:22:37",
       "industry": "其他",
       "matched_keywords": "",
+      "news_id": "6177f44277f84590",
       "published_at": "2026-04-29 04:28:17",
       "reason": "依標題與摘要關鍵字初步分類",
       "sentiment": "中性",
@@ -1521,25 +2149,7 @@
       "url": "https://www.cnbc.com/2026/04/28/airlines-fares-fuel.html"
     },
     {
-      "classification_input_tokens": 0,
-      "classification_output_tokens": 0,
-      "classification_total_tokens": 0,
-      "classified_by": "rules",
-      "confidence": 0.45,
-      "event_type": "一般新聞",
-      "fetched_at": "2026-05-03 21:39:32",
-      "industry": "其他",
-      "matched_keywords": "",
-      "published_at": "2026-04-29 04:17:21",
-      "reason": "依標題與摘要關鍵字初步分類",
-      "sentiment": "偏空",
-      "source": "CNBC Business",
-      "summary": "The Federal Communications Commission has told Disney to file its broadcast license renewals early, citing concerns around its DEI policies.",
-      "symbol": "MARKET",
-      "title": "FCC launches review of Disney broadcast licenses years ahead of schedule",
-      "url": "https://www.cnbc.com/2026/04/28/fcc-begins-review-of-disney-broadcast-licenses-years-ahead-of-schedule.html"
-    },
-    {
+      "canonical_url": "https://www.cnbc.com/2026/04/28/fcc-begins-review-of-disney-broadcast-licenses-years-ahead-of-schedule.html",
       "classification_input_tokens": 0,
       "classification_output_tokens": 0,
       "classification_total_tokens": 0,
@@ -1549,6 +2159,7 @@
       "fetched_at": "2026-04-29 10:22:37",
       "industry": "其他",
       "matched_keywords": "",
+      "news_id": "e6805e0033d04ac7",
       "published_at": "2026-04-29 04:17:21",
       "reason": "依標題與摘要關鍵字初步分類",
       "sentiment": "偏空",
@@ -1559,6 +2170,7 @@
       "url": "https://www.cnbc.com/2026/04/28/fcc-begins-review-of-disney-broadcast-licenses-years-ahead-of-schedule.html"
     },
     {
+      "canonical_url": "https://www.cnbc.com/2026/04/28/fed-meeting-preview-april-2026.html",
       "classification_input_tokens": 0,
       "classification_output_tokens": 0,
       "classification_total_tokens": 0,
@@ -1568,6 +2180,7 @@
       "fetched_at": "2026-04-29 10:22:37",
       "industry": "金融",
       "matched_keywords": "the fed issues, as fed chair, interest rate decision",
+      "news_id": "8ea49ec928090544",
       "published_at": "2026-04-29 04:15:32",
       "reason": "依標題與摘要關鍵字初步分類",
       "sentiment": "中性",
@@ -1578,6 +2191,7 @@
       "url": "https://www.cnbc.com/2026/04/28/fed-meeting-preview-april-2026.html"
     },
     {
+      "canonical_url": "https://www.cnbc.com/2026/04/28/openai-reportedly-missed-revenue-targets-shares-of-oracle-and-these-chip-stocks-are-falling.html",
       "classification_input_tokens": 0,
       "classification_output_tokens": 0,
       "classification_total_tokens": 0,
@@ -1587,6 +2201,7 @@
       "fetched_at": "2026-04-29 10:22:37",
       "industry": "半導體 / AI",
       "matched_keywords": "these chip stocks, missed revenue targets, and revenue the",
+      "news_id": "25505d164c81017e",
       "published_at": "2026-04-29 04:14:15",
       "reason": "依標題與摘要關鍵字初步分類",
       "sentiment": "偏空",
@@ -1597,6 +2212,7 @@
       "url": "https://www.cnbc.com/2026/04/28/openai-reportedly-missed-revenue-targets-shares-of-oracle-and-these-chip-stocks-are-falling.html"
     },
     {
+      "canonical_url": "https://www.cnbc.com/2026/04/28/general-motors-gm-earnings-q1-2026.html",
       "classification_input_tokens": 0,
       "classification_output_tokens": 0,
       "classification_total_tokens": 0,
@@ -1606,6 +2222,7 @@
       "fetched_at": "2026-04-29 10:22:37",
       "industry": "電動車",
       "matched_keywords": "and ev write, street's earnings expectations, from earnings and, 2026 guidance amid, 2026 guidance investors",
+      "news_id": "75ad4010bece66a5",
       "published_at": "2026-04-29 04:13:29",
       "reason": "依標題與摘要關鍵字初步分類",
       "sentiment": "中性",
@@ -1616,6 +2233,7 @@
       "url": "https://www.cnbc.com/2026/04/28/general-motors-gm-earnings-q1-2026.html"
     },
     {
+      "canonical_url": "https://www.cnbc.com/2026/04/28/ups-ups-q1-2026-earnings.html",
       "classification_input_tokens": 0,
       "classification_output_tokens": 0,
       "classification_total_tokens": 0,
@@ -1625,6 +2243,7 @@
       "fetched_at": "2026-04-29 10:22:37",
       "industry": "其他",
       "matched_keywords": "quarter earnings, first quarter earnings",
+      "news_id": "560f6df33db91d68",
       "published_at": "2026-04-29 04:00:45",
       "reason": "依標題與摘要關鍵字初步分類",
       "sentiment": "偏多",
@@ -1635,6 +2254,7 @@
       "url": "https://www.cnbc.com/2026/04/28/ups-ups-q1-2026-earnings.html"
     },
     {
+      "canonical_url": "https://www.cnbc.com/2026/04/28/red-hot-corning-shares-slide-on-earnings-why-thats-a-gift-to-investors.html",
       "classification_input_tokens": 0,
       "classification_output_tokens": 0,
       "classification_total_tokens": 0,
@@ -1644,6 +2264,7 @@
       "fetched_at": "2026-04-29 10:22:37",
       "industry": "其他",
       "matched_keywords": "on earnings why",
+      "news_id": "6dd0c04c7d70a598",
       "published_at": "2026-04-29 03:20:38",
       "reason": "依標題與摘要關鍵字初步分類",
       "sentiment": "中性",
@@ -1654,6 +2275,7 @@
       "url": "https://www.cnbc.com/2026/04/28/red-hot-corning-shares-slide-on-earnings-why-thats-a-gift-to-investors.html"
     },
     {
+      "canonical_url": "https://www.cnbc.com/2026/04/28/oil-uae-opec-saudi-arabia.html",
       "classification_input_tokens": 0,
       "classification_output_tokens": 0,
       "classification_total_tokens": 0,
@@ -1663,6 +2285,7 @@
       "fetched_at": "2026-04-29 10:22:37",
       "industry": "能源",
       "matched_keywords": "the oil cartel's, shock opec exit, from opec which, for crude prices",
+      "news_id": "456fc4b5412355e0",
       "published_at": "2026-04-29 03:17:44",
       "reason": "依標題與摘要關鍵字初步分類",
       "sentiment": "中性",
@@ -1673,6 +2296,7 @@
       "url": "https://www.cnbc.com/2026/04/28/oil-uae-opec-saudi-arabia.html"
     },
     {
+      "canonical_url": "https://www.cnbc.com/2026/04/28/traders-bet-nvidias-stock-will-return-to-record-highs-soon.html",
       "classification_input_tokens": 0,
       "classification_output_tokens": 0,
       "classification_total_tokens": 0,
@@ -1682,6 +2306,7 @@
       "fetched_at": "2026-04-29 10:22:37",
       "industry": "半導體 / AI",
       "matched_keywords": "of nvidia fell",
+      "news_id": "3adcc64689c4f274",
       "published_at": "2026-04-29 03:16:18",
       "reason": "依標題與摘要關鍵字初步分類",
       "sentiment": "偏多",
@@ -1692,6 +2317,7 @@
       "url": "https://www.cnbc.com/2026/04/28/traders-bet-nvidias-stock-will-return-to-record-highs-soon.html"
     },
     {
+      "canonical_url": "https://www.cnbc.com/2026/04/28/oil-prices-us-iran-hormuz-negotiations-wti-brent-crude.html",
       "classification_input_tokens": 0,
       "classification_output_tokens": 0,
       "classification_total_tokens": 0,
@@ -1701,6 +2327,7 @@
       "fetched_at": "2026-04-29 10:22:37",
       "industry": "能源",
       "matched_keywords": "s oil hovers, hormuz oil prices",
+      "news_id": "74b8ed34f66c827d",
       "published_at": "2026-04-29 03:15:32",
       "reason": "依標題與摘要關鍵字初步分類",
       "sentiment": "中性",
@@ -1711,6 +2338,7 @@
       "url": "https://www.cnbc.com/2026/04/28/oil-prices-us-iran-hormuz-negotiations-wti-brent-crude.html"
     },
     {
+      "canonical_url": "https://www.cnbc.com/2026/04/28/jamie-dimon-bond-crisis-global-debt-risks.html",
       "classification_input_tokens": 0,
       "classification_output_tokens": 0,
       "classification_total_tokens": 0,
@@ -1720,6 +2348,7 @@
       "fetched_at": "2026-04-29 10:22:37",
       "industry": "金融",
       "matched_keywords": "largest bank by, runs jpmorgan chase",
+      "news_id": "71d9f53c2de297b2",
       "published_at": "2026-04-29 02:44:41",
       "reason": "依標題與摘要關鍵字初步分類",
       "sentiment": "中性",
@@ -1730,6 +2359,7 @@
       "url": "https://www.cnbc.com/2026/04/28/jamie-dimon-bond-crisis-global-debt-risks.html"
     },
     {
+      "canonical_url": "https://www.cnbc.com/2026/04/28/gm-iran-war-vehicle-sales.html",
       "classification_input_tokens": 0,
       "classification_output_tokens": 0,
       "classification_total_tokens": 0,
@@ -1739,6 +2369,7 @@
       "fetched_at": "2026-04-29 10:22:37",
       "industry": "其他",
       "matched_keywords": "",
+      "news_id": "b5a3e749b562a631",
       "published_at": "2026-04-29 02:11:06",
       "reason": "依標題與摘要關鍵字初步分類",
       "sentiment": "中性",
@@ -1749,6 +2380,7 @@
       "url": "https://www.cnbc.com/2026/04/28/gm-iran-war-vehicle-sales.html"
     },
     {
+      "canonical_url": "https://www.cnbc.com/2026/04/28/openai-brings-models-to-aws-after-ending-exclusivity-with-microsoft.html",
       "classification_input_tokens": 0,
       "classification_output_tokens": 0,
       "classification_total_tokens": 0,
@@ -1758,6 +2390,7 @@
       "fetched_at": "2026-04-29 10:22:37",
       "industry": "AI / 伺服器",
       "matched_keywords": "generative ai models, the ai company",
+      "news_id": "0815f45cbb15e08a",
       "published_at": "2026-04-29 01:47:39",
       "reason": "依標題與摘要關鍵字初步分類",
       "sentiment": "中性",
@@ -1768,6 +2401,7 @@
       "url": "https://www.cnbc.com/2026/04/28/openai-brings-models-to-aws-after-ending-exclusivity-with-microsoft.html"
     },
     {
+      "canonical_url": "https://www.cnbc.com/2026/04/28/jetblue-fort-lauderdale-flights.html",
       "classification_input_tokens": 0,
       "classification_output_tokens": 0,
       "classification_total_tokens": 0,
@@ -1777,6 +2411,7 @@
       "fetched_at": "2026-04-29 10:22:37",
       "industry": "其他",
       "matched_keywords": "",
+      "news_id": "893b5371d9e97ca1",
       "published_at": "2026-04-29 01:30:53",
       "reason": "依標題與摘要關鍵字初步分類",
       "sentiment": "中性",
@@ -1787,6 +2422,7 @@
       "url": "https://www.cnbc.com/2026/04/28/jetblue-fort-lauderdale-flights.html"
     },
     {
+      "canonical_url": "https://www.cnbc.com/2026/04/28/us-humiliated-germany-merz-europe-iran-war-energy-prices-fuel.html",
       "classification_input_tokens": 0,
       "classification_output_tokens": 0,
       "classification_total_tokens": 0,
@@ -1796,6 +2432,7 @@
       "fetched_at": "2026-04-29 10:22:37",
       "industry": "其他",
       "matched_keywords": "",
+      "news_id": "96d7bb4e40516980",
       "published_at": "2026-04-29 00:39:02",
       "reason": "依標題與摘要關鍵字初步分類",
       "sentiment": "中性",
@@ -1806,6 +2443,7 @@
       "url": "https://www.cnbc.com/2026/04/28/us-humiliated-germany-merz-europe-iran-war-energy-prices-fuel.html"
     },
     {
+      "canonical_url": "https://www.cnbc.com/2026/04/28/trump-jimmy-kimmel-monologue-disney-abc.html",
       "classification_input_tokens": 0,
       "classification_output_tokens": 0,
       "classification_total_tokens": 0,
@@ -1815,6 +2453,7 @@
       "fetched_at": "2026-04-29 10:22:37",
       "industry": "其他",
       "matched_keywords": "",
+      "news_id": "62dfa1a49dfc06ba",
       "published_at": "2026-04-28 23:19:31",
       "reason": "依標題與摘要關鍵字初步分類",
       "sentiment": "偏空",
@@ -1825,6 +2464,7 @@
       "url": "https://www.cnbc.com/2026/04/28/trump-jimmy-kimmel-monologue-disney-abc.html"
     },
     {
+      "canonical_url": "https://www.cnbc.com/2026/04/28/coca-cola-ko-q1-2026-earnings.html",
       "classification_input_tokens": 0,
       "classification_output_tokens": 0,
       "classification_total_tokens": 0,
@@ -1834,6 +2474,7 @@
       "fetched_at": "2026-04-29 10:22:37",
       "industry": "總體經濟",
       "matched_keywords": "broader economy, raises earnings outlook",
+      "news_id": "9a5ccb852b52e4d1",
       "published_at": "2026-04-28 23:17:17",
       "reason": "依標題與摘要關鍵字初步分類",
       "sentiment": "偏多",
@@ -1844,6 +2485,7 @@
       "url": "https://www.cnbc.com/2026/04/28/coca-cola-ko-q1-2026-earnings.html"
     },
     {
+      "canonical_url": "https://www.cnbc.com/2026/04/28/office-demand-real-estate.html",
       "classification_input_tokens": 0,
       "classification_output_tokens": 0,
       "classification_total_tokens": 0,
@@ -1853,6 +2495,7 @@
       "fetched_at": "2026-04-29 10:22:37",
       "industry": "其他",
       "matched_keywords": "first quarter of",
+      "news_id": "707b7f1d2552446e",
       "published_at": "2026-04-28 20:30:01",
       "reason": "依標題與摘要關鍵字初步分類",
       "sentiment": "中性",
@@ -1863,6 +2506,7 @@
       "url": "https://www.cnbc.com/2026/04/28/office-demand-real-estate.html"
     },
     {
+      "canonical_url": "https://www.cnbc.com/2026/04/27/dominos-pizza-dpz-earnings-stock-falls-on-weak-sales.html",
       "classification_input_tokens": 0,
       "classification_output_tokens": 0,
       "classification_total_tokens": 0,
@@ -1872,6 +2516,7 @@
       "fetched_at": "2026-04-29 10:22:37",
       "industry": "消費零售",
       "matched_keywords": "weak consumer sentiment",
+      "news_id": "634b776cdb999c8d",
       "published_at": "2026-04-28 06:53:46",
       "reason": "依標題與摘要關鍵字初步分類",
       "sentiment": "偏空",
@@ -1882,6 +2527,7 @@
       "url": "https://www.cnbc.com/2026/04/27/dominos-pizza-dpz-earnings-stock-falls-on-weak-sales.html"
     },
     {
+      "canonical_url": "https://www.cnbc.com/2026/04/27/lpa-drugs-from-novartis-amgen-and-eli-lilly-aim-to-prevent-heart-attacks.html",
       "classification_input_tokens": 0,
       "classification_output_tokens": 0,
       "classification_total_tokens": 0,
@@ -1891,6 +2537,7 @@
       "fetched_at": "2026-04-29 10:22:37",
       "industry": "生技醫療",
       "matched_keywords": "pharma bets",
+      "news_id": "ce2861e93b2f2837",
       "published_at": "2026-04-28 03:28:58",
       "reason": "依標題與摘要關鍵字初步分類",
       "sentiment": "中性",
@@ -1901,25 +2548,7 @@
       "url": "https://www.cnbc.com/2026/04/27/lpa-drugs-from-novartis-amgen-and-eli-lilly-aim-to-prevent-heart-attacks.html"
     },
     {
-      "classification_input_tokens": 0,
-      "classification_output_tokens": 0,
-      "classification_total_tokens": 0,
-      "classified_by": "rules",
-      "confidence": 0.45,
-      "event_type": "一般新聞",
-      "fetched_at": "2026-04-29 10:22:37",
-      "industry": "其他",
-      "matched_keywords": "",
-      "published_at": "2026-04-28 03:08:28",
-      "reason": "依標題與摘要關鍵字初步分類",
-      "sentiment": "中性",
-      "source": "CNBC Business",
-      "summary": "Intellia Therapeutics said its Crispr-based treatment for hereditary angioedema met its goals in a Phase 3 trial, marking a milestone for gene editing.",
-      "symbol": "MARKET",
-      "title": "Intellia Therapeutics says its Crispr-based treatment succeeds in pivotal trial",
-      "url": "https://www.cnbc.com/2026/04/27/crispr-gene-editing-intellia-trial.html"
-    },
-    {
+      "canonical_url": "https://www.cnbc.com/2026/04/24/procter-gamble-pg-q3-2026-earnings.html",
       "classification_input_tokens": 0,
       "classification_output_tokens": 0,
       "classification_total_tokens": 0,
@@ -1929,6 +2558,7 @@
       "fetched_at": "2026-04-29 10:22:37",
       "industry": "其他",
       "matched_keywords": "gamble earnings beat, for earnings and, year forecast for",
+      "news_id": "0eaebb41fa181ae6",
       "published_at": "2026-04-28 01:20:33",
       "reason": "依標題與摘要關鍵字初步分類",
       "sentiment": "偏多",
@@ -1939,25 +2569,7 @@
       "url": "https://www.cnbc.com/2026/04/24/procter-gamble-pg-q3-2026-earnings.html"
     },
     {
-      "classification_input_tokens": 0,
-      "classification_output_tokens": 0,
-      "classification_total_tokens": 0,
-      "classified_by": "rules",
-      "confidence": 0.51,
-      "event_type": "併購 / 投資",
-      "fetched_at": "2026-04-29 10:22:37",
-      "industry": "其他",
-      "matched_keywords": "about merger united",
-      "published_at": "2026-04-27 22:51:42",
-      "reason": "依標題與摘要關鍵字初步分類",
-      "sentiment": "中性",
-      "source": "CNBC Business",
-      "summary": "United CEO Scott Kirby said American rejected the idea, \"and without a willing partner, something this big simply can't get done.\"",
-      "symbol": "MARKET",
-      "title": "United Airlines CEO confirms he approached American Airlines about merger",
-      "url": "https://www.cnbc.com/2026/04/27/united-airlines-merger-with-american-airlines-ceo-airline-confirms.html"
-    },
-    {
+      "canonical_url": "https://www.cnbc.com/2026/04/27/spotify-peloton-fitness-content-hub.html",
       "classification_input_tokens": 0,
       "classification_output_tokens": 0,
       "classification_total_tokens": 0,
@@ -1967,6 +2579,7 @@
       "fetched_at": "2026-04-29 10:22:37",
       "industry": "其他",
       "matched_keywords": "new revenue streams",
+      "news_id": "8953d47e57f057f9",
       "published_at": "2026-04-27 21:04:36",
       "reason": "依標題與摘要關鍵字初步分類",
       "sentiment": "中性",
@@ -1977,6 +2590,7 @@
       "url": "https://www.cnbc.com/2026/04/27/spotify-peloton-fitness-content-hub.html"
     },
     {
+      "canonical_url": "https://www.cnbc.com/2026/04/27/shell-arc-resources-acquisition-16-billion-energy-oil.html",
       "classification_input_tokens": 0,
       "classification_output_tokens": 0,
       "classification_total_tokens": 0,
@@ -1986,6 +2600,7 @@
       "fetched_at": "2026-04-27 20:28:50",
       "industry": "能源",
       "matched_keywords": "oil giant, of oil equivalent",
+      "news_id": "a769f734492978b6",
       "published_at": "2026-04-27 20:27:59",
       "reason": "依標題與摘要關鍵字初步分類",
       "sentiment": "中性",
@@ -1996,6 +2611,7 @@
       "url": "https://www.cnbc.com/2026/04/27/shell-arc-resources-acquisition-16-billion-energy-oil.html"
     },
     {
+      "canonical_url": "https://www.marketwatch.com/story/pullbacks-will-be-shallow-as-market-risks-diminish-says-morgan-stanley-ef6cd708",
       "classification_input_tokens": 0,
       "classification_output_tokens": 0,
       "classification_total_tokens": 0,
@@ -2005,6 +2621,7 @@
       "fetched_at": "2026-04-27 20:28:50",
       "industry": "AI / 伺服器",
       "matched_keywords": "and ai adoption, retreat earnings capex",
+      "news_id": "cef53e45daabab9a",
       "published_at": "2026-04-27 20:24:00",
       "reason": "依標題與摘要關鍵字初步分類",
       "sentiment": "偏空",
@@ -2015,6 +2632,7 @@
       "url": "https://www.marketwatch.com/story/pullbacks-will-be-shallow-as-market-risks-diminish-says-morgan-stanley-ef6cd708?mod=mw_rss_topstories"
     },
     {
+      "canonical_url": "https://www.cnbc.com/2026/04/27/trump-supreme-court-maha-glyphosate.html",
       "classification_input_tokens": 0,
       "classification_output_tokens": 0,
       "classification_total_tokens": 0,
@@ -2024,6 +2642,7 @@
       "fetched_at": "2026-04-27 20:28:50",
       "industry": "其他",
       "matched_keywords": "",
+      "news_id": "d3dae8aa2535f466",
       "published_at": "2026-04-27 20:23:08",
       "reason": "依標題與摘要關鍵字初步分類",
       "sentiment": "中性",
@@ -2034,6 +2653,7 @@
       "url": "https://www.cnbc.com/2026/04/27/trump-supreme-court-maha-glyphosate.html"
     },
     {
+      "canonical_url": "https://www.marketwatch.com/story/united-ceo-defends-merger-dreams-despite-pushback-from-american-airlines-87df78f1",
       "classification_input_tokens": 0,
       "classification_output_tokens": 0,
       "classification_total_tokens": 0,
@@ -2043,6 +2663,7 @@
       "fetched_at": "2026-04-27 20:28:50",
       "industry": "其他",
       "matched_keywords": "defends merger dreams",
+      "news_id": "b51cf095ef6b541c",
       "published_at": "2026-04-27 20:20:00",
       "reason": "依標題與摘要關鍵字初步分類",
       "sentiment": "中性",
@@ -2053,6 +2674,7 @@
       "url": "https://www.marketwatch.com/story/united-ceo-defends-merger-dreams-despite-pushback-from-american-airlines-87df78f1?mod=mw_rss_topstories"
     },
     {
+      "canonical_url": "https://www.marketwatch.com/story/ai-genuinely-freaks-me-out-do-i-leave-my-150-000-job-for-a-215-000-role-in-data-analytics-with-a-50-minute-commute-440b4c36",
       "classification_input_tokens": 0,
       "classification_output_tokens": 0,
       "classification_total_tokens": 0,
@@ -2062,6 +2684,7 @@
       "fetched_at": "2026-04-27 20:28:50",
       "industry": "AI / 伺服器",
       "matched_keywords": "ai genuinely, and ai taking",
+      "news_id": "933d9beeb246dd76",
       "published_at": "2026-04-27 20:14:00",
       "reason": "依標題與摘要關鍵字初步分類",
       "sentiment": "偏多",
@@ -2072,6 +2695,7 @@
       "url": "https://www.marketwatch.com/story/ai-genuinely-freaks-me-out-do-i-leave-my-150-000-job-for-a-215-000-role-in-data-analytics-with-a-50-minute-commute-440b4c36?mod=mw_rss_topstories"
     },
     {
+      "canonical_url": "https://www.cnbc.com/2026/04/27/openai-partners-with-customers-bank-in-push-to-automate-finance.html",
       "classification_input_tokens": 0,
       "classification_output_tokens": 0,
       "classification_total_tokens": 0,
@@ -2081,6 +2705,7 @@
       "fetched_at": "2026-04-27 20:28:50",
       "industry": "AI / 伺服器",
       "matched_keywords": "his ai clone, using ai agents, an earnings call",
+      "news_id": "ddc0094ddc0d97f5",
       "published_at": "2026-04-27 20:12:35",
       "reason": "依標題與摘要關鍵字初步分類",
       "sentiment": "中性",
@@ -2091,6 +2716,7 @@
       "url": "https://www.cnbc.com/2026/04/27/openai-partners-with-customers-bank-in-push-to-automate-finance.html"
     },
     {
+      "canonical_url": "https://www.marketwatch.com/story/they-have-millions-in-the-bank-but-without-kids-who-makes-their-life-or-death-decisions-78874d8c",
       "classification_input_tokens": 0,
       "classification_output_tokens": 0,
       "classification_total_tokens": 0,
@@ -2100,6 +2726,7 @@
       "fetched_at": "2026-04-27 20:28:50",
       "industry": "金融",
       "matched_keywords": "the bank but",
+      "news_id": "83656e9f1708b8e9",
       "published_at": "2026-04-27 20:10:00",
       "reason": "依標題與摘要關鍵字初步分類",
       "sentiment": "中性",
@@ -2110,6 +2737,7 @@
       "url": "https://www.marketwatch.com/story/they-have-millions-in-the-bank-but-without-kids-who-makes-their-life-or-death-decisions-78874d8c?mod=mw_rss_topstories"
     },
     {
+      "canonical_url": "https://www.cnbc.com/2026/04/27/qualcomm-qcom-openai-smartphone-chip-partnership-stock.html",
       "classification_input_tokens": 0,
       "classification_output_tokens": 0,
       "classification_total_tokens": 0,
@@ -2119,6 +2747,7 @@
       "fetched_at": "2026-04-27 20:28:50",
       "industry": "半導體 / AI",
       "matched_keywords": "ai chip qualcomm, smartphone chip for, ai chip",
+      "news_id": "226c0a8f60b3d4cd",
       "published_at": "2026-04-27 20:09:27",
       "reason": "依標題與摘要關鍵字初步分類",
       "sentiment": "中性",
@@ -2129,6 +2758,7 @@
       "url": "https://www.cnbc.com/2026/04/27/qualcomm-qcom-openai-smartphone-chip-partnership-stock.html"
     },
     {
+      "canonical_url": "https://www.cnbc.com/2026/04/27/meta-manus-china-blocks-acquisition-ai-startup.html",
       "classification_input_tokens": 0,
       "classification_output_tokens": 0,
       "classification_total_tokens": 0,
@@ -2138,6 +2768,7 @@
       "fetched_at": "2026-04-27 20:28:50",
       "industry": "AI / 伺服器",
       "matched_keywords": "of ai startup, singaporean ai startup, billion acquisition of",
+      "news_id": "b3224a2eef08fdee",
       "published_at": "2026-04-27 20:08:08",
       "reason": "依標題與摘要關鍵字初步分類",
       "sentiment": "中性",
@@ -2148,6 +2779,7 @@
       "url": "https://www.cnbc.com/2026/04/27/meta-manus-china-blocks-acquisition-ai-startup.html"
     },
     {
+      "canonical_url": "https://www.cnbc.com/2026/04/27/united-airlines-merger-with-american-airlines-ceo-airline-confirms.html",
       "classification_input_tokens": 0,
       "classification_output_tokens": 0,
       "classification_total_tokens": 0,
@@ -2157,6 +2789,7 @@
       "fetched_at": "2026-04-27 20:28:50",
       "industry": "其他",
       "matched_keywords": "about merger united",
+      "news_id": "b5c6de2f0b7ce564",
       "published_at": "2026-04-27 20:06:11",
       "reason": "依標題與摘要關鍵字初步分類",
       "sentiment": "中性",
@@ -2167,6 +2800,7 @@
       "url": "https://www.cnbc.com/2026/04/27/united-airlines-merger-with-american-airlines-ceo-airline-confirms.html"
     },
     {
+      "canonical_url": "https://www.cnbc.com/2026/04/26/cole-allen-dc-correspondents-dinner-shooter.html",
       "classification_input_tokens": 0,
       "classification_output_tokens": 0,
       "classification_total_tokens": 0,
@@ -2176,6 +2810,7 @@
       "fetched_at": "2026-04-27 20:28:50",
       "industry": "其他",
       "matched_keywords": "",
+      "news_id": "44c0915ce469190c",
       "published_at": "2026-04-27 20:03:20",
       "reason": "依標題與摘要關鍵字初步分類",
       "sentiment": "中性",
@@ -2186,6 +2821,7 @@
       "url": "https://www.cnbc.com/2026/04/26/cole-allen-dc-correspondents-dinner-shooter.html"
     },
     {
+      "canonical_url": "https://www.marketwatch.com/story/pension-fund-rebalancing-and-other-red-flags-that-suggest-a-stock-market-pullback-is-nearing-according-to-goldman-sachs-0f158b59",
       "classification_input_tokens": 0,
       "classification_output_tokens": 0,
       "classification_total_tokens": 0,
@@ -2195,6 +2831,7 @@
       "fetched_at": "2026-04-27 20:28:50",
       "industry": "金融",
       "matched_keywords": "to goldman sachs, the goldman sachs",
+      "news_id": "41b632ddc2c9df06",
       "published_at": "2026-04-27 20:02:00",
       "reason": "依標題與摘要關鍵字初步分類",
       "sentiment": "偏多",
@@ -2205,6 +2842,7 @@
       "url": "https://www.marketwatch.com/story/pension-fund-rebalancing-and-other-red-flags-that-suggest-a-stock-market-pullback-is-nearing-according-to-goldman-sachs-0f158b59?mod=mw_rss_topstories"
     },
     {
+      "canonical_url": "https://www.cnbc.com/2026/04/26/oil-price-iran-war-strait-hormuz.html",
       "classification_input_tokens": 0,
       "classification_output_tokens": 0,
       "classification_total_tokens": 0,
@@ -2214,6 +2852,7 @@
       "fetched_at": "2026-04-27 20:28:50",
       "industry": "能源",
       "matched_keywords": "brent oil prices",
+      "news_id": "827a5e1f0ed3bf11",
       "published_at": "2026-04-27 19:40:48",
       "reason": "依標題與摘要關鍵字初步分類",
       "sentiment": "中性",
@@ -2224,6 +2863,7 @@
       "url": "https://www.cnbc.com/2026/04/26/oil-price-iran-war-strait-hormuz.html"
     },
     {
+      "canonical_url": "https://www.marketwatch.com/story/metas-2-billion-acquisition-gets-blocked-by-china-what-the-deal-was-all-about-in-the-first-place-bbdc7b98",
       "classification_input_tokens": 0,
       "classification_output_tokens": 0,
       "classification_total_tokens": 0,
@@ -2233,6 +2873,7 @@
       "fetched_at": "2026-04-27 20:28:50",
       "industry": "AI / 伺服器",
       "matched_keywords": "artificial intelligence, to acquire a, billion acquisition gets, the deal was, a deal to",
+      "news_id": "c8b2cdeef888014e",
       "published_at": "2026-04-27 19:38:00",
       "reason": "依標題與摘要關鍵字初步分類",
       "sentiment": "中性",
@@ -2243,6 +2884,7 @@
       "url": "https://www.marketwatch.com/story/metas-2-billion-acquisition-gets-blocked-by-china-what-the-deal-was-all-about-in-the-first-place-bbdc7b98?mod=mw_rss_topstories"
     },
     {
+      "canonical_url": "https://www.cnbc.com/2026/04/27/the-bullish-signals-ahead-of-this-weeks-mag-7-earnings.html",
       "classification_input_tokens": 0,
       "classification_output_tokens": 0,
       "classification_total_tokens": 0,
@@ -2252,6 +2894,7 @@
       "fetched_at": "2026-04-27 20:28:50",
       "industry": "軟體雲端",
       "matched_keywords": "but alphabet, 7 earnings calls",
+      "news_id": "2c1dd5b1b9378ef2",
       "published_at": "2026-04-27 19:31:12",
       "reason": "依標題與摘要關鍵字初步分類",
       "sentiment": "中性",
@@ -2262,25 +2905,7 @@
       "url": "https://www.cnbc.com/2026/04/27/the-bullish-signals-ahead-of-this-weeks-mag-7-earnings.html"
     },
     {
-      "classification_input_tokens": 0,
-      "classification_output_tokens": 0,
-      "classification_total_tokens": 0,
-      "classified_by": "rules",
-      "confidence": 0.57,
-      "event_type": "財報",
-      "fetched_at": "2026-04-29 10:22:37",
-      "industry": "其他",
-      "matched_keywords": "quarter earnings results, first quarter earnings",
-      "published_at": "2026-04-27 19:30:01",
-      "reason": "依標題與摘要關鍵字初步分類",
-      "sentiment": "偏多",
-      "source": "CNBC Business",
-      "summary": "America's largest automakers are set to report first-quarter earnings results this week.",
-      "symbol": "MARKET",
-      "title": "Wall Street expects solid Q1 results for GM, as Ford and Stellantis try to gain traction",
-      "url": "https://www.cnbc.com/2026/04/27/gm-f-stla-earnings.html"
-    },
-    {
+      "canonical_url": "https://www.cnbc.com/2026/04/27/gm-f-stla-earnings.html",
       "classification_input_tokens": 0,
       "classification_output_tokens": 0,
       "classification_total_tokens": 0,
@@ -2290,6 +2915,7 @@
       "fetched_at": "2026-04-27 20:28:50",
       "industry": "其他",
       "matched_keywords": "quarter earnings results, first quarter earnings",
+      "news_id": "a62943356f46ce95",
       "published_at": "2026-04-27 19:30:01",
       "reason": "依標題與摘要關鍵字初步分類",
       "sentiment": "偏多",
@@ -2300,6 +2926,7 @@
       "url": "https://www.cnbc.com/2026/04/27/gm-f-stla-earnings.html"
     },
     {
+      "canonical_url": "https://www.marketwatch.com/story/the-sec-fears-were-trapped-in-short-term-thinking-tesla-and-amazon-prove-investors-play-the-long-game-4181fa55",
       "classification_input_tokens": 0,
       "classification_output_tokens": 0,
       "classification_total_tokens": 0,
@@ -2309,6 +2936,7 @@
       "fetched_at": "2026-04-27 20:28:50",
       "industry": "電動車",
       "matched_keywords": "thinking tesla and, semiannual earnings reporting",
+      "news_id": "1161f0e1af94f636",
       "published_at": "2026-04-27 19:27:00",
       "reason": "依標題與摘要關鍵字初步分類",
       "sentiment": "中性",
@@ -2319,6 +2947,7 @@
       "url": "https://www.marketwatch.com/story/the-sec-fears-were-trapped-in-short-term-thinking-tesla-and-amazon-prove-investors-play-the-long-game-4181fa55?mod=mw_rss_topstories"
     },
     {
+      "canonical_url": "https://www.marketwatch.com/story/a-new-version-of-an-old-drug-is-helping-men-grow-back-some-of-their-hair-98bf8292",
       "classification_input_tokens": 0,
       "classification_output_tokens": 0,
       "classification_total_tokens": 0,
@@ -2328,6 +2957,7 @@
       "fetched_at": "2026-04-27 20:28:50",
       "industry": "生技醫療",
       "matched_keywords": "old drug is, a clinical trial",
+      "news_id": "a497ebb6fee943bc",
       "published_at": "2026-04-27 19:18:00",
       "reason": "依標題與摘要關鍵字初步分類",
       "sentiment": "偏空",
@@ -2338,6 +2968,7 @@
       "url": "https://www.marketwatch.com/story/a-new-version-of-an-old-drug-is-helping-men-grow-back-some-of-their-hair-98bf8292?mod=mw_rss_topstories"
     },
     {
+      "canonical_url": "https://www.marketwatch.com/story/verizons-stock-rises-as-the-company-posts-surprise-subscriber-growth-under-new-ceo-2752e52d",
       "classification_input_tokens": 0,
       "classification_output_tokens": 0,
       "classification_total_tokens": 0,
@@ -2347,6 +2978,7 @@
       "fetched_at": "2026-04-27 20:28:50",
       "industry": "其他",
       "matched_keywords": "ceo earnings per, while revenue came",
+      "news_id": "081fab287d6d0e04",
       "published_at": "2026-04-27 19:18:00",
       "reason": "依標題與摘要關鍵字初步分類",
       "sentiment": "偏多",
@@ -2357,6 +2989,7 @@
       "url": "https://www.marketwatch.com/story/verizons-stock-rises-as-the-company-posts-surprise-subscriber-growth-under-new-ceo-2752e52d?mod=mw_rss_topstories"
     },
     {
+      "canonical_url": "https://www.marketwatch.com/story/we-believe-its-real-my-mom-received-a-check-from-a-class-action-lawsuit-it-bounced-could-this-be-a-scam-cffa7bdb",
       "classification_input_tokens": 0,
       "classification_output_tokens": 0,
       "classification_total_tokens": 0,
@@ -2366,6 +2999,7 @@
       "fetched_at": "2026-04-27 20:28:50",
       "industry": "其他",
       "matched_keywords": "action lawsuit it",
+      "news_id": "4a78ef3336bf13c5",
       "published_at": "2026-04-27 19:15:00",
       "reason": "依標題與摘要關鍵字初步分類",
       "sentiment": "中性",
@@ -2376,6 +3010,7 @@
       "url": "https://www.marketwatch.com/story/we-believe-its-real-my-mom-received-a-check-from-a-class-action-lawsuit-it-bounced-could-this-be-a-scam-cffa7bdb?mod=mw_rss_topstories"
     },
     {
+      "canonical_url": "https://www.cnbc.com/2026/04/27/crispr-gene-editing-intellia-trial.html",
       "classification_input_tokens": 0,
       "classification_output_tokens": 0,
       "classification_total_tokens": 0,
@@ -2385,6 +3020,7 @@
       "fetched_at": "2026-04-27 20:28:50",
       "industry": "其他",
       "matched_keywords": "",
+      "news_id": "f94bf1ba88c0fccf",
       "published_at": "2026-04-27 19:01:01",
       "reason": "依標題與摘要關鍵字初步分類",
       "sentiment": "中性",
@@ -2395,6 +3031,7 @@
       "url": "https://www.cnbc.com/2026/04/27/crispr-gene-editing-intellia-trial.html"
     },
     {
+      "canonical_url": "https://www.cnbc.com/2026/04/27/ai-legislation-deepfakes-whistleblowers.html",
       "classification_input_tokens": 0,
       "classification_output_tokens": 0,
       "classification_total_tokens": 0,
@@ -2404,6 +3041,7 @@
       "fetched_at": "2026-04-27 20:28:50",
       "industry": "AI / 伺服器",
       "matched_keywords": "ai bill, on ai regulation",
+      "news_id": "b01e505264d22325",
       "published_at": "2026-04-27 17:00:02",
       "reason": "依標題與摘要關鍵字初步分類",
       "sentiment": "中性",
@@ -2414,6 +3052,7 @@
       "url": "https://www.cnbc.com/2026/04/27/ai-legislation-deepfakes-whistleblowers.html"
     },
     {
+      "canonical_url": "https://www.cnbc.com/2026/04/27/global-military-spending-record-2025-europe-asia-ukraine-sipri.html",
       "classification_input_tokens": 0,
       "classification_output_tokens": 0,
       "classification_total_tokens": 0,
@@ -2423,6 +3062,7 @@
       "fetched_at": "2026-04-27 20:28:50",
       "industry": "其他",
       "matched_keywords": "",
+      "news_id": "55fa1fbbc79a748c",
       "published_at": "2026-04-27 16:19:40",
       "reason": "依標題與摘要關鍵字初步分類",
       "sentiment": "偏多",
@@ -2433,6 +3073,7 @@
       "url": "https://www.cnbc.com/2026/04/27/global-military-spending-record-2025-europe-asia-ukraine-sipri.html"
     },
     {
+      "canonical_url": "https://www.cnbc.com/2026/04/26/ube-purple-yam-viral-trend-philippines-supply-crunch.html",
       "classification_input_tokens": 0,
       "classification_output_tokens": 0,
       "classification_total_tokens": 0,
@@ -2442,6 +3083,7 @@
       "fetched_at": "2026-04-27 20:28:50",
       "industry": "其他",
       "matched_keywords": "",
+      "news_id": "2478762fc5a64ea2",
       "published_at": "2026-04-27 15:31:36",
       "reason": "依標題與摘要關鍵字初步分類",
       "sentiment": "偏多",
@@ -2452,6 +3094,7 @@
       "url": "https://www.cnbc.com/2026/04/26/ube-purple-yam-viral-trend-philippines-supply-crunch.html"
     },
     {
+      "canonical_url": "https://www.cnbc.com/2026/04/27/cnbc-converge-30-ceos-and-business-leaders-top-concerns.html",
       "classification_input_tokens": 0,
       "classification_output_tokens": 0,
       "classification_total_tokens": 0,
@@ -2461,6 +3104,7 @@
       "fetched_at": "2026-04-27 20:28:50",
       "industry": "AI / 伺服器",
       "matched_keywords": "artificial intelligence, war inflation and",
+      "news_id": "ae2caf02d6e6b810",
       "published_at": "2026-04-27 15:07:46",
       "reason": "依標題與摘要關鍵字初步分類",
       "sentiment": "中性",
@@ -2471,6 +3115,7 @@
       "url": "https://www.cnbc.com/2026/04/27/cnbc-converge-30-ceos-and-business-leaders-top-concerns.html"
     },
     {
+      "canonical_url": "https://www.cnbc.com/2026/04/27/indian-drugmaker-sun-pharma-to-buy-us-firm-organon-in-11point75-billion-deal.html",
       "classification_input_tokens": 0,
       "classification_output_tokens": 0,
       "classification_total_tokens": 0,
@@ -2480,6 +3125,7 @@
       "fetched_at": "2026-04-27 20:28:50",
       "industry": "生技醫療",
       "matched_keywords": "sun pharma shares, will acquire new, billion deal to, cash deal that",
+      "news_id": "4895ee8aed5a8d0c",
       "published_at": "2026-04-27 14:49:15",
       "reason": "依標題與摘要關鍵字初步分類",
       "sentiment": "中性",
@@ -2490,6 +3136,7 @@
       "url": "https://www.cnbc.com/2026/04/27/indian-drugmaker-sun-pharma-to-buy-us-firm-organon-in-11point75-billion-deal.html"
     },
     {
+      "canonical_url": "https://www.cnbc.com/2026/04/27/us-iran-peace-talks-stall-global-markets-stocks-oil-treasurys.html",
       "classification_input_tokens": 0,
       "classification_output_tokens": 0,
       "classification_total_tokens": 0,
@@ -2499,6 +3146,7 @@
       "fetched_at": "2026-04-27 20:28:50",
       "industry": "其他",
       "matched_keywords": "strait deal to",
+      "news_id": "fd1b6701632dc560",
       "published_at": "2026-04-27 14:24:45",
       "reason": "依標題與摘要關鍵字初步分類",
       "sentiment": "中性",
@@ -2509,6 +3157,7 @@
       "url": "https://www.cnbc.com/2026/04/27/us-iran-peace-talks-stall-global-markets-stocks-oil-treasurys.html"
     },
     {
+      "canonical_url": "https://www.cnbc.com/2026/04/27/asia-pacific-markets-nikkei-225-kospi-hang-seng-index.html",
       "classification_input_tokens": 0,
       "classification_output_tokens": 0,
       "classification_total_tokens": 0,
@@ -2518,6 +3167,7 @@
       "fetched_at": "2026-04-27 08:28:48",
       "industry": "其他",
       "matched_keywords": "",
+      "news_id": "81064d1852146f11",
       "published_at": "2026-04-27 08:10:53",
       "reason": "依標題與摘要關鍵字初步分類",
       "sentiment": "偏多",
@@ -2528,6 +3178,7 @@
       "url": "https://www.cnbc.com/2026/04/27/asia-pacific-markets-nikkei-225-kospi-hang-seng-index.html"
     },
     {
+      "canonical_url": "https://www.marketwatch.com/story/u-s-stock-futures-fall-oil-rises-ahead-of-a-busy-week-for-wall-street-c3e49958",
       "classification_input_tokens": 0,
       "classification_output_tokens": 0,
       "classification_total_tokens": 0,
@@ -2537,6 +3188,7 @@
       "fetched_at": "2026-04-27 08:28:48",
       "industry": "能源",
       "matched_keywords": "fall oil rises, as oil prices",
+      "news_id": "2f24de06eb597d51",
       "published_at": "2026-04-27 07:50:00",
       "reason": "依標題與摘要關鍵字初步分類",
       "sentiment": "偏多",
@@ -2547,6 +3199,7 @@
       "url": "https://www.marketwatch.com/story/u-s-stock-futures-fall-oil-rises-ahead-of-a-busy-week-for-wall-street-c3e49958?mod=mw_rss_topstories"
     },
     {
+      "canonical_url": "https://www.marketwatch.com/story/wall-streets-super-bowl-wednesday-alphabet-amazon-microsoft-and-meta-report-along-with-powells-last-fed-meeting-88eb1710",
       "classification_input_tokens": 0,
       "classification_output_tokens": 0,
       "classification_total_tokens": 0,
@@ -2556,6 +3209,7 @@
       "fetched_at": "2026-04-27 08:28:48",
       "industry": "軟體雲端",
       "matched_keywords": "amazon microsoft and, wednesday alphabet amazon, as alphabet amazon, last fed meeting",
+      "news_id": "5ea5ade13fd8c079",
       "published_at": "2026-04-27 05:00:00",
       "reason": "依標題與摘要關鍵字初步分類",
       "sentiment": "中性",
@@ -2566,6 +3220,7 @@
       "url": "https://www.marketwatch.com/story/wall-streets-super-bowl-wednesday-alphabet-amazon-microsoft-and-meta-report-along-with-powells-last-fed-meeting-88eb1710?mod=mw_rss_topstories"
     },
     {
+      "canonical_url": "https://www.marketwatch.com/story/some-stocks-have-risen-but-others-have-flopped-i-will-soon-inherit-my-parents-1-5-million-estate-do-i-fire-the-adviser-who-charges-a-3-fee-6b5b2caa",
       "classification_input_tokens": 0,
       "classification_output_tokens": 0,
       "classification_total_tokens": 0,
@@ -2575,6 +3230,7 @@
       "fetched_at": "2026-04-27 08:28:48",
       "industry": "其他",
       "matched_keywords": "",
+      "news_id": "326ab1a20484084a",
       "published_at": "2026-04-27 04:42:00",
       "reason": "依標題與摘要關鍵字初步分類",
       "sentiment": "偏多",
@@ -2585,6 +3241,7 @@
       "url": "https://www.marketwatch.com/story/some-stocks-have-risen-but-others-have-flopped-i-will-soon-inherit-my-parents-1-5-million-estate-do-i-fire-the-adviser-who-charges-a-3-fee-6b5b2caa?mod=mw_rss_topstories"
     },
     {
+      "canonical_url": "https://www.marketwatch.com/story/the-lord-has-taken-care-of-me-im-74-i-went-from-working-14-an-hour-to-3-4-million-heres-how-i-did-it-e0af1045",
       "classification_input_tokens": 0,
       "classification_output_tokens": 0,
       "classification_total_tokens": 0,
@@ -2594,6 +3251,7 @@
       "fetched_at": "2026-04-27 08:28:48",
       "industry": "其他",
       "matched_keywords": "",
+      "news_id": "4cf607c6b9c957a7",
       "published_at": "2026-04-27 04:30:00",
       "reason": "依標題與摘要關鍵字初步分類",
       "sentiment": "中性",
@@ -2604,6 +3262,7 @@
       "url": "https://www.marketwatch.com/story/the-lord-has-taken-care-of-me-im-74-i-went-from-working-14-an-hour-to-3-4-million-heres-how-i-did-it-e0af1045?mod=mw_rss_topstories"
     },
     {
+      "canonical_url": "https://www.marketwatch.com/story/sen-thom-tillis-drops-opposition-says-hell-back-kevin-warshs-fed-confirmation-b7252136",
       "classification_input_tokens": 0,
       "classification_output_tokens": 0,
       "classification_total_tokens": 0,
@@ -2613,6 +3272,7 @@
       "fetched_at": "2026-04-27 08:28:48",
       "industry": "金融",
       "matched_keywords": "s fed confirmation",
+      "news_id": "81eccc6369ef1e68",
       "published_at": "2026-04-27 03:56:00",
       "reason": "依標題與摘要關鍵字初步分類",
       "sentiment": "中性",
@@ -2623,6 +3283,7 @@
       "url": "https://www.marketwatch.com/story/sen-thom-tillis-drops-opposition-says-hell-back-kevin-warshs-fed-confirmation-b7252136?mod=mw_rss_topstories"
     },
     {
+      "canonical_url": "https://www.marketwatch.com/story/michael-jackson-biopics-mega-box-office-proves-his-staying-power-despite-controversy-9546f5ac",
       "classification_input_tokens": 0,
       "classification_output_tokens": 0,
       "classification_total_tokens": 0,
@@ -2632,6 +3293,7 @@
       "fetched_at": "2026-04-27 08:28:48",
       "industry": "其他",
       "matched_keywords": "",
+      "news_id": "03b58bebb4fa1ace",
       "published_at": "2026-04-27 03:15:00",
       "reason": "依標題與摘要關鍵字初步分類",
       "sentiment": "中性",
@@ -2642,6 +3304,7 @@
       "url": "https://www.marketwatch.com/story/michael-jackson-biopics-mega-box-office-proves-his-staying-power-despite-controversy-9546f5ac?mod=mw_rss_topstories"
     },
     {
+      "canonical_url": "https://www.cnbc.com/2026/04/25/scenes-from-the-white-house-correspondents-dinner-shooting.html",
       "classification_input_tokens": 0,
       "classification_output_tokens": 0,
       "classification_total_tokens": 0,
@@ -2651,6 +3314,7 @@
       "fetched_at": "2026-04-27 08:28:48",
       "industry": "其他",
       "matched_keywords": "",
+      "news_id": "70cafa022581f16f",
       "published_at": "2026-04-27 03:11:42",
       "reason": "依標題與摘要關鍵字初步分類",
       "sentiment": "中性",
@@ -2661,6 +3325,7 @@
       "url": "https://www.cnbc.com/2026/04/25/scenes-from-the-white-house-correspondents-dinner-shooting.html"
     },
     {
+      "canonical_url": "https://www.marketwatch.com/story/we-are-not-close-my-brother-says-our-mother-left-no-estate-when-she-died-how-on-earth-can-i-trust-him-0e4b46d9",
       "classification_input_tokens": 0,
       "classification_output_tokens": 0,
       "classification_total_tokens": 0,
@@ -2670,6 +3335,7 @@
       "fetched_at": "2026-04-27 08:28:48",
       "industry": "其他",
       "matched_keywords": "",
+      "news_id": "ea8c0ed00f53ac28",
       "published_at": "2026-04-27 03:02:00",
       "reason": "依標題與摘要關鍵字初步分類",
       "sentiment": "中性",
@@ -2680,6 +3346,7 @@
       "url": "https://www.marketwatch.com/story/we-are-not-close-my-brother-says-our-mother-left-no-estate-when-she-died-how-on-earth-can-i-trust-him-0e4b46d9?mod=mw_rss_topstories"
     },
     {
+      "canonical_url": "https://www.cnbc.com/2026/04/26/cramer-the-money-to-ai-stocks-is-a-problem-and-how-it-can-be-fixed.html",
       "classification_input_tokens": 0,
       "classification_output_tokens": 0,
       "classification_total_tokens": 0,
@@ -2689,6 +3356,7 @@
       "fetched_at": "2026-04-27 20:28:50",
       "industry": "AI / 伺服器",
       "matched_keywords": "to ai stocks, data center",
+      "news_id": "5e3c64286b934ee0",
       "published_at": "2026-04-27 00:47:00",
       "reason": "依標題與摘要關鍵字初步分類",
       "sentiment": "中性",
@@ -2699,6 +3367,7 @@
       "url": "https://www.cnbc.com/2026/04/26/cramer-the-money-to-ai-stocks-is-a-problem-and-how-it-can-be-fixed.html"
     },
     {
+      "canonical_url": "https://www.cnbc.com/2026/04/26/trump-presses-case-for-white-house-ballroom-following-shooting.html",
       "classification_input_tokens": 0,
       "classification_output_tokens": 0,
       "classification_total_tokens": 0,
@@ -2708,6 +3377,7 @@
       "fetched_at": "2026-04-27 00:16:59",
       "industry": "其他",
       "matched_keywords": "",
+      "news_id": "694aec0a72fb8b84",
       "published_at": "2026-04-26 23:45:22",
       "reason": "依標題與摘要關鍵字初步分類",
       "sentiment": "中性",
@@ -2718,6 +3388,7 @@
       "url": "https://www.cnbc.com/2026/04/26/trump-presses-case-for-white-house-ballroom-following-shooting.html"
     },
     {
+      "canonical_url": "https://www.cnbc.com/2026/04/26/thom-tillis-kevin-warsh-federal-reserve.html",
       "classification_input_tokens": 0,
       "classification_output_tokens": 0,
       "classification_total_tokens": 0,
@@ -2727,6 +3398,7 @@
       "fetched_at": "2026-04-27 20:28:50",
       "industry": "金融",
       "matched_keywords": "of fed chair",
+      "news_id": "0a9f02e82e79f9a4",
       "published_at": "2026-04-26 23:29:32",
       "reason": "依標題與摘要關鍵字初步分類",
       "sentiment": "中性",
@@ -2737,6 +3409,7 @@
       "url": "https://www.cnbc.com/2026/04/26/thom-tillis-kevin-warsh-federal-reserve.html"
     },
     {
+      "canonical_url": "https://www.marketwatch.com/story/its-ridiculously-easy-for-kids-to-get-hooked-on-online-gambling-heres-how-parents-can-help-a242ac1b",
       "classification_input_tokens": 0,
       "classification_output_tokens": 0,
       "classification_total_tokens": 0,
@@ -2746,6 +3419,7 @@
       "fetched_at": "2026-04-27 00:16:59",
       "industry": "其他",
       "matched_keywords": "",
+      "news_id": "d399a3c53a809be6",
       "published_at": "2026-04-26 23:08:00",
       "reason": "依標題與摘要關鍵字初步分類",
       "sentiment": "中性",
@@ -2756,6 +3430,7 @@
       "url": "https://www.marketwatch.com/story/its-ridiculously-easy-for-kids-to-get-hooked-on-online-gambling-heres-how-parents-can-help-a242ac1b?mod=mw_rss_topstories"
     },
     {
+      "canonical_url": "https://www.cnbc.com/2026/04/26/here-are-the-3-big-things-were-watching-in-the-stock-market-in-the-week-ahead.html",
       "classification_input_tokens": 0,
       "classification_output_tokens": 0,
       "classification_total_tokens": 0,
@@ -2765,6 +3440,7 @@
       "fetched_at": "2026-04-27 00:16:59",
       "industry": "總體經濟",
       "matched_keywords": "stock market in, the earnings season",
+      "news_id": "8b5103fe31e6457e",
       "published_at": "2026-04-26 22:54:56",
       "reason": "依標題與摘要關鍵字初步分類",
       "sentiment": "中性",
@@ -2775,6 +3451,7 @@
       "url": "https://www.cnbc.com/2026/04/26/here-are-the-3-big-things-were-watching-in-the-stock-market-in-the-week-ahead.html"
     },
     {
+      "canonical_url": "https://www.marketwatch.com/story/as-mass-layoffs-threaten-jobs-here-are-4-smart-moves-to-protect-yourself-2b7544a2",
       "classification_input_tokens": 0,
       "classification_output_tokens": 0,
       "classification_total_tokens": 0,
@@ -2784,6 +3461,7 @@
       "fetched_at": "2026-04-27 00:16:59",
       "industry": "總體經濟",
       "matched_keywords": "threaten jobs here",
+      "news_id": "9aafd9591ce0b9bd",
       "published_at": "2026-04-26 22:53:00",
       "reason": "依標題與摘要關鍵字初步分類",
       "sentiment": "中性",
@@ -2794,6 +3472,7 @@
       "url": "https://www.marketwatch.com/story/as-mass-layoffs-threaten-jobs-here-are-4-smart-moves-to-protect-yourself-2b7544a2?mod=mw_rss_topstories"
     },
     {
+      "canonical_url": "https://www.marketwatch.com/story/most-retirees-want-to-age-in-their-own-homes-but-theyre-not-factoring-in-these-hidden-costs-3e0467e9",
       "classification_input_tokens": 0,
       "classification_output_tokens": 0,
       "classification_total_tokens": 0,
@@ -2803,6 +3482,7 @@
       "fetched_at": "2026-04-27 00:16:59",
       "industry": "其他",
       "matched_keywords": "",
+      "news_id": "8d0444c0b742c389",
       "published_at": "2026-04-26 22:52:00",
       "reason": "依標題與摘要關鍵字初步分類",
       "sentiment": "中性",
@@ -2813,6 +3493,7 @@
       "url": "https://www.marketwatch.com/story/most-retirees-want-to-age-in-their-own-homes-but-theyre-not-factoring-in-these-hidden-costs-3e0467e9?mod=mw_rss_topstories"
     },
     {
+      "canonical_url": "https://www.marketwatch.com/story/medicare-advantage-buyers-beware-the-rules-for-selling-plans-are-changing-and-could-harm-seniors-77f5daae",
       "classification_input_tokens": 0,
       "classification_output_tokens": 0,
       "classification_total_tokens": 0,
@@ -2822,6 +3503,7 @@
       "fetched_at": "2026-04-27 00:16:59",
       "industry": "生技醫療",
       "matched_keywords": "medicare advantage, behind medicare advantage, traditional medicare",
+      "news_id": "f6141fd7531a1298",
       "published_at": "2026-04-26 22:51:00",
       "reason": "依標題與摘要關鍵字初步分類",
       "sentiment": "中性",
@@ -2832,6 +3514,7 @@
       "url": "https://www.marketwatch.com/story/medicare-advantage-buyers-beware-the-rules-for-selling-plans-are-changing-and-could-harm-seniors-77f5daae?mod=mw_rss_topstories"
     },
     {
+      "canonical_url": "https://www.marketwatch.com/story/happy-54-birthday-to-me-im-now-exactly-5-years-from-retirement-heres-what-ill-do-first-to-prepare-cc0bf06b",
       "classification_input_tokens": 0,
       "classification_output_tokens": 0,
       "classification_total_tokens": 0,
@@ -2841,6 +3524,7 @@
       "fetched_at": "2026-04-27 00:16:59",
       "industry": "其他",
       "matched_keywords": "",
+      "news_id": "53982f17ffa0841c",
       "published_at": "2026-04-26 22:50:00",
       "reason": "依標題與摘要關鍵字初步分類",
       "sentiment": "中性",
@@ -2851,6 +3535,7 @@
       "url": "https://www.marketwatch.com/story/happy-54-birthday-to-me-im-now-exactly-5-years-from-retirement-heres-what-ill-do-first-to-prepare-cc0bf06b?mod=mw_rss_topstories"
     },
     {
+      "canonical_url": "https://www.marketwatch.com/story/retiring-abroad-watch-out-for-this-expensive-housing-mistake-1c647caa",
       "classification_input_tokens": 0,
       "classification_output_tokens": 0,
       "classification_total_tokens": 0,
@@ -2860,6 +3545,7 @@
       "fetched_at": "2026-04-27 00:16:59",
       "industry": "其他",
       "matched_keywords": "",
+      "news_id": "d014a066c0e44be8",
       "published_at": "2026-04-26 22:40:00",
       "reason": "依標題與摘要關鍵字初步分類",
       "sentiment": "中性",
@@ -2870,6 +3556,7 @@
       "url": "https://www.marketwatch.com/story/retiring-abroad-watch-out-for-this-expensive-housing-mistake-1c647caa?mod=mw_rss_topstories"
     },
     {
+      "canonical_url": "https://www.marketwatch.com/story/financial-literacy-will-get-serious-treatment-in-high-schools-starting-next-year-13e94b76",
       "classification_input_tokens": 0,
       "classification_output_tokens": 0,
       "classification_total_tokens": 0,
@@ -2879,6 +3566,7 @@
       "fetched_at": "2026-04-27 00:16:59",
       "industry": "金融",
       "matched_keywords": "learned financial literacy",
+      "news_id": "174c5fd4a4da99f7",
       "published_at": "2026-04-26 22:40:00",
       "reason": "依標題與摘要關鍵字初步分類",
       "sentiment": "中性",
@@ -2889,6 +3577,7 @@
       "url": "https://www.marketwatch.com/story/financial-literacy-will-get-serious-treatment-in-high-schools-starting-next-year-13e94b76?mod=mw_rss_topstories"
     },
     {
+      "canonical_url": "https://www.cnbc.com/2026/04/25/trump-gunshots-white-house-correspondents-dinner.html",
       "classification_input_tokens": 0,
       "classification_output_tokens": 0,
       "classification_total_tokens": 0,
@@ -2898,6 +3587,7 @@
       "fetched_at": "2026-04-27 00:16:59",
       "industry": "其他",
       "matched_keywords": "",
+      "news_id": "17d8a8237b59bd93",
       "published_at": "2026-04-26 22:02:54",
       "reason": "依標題與摘要關鍵字初步分類",
       "sentiment": "中性",
@@ -2908,6 +3598,7 @@
       "url": "https://www.cnbc.com/2026/04/25/trump-gunshots-white-house-correspondents-dinner.html"
     },
     {
+      "canonical_url": "https://www.cnbc.com/2026/04/26/world-leaders-express-support-after-washington-dc-shooting.html",
       "classification_input_tokens": 0,
       "classification_output_tokens": 0,
       "classification_total_tokens": 0,
@@ -2917,6 +3608,7 @@
       "fetched_at": "2026-04-27 08:28:48",
       "industry": "其他",
       "matched_keywords": "",
+      "news_id": "8ce140dca034b2c6",
       "published_at": "2026-04-26 21:57:27",
       "reason": "依標題與摘要關鍵字初步分類",
       "sentiment": "中性",
@@ -2927,6 +3619,7 @@
       "url": "https://www.cnbc.com/2026/04/26/world-leaders-express-support-after-washington-dc-shooting.html"
     },
     {
+      "canonical_url": "https://www.cnbc.com/2026/04/26/psychologist-parents-who-have-close-bonds-with-their-adult-kids-never-do-6-things.html",
       "classification_input_tokens": 0,
       "classification_output_tokens": 0,
       "classification_total_tokens": 0,
@@ -2936,6 +3629,7 @@
       "fetched_at": "2026-04-27 00:16:59",
       "industry": "其他",
       "matched_keywords": "",
+      "news_id": "74ab15e5e5c15686",
       "published_at": "2026-04-26 21:45:31",
       "reason": "依標題與摘要關鍵字初步分類",
       "sentiment": "中性",
@@ -2946,6 +3640,7 @@
       "url": "https://www.cnbc.com/2026/04/26/psychologist-parents-who-have-close-bonds-with-their-adult-kids-never-do-6-things.html"
     },
     {
+      "canonical_url": "https://www.cnbc.com/2026/04/26/insurance-rates-credit-history.html",
       "classification_input_tokens": 0,
       "classification_output_tokens": 0,
       "classification_total_tokens": 0,
@@ -2955,6 +3650,7 @@
       "fetched_at": "2026-04-27 20:28:50",
       "industry": "金融",
       "matched_keywords": "insurance rates based",
+      "news_id": "a4fbe601e08dd61f",
       "published_at": "2026-04-26 21:30:01",
       "reason": "依標題與摘要關鍵字初步分類",
       "sentiment": "中性",
@@ -2965,6 +3661,7 @@
       "url": "https://www.cnbc.com/2026/04/26/insurance-rates-credit-history.html"
     },
     {
+      "canonical_url": "https://www.cnbc.com/2026/04/26/top-wall-street-analysts-pick-these-3-stocks-for-reliable-income.html",
       "classification_input_tokens": 0,
       "classification_output_tokens": 0,
       "classification_total_tokens": 0,
@@ -2974,6 +3671,7 @@
       "fetched_at": "2026-04-27 00:16:59",
       "industry": "其他",
       "matched_keywords": "",
+      "news_id": "5b40ea51235c9e00",
       "published_at": "2026-04-26 20:41:47",
       "reason": "依標題與摘要關鍵字初步分類",
       "sentiment": "中性",
@@ -2984,6 +3682,7 @@
       "url": "https://www.cnbc.com/2026/04/26/top-wall-street-analysts-pick-these-3-stocks-for-reliable-income.html"
     },
     {
+      "canonical_url": "https://www.marketwatch.com/story/big-tech-is-the-bull-markets-win-win-trade-right-now-making-this-week-crucial-45665c97",
       "classification_input_tokens": 0,
       "classification_output_tokens": 0,
       "classification_total_tokens": 0,
@@ -2993,6 +3692,7 @@
       "fetched_at": "2026-04-27 00:16:59",
       "industry": "總體經濟",
       "matched_keywords": "bull market s",
+      "news_id": "e2dbd5fe7beec689",
       "published_at": "2026-04-26 20:01:00",
       "reason": "依標題與摘要關鍵字初步分類",
       "sentiment": "中性",
@@ -3003,6 +3703,7 @@
       "url": "https://www.marketwatch.com/story/big-tech-is-the-bull-markets-win-win-trade-right-now-making-this-week-crucial-45665c97?mod=mw_rss_topstories"
     },
     {
+      "canonical_url": "https://www.cnbc.com/2026/04/25/iran-says-no-meeting-with-us-negotiators-planned-in-pakistan.html",
       "classification_input_tokens": 0,
       "classification_output_tokens": 0,
       "classification_total_tokens": 0,
@@ -3012,6 +3713,7 @@
       "fetched_at": "2026-04-27 00:16:59",
       "industry": "其他",
       "matched_keywords": "",
+      "news_id": "7aa5e2264917c748",
       "published_at": "2026-04-26 18:02:18",
       "reason": "依標題與摘要關鍵字初步分類",
       "sentiment": "中性",
@@ -3022,6 +3724,7 @@
       "url": "https://www.cnbc.com/2026/04/25/iran-says-no-meeting-with-us-negotiators-planned-in-pakistan.html"
     },
     {
+      "canonical_url": "https://www.marketwatch.com/story/white-house-correspondents-dinner-weekend-gets-hollywoodified-as-companies-from-cnn-to-grindr-host-events-78a4fa10",
       "classification_input_tokens": 0,
       "classification_output_tokens": 0,
       "classification_total_tokens": 0,
@@ -3031,6 +3734,7 @@
       "fetched_at": "2026-04-27 00:16:59",
       "industry": "其他",
       "matched_keywords": "",
+      "news_id": "9febbedb8273c584",
       "published_at": "2026-04-26 03:05:00",
       "reason": "依標題與摘要關鍵字初步分類",
       "sentiment": "中性",
@@ -3041,6 +3745,7 @@
       "url": "https://www.marketwatch.com/story/white-house-correspondents-dinner-weekend-gets-hollywoodified-as-companies-from-cnn-to-grindr-host-events-78a4fa10?mod=mw_rss_topstories"
     },
     {
+      "canonical_url": "https://www.marketwatch.com/story/when-dentists-start-getting-cold-calls-about-private-credit-you-know-the-fad-has-peaked-67f1ef78",
       "classification_input_tokens": 0,
       "classification_output_tokens": 0,
       "classification_total_tokens": 0,
@@ -3050,6 +3755,7 @@
       "fetched_at": "2026-04-27 00:16:59",
       "industry": "金融",
       "matched_keywords": "high yield with",
+      "news_id": "32ef9df10d3b8633",
       "published_at": "2026-04-26 02:44:00",
       "reason": "依標題與摘要關鍵字初步分類",
       "sentiment": "中性",
@@ -3060,6 +3766,7 @@
       "url": "https://www.marketwatch.com/story/when-dentists-start-getting-cold-calls-about-private-credit-you-know-the-fad-has-peaked-67f1ef78?mod=mw_rss_topstories"
     },
     {
+      "canonical_url": "https://www.cnbc.com/2026/04/25/right-to-repair-consumer-prices-affordability-economy-elections.html",
       "classification_input_tokens": 0,
       "classification_output_tokens": 0,
       "classification_total_tokens": 0,
@@ -3069,6 +3776,7 @@
       "fetched_at": "2026-04-27 20:28:50",
       "industry": "總體經濟",
       "matched_keywords": "repair economy right",
+      "news_id": "5c691e5e0669038e",
       "published_at": "2026-04-25 22:17:59",
       "reason": "依標題與摘要關鍵字初步分類",
       "sentiment": "中性",
@@ -3079,6 +3787,7 @@
       "url": "https://www.cnbc.com/2026/04/25/right-to-repair-consumer-prices-affordability-economy-elections.html"
     },
     {
+      "canonical_url": "https://www.cnbc.com/2026/04/25/why-some-young-americans-are-dating-less-in-2026.html",
       "classification_input_tokens": 0,
       "classification_output_tokens": 0,
       "classification_total_tokens": 0,
@@ -3088,6 +3797,7 @@
       "fetched_at": "2026-04-27 20:28:50",
       "industry": "金融",
       "matched_keywords": "a financial decision",
+      "news_id": "591a3e62aff08576",
       "published_at": "2026-04-25 21:30:02",
       "reason": "依標題與摘要關鍵字初步分類",
       "sentiment": "中性",
@@ -3098,6 +3808,7 @@
       "url": "https://www.cnbc.com/2026/04/25/why-some-young-americans-are-dating-less-in-2026.html"
     },
     {
+      "canonical_url": "https://www.cnbc.com/2026/04/25/how-mid-priced-retail-products-became-status-symbol-for-young-shoppers.html",
       "classification_input_tokens": 0,
       "classification_output_tokens": 0,
       "classification_total_tokens": 0,
@@ -3107,6 +3818,7 @@
       "fetched_at": "2026-04-27 00:16:59",
       "industry": "消費零售",
       "matched_keywords": "priced retail items",
+      "news_id": "6565ad2f3b7469ec",
       "published_at": "2026-04-25 21:05:01",
       "reason": "依標題與摘要關鍵字初步分類",
       "sentiment": "中性",
@@ -3117,6 +3829,7 @@
       "url": "https://www.cnbc.com/2026/04/25/how-mid-priced-retail-products-became-status-symbol-for-young-shoppers.html"
     },
     {
+      "canonical_url": "https://www.cnbc.com/2026/04/25/36-year-old-left-the-us-for-chinanow-pays-1000-rent-and-100-for-groceries-for-family-of-4.html",
       "classification_input_tokens": 0,
       "classification_output_tokens": 0,
       "classification_total_tokens": 0,
@@ -3126,6 +3839,7 @@
       "fetched_at": "2026-04-27 00:16:59",
       "industry": "其他",
       "matched_keywords": "",
+      "news_id": "fe7294e6d406b5c3",
       "published_at": "2026-04-25 21:00:01",
       "reason": "依標題與摘要關鍵字初步分類",
       "sentiment": "中性",
@@ -3136,6 +3850,7 @@
       "url": "https://www.cnbc.com/2026/04/25/36-year-old-left-the-us-for-chinanow-pays-1000-rent-and-100-for-groceries-for-family-of-4.html"
     },
     {
+      "canonical_url": "https://www.cnbc.com/2026/04/25/ai-talent-wars-enterprise-software-executives-openai.html",
       "classification_input_tokens": 0,
       "classification_output_tokens": 0,
       "classification_total_tokens": 0,
@@ -3145,6 +3860,7 @@
       "fetched_at": "2026-04-27 20:28:50",
       "industry": "AI / 伺服器",
       "matched_keywords": "ai talent, of ai disruption",
+      "news_id": "eaa3c7c93b1afc03",
       "published_at": "2026-04-25 20:43:39",
       "reason": "依標題與摘要關鍵字初步分類",
       "sentiment": "中性",
@@ -3155,25 +3871,28 @@
       "url": "https://www.cnbc.com/2026/04/25/ai-talent-wars-enterprise-software-executives-openai.html"
     },
     {
+      "canonical_url": "https://www.cnbc.com/2026/04/25/generation-x-beauty-sales.html",
       "classification_input_tokens": 0,
       "classification_output_tokens": 0,
       "classification_total_tokens": 0,
       "classified_by": "rules",
       "confidence": 0.45,
       "event_type": "一般新聞",
-      "fetched_at": "2026-04-29 10:22:37",
+      "fetched_at": "2026-04-27 20:28:50",
       "industry": "其他",
       "matched_keywords": "",
+      "news_id": "3ada28f149ef7cbb",
       "published_at": "2026-04-25 20:00:01",
       "reason": "依標題與摘要關鍵字初步分類",
       "sentiment": "中性",
-      "source": "CNBC Business",
+      "source": "CNBC Top News",
       "summary": "Generation X is one of the biggest beauty spenders, and brands are paying attention.",
       "symbol": "MARKET",
       "title": "Forgotten no more: Generation X is driving beauty sales",
       "url": "https://www.cnbc.com/2026/04/25/generation-x-beauty-sales.html"
     },
     {
+      "canonical_url": "https://www.cnbc.com/2026/04/25/tesla-and-xais-grok-shows-promises-and-risks-of-ai-chatbots-in-cars.html",
       "classification_input_tokens": 0,
       "classification_output_tokens": 0,
       "classification_total_tokens": 0,
@@ -3183,6 +3902,7 @@
       "fetched_at": "2026-04-27 20:28:50",
       "industry": "電動車",
       "matched_keywords": "a tesla in, a tesla model, tesla model y",
+      "news_id": "15d1dc7d47891333",
       "published_at": "2026-04-25 20:00:01",
       "reason": "依標題與摘要關鍵字初步分類",
       "sentiment": "中性",
@@ -3193,25 +3913,7 @@
       "url": "https://www.cnbc.com/2026/04/25/tesla-and-xais-grok-shows-promises-and-risks-of-ai-chatbots-in-cars.html"
     },
     {
-      "classification_input_tokens": 0,
-      "classification_output_tokens": 0,
-      "classification_total_tokens": 0,
-      "classified_by": "rules",
-      "confidence": 0.45,
-      "event_type": "一般新聞",
-      "fetched_at": "2026-04-27 20:28:50",
-      "industry": "其他",
-      "matched_keywords": "",
-      "published_at": "2026-04-25 20:00:01",
-      "reason": "依標題與摘要關鍵字初步分類",
-      "sentiment": "中性",
-      "source": "CNBC Top News",
-      "summary": "Generation X is one of the biggest beauty spenders, and brands are paying attention.",
-      "symbol": "MARKET",
-      "title": "Forgotten no more: Generation X is driving beauty sales",
-      "url": "https://www.cnbc.com/2026/04/25/generation-x-beauty-sales.html"
-    },
-    {
+      "canonical_url": "https://www.cnbc.com/2026/04/25/crude-oil-freight-tanker-strait-hormuz-iran-war-energy-stocks.html",
       "classification_input_tokens": 0,
       "classification_output_tokens": 0,
       "classification_total_tokens": 0,
@@ -3221,6 +3923,7 @@
       "fetched_at": "2026-04-27 00:16:59",
       "industry": "能源",
       "matched_keywords": "than oil or, crude oil and, or energy stocks, and energy stocks, outperforming crude oil",
+      "news_id": "3fa7b7f9a12c8f04",
       "published_at": "2026-04-25 19:53:07",
       "reason": "依標題與摘要關鍵字初步分類",
       "sentiment": "偏多",
@@ -3231,6 +3934,7 @@
       "url": "https://www.cnbc.com/2026/04/25/crude-oil-freight-tanker-strait-hormuz-iran-war-energy-stocks.html"
     },
     {
+      "canonical_url": "https://www.cnbc.com/2026/04/24/how-the-restaurant-group-behind-nycs-carbone-is-overcoming-young-people-shunning-alcohol.html",
       "classification_input_tokens": 0,
       "classification_output_tokens": 0,
       "classification_total_tokens": 0,
@@ -3240,6 +3944,7 @@
       "fetched_at": "2026-04-27 00:16:59",
       "industry": "其他",
       "matched_keywords": "",
+      "news_id": "a0bc7e6b3752d566",
       "published_at": "2026-04-25 06:45:20",
       "reason": "依標題與摘要關鍵字初步分類",
       "sentiment": "中性",
@@ -3250,6 +3955,7 @@
       "url": "https://www.cnbc.com/2026/04/24/how-the-restaurant-group-behind-nycs-carbone-is-overcoming-young-people-shunning-alcohol.html"
     },
     {
+      "canonical_url": "https://www.cnbc.com/2026/04/24/nvidia-stock-closes-at-record-pushing-market-cap-past-5-trillion.html",
       "classification_input_tokens": 0,
       "classification_output_tokens": 0,
       "classification_total_tokens": 0,
@@ -3259,6 +3965,7 @@
       "fetched_at": "2026-04-25 13:41:12",
       "industry": "半導體 / AI",
       "matched_keywords": "nvidia stock, in intel pushed",
+      "news_id": "63e302ffd8b97617",
       "published_at": "2026-04-25 06:40:51",
       "reason": "依標題與摘要關鍵字初步分類",
       "sentiment": "偏多",
@@ -3269,6 +3976,7 @@
       "url": "https://www.cnbc.com/2026/04/24/nvidia-stock-closes-at-record-pushing-market-cap-past-5-trillion.html"
     },
     {
+      "canonical_url": "https://www.cnbc.com/2026/04/24/special-forces-van-dyke-polymarket-bets-maduro-raid-kalshi.html",
       "classification_input_tokens": 0,
       "classification_output_tokens": 0,
       "classification_total_tokens": 0,
@@ -3278,6 +3986,7 @@
       "fetched_at": "2026-04-27 00:16:59",
       "industry": "其他",
       "matched_keywords": "",
+      "news_id": "716e33c911d5611c",
       "published_at": "2026-04-25 06:20:21",
       "reason": "依標題與摘要關鍵字初步分類",
       "sentiment": "中性",
@@ -3288,6 +3997,7 @@
       "url": "https://www.cnbc.com/2026/04/24/special-forces-van-dyke-polymarket-bets-maduro-raid-kalshi.html"
     },
     {
+      "canonical_url": "https://www.marketwatch.com/story/im-planning-to-retire-at-60-should-i-sell-my-house-and-invest-the-500-000-2b504dd9",
       "classification_input_tokens": 0,
       "classification_output_tokens": 0,
       "classification_total_tokens": 0,
@@ -3297,6 +4007,7 @@
       "fetched_at": "2026-04-25 13:41:12",
       "industry": "其他",
       "matched_keywords": "",
+      "news_id": "5bf92f90f7610ca8",
       "published_at": "2026-04-25 06:08:00",
       "reason": "依標題與摘要關鍵字初步分類",
       "sentiment": "中性",
@@ -3307,6 +4018,7 @@
       "url": "https://www.marketwatch.com/story/im-planning-to-retire-at-60-should-i-sell-my-house-and-invest-the-500-000-2b504dd9?mod=mw_rss_topstories"
     },
     {
+      "canonical_url": "https://www.cnbc.com/2026/04/24/fed-powell-pirro-elizabeth-warren-durbin.html",
       "classification_input_tokens": 0,
       "classification_output_tokens": 0,
       "classification_total_tokens": 0,
@@ -3316,6 +4028,7 @@
       "fetched_at": "2026-04-27 00:16:59",
       "industry": "金融",
       "matched_keywords": "reopen fed probe, of fed chair, fed probe at, a probe of",
+      "news_id": "88dd25954b6b3037",
       "published_at": "2026-04-25 06:02:04",
       "reason": "依標題與摘要關鍵字初步分類",
       "sentiment": "偏空",
@@ -3326,6 +4039,7 @@
       "url": "https://www.cnbc.com/2026/04/24/fed-powell-pirro-elizabeth-warren-durbin.html"
     },
     {
+      "canonical_url": "https://www.marketwatch.com/story/this-is-unbelievable-my-adviser-made-300-000-trading-options-now-im-being-killed-by-taxes-do-i-complain-e30873b7",
       "classification_input_tokens": 0,
       "classification_output_tokens": 0,
       "classification_total_tokens": 0,
@@ -3335,6 +4049,7 @@
       "fetched_at": "2026-04-25 13:41:12",
       "industry": "其他",
       "matched_keywords": "",
+      "news_id": "ff1286254ba428a9",
       "published_at": "2026-04-25 05:54:00",
       "reason": "依標題與摘要關鍵字初步分類",
       "sentiment": "中性",
@@ -3345,6 +4060,7 @@
       "url": "https://www.marketwatch.com/story/this-is-unbelievable-my-adviser-made-300-000-trading-options-now-im-being-killed-by-taxes-do-i-complain-e30873b7?mod=mw_rss_topstories"
     },
     {
+      "canonical_url": "https://www.marketwatch.com/story/my-child-will-need-lifelong-support-im-in-my-40s-with-a-330-000-inherited-retirement-account-how-can-i-grow-it-4fc7f64a",
       "classification_input_tokens": 0,
       "classification_output_tokens": 0,
       "classification_total_tokens": 0,
@@ -3354,6 +4070,7 @@
       "fetched_at": "2026-04-25 13:41:12",
       "industry": "其他",
       "matched_keywords": "",
+      "news_id": "5898b1d342c7e44a",
       "published_at": "2026-04-25 05:19:00",
       "reason": "依標題與摘要關鍵字初步分類",
       "sentiment": "中性",
@@ -3364,6 +4081,7 @@
       "url": "https://www.marketwatch.com/story/my-child-will-need-lifelong-support-im-in-my-40s-with-a-330-000-inherited-retirement-account-how-can-i-grow-it-4fc7f64a?mod=mw_rss_topstories"
     },
     {
+      "canonical_url": "https://www.cnbc.com/2026/04/24/nuclear-reactor-company-x-energy-begins-trading-as-ai-drives-interest-in-the-industry.html",
       "classification_input_tokens": 0,
       "classification_output_tokens": 0,
       "classification_total_tokens": 0,
@@ -3373,6 +4091,7 @@
       "fetched_at": "2026-04-25 13:41:12",
       "industry": "AI / 伺服器",
       "matched_keywords": "as ai drives, the ai boom",
+      "news_id": "773ce9216b8b3875",
       "published_at": "2026-04-25 05:11:23",
       "reason": "依標題與摘要關鍵字初步分類",
       "sentiment": "偏多",
@@ -3383,6 +4102,7 @@
       "url": "https://www.cnbc.com/2026/04/24/nuclear-reactor-company-x-energy-begins-trading-as-ai-drives-interest-in-the-industry.html"
     },
     {
+      "canonical_url": "https://www.cnbc.com/2026/04/24/strait-hormuz-baker-hughes-iran-war-oil-lng.html",
       "classification_input_tokens": 0,
       "classification_output_tokens": 0,
       "classification_total_tokens": 0,
@@ -3392,6 +4112,7 @@
       "fetched_at": "2026-04-25 13:41:12",
       "industry": "其他",
       "matched_keywords": "",
+      "news_id": "61b70e3b22d55655",
       "published_at": "2026-04-25 05:01:21",
       "reason": "依標題與摘要關鍵字初步分類",
       "sentiment": "中性",
@@ -3402,25 +4123,7 @@
       "url": "https://www.cnbc.com/2026/04/24/strait-hormuz-baker-hughes-iran-war-oil-lng.html"
     },
     {
-      "classification_input_tokens": 0,
-      "classification_output_tokens": 0,
-      "classification_total_tokens": 0,
-      "classified_by": "rules",
-      "confidence": 0.45,
-      "event_type": "一般新聞",
-      "fetched_at": "2026-04-29 10:22:37",
-      "industry": "其他",
-      "matched_keywords": "",
-      "published_at": "2026-04-25 05:00:15",
-      "reason": "依標題與摘要關鍵字初步分類",
-      "sentiment": "中性",
-      "source": "CNBC Business",
-      "summary": "President Trump has said the government could buy Spirit.",
-      "symbol": "MARKET",
-      "title": "Clock ticks on Spirit Airlines as bondholders weigh Trump bailout. Here's what could happen next",
-      "url": "https://www.cnbc.com/2026/04/24/spirit-airlines-trump-bailout.html"
-    },
-    {
+      "canonical_url": "https://www.cnbc.com/2026/04/24/spirit-airlines-trump-bailout.html",
       "classification_input_tokens": 0,
       "classification_output_tokens": 0,
       "classification_total_tokens": 0,
@@ -3430,6 +4133,7 @@
       "fetched_at": "2026-04-25 13:41:12",
       "industry": "其他",
       "matched_keywords": "",
+      "news_id": "c31036768ec0452f",
       "published_at": "2026-04-25 05:00:15",
       "reason": "依標題與摘要關鍵字初步分類",
       "sentiment": "中性",
@@ -3440,6 +4144,7 @@
       "url": "https://www.cnbc.com/2026/04/24/spirit-airlines-trump-bailout.html"
     },
     {
+      "canonical_url": "https://www.marketwatch.com/story/nvidias-stock-heads-for-first-record-close-in-6-months-thanks-to-intel-21af7d28",
       "classification_input_tokens": 0,
       "classification_output_tokens": 0,
       "classification_total_tokens": 0,
@@ -3449,6 +4154,7 @@
       "fetched_at": "2026-04-25 13:41:12",
       "industry": "半導體 / AI",
       "matched_keywords": "nvidia s, intel nvidia is, to intel nvidia, for chip makers",
+      "news_id": "71f843b02ec1f0fb",
       "published_at": "2026-04-25 05:00:00",
       "reason": "依標題與摘要關鍵字初步分類",
       "sentiment": "偏多",
@@ -3459,6 +4165,7 @@
       "url": "https://www.marketwatch.com/story/nvidias-stock-heads-for-first-record-close-in-6-months-thanks-to-intel-21af7d28?mod=mw_rss_topstories"
     },
     {
+      "canonical_url": "https://www.marketwatch.com/story/intels-stock-extends-its-spectacular-run-and-could-see-its-best-daily-gain-on-record-6e6ef0de",
       "classification_input_tokens": 0,
       "classification_output_tokens": 0,
       "classification_total_tokens": 0,
@@ -3468,6 +4175,7 @@
       "fetched_at": "2026-04-25 13:41:12",
       "industry": "半導體 / AI",
       "matched_keywords": "intel s, whether intel s",
+      "news_id": "42c2fc9fdbae0c72",
       "published_at": "2026-04-25 04:54:00",
       "reason": "依標題與摘要關鍵字初步分類",
       "sentiment": "中性",
@@ -3478,6 +4186,7 @@
       "url": "https://www.marketwatch.com/story/intels-stock-extends-its-spectacular-run-and-could-see-its-best-daily-gain-on-record-6e6ef0de?mod=mw_rss_topstories"
     },
     {
+      "canonical_url": "https://www.cnbc.com/2026/04/24/iran-war-pakistan-trump-hegseth.html",
       "classification_input_tokens": 0,
       "classification_output_tokens": 0,
       "classification_total_tokens": 0,
@@ -3487,6 +4196,7 @@
       "fetched_at": "2026-04-26 23:39:22",
       "industry": "能源",
       "matched_keywords": "and oil prices, peace deal claiming",
+      "news_id": "0fea1a8d9e932a43",
       "published_at": "2026-04-25 04:40:38",
       "reason": "依標題與摘要關鍵字初步分類",
       "sentiment": "中性",
@@ -3497,6 +4207,7 @@
       "url": "https://www.cnbc.com/2026/04/24/iran-war-pakistan-trump-hegseth.html"
     },
     {
+      "canonical_url": "https://www.marketwatch.com/story/amds-stock-is-red-hot-and-on-track-to-hit-a-major-milestone-0b3d9f9d",
       "classification_input_tokens": 0,
       "classification_output_tokens": 0,
       "classification_total_tokens": 0,
@@ -3506,6 +4217,7 @@
       "fetched_at": "2026-04-25 13:41:12",
       "industry": "半導體 / AI",
       "matched_keywords": "amd s, milestone amd joined, after intel s, s earnings report",
+      "news_id": "79c5d579bc3f9e28",
       "published_at": "2026-04-25 04:36:00",
       "reason": "依標題與摘要關鍵字初步分類",
       "sentiment": "中性",
@@ -3516,6 +4228,7 @@
       "url": "https://www.marketwatch.com/story/amds-stock-is-red-hot-and-on-track-to-hit-a-major-milestone-0b3d9f9d?mod=mw_rss_topstories"
     },
     {
+      "canonical_url": "https://www.marketwatch.com/story/theres-a-new-stock-for-the-nuclear-power-ipo-trade-and-wall-street-is-piling-in-should-you-b07269fa",
       "classification_input_tokens": 0,
       "classification_output_tokens": 0,
       "classification_total_tokens": 0,
@@ -3525,6 +4238,7 @@
       "fetched_at": "2026-04-25 13:41:12",
       "industry": "AI / 伺服器",
       "matched_keywords": "the ai power",
+      "news_id": "41c82965833ef9bd",
       "published_at": "2026-04-25 04:29:00",
       "reason": "依標題與摘要關鍵字初步分類",
       "sentiment": "中性",
@@ -3535,6 +4249,7 @@
       "url": "https://www.marketwatch.com/story/theres-a-new-stock-for-the-nuclear-power-ipo-trade-and-wall-street-is-piling-in-should-you-b07269fa?mod=mw_rss_topstories"
     },
     {
+      "canonical_url": "https://www.marketwatch.com/story/charters-stock-is-getting-hammered-heres-whats-fueling-its-worst-day-on-record-11f991a0",
       "classification_input_tokens": 0,
       "classification_output_tokens": 0,
       "classification_total_tokens": 0,
@@ -3544,6 +4259,7 @@
       "fetched_at": "2026-04-25 13:41:12",
       "industry": "其他",
       "matched_keywords": "latest quarter signaling",
+      "news_id": "a077c75ad00896e5",
       "published_at": "2026-04-25 04:26:00",
       "reason": "依標題與摘要關鍵字初步分類",
       "sentiment": "偏多",
@@ -3554,6 +4270,7 @@
       "url": "https://www.marketwatch.com/story/charters-stock-is-getting-hammered-heres-whats-fueling-its-worst-day-on-record-11f991a0?mod=mw_rss_topstories"
     },
     {
+      "canonical_url": "https://www.cnbc.com/2026/04/24/buying-chip-stocks-is-getting-pricey-traders-dont-care.html",
       "classification_input_tokens": 0,
       "classification_output_tokens": 0,
       "classification_total_tokens": 0,
@@ -3563,6 +4280,7 @@
       "fetched_at": "2026-04-25 13:41:12",
       "industry": "半導體 / AI",
       "matched_keywords": "buying chip stocks, vaneck semiconductor etf",
+      "news_id": "d422732fc4d05828",
       "published_at": "2026-04-25 03:46:26",
       "reason": "依標題與摘要關鍵字初步分類",
       "sentiment": "中性",
@@ -3573,6 +4291,7 @@
       "url": "https://www.cnbc.com/2026/04/24/buying-chip-stocks-is-getting-pricey-traders-dont-care.html"
     },
     {
+      "canonical_url": "https://www.cnbc.com/2026/04/24/fed-kevin-warsh-jerome-powell.html",
       "classification_input_tokens": 0,
       "classification_output_tokens": 0,
       "classification_total_tokens": 0,
@@ -3582,6 +4301,7 @@
       "fetched_at": "2026-04-25 13:41:12",
       "industry": "金融",
       "matched_keywords": "the fed prosecutors",
+      "news_id": "7f9667f529740b34",
       "published_at": "2026-04-25 03:28:17",
       "reason": "依標題與摘要關鍵字初步分類",
       "sentiment": "偏空",
@@ -3592,6 +4312,7 @@
       "url": "https://www.cnbc.com/2026/04/24/fed-kevin-warsh-jerome-powell.html"
     },
     {
+      "canonical_url": "https://www.cnbc.com/2026/04/24/will-he-stay-or-will-he-go-with-criminal-probe-over-fed-chair-powell-faces-big-decision.html",
       "classification_input_tokens": 0,
       "classification_output_tokens": 0,
       "classification_total_tokens": 0,
@@ -3601,6 +4322,7 @@
       "fetched_at": "2026-04-27 00:16:59",
       "industry": "金融",
       "matched_keywords": "over fed chair, criminal probe over",
+      "news_id": "49df98b894518fae",
       "published_at": "2026-04-25 03:19:00",
       "reason": "依標題與摘要關鍵字初步分類",
       "sentiment": "偏空",
@@ -3611,6 +4333,7 @@
       "url": "https://www.cnbc.com/2026/04/24/will-he-stay-or-will-he-go-with-criminal-probe-over-fed-chair-powell-faces-big-decision.html"
     },
     {
+      "canonical_url": "https://www.cnbc.com/2026/04/24/amazon-custom-chips-get-a-boost-from-meta-giving-the-cloud-giant-another-path-to-win-in-ai.html",
       "classification_input_tokens": 0,
       "classification_output_tokens": 0,
       "classification_total_tokens": 0,
@@ -3620,6 +4343,7 @@
       "fetched_at": "2026-04-25 13:41:12",
       "industry": "半導體 / AI",
       "matched_keywords": "custom chips get, custom chips, meta deal highlights",
+      "news_id": "ad180ae068215364",
       "published_at": "2026-04-25 03:11:46",
       "reason": "依標題與摘要關鍵字初步分類",
       "sentiment": "偏多",
@@ -3630,6 +4354,7 @@
       "url": "https://www.cnbc.com/2026/04/24/amazon-custom-chips-get-a-boost-from-meta-giving-the-cloud-giant-another-path-to-win-in-ai.html"
     },
     {
+      "canonical_url": "https://www.marketwatch.com/story/why-crude-prices-wont-fall-back-to-levels-seen-before-the-iran-war-anytime-soon-9bdceed1",
       "classification_input_tokens": 0,
       "classification_output_tokens": 0,
       "classification_total_tokens": 0,
@@ -3639,6 +4364,7 @@
       "fetched_at": "2026-04-25 13:41:12",
       "industry": "能源",
       "matched_keywords": "why crude prices, expect crude prices",
+      "news_id": "8922e8849ef2af62",
       "published_at": "2026-04-25 03:07:00",
       "reason": "依標題與摘要關鍵字初步分類",
       "sentiment": "偏空",
@@ -3649,6 +4375,7 @@
       "url": "https://www.marketwatch.com/story/why-crude-prices-wont-fall-back-to-levels-seen-before-the-iran-war-anytime-soon-9bdceed1?mod=mw_rss_topstories"
     },
     {
+      "canonical_url": "https://www.cnbc.com/2026/04/24/an-aws-backed-hollywood-startup-deploys-ai-for-speed-and-cost-cutting.html",
       "classification_input_tokens": 0,
       "classification_output_tokens": 0,
       "classification_total_tokens": 0,
@@ -3658,6 +4385,7 @@
       "fetched_at": "2026-04-27 00:16:59",
       "industry": "AI / 伺服器",
       "matched_keywords": "deploys ai for, new ai powered, bring jobs back",
+      "news_id": "9406d02f2da9ddbc",
       "published_at": "2026-04-25 03:06:39",
       "reason": "依標題與摘要關鍵字初步分類",
       "sentiment": "中性",
@@ -3668,6 +4396,7 @@
       "url": "https://www.cnbc.com/2026/04/24/an-aws-backed-hollywood-startup-deploys-ai-for-speed-and-cost-cutting.html"
     },
     {
+      "canonical_url": "https://www.cnbc.com/2026/04/24/fed-powell-doj-warsh-trump.html",
       "classification_input_tokens": 0,
       "classification_output_tokens": 0,
       "classification_total_tokens": 0,
@@ -3677,6 +4406,7 @@
       "fetched_at": "2026-04-25 13:41:12",
       "industry": "金融",
       "matched_keywords": "s fed chair, powell probe lifts",
+      "news_id": "4bcac4eaf7218380",
       "published_at": "2026-04-25 02:53:00",
       "reason": "依標題與摘要關鍵字初步分類",
       "sentiment": "偏空",
@@ -3687,6 +4417,7 @@
       "url": "https://www.cnbc.com/2026/04/24/fed-powell-doj-warsh-trump.html"
     },
     {
+      "canonical_url": "https://www.cnbc.com/2026/04/24/20k-job-cuts-at-meta-microsoft-raise-concern-of-ai-labor-crisis-.html",
       "classification_input_tokens": 0,
       "classification_output_tokens": 0,
       "classification_total_tokens": 0,
@@ -3696,6 +4427,7 @@
       "fetched_at": "2026-04-27 00:16:59",
       "industry": "AI / 伺服器",
       "matched_keywords": "that ai driven",
+      "news_id": "26e78cdc521e5c69",
       "published_at": "2026-04-25 02:46:27",
       "reason": "依標題與摘要關鍵字初步分類",
       "sentiment": "中性",
@@ -3706,6 +4438,7 @@
       "url": "https://www.cnbc.com/2026/04/24/20k-job-cuts-at-meta-microsoft-raise-concern-of-ai-labor-crisis-.html"
     },
     {
+      "canonical_url": "https://www.cnbc.com/2026/04/24/regeneron-otarmeni-gene-therapy-hearing-loss.html",
       "classification_input_tokens": 0,
       "classification_output_tokens": 0,
       "classification_total_tokens": 0,
@@ -3715,6 +4448,7 @@
       "fetched_at": "2026-04-25 13:41:12",
       "industry": "其他",
       "matched_keywords": "",
+      "news_id": "9e849c7033c6b8f6",
       "published_at": "2026-04-25 02:37:03",
       "reason": "依標題與摘要關鍵字初步分類",
       "sentiment": "偏空",
@@ -3725,6 +4459,7 @@
       "url": "https://www.cnbc.com/2026/04/24/regeneron-otarmeni-gene-therapy-hearing-loss.html"
     },
     {
+      "canonical_url": "https://www.cnbc.com/2026/04/24/musk-v-altman-trial-openai-lawsuit-xai.html",
       "classification_input_tokens": 0,
       "classification_output_tokens": 0,
       "classification_total_tokens": 0,
@@ -3734,6 +4469,7 @@
       "fetched_at": "2026-04-27 00:16:59",
       "industry": "其他",
       "matched_keywords": "at stake the",
+      "news_id": "185a561c327452ff",
       "published_at": "2026-04-25 02:35:54",
       "reason": "依標題與摘要關鍵字初步分類",
       "sentiment": "中性",
@@ -3744,6 +4480,7 @@
       "url": "https://www.cnbc.com/2026/04/24/musk-v-altman-trial-openai-lawsuit-xai.html"
     },
     {
+      "canonical_url": "https://www.cnbc.com/2026/04/24/google-to-invest-up-to-40-billion-in-anthropic-as-search-giant-spreads-its-ai-bets.html",
       "classification_input_tokens": 0,
       "classification_output_tokens": 0,
       "classification_total_tokens": 0,
@@ -3753,6 +4490,7 @@
       "fetched_at": "2026-04-25 13:41:12",
       "industry": "AI / 伺服器",
       "matched_keywords": "its ai bets",
+      "news_id": "45ef7369bcf5fac4",
       "published_at": "2026-04-25 02:32:44",
       "reason": "依標題與摘要關鍵字初步分類",
       "sentiment": "中性",
@@ -3763,6 +4501,7 @@
       "url": "https://www.cnbc.com/2026/04/24/google-to-invest-up-to-40-billion-in-anthropic-as-search-giant-spreads-its-ai-bets.html"
     },
     {
+      "canonical_url": "https://www.cnbc.com/2026/04/24/bessent-iran-war-uae-swap-lines-gulf-asia.html",
       "classification_input_tokens": 0,
       "classification_output_tokens": 0,
       "classification_total_tokens": 0,
@@ -3772,6 +4511,7 @@
       "fetched_at": "2026-04-25 13:41:12",
       "industry": "其他",
       "matched_keywords": "",
+      "news_id": "6645ebda6925442f",
       "published_at": "2026-04-25 00:54:35",
       "reason": "依標題與摘要關鍵字初步分類",
       "sentiment": "中性",
@@ -3782,6 +4522,7 @@
       "url": "https://www.cnbc.com/2026/04/24/bessent-iran-war-uae-swap-lines-gulf-asia.html"
     },
     {
+      "canonical_url": "https://www.cnbc.com/2026/04/24/fed-likely-to-hold-rates-steady-april-consumer-impact.html",
       "classification_input_tokens": 0,
       "classification_output_tokens": 0,
       "classification_total_tokens": 0,
@@ -3791,6 +4532,7 @@
       "fetched_at": "2026-04-25 13:41:12",
       "industry": "金融",
       "matched_keywords": "fed is, hold rates steady, savings rates",
+      "news_id": "f4cf5030f04e72cf",
       "published_at": "2026-04-25 00:42:55",
       "reason": "依標題與摘要關鍵字初步分類",
       "sentiment": "中性",
@@ -3799,6 +4541,217 @@
       "symbol": "MARKET",
       "title": "Fed is likely to hold rates steady — here's how that impacts consumer costs",
       "url": "https://www.cnbc.com/2026/04/24/fed-likely-to-hold-rates-steady-april-consumer-impact.html"
+    },
+    {
+      "canonical_url": "https://www.marketwatch.com/story/elon-musk-in-a-post-on-x-says-some-of-his-trump-posts-went-too-far-and-that-he-regrets-them-90e73a6a",
+      "classification_input_tokens": 0,
+      "classification_output_tokens": 0,
+      "classification_total_tokens": 0,
+      "classified_by": "rules",
+      "confidence": 0.45,
+      "event_type": "一般新聞",
+      "fetched_at": "2026-05-04 16:23:28",
+      "industry": "其他",
+      "matched_keywords": "",
+      "news_id": "541b0604e2527d6b",
+      "published_at": "2025-06-11 15:09:00",
+      "reason": "依標題與摘要關鍵字初步分類",
+      "sentiment": "中性",
+      "source": "MarketWatch Realtime",
+      "summary": "",
+      "symbol": "MARKET",
+      "title": "Elon Musk in a post on X says some of his Trump posts ‘went too far’ and that he regrets them",
+      "url": "https://www.marketwatch.com/story/elon-musk-in-a-post-on-x-says-some-of-his-trump-posts-went-too-far-and-that-he-regrets-them-90e73a6a?mod=mw_rss_realtimeheadlines"
+    },
+    {
+      "canonical_url": "https://www.marketwatch.com/story/bank-of-england-decision-on-thursday-will-be-at-12-02-p-m-local-time-instead-of-12-p-m-due-to-ve-day-two-minutes-of-silence-1f6bed66",
+      "classification_input_tokens": 0,
+      "classification_output_tokens": 0,
+      "classification_total_tokens": 0,
+      "classified_by": "rules",
+      "confidence": 0.51,
+      "event_type": "一般新聞",
+      "fetched_at": "2026-05-04 16:23:28",
+      "industry": "金融",
+      "matched_keywords": "bank of",
+      "news_id": "567b1f159f1021aa",
+      "published_at": "2025-05-06 19:59:00",
+      "reason": "依標題與摘要關鍵字初步分類",
+      "sentiment": "中性",
+      "source": "MarketWatch Realtime",
+      "summary": "",
+      "symbol": "MARKET",
+      "title": "Bank of England decision on Thursday will be at 12:02 p.m. local time instead of 12 p.m., due to VE Day’s two minutes of silence",
+      "url": "https://www.marketwatch.com/story/bank-of-england-decision-on-thursday-will-be-at-12-02-p-m-local-time-instead-of-12-p-m-due-to-ve-day-two-minutes-of-silence-1f6bed66?mod=mw_rss_realtimeheadlines"
+    },
+    {
+      "canonical_url": "https://www.marketwatch.com/story/swiss-national-bank-cuts-interest-rates-by-a-half-point-to-0-5-ed1fce78",
+      "classification_input_tokens": 0,
+      "classification_output_tokens": 0,
+      "classification_total_tokens": 0,
+      "classified_by": "rules",
+      "confidence": 0.63,
+      "event_type": "總體 / 利率",
+      "fetched_at": "2026-05-04 16:23:28",
+      "industry": "金融",
+      "matched_keywords": "interest rates by, national bank cuts",
+      "news_id": "4392c22648029c5b",
+      "published_at": "2024-12-12 16:32:00",
+      "reason": "依標題與摘要關鍵字初步分類",
+      "sentiment": "中性",
+      "source": "MarketWatch Realtime",
+      "summary": "",
+      "symbol": "MARKET",
+      "title": "Swiss National Bank cuts interest rates by a half point to 0.5%",
+      "url": "https://www.marketwatch.com/story/swiss-national-bank-cuts-interest-rates-by-a-half-point-to-0-5-ed1fce78?mod=mw_rss_realtimeheadlines"
+    },
+    {
+      "canonical_url": "https://www.marketwatch.com/story/dollar-jumps-0-5-to-0-8890-francs-047c6b4d",
+      "classification_input_tokens": 0,
+      "classification_output_tokens": 0,
+      "classification_total_tokens": 0,
+      "classified_by": "rules",
+      "confidence": 0.45,
+      "event_type": "一般新聞",
+      "fetched_at": "2026-05-04 16:23:28",
+      "industry": "其他",
+      "matched_keywords": "",
+      "news_id": "22f97c4f95c4e23f",
+      "published_at": "2024-12-12 16:32:00",
+      "reason": "依標題與摘要關鍵字初步分類",
+      "sentiment": "中性",
+      "source": "MarketWatch Realtime",
+      "summary": "",
+      "symbol": "MARKET",
+      "title": "Dollar jumps 0.5% to 0.8890 francs",
+      "url": "https://www.marketwatch.com/story/dollar-jumps-0-5-to-0-8890-francs-047c6b4d?mod=mw_rss_realtimeheadlines"
+    },
+    {
+      "canonical_url": "https://www.marketwatch.com/story/germany-flash-manufacturing-pmi-rises-to-4-month-high-of-43-2-b9e50a64",
+      "classification_input_tokens": 0,
+      "classification_output_tokens": 0,
+      "classification_total_tokens": 0,
+      "classified_by": "rules",
+      "confidence": 0.45,
+      "event_type": "一般新聞",
+      "fetched_at": "2026-05-04 16:23:28",
+      "industry": "其他",
+      "matched_keywords": "",
+      "news_id": "0015d6cb09e9a183",
+      "published_at": "2024-11-22 16:34:00",
+      "reason": "依標題與摘要關鍵字初步分類",
+      "sentiment": "偏多",
+      "source": "MarketWatch Realtime",
+      "summary": "",
+      "symbol": "MARKET",
+      "title": "Germany flash manufacturing PMI rises to 4-month high of 43.2",
+      "url": "https://www.marketwatch.com/story/germany-flash-manufacturing-pmi-rises-to-4-month-high-of-43-2-b9e50a64?mod=mw_rss_realtimeheadlines"
+    },
+    {
+      "canonical_url": "https://www.marketwatch.com/story/germany-flash-services-pmi-falls-to-9-month-low-of-49-4-5e5d2763",
+      "classification_input_tokens": 0,
+      "classification_output_tokens": 0,
+      "classification_total_tokens": 0,
+      "classified_by": "rules",
+      "confidence": 0.45,
+      "event_type": "一般新聞",
+      "fetched_at": "2026-05-04 16:23:28",
+      "industry": "其他",
+      "matched_keywords": "",
+      "news_id": "3f9c8dd32395a48a",
+      "published_at": "2024-11-22 16:34:00",
+      "reason": "依標題與摘要關鍵字初步分類",
+      "sentiment": "偏空",
+      "source": "MarketWatch Realtime",
+      "summary": "",
+      "symbol": "MARKET",
+      "title": "Germany flash services PMI falls to 9-month low of 49.4",
+      "url": "https://www.marketwatch.com/story/germany-flash-services-pmi-falls-to-9-month-low-of-49-4-5e5d2763?mod=mw_rss_realtimeheadlines"
+    },
+    {
+      "canonical_url": "https://www.marketwatch.com/story/powell-says-labor-market-not-a-source-of-significant-inflation-pressure-cc3b1297",
+      "classification_input_tokens": 0,
+      "classification_output_tokens": 0,
+      "classification_total_tokens": 0,
+      "classified_by": "rules",
+      "confidence": 0.57,
+      "event_type": "總體 / 利率",
+      "fetched_at": "2026-05-04 16:23:28",
+      "industry": "金融",
+      "matched_keywords": "significant inflation pressure",
+      "news_id": "f34eacfd2cf786b4",
+      "published_at": "2024-08-01 02:48:00",
+      "reason": "依標題與摘要關鍵字初步分類",
+      "sentiment": "中性",
+      "source": "MarketWatch Realtime",
+      "summary": "",
+      "symbol": "MARKET",
+      "title": "Powell says labor market not a source of significant inflation pressure",
+      "url": "https://www.marketwatch.com/story/powell-says-labor-market-not-a-source-of-significant-inflation-pressure-cc3b1297?mod=mw_rss_realtimeheadlines"
+    },
+    {
+      "canonical_url": "https://www.marketwatch.com/story/feds-powell-says-rate-cut-on-the-table-as-soon-as-september-f3f7c8f2",
+      "classification_input_tokens": 0,
+      "classification_output_tokens": 0,
+      "classification_total_tokens": 0,
+      "classified_by": "rules",
+      "confidence": 0.69,
+      "event_type": "總體 / 利率",
+      "fetched_at": "2026-05-04 16:23:28",
+      "industry": "金融",
+      "matched_keywords": "fed s, says rate cut",
+      "news_id": "fd52bbab04895c59",
+      "published_at": "2024-08-01 02:41:00",
+      "reason": "依標題與摘要關鍵字初步分類",
+      "sentiment": "中性",
+      "source": "MarketWatch Realtime",
+      "summary": "",
+      "symbol": "MARKET",
+      "title": "Fed’s Powell says rate cut ‘on the table’ as soon as September",
+      "url": "https://www.marketwatch.com/story/feds-powell-says-rate-cut-on-the-table-as-soon-as-september-f3f7c8f2?mod=mw_rss_realtimeheadlines"
+    },
+    {
+      "canonical_url": "https://www.marketwatch.com/story/final-s-p-u-s-manufacturing-index-is-52-2-in-february-vs-initial-51-5-180b7107",
+      "classification_input_tokens": 0,
+      "classification_output_tokens": 0,
+      "classification_total_tokens": 0,
+      "classified_by": "rules",
+      "confidence": 0.45,
+      "event_type": "一般新聞",
+      "fetched_at": "2026-05-04 16:23:28",
+      "industry": "其他",
+      "matched_keywords": "",
+      "news_id": "725a18a2178d7291",
+      "published_at": "2024-03-01 22:47:00",
+      "reason": "依標題與摘要關鍵字初步分類",
+      "sentiment": "中性",
+      "source": "MarketWatch Realtime",
+      "summary": "",
+      "symbol": "MARKET",
+      "title": "Final S&P U.S. manufacturing index is 52.2 in February vs. initial 51.5",
+      "url": "https://www.marketwatch.com/story/final-s-p-u-s-manufacturing-index-is-52-2-in-february-vs-initial-51-5-180b7107?mod=mw_rss_realtimeheadlines"
+    },
+    {
+      "canonical_url": "https://www.marketwatch.com/story/duolingo-started-at-buy-with-222-price-target-at-seaport-f762126a",
+      "classification_input_tokens": 0,
+      "classification_output_tokens": 0,
+      "classification_total_tokens": 0,
+      "classified_by": "rules",
+      "confidence": 0.51,
+      "event_type": "一般新聞",
+      "fetched_at": "2026-05-04 16:23:28",
+      "industry": "消費零售",
+      "matched_keywords": "price target at",
+      "news_id": "28790a469c4af02d",
+      "published_at": "2024-02-27 20:40:00",
+      "reason": "依標題與摘要關鍵字初步分類",
+      "sentiment": "中性",
+      "source": "MarketWatch Realtime",
+      "summary": "",
+      "symbol": "MARKET",
+      "title": "Duolingo started at buy with $222 price target at Seaport",
+      "url": "https://www.marketwatch.com/story/duolingo-started-at-buy-with-222-price-target-at-seaport-f762126a?mod=mw_rss_realtimeheadlines"
     }
-  ]
+  ],
+  "symbols": []
 }
