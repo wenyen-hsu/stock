@@ -119,6 +119,69 @@
       font-size: 13px;
       line-height: 1.6;
     }
+    .status-grid {
+      display: grid;
+      grid-template-columns: repeat(6, minmax(110px, 1fr));
+      gap: 10px;
+      padding: 14px;
+    }
+    .status-card {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 10px;
+      background: #fbfdff;
+    }
+    .status-card.good { border-color: #bfe3d0; background: #f3fbf6; }
+    .status-card.warn { border-color: #f6c76d; background: #fffbf0; }
+    .status-card.bad { border-color: #efc4c0; background: #fff7f6; }
+    .status-name { color: var(--muted); font-size: 12px; font-weight: 800; }
+    .status-value { margin-top: 4px; color: var(--ink); font-size: 16px; font-weight: 900; }
+    .status-detail { margin-top: 5px; color: var(--muted); font-size: 12px; line-height: 1.45; }
+    .judgement-box {
+      border-top: 1px solid var(--line);
+      padding: 13px 14px;
+      color: #26384d;
+      font-size: 14px;
+      line-height: 1.65;
+      background: #fbfdff;
+    }
+    .column-controls {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      padding: 12px 14px;
+      border-top: 1px solid var(--line);
+      background: #fbfdff;
+    }
+    .column-controls .toggle { height: 28px; font-size: 12px; }
+    .tooltip-anchor { position: relative; }
+    .tooltip-anchor::after {
+      content: attr(data-tip);
+      position: absolute;
+      left: 0;
+      top: calc(100% + 8px);
+      z-index: 20;
+      width: min(320px, 72vw);
+      padding: 10px 12px;
+      border: 1px solid #cfd9e1;
+      border-radius: 8px;
+      background: #102a43;
+      color: #f8fafc;
+      box-shadow: 0 10px 24px rgba(15, 23, 42, .18);
+      font-size: 12px;
+      font-weight: 700;
+      line-height: 1.55;
+      white-space: normal;
+      pointer-events: none;
+      opacity: 0;
+      transform: translateY(-4px);
+      transition: opacity .12s ease, transform .12s ease;
+    }
+    .tooltip-anchor:hover::after,
+    .tooltip-anchor:focus-within::after {
+      opacity: 1;
+      transform: translateY(0);
+    }
     .panel {
       background: var(--panel);
       border: 1px solid var(--line);
@@ -191,13 +254,16 @@
       font-size: 12px;
       font-weight: 800;
     }
-    .price-chart-wrap {
+    .price-chart-wrap,
+    .revenue-chart-wrap {
       height: 330px;
       min-height: 260px;
       position: relative;
     }
+    .revenue-chart-wrap { height: 300px; }
     .price-chart-wrap canvas { cursor: zoom-in; }
-    #price-chart { width: 100%; height: 100%; display: block; }
+    #price-chart,
+    #revenue-chart { width: 100%; height: 100%; display: block; }
     .legend {
       display: flex;
       gap: 12px;
@@ -385,7 +451,7 @@
     @media (max-width: 1000px) {
       main { padding: 14px; }
       .toolbar { grid-template-columns: repeat(2, minmax(140px, 1fr)); }
-      .metrics, .layout-2, .update-grid, .assist-grid { grid-template-columns: 1fr; }
+      .metrics, .layout-2, .update-grid, .assist-grid, .status-grid { grid-template-columns: 1fr; }
     }
   </style>
 </head>
@@ -409,6 +475,10 @@
           <option value="total_score">基礎選股分</option>
           <option value="chip_score">法人籌碼分數</option>
           <option value="foreign_buy">外資買超</option>
+          <option value="foreign_5d_revenue_growth">外資近5日買超 + 營收成長</option>
+          <option value="inst_buy_volume">法人買超 + 占量</option>
+          <option value="revenue_volume_breakout">營收成長 + 量能</option>
+          <option value="margin_down_foreign_buy">融資下降 + 外資買超</option>
           <option value="trust_buy">投信買超</option>
           <option value="inst_buy">外資 + 投信</option>
           <option value="near_avg_with_inst_buy">接近均價且法人買超</option>
@@ -425,6 +495,10 @@
       <div>
         <label for="query">搜尋</label>
         <input id="query" placeholder="代號或名稱" />
+      </div>
+      <div>
+        <label for="min-volume">最低成交量(張)</label>
+        <input id="min-volume" type="number" min="0" step="100" placeholder="不限" />
       </div>
       <div>
         <label for="limit">筆數</label>
@@ -452,6 +526,7 @@
         <div class="panel-title" id="ranking-title">排行</div>
         <div class="muted" id="ranking-note"></div>
       </div>
+      <div class="column-controls" id="ranking-columns"></div>
       <div class="table-wrap" id="ranking-table"></div>
     </section>
 
@@ -474,6 +549,16 @@
         </div>
       </div>
       <section class="metrics" id="detail-metrics"></section>
+      <section class="panel" id="detail-status-panel">
+        <div class="panel-head">
+          <div>
+            <div class="panel-title">資料品質與判斷摘要</div>
+            <div class="muted">區分已更新、缺資料與來源空回應，避免把缺資料誤判成 0。</div>
+          </div>
+        </div>
+        <div id="detail-data-status"></div>
+        <div class="judgement-box" id="detail-judgement"></div>
+      </section>
       <section class="panel" id="selection-panel">
         <div class="panel-head">
           <div>
@@ -487,8 +572,7 @@
         <div class="panel-head">
           <div class="panel-title">股價走勢</div>
           <div class="chart-toolbar">
-            <span>線圖</span>
-            <label class="toggle series-option" data-series="close"><span class="legend-swatch"></span><input type="checkbox" id="close-toggle" checked /> 收盤</label>
+            <span>蠟燭圖</span>
             <label class="toggle ma-option" data-ma="5"><span class="legend-swatch"></span><input type="checkbox" class="ma-toggle" value="5" checked /> MA5</label>
             <label class="toggle ma-option" data-ma="10"><span class="legend-swatch"></span><input type="checkbox" class="ma-toggle" value="10" checked /> MA10</label>
             <label class="toggle ma-option" data-ma="20"><span class="legend-swatch"></span><input type="checkbox" class="ma-toggle" value="20" checked /> MA20</label>
@@ -533,6 +617,10 @@
             <div><div class="panel-title">24 個月營收</div><div class="muted" id="revenue-note"></div></div>
             <div class="panel-actions"><button class="secondary single-refresh" data-section="revenue">更新營收</button></div>
           </div>
+          <div class="panel-body">
+            <div class="revenue-chart-wrap"><canvas id="revenue-chart"></canvas></div>
+            <div class="legend" id="revenue-legend"></div>
+          </div>
           <div class="table-wrap" id="revenue-table"></div>
         </div>
       </section>
@@ -543,6 +631,10 @@
             <div class="muted" id="margin-note">取自 TWSE / TPEx 信用交易公開資料，單位為張</div>
           </div>
           <div class="panel-actions"><button class="secondary single-refresh" data-section="daily">更新融資融券</button></div>
+        </div>
+        <div class="panel-body">
+          <div class="revenue-chart-wrap"><canvas id="margin-chart"></canvas></div>
+          <div class="legend" id="margin-legend"></div>
         </div>
         <div class="table-wrap" id="margin-table"></div>
       </section>
@@ -703,10 +795,23 @@
     window.STOCK_CHIP_STATIC = true;
   </script>
   <script>
-    const state = { tab: "ranking", previousTab: "ranking", detail: null, broker: "", lastDataUpdatedAt: "", chartRange: 20, rankingRows: [], rankingSort: null, usNewsRows: [] };
+    const state = { tab: "ranking", previousTab: "ranking", detail: null, broker: "", lastDataUpdatedAt: "", chartRange: 20, rankingRows: [], rankingSort: null, usNewsRows: [], columnGroup: "core" };
     const STATIC_MODE = window.STOCK_CHIP_STATIC === true;
     const staticCache = {};
-    const chartColors = { close: "#0f766e", ma5: "#b42318", ma10: "#175cd3", ma20: "#f59e0b", ma60: "#7a5af8" };
+    const chartColors = {
+      up: "#b42318",
+      down: "#087f5b",
+      flat: "#667085",
+      ma5: "#b42318",
+      ma10: "#175cd3",
+      ma20: "#f59e0b",
+      ma60: "#7a5af8",
+      revenueCurrent: "#0f766e",
+      revenueLastYear: "#94a3b8",
+      revenueYoy: "#b42318",
+      margin: "#175cd3",
+      short: "#f59e0b"
+    };
     const fmt = (v) => {
       if (v === null || v === undefined || v === "") return "";
       const n = Number(v);
@@ -749,13 +854,15 @@
       staticCache[path] = await res.json();
       return staticCache[path];
     }
-    function staticFilterRows(rows, market, q, limit) {
+    function staticFilterRows(rows, market, q, limit, minVolume = 0) {
       const text = String(q || "").trim().toLowerCase();
       const max = Number(limit || 50);
+      const volumeFloor = Number(minVolume || 0);
       const output = [];
       for (const row of rows || []) {
         if (market && row.market !== market) continue;
         if (text && !String(row.stock_id || "").toLowerCase().includes(text) && !String(row.name || "").toLowerCase().includes(text)) continue;
+        if (volumeFloor > 0 && Number(row.volume_lot || 0) < volumeFloor) continue;
         output.push(row);
         if (output.length >= max) break;
       }
@@ -778,7 +885,7 @@
           : await staticData(`data/rankings/${days}d/${ranking}.json`);
         return {
           title: `${days} 日排行：${ranking}`,
-          rows: staticFilterRows(source.rows || source, parsed.searchParams.get("market") || "", q, parsed.searchParams.get("limit") || 50),
+          rows: staticFilterRows(source.rows || source, parsed.searchParams.get("market") || "", q, parsed.searchParams.get("limit") || 50, parsed.searchParams.get("min_volume") || 0),
         };
       }
       if (parsed.pathname === "/api/watchlist") {
@@ -787,7 +894,7 @@
         const order = new Map(ids.map((id, idx) => [id, idx]));
         const rows = (source.rows || source).filter(row => order.has(String(row.stock_id)))
           .sort((a, b) => order.get(String(a.stock_id)) - order.get(String(b.stock_id)));
-        return {rows: staticFilterRows(rows, parsed.searchParams.get("market") || "", parsed.searchParams.get("q") || "", parsed.searchParams.get("limit") || 50)};
+        return {rows: staticFilterRows(rows, parsed.searchParams.get("market") || "", parsed.searchParams.get("q") || "", parsed.searchParams.get("limit") || 50, parsed.searchParams.get("min_volume") || 0)};
       }
       if (parsed.pathname === "/api/stock") {
         const stockId = parsed.searchParams.get("stock_id") || "2376";
@@ -836,13 +943,26 @@
       return res.json();
     }
     function params() {
+      const ranking = document.querySelector("#ranking").value;
+      const daysSelect = document.querySelector("#days");
+      if (ranking === "foreign_5d_revenue_growth" && daysSelect.value !== "5") {
+        daysSelect.value = "5";
+      }
       return new URLSearchParams({
-        days: document.querySelector("#days").value,
-        ranking: document.querySelector("#ranking").value,
+        days: daysSelect.value,
+        ranking,
         market: document.querySelector("#market").value,
         q: document.querySelector("#query").value.trim(),
+        min_volume: document.querySelector("#min-volume").value.trim(),
         limit: document.querySelector("#limit").value
       });
+    }
+    function enforceRankingDays() {
+      const ranking = document.querySelector("#ranking").value;
+      const daysSelect = document.querySelector("#days");
+      if (ranking === "foreign_5d_revenue_growth" && daysSelect.value !== "5") {
+        daysSelect.value = "5";
+      }
     }
     function renderMetrics(target, rows) {
       target.innerHTML = rows.map(([label, value, klass]) =>
@@ -898,11 +1018,6 @@
       return [...document.querySelectorAll(".ma-toggle:checked")].map(input => input.value);
     }
     function syncSeriesSwatches() {
-      document.querySelectorAll(".series-option").forEach(label => {
-        const swatch = label.querySelector(".legend-swatch");
-        const color = chartColors[label.dataset.series] || "#607080";
-        if (swatch) swatch.style.background = color;
-      });
       document.querySelectorAll(".ma-option").forEach(label => {
         const swatch = label.querySelector(".legend-swatch");
         const color = chartColors[`ma${label.dataset.ma}`] || "#607080";
@@ -948,23 +1063,25 @@
         legend.innerHTML = `<span class="muted">沒有股價資料。</span>`;
         return;
       }
-      const series = [];
-      if (document.querySelector("#close-toggle")?.checked) {
-        series.push({ key: "close", label: "收盤", color: chartColors.close });
-      }
-      selectedMaPeriods().forEach(period => series.push({ key: `ma${period}`, label: `MA${period}`, color: chartColors[`ma${period}`] }));
+      const maSeries = selectedMaPeriods().map(period => ({ key: `ma${period}`, label: `MA${period}`, color: chartColors[`ma${period}`] }));
       const values = [];
-      rows.forEach(row => series.forEach(s => {
-        const n = Number(row[s.key]);
-        if (Number.isFinite(n) && n > 0) values.push(n);
-      }));
+      rows.forEach(row => {
+        ["open", "high", "low", "close"].forEach(key => {
+          const n = Number(row[key]);
+          if (Number.isFinite(n) && n > 0) values.push(n);
+        });
+        maSeries.forEach(s => {
+          const n = Number(row[s.key]);
+          if (Number.isFinite(n) && n > 0) values.push(n);
+        });
+      });
       if (!values.length) {
         legend.innerHTML = `<span class="muted">沒有可繪製的價格。</span>`;
         return;
       }
       const w = wrap.clientWidth;
       const h = wrap.clientHeight;
-      const pad = { top: 12, right: 54, bottom: 34, left: 48 };
+      const pad = { top: 12, right: 54, bottom: 72, left: 48 };
       let min = Math.min(...values);
       let max = Math.max(...values);
       const span = max - min || max * 0.04 || 1;
@@ -994,10 +1111,42 @@
         if (idx % tickStep !== 0 && idx !== rows.length - 1) return;
         ctx.fillText(String(row.date).slice(5), x(idx), h - pad.bottom + 10);
       });
+      const volumeMax = Math.max(...rows.map(row => Number(row.volume_lot || 0)), 0);
+      const volumeTop = h - 44;
+      const volumeBottom = h - 18;
+      const slot = rows.length <= 1 ? (w - pad.left - pad.right) : (w - pad.left - pad.right) / rows.length;
+      const candleWidth = Math.max(4, Math.min(14, slot * 0.58));
+      rows.forEach((row, idx) => {
+        const open = Number(row.open);
+        const high = Number(row.high);
+        const low = Number(row.low);
+        const close = Number(row.close);
+        if (![open, high, low, close].every(Number.isFinite)) return;
+        const cx = x(idx);
+        const color = close > open ? chartColors.up : close < open ? chartColors.down : chartColors.flat;
+        const top = y(Math.max(open, close));
+        const bottom = y(Math.min(open, close));
+        ctx.strokeStyle = color;
+        ctx.fillStyle = color;
+        ctx.lineWidth = 1.5;
+        if (volumeMax > 0) {
+          const volume = Number(row.volume_lot || 0);
+          const vh = (volume / volumeMax) * (volumeBottom - volumeTop);
+          ctx.globalAlpha = 0.22;
+          ctx.fillRect(cx - candleWidth / 2, volumeBottom - vh, candleWidth, Math.max(1, vh));
+          ctx.globalAlpha = 1;
+        }
+        ctx.beginPath();
+        ctx.moveTo(cx, y(high));
+        ctx.lineTo(cx, y(low));
+        ctx.stroke();
+        const bodyHeight = Math.max(2, bottom - top);
+        ctx.fillRect(cx - candleWidth / 2, top, candleWidth, bodyHeight);
+      });
       function drawLine(s) {
         ctx.beginPath();
         ctx.strokeStyle = s.color;
-        ctx.lineWidth = s.key === "close" ? 2.5 : 1.8;
+        ctx.lineWidth = 1.8;
         let started = false;
         rows.forEach((row, idx) => {
           const n = Number(row[s.key]);
@@ -1014,12 +1163,217 @@
         });
         ctx.stroke();
       }
-      series.forEach(drawLine);
+      maSeries.forEach(drawLine);
       const latest = rows[rows.length - 1];
-      legend.innerHTML = series.map(s => {
+      const candleLegend = [
+        `<span class="legend-item"><span class="legend-swatch" style="background:${chartColors.up}"></span>上漲K</span>`,
+        `<span class="legend-item"><span class="legend-swatch" style="background:${chartColors.down}"></span>下跌K</span>`,
+        `<span class="legend-item">收盤 ${esc(fmt(latest?.close))}</span>`,
+        `<span class="legend-item">量 ${esc(fmt(latest?.volume_lot))} 張</span>`
+      ].join("");
+      legend.innerHTML = candleLegend + maSeries.map(s => {
         const value = latest?.[s.key];
         return `<span class="legend-item"><span class="legend-swatch" style="background:${s.color}"></span>${esc(s.label)} ${esc(fmt(value))}</span>`;
       }).join("") + `<span class="muted">顯示 ${rows.length} / ${allRows.length} 日，滾輪可縮放</span>`;
+    }
+    function renderRevenueChart() {
+      const canvas = document.querySelector("#revenue-chart");
+      const legend = document.querySelector("#revenue-legend");
+      const rows = [...(state.detail?.revenues || [])].reverse().slice(-12);
+      if (!canvas || !legend) return;
+      const wrap = canvas.parentElement;
+      const dpr = window.devicePixelRatio || 1;
+      canvas.width = Math.floor(wrap.clientWidth * dpr);
+      canvas.height = Math.floor(wrap.clientHeight * dpr);
+      const ctx = canvas.getContext("2d");
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      ctx.clearRect(0, 0, wrap.clientWidth, wrap.clientHeight);
+      if (!rows.length) {
+        legend.innerHTML = `<span class="muted">沒有營收資料。</span>`;
+        return;
+      }
+      const values = [];
+      rows.forEach(row => {
+        const current = Number(row.revenue_million);
+        const lastYear = Number(row.last_year_revenue_million);
+        if (Number.isFinite(current) && current > 0) values.push(current);
+        if (Number.isFinite(lastYear) && lastYear > 0) values.push(lastYear);
+      });
+      if (!values.length) {
+        legend.innerHTML = `<span class="muted">沒有可繪製的營收。</span>`;
+        return;
+      }
+      const w = wrap.clientWidth;
+      const h = wrap.clientHeight;
+      const pad = { top: 14, right: 20, bottom: 42, left: 64 };
+      const max = Math.max(...values) * 1.16;
+      const y = value => pad.top + (max - value) * (h - pad.top - pad.bottom) / max;
+      const baseY = h - pad.bottom;
+      ctx.font = "12px -apple-system, BlinkMacSystemFont, Segoe UI, sans-serif";
+      ctx.lineWidth = 1;
+      ctx.strokeStyle = "#edf1f4";
+      ctx.fillStyle = "#607080";
+      ctx.textAlign = "right";
+      ctx.textBaseline = "middle";
+      for (let i = 0; i <= 4; i++) {
+        const gy = pad.top + i * (h - pad.top - pad.bottom) / 4;
+        const value = max - i * max / 4;
+        ctx.beginPath();
+        ctx.moveTo(pad.left, gy);
+        ctx.lineTo(w - pad.right, gy);
+        ctx.stroke();
+        ctx.fillText(fmt(value), pad.left - 8, gy);
+      }
+      const plotW = w - pad.left - pad.right;
+      const groupW = plotW / rows.length;
+      const barW = Math.max(5, Math.min(18, groupW * 0.26));
+      const yoyValues = rows.map(row => Number(row.yoy_pct)).filter(Number.isFinite);
+      let yoyMin = yoyValues.length ? Math.min(...yoyValues) : 0;
+      let yoyMax = yoyValues.length ? Math.max(...yoyValues) : 0;
+      const yoySpan = yoyMax - yoyMin || Math.max(Math.abs(yoyMax), 10);
+      yoyMin -= yoySpan * 0.18;
+      yoyMax += yoySpan * 0.18;
+      const yPct = value => pad.top + (yoyMax - value) * (h - pad.top - pad.bottom) / (yoyMax - yoyMin || 1);
+      rows.forEach((row, idx) => {
+        const center = pad.left + groupW * idx + groupW / 2;
+        const lastYear = Number(row.last_year_revenue_million);
+        const current = Number(row.revenue_million);
+        [
+          { value: lastYear, x: center - barW * 0.65, color: chartColors.revenueLastYear },
+          { value: current, x: center + barW * 0.65, color: chartColors.revenueCurrent }
+        ].forEach(bar => {
+          if (!Number.isFinite(bar.value) || bar.value <= 0) return;
+          const top = y(bar.value);
+          ctx.fillStyle = bar.color;
+          ctx.fillRect(bar.x - barW / 2, top, barW, Math.max(1, baseY - top));
+        });
+        ctx.fillStyle = "#607080";
+        ctx.textAlign = "center";
+        ctx.textBaseline = "top";
+        ctx.fillText(String(row.revenue_month || "").slice(2), center, baseY + 10);
+      });
+      if (yoyValues.length) {
+        ctx.strokeStyle = chartColors.revenueYoy;
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        let started = false;
+        rows.forEach((row, idx) => {
+          const yoy = Number(row.yoy_pct);
+          if (!Number.isFinite(yoy)) {
+            started = false;
+            return;
+          }
+          const center = pad.left + groupW * idx + groupW / 2;
+          const py = yPct(yoy);
+          if (!started) {
+            ctx.moveTo(center, py);
+            started = true;
+          } else {
+            ctx.lineTo(center, py);
+          }
+        });
+        ctx.stroke();
+        rows.forEach((row, idx) => {
+          const yoy = Number(row.yoy_pct);
+          if (!Number.isFinite(yoy)) return;
+          const center = pad.left + groupW * idx + groupW / 2;
+          ctx.fillStyle = chartColors.revenueYoy;
+          ctx.beginPath();
+          ctx.arc(center, yPct(yoy), 2.6, 0, Math.PI * 2);
+          ctx.fill();
+        });
+      }
+      const latest = rows[rows.length - 1];
+      legend.innerHTML = [
+        `<span class="legend-item"><span class="legend-swatch" style="background:${chartColors.revenueCurrent}"></span>本期 ${esc(fmt(latest?.revenue_million))} 百萬</span>`,
+        `<span class="legend-item"><span class="legend-swatch" style="background:${chartColors.revenueLastYear}"></span>去年同期 ${esc(fmt(latest?.last_year_revenue_million))} 百萬</span>`,
+        `<span class="legend-item"><span class="legend-swatch" style="background:${chartColors.revenueYoy}"></span>YoY 線</span>`,
+        `<span class="${cls(latest?.yoy_pct)}">年增 ${esc(fmt(latest?.yoy_pct))}%</span>`
+      ].join("");
+    }
+    function renderMarginChart() {
+      const canvas = document.querySelector("#margin-chart");
+      const legend = document.querySelector("#margin-legend");
+      const rows = [...(state.detail?.margin || [])].reverse();
+      if (!canvas || !legend) return;
+      const wrap = canvas.parentElement;
+      const dpr = window.devicePixelRatio || 1;
+      canvas.width = Math.floor(wrap.clientWidth * dpr);
+      canvas.height = Math.floor(wrap.clientHeight * dpr);
+      const ctx = canvas.getContext("2d");
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      ctx.clearRect(0, 0, wrap.clientWidth, wrap.clientHeight);
+      if (!rows.length) {
+        legend.innerHTML = `<span class="muted">沒有融資融券資料。</span>`;
+        return;
+      }
+      const series = [
+        { key: "margin_balance_lot", label: "融資餘額", color: chartColors.margin },
+        { key: "short_balance_lot", label: "融券餘額", color: chartColors.short }
+      ];
+      const values = [];
+      rows.forEach(row => series.forEach(s => {
+        const n = Number(row[s.key]);
+        if (Number.isFinite(n)) values.push(n);
+      }));
+      if (!values.length) {
+        legend.innerHTML = `<span class="muted">沒有可繪製的融資融券餘額。</span>`;
+        return;
+      }
+      const w = wrap.clientWidth;
+      const h = wrap.clientHeight;
+      const pad = { top: 14, right: 28, bottom: 38, left: 62 };
+      let min = Math.min(...values);
+      let max = Math.max(...values);
+      const span = max - min || Math.max(max * 0.08, 1);
+      min -= span * 0.12;
+      max += span * 0.12;
+      const x = idx => pad.left + (rows.length <= 1 ? 0 : idx * (w - pad.left - pad.right) / (rows.length - 1));
+      const y = value => pad.top + (max - value) * (h - pad.top - pad.bottom) / (max - min);
+      ctx.font = "12px -apple-system, BlinkMacSystemFont, Segoe UI, sans-serif";
+      ctx.lineWidth = 1;
+      ctx.strokeStyle = "#edf1f4";
+      ctx.fillStyle = "#607080";
+      ctx.textAlign = "right";
+      ctx.textBaseline = "middle";
+      for (let i = 0; i <= 4; i++) {
+        const gy = pad.top + i * (h - pad.top - pad.bottom) / 4;
+        const value = max - i * (max - min) / 4;
+        ctx.beginPath();
+        ctx.moveTo(pad.left, gy);
+        ctx.lineTo(w - pad.right, gy);
+        ctx.stroke();
+        ctx.fillText(fmt(value), pad.left - 8, gy);
+      }
+      ctx.textAlign = "center";
+      ctx.textBaseline = "top";
+      const tickStep = Math.max(1, Math.ceil(rows.length / 5));
+      rows.forEach((row, idx) => {
+        if (idx % tickStep !== 0 && idx !== rows.length - 1) return;
+        ctx.fillText(String(row.date || "").slice(5), x(idx), h - pad.bottom + 10);
+      });
+      series.forEach(s => {
+        ctx.beginPath();
+        ctx.strokeStyle = s.color;
+        ctx.lineWidth = 2;
+        let started = false;
+        rows.forEach((row, idx) => {
+          const n = Number(row[s.key]);
+          if (!Number.isFinite(n)) {
+            started = false;
+            return;
+          }
+          if (!started) {
+            ctx.moveTo(x(idx), y(n));
+            started = true;
+          } else {
+            ctx.lineTo(x(idx), y(n));
+          }
+        });
+        ctx.stroke();
+      });
+      const latest = rows[rows.length - 1];
+      legend.innerHTML = series.map(s => `<span class="legend-item"><span class="legend-swatch" style="background:${s.color}"></span>${esc(s.label)} ${esc(fmt(latest?.[s.key]))}</span>`).join("");
     }
     function renderNews() {
       const target = document.querySelector("#news-list");
@@ -1182,25 +1536,61 @@
       btn.textContent = original;
     }
     const rankingCols = [
-      {key:"stock_id", label:"代號", sortType:"text", format: v => v},
-      {key:"name", label:"名稱", sortType:"text"},
-      {key:"market", label:"市場", sortType:"text"},
-      {key:"close", label:"收盤"},
-      {key:"observed_days", label:"資料日"},
-      {key:"total_score", label:"基礎分", signed:true},
-      {key:"chip_score", label:"法人分", signed:true},
-      {key:"revenue_momentum_score", label:"營收分", signed:true},
-      {key:"margin_score", label:"融資分", signed:true},
-      {key:"foreign_net_lot", label:"外資", signed:true},
-      {key:"trust_net_lot", label:"投信", signed:true},
-      {key:"margin_balance_change_lot", label:"融資增減", signed:true},
-      {key:"short_balance_change_lot", label:"融券增減", signed:true},
-      {key:"avg_price", label:"均價"},
-      {key:"branch_status", label:"分點狀態", sortType:"text"},
-      {key:"revenue_month", label:"營收月", sortType:"text"},
-      {key:"revenue_yoy_pct", label:"年增%", signed:true},
-      {key:"base_reason", label:"理由", sortType:"text"}
+      {key:"stock_id", label:"代號", sortType:"text", format: v => v, groups:["core","chip","foreign","revenue","margin","branch"]},
+      {key:"name", label:"名稱", sortType:"text", groups:["core","chip","foreign","revenue","margin","branch"]},
+      {key:"market", label:"市場", sortType:"text", groups:["core"]},
+      {key:"close", label:"收盤", groups:["core","chip","foreign","revenue","margin"]},
+      {key:"observed_days", label:"資料日", groups:["core"]},
+      {key:"total_score", label:"基礎分", signed:true, groups:["core"]},
+      {key:"chip_score", label:"法人分", signed:true, groups:["core","chip"]},
+      {key:"revenue_momentum_score", label:"營收分", signed:true, groups:["core","revenue"]},
+      {key:"margin_score", label:"融資分", signed:true, groups:["core","margin"]},
+      {key:"volume_lot", label:"成交量", groups:["core","chip","foreign"]},
+      {key:"foreign_net_lot", label:"外資", signed:true, groups:["chip","foreign"]},
+      {key:"trust_net_lot", label:"投信", signed:true, groups:["chip"]},
+      {key:"inst_net_lot", label:"外資+投信", signed:true, groups:["chip"]},
+      {key:"foreign_net_volume_pct", label:"外資占量%", signed:true, groups:["chip","foreign"]},
+      {key:"latest_foreign_net_lot", label:"最近一日外資", signed:true, groups:["foreign"]},
+      {key:"foreign_buy_streak", label:"外資連買", groups:["foreign"]},
+      {key:"foreign_sell_streak", label:"外資連賣", groups:["foreign"]},
+      {key:"margin_balance_change_lot", label:"融資增減", signed:true, groups:["margin"]},
+      {key:"short_balance_change_lot", label:"融券增減", signed:true, groups:["margin"]},
+      {key:"avg_price", label:"均價", groups:["core"]},
+      {key:"branch_status", label:"分點狀態", sortType:"text", groups:["branch"]},
+      {key:"top_buy_branch_name", label:"買超分點", sortType:"text", groups:["branch"]},
+      {key:"branch_score", label:"分點分", signed:true, groups:["branch"]},
+      {key:"revenue_month", label:"營收月", sortType:"text", groups:["revenue"]},
+      {key:"revenue_mom_pct", label:"月增%", signed:true, groups:["revenue"]},
+      {key:"revenue_yoy_pct", label:"年增%", signed:true, groups:["revenue"]},
+      {key:"base_reason", label:"理由", sortType:"text", groups:["core"]}
     ];
+    const columnGroups = [
+      {key:"core", label:"核心", tip:"核心：用全市場較穩定可取得的資料做快速排序，包含收盤、資料日、基礎分、法人分、營收分、融資分、成交量與均價。"},
+      {key:"chip", label:"法人籌碼", tip:"法人籌碼：觀察外資、投信買賣超與外資占成交量比例。占量越高，代表法人買賣超相對當期成交量越集中。"},
+      {key:"foreign", label:"外資籌碼", tip:"外資籌碼：只看外資相關資料，包含區間外資買賣超、外資占成交量比例、最近一日外資、外資連買與連賣。適合判斷外資是否持續偏多或短線轉向。"},
+      {key:"revenue", label:"營收", tip:"營收：顯示最新營收月份、營收分、月增率與年增率，用來判斷基本面動能是否同步轉強。"},
+      {key:"margin", label:"融資券", tip:"融資券：觀察融資餘額與融券餘額增減。融資快速增加可能代表散戶追價，融資下降且法人買超通常較乾淨。"},
+      {key:"branch", label:"分點", tip:"分點：顯示區間買超分點、分點分與抓取狀態。這是進階資料，若狀態為缺資料或空回應，不應拿來影響全市場排行。"}
+    ];
+    function visibleRankingCols() {
+      return rankingCols.filter(col => (col.groups || ["core"]).includes(state.columnGroup));
+    }
+    function renderColumnControls() {
+      const target = document.querySelector("#ranking-columns");
+      if (!target) return;
+      target.innerHTML = columnGroups.map(group => `
+        <label class="toggle tooltip-anchor" data-tip="${esc(group.tip)}" title="${esc(group.tip)}">
+          <input type="radio" name="column-group" value="${esc(group.key)}" ${state.columnGroup === group.key ? "checked" : ""} />
+          ${esc(group.label)}
+        </label>
+      `).join("");
+      target.querySelectorAll("input[name='column-group']").forEach(input => {
+        input.addEventListener("change", () => {
+          state.columnGroup = input.value;
+          renderRankingTable();
+        });
+      });
+    }
     async function loadMeta() {
       const meta = await getJSON("/api/meta?days=" + document.querySelector("#days").value);
       renderMetrics(document.querySelector("#metrics"), [
@@ -1231,8 +1621,10 @@
       renderRankingTable();
     }
     function renderRankingTable() {
-      const rows = sortRows(state.rankingRows || [], rankingCols, state.rankingSort);
-      renderTable(document.querySelector("#ranking-table"), rows, rankingCols, {
+      renderColumnControls();
+      const cols = visibleRankingCols();
+      const rows = sortRows(state.rankingRows || [], cols, state.rankingSort);
+      renderTable(document.querySelector("#ranking-table"), rows, cols, {
         rowId: row => row.stock_id,
         onClick: stock => openDetail(stock),
         sort: state.rankingSort,
@@ -1272,6 +1664,76 @@
         </div>
         <div class="assist-reason">${esc(selection.base_reason || selection.selection_reason || "")}</div>
       `;
+    }
+    function renderDataQuality(data) {
+      const target = document.querySelector("#detail-data-status");
+      const judgement = document.querySelector("#detail-judgement");
+      if (!target || !judgement) return;
+      const days = Number(document.querySelector("#days").value || 20);
+      const branchStatus = data.branch_top_status || {};
+      const statusText = {success:"已取得", empty:"來源空回應", failed:"抓取失敗", missing:"尚未抓取"}[branchStatus.status] || branchStatus.status || "未知";
+      const items = [
+        {
+          name: "每日行情",
+          ok: (data.daily || []).length >= Math.min(days, 5),
+          warn: (data.daily || []).length > 0,
+          value: `${fmt((data.daily || []).length)} / ${days} 日`,
+          detail: data.stock?.latest_date || "-"
+        },
+        {
+          name: "法人買賣超",
+          ok: (data.daily || []).some(row => Number(row.foreign_net_lot || 0) !== 0 || Number(row.trust_net_lot || 0) !== 0 || Number(row.dealer_net_lot || 0) !== 0),
+          warn: (data.daily || []).length > 0,
+          value: "每日進出",
+          detail: "0 可能是真 0，也可能是來源未提供"
+        },
+        {
+          name: "24月營收",
+          ok: (data.revenues || []).length >= 12,
+          warn: (data.revenues || []).length > 0,
+          value: `${fmt((data.revenues || []).length)} 個月`,
+          detail: data.revenues?.[0]?.revenue_month || "-"
+        },
+        {
+          name: "融資融券",
+          ok: (data.margin || []).length >= Math.min(days, 5),
+          warn: (data.margin || []).length > 0,
+          value: `${fmt((data.margin || []).length)} / ${days} 日`,
+          detail: data.margin?.[0]?.date || "-"
+        },
+        {
+          name: "分點排行",
+          ok: branchStatus.status === "success" && (data.branch_top || []).length > 0,
+          warn: ["empty", "missing"].includes(branchStatus.status),
+          value: statusText,
+          detail: branchStatus.updated_at || branchStatus.error || "-"
+        },
+        {
+          name: "新聞",
+          ok: (data.news || []).length > 0,
+          warn: false,
+          value: `${fmt((data.news || []).length)} 則`,
+          detail: (data.news || []).map(row => row.fetched_at).filter(Boolean).sort().at(-1) || "手動抓取"
+        }
+      ];
+      target.innerHTML = `<div class="status-grid">${items.map(item => {
+        const klass = item.ok ? "good" : item.warn ? "warn" : "bad";
+        return `<div class="status-card ${klass}">
+          <div class="status-name">${esc(item.name)}</div>
+          <div class="status-value">${esc(item.ok ? "可用" : item.warn ? "部分" : "缺資料")}</div>
+          <div class="status-detail">${esc(item.value)} · ${esc(item.detail)}</div>
+        </div>`;
+      }).join("")}</div>`;
+      const s = data.selection || {};
+      const notes = [];
+      if (Number(s.chip_score || 0) > 55) notes.push("法人籌碼偏強");
+      else if (Number(s.chip_score || 0) < 35) notes.push("法人籌碼偏弱");
+      if (Number(s.revenue_yoy_pct || 0) > 0 && Number(s.revenue_mom_pct || 0) > 0) notes.push("營收月增與年增同步為正");
+      else if ((data.revenues || []).length) notes.push("營收動能需要再確認");
+      if (Number(data.stock?.margin_balance_change_lot || 0) > 0 && Number(data.stock?.foreign_net_lot || 0) > 0) notes.push("外資買超但融資也增加，需留意追價風險");
+      if (branchStatus.status !== "success") notes.push("分點資料未完整，分點分只作參考");
+      if (!notes.length) notes.push("目前資料不足，先以基礎行情、法人與營收做初步觀察");
+      judgement.textContent = `初步判斷：${notes.join("；")}。這不是買賣建議，主要用來提醒目前資料完整度與矛盾點。`;
     }
     async function expandStockFromSearch() {
       const q = document.querySelector("#query").value.trim();
@@ -1376,7 +1838,9 @@
           const runClass = runState === "done" ? "done" : runState === "running" ? "running" : runState === "pending" ? "warn" : "";
           const buttonLabel = running
             ? (runLabel || "等待中")
-            : task.id === "all_data" ? "一鍵更新" : "開始更新";
+            : task.id === "all_data" ? "一鍵更新"
+              : task.id === "all_market_revenue" ? "補齊全市場"
+              : "開始更新";
           const extra = task.extra_status ? `<div class="job-extra">${esc(task.extra_status)}</div>` : "";
           return `<div class="job-card ${task.id === "all_data" ? "primary-job" : ""} ${staleClass}">
           <div class="job-title">${esc(task.title)}</div>
@@ -1562,8 +2026,11 @@
         [`${days}日融資`, fmt(data.stock.margin_balance_change_lot), cls(data.stock.margin_balance_change_lot)],
         [`${days}日融券`, fmt(data.stock.short_balance_change_lot), cls(data.stock.short_balance_change_lot)]
       ]);
+      renderDataQuality(data);
       renderSelectionAssist(data.selection);
       renderPriceChart();
+      renderRevenueChart();
+      renderMarginChart();
       renderNews();
       renderTable(document.querySelector("#daily-table"), data.daily, [
         {key:"date", label:"日期"},
@@ -1681,7 +2148,19 @@
       }
     }
     document.querySelectorAll(".tab").forEach(btn => btn.addEventListener("click", () => setTab(btn.dataset.tab)));
-    ["days","ranking","market","limit"].forEach(id => document.querySelector("#" + id).addEventListener("change", reload));
+    document.querySelector("#ranking").addEventListener("change", () => {
+      enforceRankingDays();
+      reload();
+    });
+    document.querySelector("#days").addEventListener("change", () => {
+      enforceRankingDays();
+      reload();
+    });
+    ["market","limit"].forEach(id => document.querySelector("#" + id).addEventListener("change", reload));
+    document.querySelector("#min-volume").addEventListener("input", () => {
+      clearTimeout(window.__vol);
+      window.__vol = setTimeout(reload, 250);
+    });
     document.querySelector("#query").addEventListener("input", () => {
       clearTimeout(window.__q);
       window.__q = setTimeout(() => {
@@ -1706,7 +2185,6 @@
     document.querySelector("#cancel-update").addEventListener("click", cancelCurrentUpdate);
     document.querySelector("#detail-stock").addEventListener("change", loadDetail);
     document.querySelectorAll(".ma-toggle").forEach(input => input.addEventListener("change", renderPriceChart));
-    document.querySelector("#close-toggle").addEventListener("change", renderPriceChart);
     document.querySelectorAll(".single-refresh").forEach(btn => {
       btn.addEventListener("click", () => refreshSingleSection(btn.dataset.section, btn));
     });
@@ -1723,7 +2201,11 @@
     syncSeriesSwatches();
     window.addEventListener("resize", () => {
       clearTimeout(window.__chartResize);
-      window.__chartResize = setTimeout(renderPriceChart, 120);
+      window.__chartResize = setTimeout(() => {
+        renderPriceChart();
+        renderRevenueChart();
+        renderMarginChart();
+      }, 120);
     });
     reload().catch(err => {
       document.querySelector("#ranking-table").innerHTML = `<div class="empty">${esc(err.message)}</div>`;
