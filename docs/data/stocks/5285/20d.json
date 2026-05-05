@@ -412,9 +412,31 @@
       "ma60": null,
       "open": 55.7,
       "volume_lot": 344.31
+    },
+    {
+      "avg_price": 56.015410795887284,
+      "close": 56.1,
+      "date": "2026-05-05",
+      "high": 56.6,
+      "low": 55.5,
+      "ma10": 55.05,
+      "ma20": 53.6425,
+      "ma5": 55.06,
+      "ma60": null,
+      "open": 56.3,
+      "volume_lot": 168.06
     }
   ],
   "daily": [
+    {
+      "avg_price": 56.015410795887284,
+      "close": 56.1,
+      "date": "2026-05-05",
+      "dealer_net_lot": 0.0,
+      "foreign_net_lot": -8.0,
+      "trust_net_lot": 0.0,
+      "volume_lot": 168.06
+    },
     {
       "avg_price": 56.02655784841928,
       "close": 56.3,
@@ -585,18 +607,26 @@
       "foreign_net_lot": 41.02,
       "trust_net_lot": 0.0,
       "volume_lot": 211.06
-    },
-    {
-      "avg_price": 48.46593153130381,
-      "close": 48.2,
-      "date": "2026-04-02",
-      "dealer_net_lot": 1.0,
-      "foreign_net_lot": -15.0,
-      "trust_net_lot": 0.0,
-      "volume_lot": 126.6
     }
   ],
   "margin": [
+    {
+      "date": "2026-05-05",
+      "margin_balance_lot": 4412,
+      "margin_buy_lot": 41,
+      "margin_cash_repay_lot": 0,
+      "margin_change_lot": 25,
+      "margin_prev_balance_lot": 4387,
+      "margin_sell_lot": 16,
+      "note": "",
+      "offset_lot": 2,
+      "short_balance_lot": 5,
+      "short_buy_lot": 0,
+      "short_change_lot": 0,
+      "short_prev_balance_lot": 5,
+      "short_sell_lot": 0,
+      "short_stock_repay_lot": 0
+    },
     {
       "date": "2026-05-04",
       "margin_balance_lot": 4387,
@@ -919,23 +949,6 @@
       "short_prev_balance_lot": 0,
       "short_sell_lot": 0,
       "short_stock_repay_lot": 0
-    },
-    {
-      "date": "2026-04-02",
-      "margin_balance_lot": 3797,
-      "margin_buy_lot": 45,
-      "margin_cash_repay_lot": 2,
-      "margin_change_lot": 38,
-      "margin_prev_balance_lot": 3759,
-      "margin_sell_lot": 5,
-      "note": "",
-      "offset_lot": 0,
-      "short_balance_lot": 0,
-      "short_buy_lot": 0,
-      "short_change_lot": 0,
-      "short_prev_balance_lot": 0,
-      "short_sell_lot": 0,
-      "short_stock_repay_lot": 0
     }
   ],
   "news": [],
@@ -1230,29 +1243,29 @@
     }
   ],
   "selection": {
-    "avg_price": 54.3562,
+    "avg_price": 54.4941,
     "base_reason": "外資買超；融資增加；營收 2026-03，月增 15.79%，年增 -2.75%，累計年增 1.64%",
-    "base_score": 33.3,
+    "base_score": 31.3,
     "branch_score": 0.0,
     "branch_status": "未取得",
-    "chip_score": 38.0,
-    "close": 56.3,
+    "chip_score": 36.0,
+    "close": 56.1,
     "close_vs_top_buy_avg_pct": 0.0,
-    "complete_chip_score": 33.3,
+    "complete_chip_score": 31.3,
     "confluence_branch_score": 0.0,
     "confluence_direction_score": 0.0,
     "confluence_inst_score": 0.0,
     "confluence_price_score": 0.0,
     "confluence_score": 0.0,
     "confluence_streak_score": 0.0,
-    "foreign_buy_streak": 3.0,
-    "foreign_net_lot": 1119.27,
-    "foreign_net_volume_pct": 15.15,
-    "foreign_sell_streak": 0.0,
-    "inst_net_lot": 1119.27,
+    "foreign_buy_streak": 0.0,
+    "foreign_net_lot": 1126.27,
+    "foreign_net_volume_pct": 15.16,
+    "foreign_sell_streak": 1.0,
+    "inst_net_lot": 1126.27,
     "inst_net_volume_pct": 0.0,
-    "latest_date": "2026-05-04",
-    "margin_balance_change_lot": 628.0,
+    "latest_date": "2026-05-05",
+    "margin_balance_change_lot": 615.0,
     "margin_score": -6.36,
     "market": "TWSE",
     "name": "界霖",
@@ -1263,7 +1276,7 @@
     "revenue_month": "2026-03",
     "revenue_yoy_pct": -2.75,
     "selection_reason": "營收 2026-03，月增 15.79%，年增 -2.75%，累計年增 1.64%",
-    "selection_score": 33.3,
+    "selection_score": 31.3,
     "short_balance_change_lot": 5.0,
     "stock_id": "5285",
     "top_buy_branch_avg_price": 0.0,
@@ -1273,25 +1286,25 @@
     "top_sell_branch_avg_price": 0.0,
     "top_sell_branch_name": "",
     "top_sell_branch_net_lot": 0.0,
-    "total_score": 33.3,
+    "total_score": 31.3,
     "trust_buy_streak": 0.0,
     "trust_net_lot": 0.0,
     "trust_net_volume_pct": 0.0,
     "trust_sell_streak": 0.0,
-    "volume_lot": 7389.05
+    "volume_lot": 7430.52
   },
   "stock": {
-    "avg_price": 54.3562,
-    "close": 56.3,
-    "foreign_net_lot": 1119.27,
+    "avg_price": 54.4941,
+    "close": 56.1,
+    "foreign_net_lot": 1126.27,
     "in_watchlist": false,
-    "latest_date": "2026-05-04",
-    "margin_balance_change_lot": 628,
+    "latest_date": "2026-05-05",
+    "margin_balance_change_lot": 615,
     "market": "TWSE",
     "name": "界霖",
     "short_balance_change_lot": 5,
     "stock_id": "5285",
     "trust_net_lot": 0.0,
-    "volume_lot": 7389.05
+    "volume_lot": 7430.52
   }
 }

@@ -399,9 +399,31 @@
       "ma60": null,
       "open": 16.85,
       "volume_lot": 721.0
+    },
+    {
+      "avg_price": 17.959310178485286,
+      "close": 18.1,
+      "date": "2026-05-05",
+      "high": 18.8,
+      "low": 17.2,
+      "ma10": 17.19,
+      "ma20": 16.545,
+      "ma5": 17.12,
+      "ma60": null,
+      "open": 17.2,
+      "volume_lot": 2073.0
     }
   ],
   "daily": [
+    {
+      "avg_price": 17.959310178485286,
+      "close": 18.1,
+      "date": "2026-05-05",
+      "dealer_net_lot": 1.02,
+      "foreign_net_lot": 236.0,
+      "trust_net_lot": 0.0,
+      "volume_lot": 2073.0
+    },
     {
       "avg_price": 17.19147018030513,
       "close": 17.2,
@@ -437,18 +459,26 @@
       "foreign_net_lot": 35.0,
       "trust_net_lot": 0.0,
       "volume_lot": 414.0
-    },
-    {
-      "avg_price": 16.677251184834123,
-      "close": 16.75,
-      "date": "2026-04-27",
-      "dealer_net_lot": 0.01,
-      "foreign_net_lot": 18.0,
-      "trust_net_lot": 0.0,
-      "volume_lot": 844.0
     }
   ],
   "margin": [
+    {
+      "date": "2026-05-05",
+      "margin_balance_lot": 88,
+      "margin_buy_lot": 0,
+      "margin_cash_repay_lot": 0,
+      "margin_change_lot": -6,
+      "margin_prev_balance_lot": 94,
+      "margin_sell_lot": 6,
+      "note": "OX",
+      "offset_lot": 0,
+      "short_balance_lot": 0,
+      "short_buy_lot": 0,
+      "short_change_lot": 0,
+      "short_prev_balance_lot": 0,
+      "short_sell_lot": 0,
+      "short_stock_repay_lot": 0
+    },
     {
       "date": "2026-04-30",
       "margin_balance_lot": 94,
@@ -485,23 +515,6 @@
     },
     {
       "date": "2026-04-28",
-      "margin_balance_lot": 96,
-      "margin_buy_lot": 0,
-      "margin_cash_repay_lot": 0,
-      "margin_change_lot": 0,
-      "margin_prev_balance_lot": 96,
-      "margin_sell_lot": 0,
-      "note": "OX",
-      "offset_lot": 0,
-      "short_balance_lot": 0,
-      "short_buy_lot": 0,
-      "short_change_lot": 0,
-      "short_prev_balance_lot": 0,
-      "short_sell_lot": 0,
-      "short_stock_repay_lot": 0
-    },
-    {
-      "date": "2026-04-27",
       "margin_balance_lot": 96,
       "margin_buy_lot": 0,
       "margin_cash_repay_lot": 0,
@@ -810,15 +823,15 @@
     }
   ],
   "selection": {
-    "avg_price": 16.861,
+    "avg_price": 17.4116,
     "base_reason": "外資買超；融資下降；營收 2026-03，月增 60.47%，年增 69.82%，累計年增 61.31%",
-    "base_score": 72.06,
+    "base_score": 66.18,
     "branch_score": 0.0,
     "branch_status": "未取得",
-    "chip_score": 48.0,
-    "close": 17.2,
+    "chip_score": 42.0,
+    "close": 18.1,
     "close_vs_top_buy_avg_pct": 0.0,
-    "complete_chip_score": 72.06,
+    "complete_chip_score": 66.18,
     "confluence_branch_score": 0.0,
     "confluence_direction_score": 0.0,
     "confluence_inst_score": 0.0,
@@ -826,14 +839,14 @@
     "confluence_score": 0.0,
     "confluence_streak_score": 0.0,
     "foreign_buy_streak": 5.0,
-    "foreign_net_lot": 623.0,
-    "foreign_net_volume_pct": 19.54,
+    "foreign_net_lot": 841.0,
+    "foreign_net_volume_pct": 19.04,
     "foreign_sell_streak": 0.0,
-    "inst_net_lot": 623.0,
+    "inst_net_lot": 841.0,
     "inst_net_volume_pct": 0.0,
-    "latest_date": "2026-05-04",
-    "margin_balance_change_lot": -2.0,
-    "margin_score": 0.06,
+    "latest_date": "2026-05-05",
+    "margin_balance_change_lot": -8.0,
+    "margin_score": 0.18,
     "market": "TPEX",
     "name": "普誠",
     "observed_days": 5,
@@ -843,7 +856,7 @@
     "revenue_month": "2026-03",
     "revenue_yoy_pct": 69.82,
     "selection_reason": "營收 2026-03，月增 60.47%，年增 69.82%，累計年增 61.31%",
-    "selection_score": 72.06,
+    "selection_score": 66.18,
     "short_balance_change_lot": 0.0,
     "stock_id": "6129",
     "top_buy_branch_avg_price": 0.0,
@@ -853,25 +866,25 @@
     "top_sell_branch_avg_price": 0.0,
     "top_sell_branch_name": "",
     "top_sell_branch_net_lot": 0.0,
-    "total_score": 72.06,
+    "total_score": 66.18,
     "trust_buy_streak": 0.0,
     "trust_net_lot": 0.0,
     "trust_net_volume_pct": 0.0,
     "trust_sell_streak": 0.0,
-    "volume_lot": 3188.0
+    "volume_lot": 4417.0
   },
   "stock": {
-    "avg_price": 16.861,
-    "close": 17.2,
-    "foreign_net_lot": 623.0,
+    "avg_price": 17.4116,
+    "close": 18.1,
+    "foreign_net_lot": 841.0,
     "in_watchlist": false,
-    "latest_date": "2026-05-04",
-    "margin_balance_change_lot": -2,
+    "latest_date": "2026-05-05",
+    "margin_balance_change_lot": -8,
     "market": "TPEX",
     "name": "普誠",
     "short_balance_change_lot": 0,
     "stock_id": "6129",
     "trust_net_lot": 0.0,
-    "volume_lot": 3188.0
+    "volume_lot": 4417.0
   }
 }

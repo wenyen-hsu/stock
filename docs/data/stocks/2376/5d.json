@@ -412,9 +412,31 @@
       "ma60": null,
       "open": 278.0,
       "volume_lot": 6508.65
+    },
+    {
+      "avg_price": 279.1339273205945,
+      "close": 279.5,
+      "date": "2026-05-05",
+      "high": 281.0,
+      "low": 275.5,
+      "ma10": 279.7,
+      "ma20": 271.275,
+      "ma5": 277.1,
+      "ma60": null,
+      "open": 279.0,
+      "volume_lot": 4539.83
     }
   ],
   "daily": [
+    {
+      "avg_price": 279.1339273205945,
+      "close": 279.5,
+      "date": "2026-05-05",
+      "dealer_net_lot": -5.69,
+      "foreign_net_lot": 462.53,
+      "trust_net_lot": -350.77,
+      "volume_lot": 4539.83
+    },
     {
       "avg_price": 277.1806218989326,
       "close": 279.0,
@@ -450,18 +472,26 @@
       "foreign_net_lot": -812.39,
       "trust_net_lot": -51.41,
       "volume_lot": 5090.75
-    },
-    {
-      "avg_price": 282.9253828360931,
-      "close": 285.0,
-      "date": "2026-04-27",
-      "dealer_net_lot": 244.66,
-      "foreign_net_lot": 2299.06,
-      "trust_net_lot": -53.34,
-      "volume_lot": 8641.3
     }
   ],
   "margin": [
+    {
+      "date": "2026-05-05",
+      "margin_balance_lot": 8181,
+      "margin_buy_lot": 355,
+      "margin_cash_repay_lot": 2,
+      "margin_change_lot": 103,
+      "margin_prev_balance_lot": 8078,
+      "margin_sell_lot": 250,
+      "note": "",
+      "offset_lot": 0,
+      "short_balance_lot": 153,
+      "short_buy_lot": 9,
+      "short_change_lot": -6,
+      "short_prev_balance_lot": 159,
+      "short_sell_lot": 3,
+      "short_stock_repay_lot": 0
+    },
     {
       "date": "2026-05-04",
       "margin_balance_lot": 8078,
@@ -529,29 +559,12 @@
       "short_prev_balance_lot": 164,
       "short_sell_lot": 1,
       "short_stock_repay_lot": 0
-    },
-    {
-      "date": "2026-04-27",
-      "margin_balance_lot": 8016,
-      "margin_buy_lot": 682,
-      "margin_cash_repay_lot": 2,
-      "margin_change_lot": 221,
-      "margin_prev_balance_lot": 7795,
-      "margin_sell_lot": 459,
-      "note": "",
-      "offset_lot": 5,
-      "short_balance_lot": 164,
-      "short_buy_lot": 2,
-      "short_change_lot": 12,
-      "short_prev_balance_lot": 152,
-      "short_sell_lot": 14,
-      "short_stock_repay_lot": 0
     }
   ],
   "news": [
     {
       "content_excerpt": "",
-      "fetched_at": "2026-05-04 23:43:09",
+      "fetched_at": "2026-05-05 20:58:40",
       "published_at": "2026-04-30 11:38:05",
       "source": "Yahoo股市",
       "stock_id": "2376",
@@ -561,7 +574,7 @@
     },
     {
       "content_excerpt": "",
-      "fetched_at": "2026-05-04 23:43:09",
+      "fetched_at": "2026-05-05 20:58:40",
       "published_at": "2026-04-30 11:38:00",
       "source": "Yahoo股市",
       "stock_id": "2376",
@@ -571,7 +584,7 @@
     },
     {
       "content_excerpt": "",
-      "fetched_at": "2026-05-04 23:43:09",
+      "fetched_at": "2026-05-05 20:58:40",
       "published_at": "2026-04-26 08:41:07",
       "source": "Yahoo股市",
       "stock_id": "2376",
@@ -581,7 +594,7 @@
     },
     {
       "content_excerpt": "",
-      "fetched_at": "2026-05-04 23:43:09",
+      "fetched_at": "2026-05-05 20:58:40",
       "published_at": "2026-04-23 04:10:00",
       "source": "Yahoo股市",
       "stock_id": "2376",
@@ -591,7 +604,7 @@
     },
     {
       "content_excerpt": "",
-      "fetched_at": "2026-05-04 23:43:09",
+      "fetched_at": "2026-05-05 20:58:40",
       "published_at": "2026-04-22 10:59:36",
       "source": "Yahoo股市",
       "stock_id": "2376",
@@ -1001,30 +1014,30 @@
     }
   ],
   "selection": {
-    "avg_price": 278.7521,
+    "avg_price": 277.5698,
     "base_reason": "融資增加；營收 2026-03，月增 18.6%，年增 74.84%，累計年增 59.8%",
-    "base_score": 4.35,
+    "base_score": -15.82,
     "branch_score": 0.0,
     "branch_status": "未取得",
-    "chip_score": -17.58,
-    "close": 279.0,
+    "chip_score": -37.95,
+    "close": 279.5,
     "close_vs_top_buy_avg_pct": 0.0,
-    "complete_chip_score": 4.35,
+    "complete_chip_score": -15.82,
     "confluence_branch_score": 0.0,
     "confluence_direction_score": 0.0,
     "confluence_inst_score": 0.0,
     "confluence_price_score": 0.0,
     "confluence_score": 0.0,
     "confluence_streak_score": 0.0,
-    "foreign_buy_streak": 2.0,
-    "foreign_net_lot": -192.78,
-    "foreign_net_volume_pct": -0.58,
+    "foreign_buy_streak": 3.0,
+    "foreign_net_lot": -2029.31,
+    "foreign_net_volume_pct": -6.99,
     "foreign_sell_streak": 0.0,
-    "inst_net_lot": -940.89,
+    "inst_net_lot": -3074.85,
     "inst_net_volume_pct": 0.0,
-    "latest_date": "2026-05-04",
-    "margin_balance_change_lot": 283.0,
-    "margin_score": -0.67,
+    "latest_date": "2026-05-05",
+    "margin_balance_change_lot": 165.0,
+    "margin_score": -0.47,
     "market": "TWSE",
     "name": "技嘉",
     "observed_days": 5,
@@ -1034,8 +1047,8 @@
     "revenue_month": "2026-03",
     "revenue_yoy_pct": 74.84,
     "selection_reason": "營收 2026-03，月增 18.6%，年增 74.84%，累計年增 59.8%",
-    "selection_score": 4.35,
-    "short_balance_change_lot": 7.0,
+    "selection_score": -15.82,
+    "short_balance_change_lot": -11.0,
     "stock_id": "2376",
     "top_buy_branch_avg_price": 0.0,
     "top_buy_branch_name": "",
@@ -1044,25 +1057,25 @@
     "top_sell_branch_avg_price": 0.0,
     "top_sell_branch_name": "",
     "top_sell_branch_net_lot": 0.0,
-    "total_score": 4.35,
+    "total_score": -15.82,
     "trust_buy_streak": 0.0,
-    "trust_net_lot": -748.11,
-    "trust_net_volume_pct": -2.26,
+    "trust_net_lot": -1045.54,
+    "trust_net_volume_pct": -3.6,
     "trust_sell_streak": 5.0,
-    "volume_lot": 33138.6
+    "volume_lot": 29037.13
   },
   "stock": {
-    "avg_price": 278.7521,
-    "close": 279.0,
-    "foreign_net_lot": -192.78,
+    "avg_price": 277.5698,
+    "close": 279.5,
+    "foreign_net_lot": -2029.31,
     "in_watchlist": true,
-    "latest_date": "2026-05-04",
-    "margin_balance_change_lot": 283,
+    "latest_date": "2026-05-05",
+    "margin_balance_change_lot": 165,
     "market": "TWSE",
     "name": "技嘉",
-    "short_balance_change_lot": 7,
+    "short_balance_change_lot": -11,
     "stock_id": "2376",
-    "trust_net_lot": -748.11,
-    "volume_lot": 33138.6
+    "trust_net_lot": -1045.54,
+    "volume_lot": 29037.13
   }
 }

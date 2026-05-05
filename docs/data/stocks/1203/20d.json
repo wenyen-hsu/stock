@@ -412,9 +412,31 @@
       "ma60": null,
       "open": 42.35,
       "volume_lot": 21.8
+    },
+    {
+      "avg_price": 42.744559868780755,
+      "close": 42.7,
+      "date": "2026-05-05",
+      "high": 43.2,
+      "low": 42.5,
+      "ma10": 43.58,
+      "ma20": 42.57,
+      "ma5": 43.29,
+      "ma60": null,
+      "open": 42.5,
+      "volume_lot": 9.14
     }
   ],
   "daily": [
+    {
+      "avg_price": 42.744559868780755,
+      "close": 42.7,
+      "date": "2026-05-05",
+      "dealer_net_lot": 1.0,
+      "foreign_net_lot": 2.0,
+      "trust_net_lot": 0.0,
+      "volume_lot": 9.14
+    },
     {
       "avg_price": 42.9052708839855,
       "close": 42.75,
@@ -585,18 +607,26 @@
       "foreign_net_lot": 0.0,
       "trust_net_lot": 0.0,
       "volume_lot": 8.58
-    },
-    {
-      "avg_price": 39.452924887504324,
-      "close": 39.4,
-      "date": "2026-04-02",
-      "dealer_net_lot": 1.0,
-      "foreign_net_lot": -2.0,
-      "trust_net_lot": 0.0,
-      "volume_lot": 17.33
     }
   ],
   "margin": [
+    {
+      "date": "2026-05-05",
+      "margin_balance_lot": 9,
+      "margin_buy_lot": 0,
+      "margin_cash_repay_lot": 0,
+      "margin_change_lot": -1,
+      "margin_prev_balance_lot": 10,
+      "margin_sell_lot": 1,
+      "note": "",
+      "offset_lot": 0,
+      "short_balance_lot": 0,
+      "short_buy_lot": 0,
+      "short_change_lot": 0,
+      "short_prev_balance_lot": 0,
+      "short_sell_lot": 0,
+      "short_stock_repay_lot": 0
+    },
     {
       "date": "2026-05-04",
       "margin_balance_lot": 10,
@@ -919,23 +949,6 @@
       "short_prev_balance_lot": 0,
       "short_sell_lot": 0,
       "short_stock_repay_lot": 0
-    },
-    {
-      "date": "2026-04-02",
-      "margin_balance_lot": 14,
-      "margin_buy_lot": 0,
-      "margin_cash_repay_lot": 0,
-      "margin_change_lot": 0,
-      "margin_prev_balance_lot": 14,
-      "margin_sell_lot": 0,
-      "note": "",
-      "offset_lot": 0,
-      "short_balance_lot": 0,
-      "short_buy_lot": 0,
-      "short_change_lot": 0,
-      "short_prev_balance_lot": 0,
-      "short_sell_lot": 0,
-      "short_stock_repay_lot": 0
     }
   ],
   "news": [],
@@ -1230,30 +1243,30 @@
     }
   ],
   "selection": {
-    "avg_price": 42.5187,
+    "avg_price": 42.5922,
     "base_reason": "外資買超；融資下降；營收 2026-03，月增 20.35%，年增 -10.87%，累計年增 -14.33%",
-    "base_score": 38.72,
+    "base_score": 40.86,
     "branch_score": 0.0,
     "branch_status": "未取得",
-    "chip_score": 40.0,
-    "close": 42.75,
+    "chip_score": 42.0,
+    "close": 42.7,
     "close_vs_top_buy_avg_pct": 0.0,
-    "complete_chip_score": 38.72,
+    "complete_chip_score": 40.86,
     "confluence_branch_score": 0.0,
     "confluence_direction_score": 0.0,
     "confluence_inst_score": 0.0,
     "confluence_price_score": 0.0,
     "confluence_score": 0.0,
     "confluence_streak_score": 0.0,
-    "foreign_buy_streak": 1.0,
-    "foreign_net_lot": 224.19,
-    "foreign_net_volume_pct": 29.53,
+    "foreign_buy_streak": 2.0,
+    "foreign_net_lot": 228.19,
+    "foreign_net_volume_pct": 30.38,
     "foreign_sell_streak": 0.0,
-    "inst_net_lot": 224.19,
+    "inst_net_lot": 228.19,
     "inst_net_volume_pct": 0.0,
-    "latest_date": "2026-05-04",
-    "margin_balance_change_lot": -4.0,
-    "margin_score": 0.53,
+    "latest_date": "2026-05-05",
+    "margin_balance_change_lot": -5.0,
+    "margin_score": 0.67,
     "market": "TWSE",
     "name": "味王",
     "observed_days": 20,
@@ -1263,7 +1276,7 @@
     "revenue_month": "2026-03",
     "revenue_yoy_pct": -10.87,
     "selection_reason": "營收 2026-03，月增 20.35%，年增 -10.87%，累計年增 -14.33%",
-    "selection_score": 38.72,
+    "selection_score": 40.86,
     "short_balance_change_lot": 0.0,
     "stock_id": "1203",
     "top_buy_branch_avg_price": 0.0,
@@ -1273,25 +1286,25 @@
     "top_sell_branch_avg_price": 0.0,
     "top_sell_branch_name": "",
     "top_sell_branch_net_lot": 0.0,
-    "total_score": 38.72,
+    "total_score": 40.86,
     "trust_buy_streak": 0.0,
     "trust_net_lot": 0.0,
     "trust_net_volume_pct": 0.0,
     "trust_sell_streak": 0.0,
-    "volume_lot": 759.21
+    "volume_lot": 751.02
   },
   "stock": {
-    "avg_price": 42.5187,
-    "close": 42.75,
-    "foreign_net_lot": 224.19,
+    "avg_price": 42.5922,
+    "close": 42.7,
+    "foreign_net_lot": 228.19,
     "in_watchlist": false,
-    "latest_date": "2026-05-04",
-    "margin_balance_change_lot": -4,
+    "latest_date": "2026-05-05",
+    "margin_balance_change_lot": -5,
     "market": "TWSE",
     "name": "味王",
     "short_balance_change_lot": 0,
     "stock_id": "1203",
     "trust_net_lot": 0.0,
-    "volume_lot": 759.21
+    "volume_lot": 751.02
   }
 }

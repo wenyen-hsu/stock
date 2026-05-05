@@ -399,9 +399,31 @@
       "ma60": null,
       "open": 15.5,
       "volume_lot": 3948.0
+    },
+    {
+      "avg_price": 15.706234351527291,
+      "close": 15.7,
+      "date": "2026-05-05",
+      "high": 15.8,
+      "low": 15.65,
+      "ma10": 15.12,
+      "ma20": 14.9575,
+      "ma5": 15.43,
+      "ma60": null,
+      "open": 15.75,
+      "volume_lot": 1997.0
     }
   ],
   "daily": [
+    {
+      "avg_price": 15.706234351527291,
+      "close": 15.7,
+      "date": "2026-05-05",
+      "dealer_net_lot": 0.0,
+      "foreign_net_lot": 417.0,
+      "trust_net_lot": 0.0,
+      "volume_lot": 1997.0
+    },
     {
       "avg_price": 15.618933637284702,
       "close": 15.7,
@@ -572,18 +594,26 @@
       "foreign_net_lot": 248.0,
       "trust_net_lot": 0.0,
       "volume_lot": 723.0
-    },
-    {
-      "avg_price": 14.65814332247557,
-      "close": 14.65,
-      "date": "2026-04-02",
-      "dealer_net_lot": 0.0,
-      "foreign_net_lot": -378.0,
-      "trust_net_lot": 0.0,
-      "volume_lot": 921.0
     }
   ],
   "margin": [
+    {
+      "date": "2026-05-05",
+      "margin_balance_lot": 3375,
+      "margin_buy_lot": 26,
+      "margin_cash_repay_lot": 0,
+      "margin_change_lot": -58,
+      "margin_prev_balance_lot": 3433,
+      "margin_sell_lot": 84,
+      "note": "",
+      "offset_lot": 1,
+      "short_balance_lot": 6,
+      "short_buy_lot": 0,
+      "short_change_lot": 0,
+      "short_prev_balance_lot": 6,
+      "short_sell_lot": 0,
+      "short_stock_repay_lot": 0
+    },
     {
       "date": "2026-04-30",
       "margin_balance_lot": 3247,
@@ -889,23 +919,6 @@
       "short_prev_balance_lot": 3,
       "short_sell_lot": 0,
       "short_stock_repay_lot": 0
-    },
-    {
-      "date": "2026-04-02",
-      "margin_balance_lot": 2266,
-      "margin_buy_lot": 32,
-      "margin_cash_repay_lot": 0,
-      "margin_change_lot": 18,
-      "margin_prev_balance_lot": 2248,
-      "margin_sell_lot": 14,
-      "note": "",
-      "offset_lot": 0,
-      "short_balance_lot": 3,
-      "short_buy_lot": 0,
-      "short_change_lot": 0,
-      "short_prev_balance_lot": 3,
-      "short_sell_lot": 0,
-      "short_stock_repay_lot": 0
     }
   ],
   "news": [],
@@ -1200,30 +1213,30 @@
     }
   ],
   "selection": {
-    "avg_price": 14.9904,
+    "avg_price": 15.0396,
     "base_reason": "外資買超；融資增加；營收 2026-03，月增 -94.12%，年增 -110.8%，累計年增 33.33%",
-    "base_score": 27.61,
+    "base_score": 30.96,
     "branch_score": 0.0,
     "branch_status": "未取得",
-    "chip_score": 33.01,
+    "chip_score": 36.54,
     "close": 15.7,
     "close_vs_top_buy_avg_pct": 0.0,
-    "complete_chip_score": 27.61,
+    "complete_chip_score": 30.96,
     "confluence_branch_score": 0.0,
     "confluence_direction_score": 0.0,
     "confluence_inst_score": 0.0,
     "confluence_price_score": 0.0,
     "confluence_score": 0.0,
     "confluence_streak_score": 0.0,
-    "foreign_buy_streak": 2.0,
-    "foreign_net_lot": 3857.01,
-    "foreign_net_volume_pct": 11.27,
+    "foreign_buy_streak": 3.0,
+    "foreign_net_lot": 4652.01,
+    "foreign_net_volume_pct": 13.17,
     "foreign_sell_streak": 0.0,
-    "inst_net_lot": 3857.01,
+    "inst_net_lot": 4652.01,
     "inst_net_volume_pct": 0.0,
-    "latest_date": "2026-05-04",
-    "margin_balance_change_lot": 999.0,
-    "margin_score": -2.33,
+    "latest_date": "2026-05-05",
+    "margin_balance_change_lot": 1109.0,
+    "margin_score": -2.51,
     "market": "TPEX",
     "name": "福邦證",
     "observed_days": 20,
@@ -1233,7 +1246,7 @@
     "revenue_month": "2026-03",
     "revenue_yoy_pct": -110.8,
     "selection_reason": "營收 2026-03，月增 -94.12%，年增 -110.8%，累計年增 33.33%",
-    "selection_score": 27.61,
+    "selection_score": 30.96,
     "short_balance_change_lot": 3.0,
     "stock_id": "6026",
     "top_buy_branch_avg_price": 0.0,
@@ -1243,25 +1256,25 @@
     "top_sell_branch_avg_price": 0.0,
     "top_sell_branch_name": "",
     "top_sell_branch_net_lot": 0.0,
-    "total_score": 27.61,
+    "total_score": 30.96,
     "trust_buy_streak": 0.0,
     "trust_net_lot": 0.0,
     "trust_net_volume_pct": 0.0,
     "trust_sell_streak": 0.0,
-    "volume_lot": 34234.0
+    "volume_lot": 35310.0
   },
   "stock": {
-    "avg_price": 14.9904,
+    "avg_price": 15.0396,
     "close": 15.7,
-    "foreign_net_lot": 3857.01,
+    "foreign_net_lot": 4652.01,
     "in_watchlist": false,
-    "latest_date": "2026-05-04",
-    "margin_balance_change_lot": 999,
+    "latest_date": "2026-05-05",
+    "margin_balance_change_lot": 1109,
     "market": "TPEX",
     "name": "福邦證",
     "short_balance_change_lot": 3,
     "stock_id": "6026",
     "trust_net_lot": 0.0,
-    "volume_lot": 34234.0
+    "volume_lot": 35310.0
   }
 }

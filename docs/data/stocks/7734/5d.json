@@ -399,9 +399,31 @@
       "ma60": null,
       "open": 3550.0,
       "volume_lot": 124.0
+    },
+    {
+      "avg_price": 3761.2025316455697,
+      "close": 3690.0,
+      "date": "2026-05-05",
+      "high": 3895.0,
+      "low": 3680.0,
+      "ma10": 3402.0,
+      "ma20": 2944.25,
+      "ma5": 3477.0,
+      "ma60": null,
+      "open": 3895.0,
+      "volume_lot": 79.0
     }
   ],
   "daily": [
+    {
+      "avg_price": 3761.2025316455697,
+      "close": 3690.0,
+      "date": "2026-05-05",
+      "dealer_net_lot": -0.9,
+      "foreign_net_lot": 52.37,
+      "trust_net_lot": 0.0,
+      "volume_lot": 79.0
+    },
     {
       "avg_price": 3577.9435483870966,
       "close": 3690.0,
@@ -437,18 +459,26 @@
       "foreign_net_lot": -8.75,
       "trust_net_lot": 0.0,
       "volume_lot": 64.0
-    },
-    {
-      "avg_price": 3490.441340782123,
-      "close": 3390.0,
-      "date": "2026-04-27",
-      "dealer_net_lot": -29.04,
-      "foreign_net_lot": 14.84,
-      "trust_net_lot": 247.0,
-      "volume_lot": 895.0
     }
   ],
   "margin": [
+    {
+      "date": "2026-05-05",
+      "margin_balance_lot": 896,
+      "margin_buy_lot": 0,
+      "margin_cash_repay_lot": 0,
+      "margin_change_lot": -29,
+      "margin_prev_balance_lot": 925,
+      "margin_sell_lot": 29,
+      "note": "61      D",
+      "offset_lot": 2,
+      "short_balance_lot": 3,
+      "short_buy_lot": 1,
+      "short_change_lot": -1,
+      "short_prev_balance_lot": 4,
+      "short_sell_lot": 0,
+      "short_stock_repay_lot": 0
+    },
     {
       "date": "2026-04-30",
       "margin_balance_lot": 977,
@@ -499,26 +529,90 @@
       "short_prev_balance_lot": 35,
       "short_sell_lot": 0,
       "short_stock_repay_lot": 0
-    },
-    {
-      "date": "2026-04-27",
-      "margin_balance_lot": 1022,
-      "margin_buy_lot": 71,
-      "margin_cash_repay_lot": 0,
-      "margin_change_lot": -94,
-      "margin_prev_balance_lot": 1116,
-      "margin_sell_lot": 165,
-      "note": "61      D",
-      "offset_lot": 1,
-      "short_balance_lot": 35,
-      "short_buy_lot": 15,
-      "short_change_lot": 14,
-      "short_prev_balance_lot": 21,
-      "short_sell_lot": 29,
-      "short_stock_repay_lot": 0
     }
   ],
-  "news": [],
+  "news": [
+    {
+      "content_excerpt": "主 旨：印能科技115年第一季合併財務報告董事會召開日期 1.董事會召集通知日:115/05/04 2.董事會預計召開日期:115/05/12 3.預計提報董事會或經董事會決議之財務報告或年度自結財務資訊年季:115年第一季",
+      "fetched_at": "2026-05-05 00:29:28",
+      "published_at": "2026-05-04 15:31:53",
+      "source": "Yahoo股市",
+      "stock_id": "7734",
+      "summary": "日 期：2026年05月04日公司名稱：印能科技(7734)主 旨：印能科技115年第一季合併財務報告董事會召開日期發言人：蘇桓平說 明：1.董事會召集通知日:115/05/042.董事會預計召開日期",
+      "title": "【公告】印能科技115年第一季合併財務報告董事會召開日期",
+      "url": "https://tw.stock.yahoo.com/news/%E5%85%AC%E5%91%8A-%E5%8D%B0%E8%83%BD%E7%A7%91%E6%8A%80115%E5%B9%B4%E7%AC%AC-%E5%AD%A3%E5%90%88%E4%BD%B5%E8%B2%A1%E5%8B%99%E5%A0%B1%E5%91%8A%E8%91%A3%E4%BA%8B%E6%9C%83%E5%8F%AC%E9%96%8B%E6%97%A5%E6%9C%9F-073153478.html"
+    },
+    {
+      "content_excerpt": "主 旨：印能科技有價證券近期多次達公布注意交易資訊標準，故公告相關訊息，以利投資人區別暸解 2.發生緣由:依據財團法人中華民國證券櫃檯買賣中心通知處理及辦理公告 單月(註1) 115年3月 114年3月 與去年同期增減% ---------------------- -------------- -------------- ------------------ 營業收入(百萬元) 291.53 175.59 66.03 稅前淨利(百萬元) 176.17 146.37 20.36 歸屬母公司淨利(百萬元) 140.22 95.71 46.51 每股盈餘( 元 ) 5.01 4.29 16.78 ========================================================================== 最近一季單季(註2) 114年第4季 113年第4季 與去年同期增減% 營業收入(百萬元) 492.31 533.21 -7.67 稅前淨利(百萬元) 245.93 359.73 -31.63 歸屬母公司淨利(百萬元) 192.63 286.14 -32.68 每股盈餘( 元 ) 6.91 11.37 -39.23 =========================================================================== 最近四季累計(註3) 114年第1季~114年第4季 ----------------------- -------------------------- 營業收入(百萬元) 2,302.77 稅前淨利(百萬元) 1,189.20 歸屬母公司淨利(百萬元) 918.09 4.有無「財團法人中華民國證券櫃檯買賣中心對有價證券上櫃公司 重大訊息之查證暨公開處理程序 」第4條所列重大訊息之情事（如 5.有無「財團法人中華民國證券櫃檯買賣中心對有價證券上櫃公司 重大訊息之查證暨公開處理程序」第11條所列重大訊息說明記者會 註1：以上115年3月及去年同期比較數之財務資料係本公司採IFRS會計準則編製之 合併數，未經會計師查核(閱)，僅供投資人參考。 註2：最近一季114年第4季係指單季數字，非為最近財務報告中之累計數字，且係本 公司採IFRS下編製之合併數，業經會計師查核(閱)，僅供投資人參考。 註3：最近四季累計係本公司114年第1季至114年第4季採IFRS編製之合併數，業經會",
+      "fetched_at": "2026-05-05 00:29:28",
+      "published_at": "2026-04-27 14:13:54",
+      "source": "Yahoo股市",
+      "stock_id": "7734",
+      "summary": "日 期：2026年04月27日公司名稱：印能科技(7734)主 旨：印能科技有價證券近期多次達公布注意交易資訊標準，故公告相關訊息，以利投資人區別暸解發言人：蘇桓平說 明：1.事實發生日:115/04",
+      "title": "【公告】印能科技有價證券近期多次達公布注意交易資訊標準，故公告相關訊息，以利投資人區別暸解",
+      "url": "https://tw.stock.yahoo.com/news/%E5%85%AC%E5%91%8A-%E5%8D%B0%E8%83%BD%E7%A7%91%E6%8A%80%E6%9C%89%E5%83%B9%E8%AD%89%E5%88%B8%E8%BF%91%E6%9C%9F%E5%A4%9A%E6%AC%A1%E9%81%94%E5%85%AC%E5%B8%83%E6%B3%A8%E6%84%8F%E4%BA%A4%E6%98%93%E8%B3%87%E8%A8%8A%E6%A8%99%E6%BA%96-%E6%95%85%E5%85%AC%E5%91%8A%E7%9B%B8%E9%97%9C%E8%A8%8A%E6%81%AF-%E4%BB%A5%E5%88%A9%E6%8A%95%E8%B3%87%E4%BA%BA%E5%8D%80%E5%88%A5%E6%9A%B8%E8%A7%A3-061354340.html"
+    },
+    {
+      "content_excerpt": "日期： 2026 年 04 月 10日 【公告】印能科技 2026年3月合併營收 (單位：仟元)",
+      "fetched_at": "2026-05-05 00:29:28",
+      "published_at": "2026-04-10 14:03:53",
+      "source": "Yahoo股市",
+      "stock_id": "7734",
+      "summary": "日期： 2026 年 04 月 10日上櫃公司：印能科技(7734)單位：仟元 【公告】印能科技 2026年3月合併營收 (單位：仟元)項目合併營業收入淨額本月291,525去年同期175,586增減",
+      "title": "【公告】印能科技 2026年3月合併營收2.92億元 年增66.03%",
+      "url": "https://tw.stock.yahoo.com/news/%E5%85%AC%E5%91%8A-%E5%8D%B0%E8%83%BD%E7%A7%91%E6%8A%80-2026%E5%B9%B43%E6%9C%88%E5%90%88%E4%BD%B5%E7%87%9F%E6%94%B62-92%E5%84%84%E5%85%83-%E5%B9%B4%E5%A2%9E66-060353177.html"
+    },
+    {
+      "content_excerpt": "主 旨：受邀參加群益金鼎證券舉辦之投資論壇 1.召開法人說明會之日期：115/03/17 2.召開法人說明會之時間：13 時 30 分 3.召開法人說明會之地點：台北茹曦酒店（台北市松山區敦化北路100號) 4.法人說明會擇要訊息：受邀參加群益金鼎證券舉辦之投資論壇 完整財務業務資訊請至公開資訊觀測站之法人說明會一覽表或法說會項目下查閱。",
+      "fetched_at": "2026-05-05 00:29:28",
+      "published_at": "2026-03-16 15:05:03",
+      "source": "Yahoo股市",
+      "stock_id": "7734",
+      "summary": "日 期：2026年03月16日公司名稱：印能科技(7734)主 旨：受邀參加群益金鼎證券舉辦之投資論壇發言人：蘇桓平說 明：符合條款第四條第XX款：12事實發生日：115/03/171.召開法人說明會",
+      "title": "【公告】印能科技受邀參加群益金鼎證券舉辦之投資論壇",
+      "url": "https://tw.stock.yahoo.com/news/%E5%85%AC%E5%91%8A-%E5%8D%B0%E8%83%BD%E7%A7%91%E6%8A%80%E5%8F%97%E9%82%80%E5%8F%83%E5%8A%A0%E7%BE%A4%E7%9B%8A%E9%87%91%E9%BC%8E%E8%AD%89%E5%88%B8%E8%88%89%E8%BE%A6%E4%B9%8B%E6%8A%95%E8%B3%87%E8%AB%96%E5%A3%87-070503689.html"
+    },
+    {
+      "content_excerpt": "主 旨：受邀參加BofA Securities 2026 Asia Tech Conference 1.召開法人說明會之日期：115/03/18 2.召開法人說明會之時間：14 時 00 分 3.召開法人說明會之地點：台北君悅酒店(台北市信義區松壽路2號) 4.法人說明會擇要訊息：受邀參加BofA Securities 2026 Asia Tech Conference 完整財務業務資訊請至公開資訊觀測站之法人說明會一覽表或法說會項目下查閱。",
+      "fetched_at": "2026-05-05 00:29:28",
+      "published_at": "2026-03-16 15:05:01",
+      "source": "Yahoo股市",
+      "stock_id": "7734",
+      "summary": "日 期：2026年03月16日公司名稱：印能科技(7734)主 旨：受邀參加BofA Securities 2026 Asia Tech Conference發言人：蘇桓平說 明：符合條款第四條第XX",
+      "title": "【公告】印能科技受邀參加BofA Securities 2026 Asia Tech Conference",
+      "url": "https://tw.stock.yahoo.com/news/%E5%85%AC%E5%91%8A-%E5%8D%B0%E8%83%BD%E7%A7%91%E6%8A%80%E5%8F%97%E9%82%80%E5%8F%83%E5%8A%A0bofa-securities-2026-asia-070501469.html"
+    },
+    {
+      "content_excerpt": "主 旨：受邀參加宏遠證券舉辦之產業論壇 1.召開法人說明會之日期：115/03/11 2.召開法人說明會之時間：14 時 00 分 3.召開法人說明會之地點：宏遠證券7樓(台北市大安區信義路四段236號7樓) 4.法人說明會擇要訊息：受邀參加宏遠證券舉辦之產業論壇 完整財務業務資訊請至公開資訊觀測站之法人說明會一覽表或法說會項目下查閱。",
+      "fetched_at": "2026-05-05 00:29:28",
+      "published_at": "2026-03-10 15:16:19",
+      "source": "Yahoo股市",
+      "stock_id": "7734",
+      "summary": "日 期：2026年03月10日公司名稱：印能科技(7734)主 旨：受邀參加宏遠證券舉辦之產業論壇發言人：蘇桓平說 明：符合條款第四條第XX款：12事實發生日：115/03/111.召開法人說明會之日",
+      "title": "【公告】印能科技受邀參加宏遠證券舉辦之產業論壇",
+      "url": "https://tw.stock.yahoo.com/news/%E5%85%AC%E5%91%8A-%E5%8D%B0%E8%83%BD%E7%A7%91%E6%8A%80%E5%8F%97%E9%82%80%E5%8F%83%E5%8A%A0%E5%AE%8F%E9%81%A0%E8%AD%89%E5%88%B8%E8%88%89%E8%BE%A6%E4%B9%8B%E7%94%A2%E6%A5%AD%E8%AB%96%E5%A3%87-071619054.html"
+    },
+    {
+      "content_excerpt": "日期： 2026 年 03 月 10日 【公告】印能科技 2026年2月合併營收 (單位：仟元)",
+      "fetched_at": "2026-05-05 00:29:28",
+      "published_at": "2026-03-10 14:13:37",
+      "source": "Yahoo股市",
+      "stock_id": "7734",
+      "summary": "日期： 2026 年 03 月 10日上櫃公司：印能科技(7734)單位：仟元 【公告】印能科技 2026年2月合併營收 (單位：仟元)項目合併營業收入淨額本月280,371去年同期180,204增減",
+      "title": "【公告】印能科技 2026年2月合併營收2.8億元 年增55.59%",
+      "url": "https://tw.stock.yahoo.com/news/%E5%85%AC%E5%91%8A-%E5%8D%B0%E8%83%BD%E7%A7%91%E6%8A%80-2026%E5%B9%B42%E6%9C%88%E5%90%88%E4%BD%B5%E7%87%9F%E6%94%B62-8%E5%84%84%E5%85%83-%E5%B9%B4%E5%A2%9E55-061337569.html"
+    },
+    {
+      "content_excerpt": "主 旨：印能科技董事會決議114年度股利分派 1. 董事會擬議日期：115/03/03 2. 股利所屬年(季)度：114年 年度 3. 股利所屬期間：114/01/01 至 114/12/31 (1)盈餘分配之現金股利(元/股)：19.85063330 (2)法定盈餘公積發放之現金(元/股)：0 (3)資本公積發放之現金(元/股)：0 (4)股東配發之現金(股利)總金額(元)：550,855,074 (6)法定盈餘公積轉增資配股(元/股)：0 (7)資本公積轉增資配股(元/股)：0 6. 普通股每股面額欄位：新台幣10.0000元",
+      "fetched_at": "2026-05-05 00:29:28",
+      "published_at": "2026-03-03 16:28:52",
+      "source": "Yahoo股市",
+      "stock_id": "7734",
+      "summary": "日 期：2026年03月03日公司名稱：印能科技(7734)主 旨：印能科技董事會決議114年度股利分派發言人：蘇桓平說 明：1. 董事會擬議日期：115/03/032. 股利所屬年(季)度：114年",
+      "title": "【公告】印能科技董事會決議114年度股利分派",
+      "url": "https://tw.stock.yahoo.com/news/%E5%85%AC%E5%91%8A-%E5%8D%B0%E8%83%BD%E7%A7%91%E6%8A%80%E8%91%A3%E4%BA%8B%E6%9C%83%E6%B1%BA%E8%AD%B0114%E5%B9%B4%E5%BA%A6%E8%82%A1%E5%88%A9%E5%88%86%E6%B4%BE-082852714.html"
+    }
+  ],
   "revenues": [
     {
       "cumulative_revenue_million": 876.25,
@@ -714,30 +808,30 @@
     }
   ],
   "selection": {
-    "avg_price": 3472.7166,
-    "base_reason": "外資買超；投信買超；融資下降；營收 2026-03，月增 3.98%，年增 66.03%，累計年增 81.96%",
-    "base_score": 88.98,
+    "avg_price": 3491.2869,
+    "base_reason": "外資買超；融資下降；營收 2026-03，月增 3.98%，年增 66.03%，累計年增 81.96%",
+    "base_score": 64.63,
     "branch_score": 0.0,
     "branch_status": "未取得",
-    "chip_score": 60.5,
+    "chip_score": 37.25,
     "close": 3690.0,
     "close_vs_top_buy_avg_pct": 0.0,
-    "complete_chip_score": 88.98,
+    "complete_chip_score": 64.63,
     "confluence_branch_score": 0.0,
     "confluence_direction_score": 0.0,
     "confluence_inst_score": 0.0,
     "confluence_price_score": 0.0,
     "confluence_score": 0.0,
     "confluence_streak_score": 0.0,
-    "foreign_buy_streak": 3.0,
-    "foreign_net_lot": 125.09,
-    "foreign_net_volume_pct": 10.52,
+    "foreign_buy_streak": 4.0,
+    "foreign_net_lot": 162.62,
+    "foreign_net_volume_pct": 43.6,
     "foreign_sell_streak": 0.0,
-    "inst_net_lot": 367.99,
+    "inst_net_lot": 158.52,
     "inst_net_volume_pct": 0.0,
-    "latest_date": "2026-05-04",
-    "margin_balance_change_lot": -139.0,
-    "margin_score": 7.6,
+    "latest_date": "2026-05-05",
+    "margin_balance_change_lot": -126.0,
+    "margin_score": 6.5,
     "market": "TPEX",
     "name": "印能科技",
     "observed_days": 5,
@@ -747,8 +841,8 @@
     "revenue_month": "2026-03",
     "revenue_yoy_pct": 66.03,
     "selection_reason": "營收 2026-03，月增 3.98%，年增 66.03%，累計年增 81.96%",
-    "selection_score": 88.98,
-    "short_balance_change_lot": -16.0,
+    "selection_score": 64.63,
+    "short_balance_change_lot": -32.0,
     "stock_id": "7734",
     "top_buy_branch_avg_price": 0.0,
     "top_buy_branch_name": "",
@@ -757,25 +851,25 @@
     "top_sell_branch_avg_price": 0.0,
     "top_sell_branch_name": "",
     "top_sell_branch_net_lot": 0.0,
-    "total_score": 88.98,
+    "total_score": 64.63,
     "trust_buy_streak": 0.0,
-    "trust_net_lot": 242.9,
-    "trust_net_volume_pct": 20.43,
-    "trust_sell_streak": 1.0,
-    "volume_lot": 1189.0
+    "trust_net_lot": -4.1,
+    "trust_net_volume_pct": -1.1,
+    "trust_sell_streak": 0.0,
+    "volume_lot": 373.0
   },
   "stock": {
-    "avg_price": 3472.7166,
+    "avg_price": 3491.2869,
     "close": 3690.0,
-    "foreign_net_lot": 125.09,
+    "foreign_net_lot": 162.62,
     "in_watchlist": false,
-    "latest_date": "2026-05-04",
-    "margin_balance_change_lot": -139,
+    "latest_date": "2026-05-05",
+    "margin_balance_change_lot": -126,
     "market": "TPEX",
     "name": "印能科技",
-    "short_balance_change_lot": -16,
+    "short_balance_change_lot": -32,
     "stock_id": "7734",
-    "trust_net_lot": 242.9,
-    "volume_lot": 1189.0
+    "trust_net_lot": -4.1,
+    "volume_lot": 373.0
   }
 }

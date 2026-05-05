@@ -399,9 +399,31 @@
       "ma60": null,
       "open": 26.9,
       "volume_lot": 365.0
+    },
+    {
+      "avg_price": 28.623086419753086,
+      "close": 29.0,
+      "date": "2026-05-05",
+      "high": 29.0,
+      "low": 27.85,
+      "ma10": 28.455,
+      "ma20": 29.4775,
+      "ma5": 27.59,
+      "ma60": null,
+      "open": 27.85,
+      "volume_lot": 405.0
     }
   ],
   "daily": [
+    {
+      "avg_price": 28.623086419753086,
+      "close": 29.0,
+      "date": "2026-05-05",
+      "dealer_net_lot": 1.58,
+      "foreign_net_lot": 12.0,
+      "trust_net_lot": 0.0,
+      "volume_lot": 405.0
+    },
     {
       "avg_price": 27.660273972602738,
       "close": 28.05,
@@ -437,18 +459,26 @@
       "foreign_net_lot": 244.0,
       "trust_net_lot": 0.0,
       "volume_lot": 615.0
-    },
-    {
-      "avg_price": 27.573887434554972,
-      "close": 27.65,
-      "date": "2026-04-27",
-      "dealer_net_lot": 0.76,
-      "foreign_net_lot": 140.6,
-      "trust_net_lot": 0.0,
-      "volume_lot": 764.0
     }
   ],
   "margin": [
+    {
+      "date": "2026-05-05",
+      "margin_balance_lot": 3928,
+      "margin_buy_lot": 13,
+      "margin_cash_repay_lot": 2,
+      "margin_change_lot": -31,
+      "margin_prev_balance_lot": 3959,
+      "margin_sell_lot": 42,
+      "note": "",
+      "offset_lot": 0,
+      "short_balance_lot": 6,
+      "short_buy_lot": 1,
+      "short_change_lot": 1,
+      "short_prev_balance_lot": 5,
+      "short_sell_lot": 2,
+      "short_stock_repay_lot": 0
+    },
     {
       "date": "2026-04-30",
       "margin_balance_lot": 3994,
@@ -498,23 +528,6 @@
       "short_change_lot": -2,
       "short_prev_balance_lot": 14,
       "short_sell_lot": 0,
-      "short_stock_repay_lot": 0
-    },
-    {
-      "date": "2026-04-27",
-      "margin_balance_lot": 3998,
-      "margin_buy_lot": 13,
-      "margin_cash_repay_lot": 6,
-      "margin_change_lot": -84,
-      "margin_prev_balance_lot": 4082,
-      "margin_sell_lot": 91,
-      "note": "",
-      "offset_lot": 1,
-      "short_balance_lot": 14,
-      "short_buy_lot": 0,
-      "short_change_lot": 3,
-      "short_prev_balance_lot": 11,
-      "short_sell_lot": 3,
       "short_stock_repay_lot": 0
     }
   ],
@@ -810,15 +823,15 @@
     }
   ],
   "selection": {
-    "avg_price": 27.2517,
+    "avg_price": 27.3971,
     "base_reason": "外資買超；融資下降；營收 2026-03，月增 -12.21%，年增 186.45%，累計年增 62.72%",
-    "base_score": 70.54,
+    "base_score": 64.11,
     "branch_score": 0.0,
     "branch_status": "未取得",
-    "chip_score": 48.0,
-    "close": 28.05,
+    "chip_score": 42.0,
+    "close": 29.0,
     "close_vs_top_buy_avg_pct": 0.0,
-    "complete_chip_score": 70.54,
+    "complete_chip_score": 64.11,
     "confluence_branch_score": 0.0,
     "confluence_direction_score": 0.0,
     "confluence_inst_score": 0.0,
@@ -826,14 +839,14 @@
     "confluence_score": 0.0,
     "confluence_streak_score": 0.0,
     "foreign_buy_streak": 5.0,
-    "foreign_net_lot": 642.5,
-    "foreign_net_volume_pct": 25.84,
+    "foreign_net_lot": 513.9,
+    "foreign_net_volume_pct": 24.16,
     "foreign_sell_streak": 0.0,
-    "inst_net_lot": 642.5,
+    "inst_net_lot": 513.9,
     "inst_net_volume_pct": 0.0,
-    "latest_date": "2026-05-04",
-    "margin_balance_change_lot": -88.0,
-    "margin_score": 3.61,
+    "latest_date": "2026-05-05",
+    "margin_balance_change_lot": -70.0,
+    "margin_score": 3.18,
     "market": "TPEX",
     "name": "泰茂",
     "observed_days": 5,
@@ -843,8 +856,8 @@
     "revenue_month": "2026-03",
     "revenue_yoy_pct": 186.45,
     "selection_reason": "營收 2026-03，月增 -12.21%，年增 186.45%，累計年增 62.72%",
-    "selection_score": 70.54,
-    "short_balance_change_lot": 3.0,
+    "selection_score": 64.11,
+    "short_balance_change_lot": -8.0,
     "stock_id": "2230",
     "top_buy_branch_avg_price": 0.0,
     "top_buy_branch_name": "",
@@ -853,25 +866,25 @@
     "top_sell_branch_avg_price": 0.0,
     "top_sell_branch_name": "",
     "top_sell_branch_net_lot": 0.0,
-    "total_score": 70.54,
+    "total_score": 64.11,
     "trust_buy_streak": 0.0,
     "trust_net_lot": 0.0,
     "trust_net_volume_pct": 0.0,
     "trust_sell_streak": 0.0,
-    "volume_lot": 2486.0
+    "volume_lot": 2127.0
   },
   "stock": {
-    "avg_price": 27.2517,
-    "close": 28.05,
-    "foreign_net_lot": 642.5,
+    "avg_price": 27.3971,
+    "close": 29.0,
+    "foreign_net_lot": 513.9,
     "in_watchlist": false,
-    "latest_date": "2026-05-04",
-    "margin_balance_change_lot": -88,
+    "latest_date": "2026-05-05",
+    "margin_balance_change_lot": -70,
     "market": "TPEX",
     "name": "泰茂",
-    "short_balance_change_lot": 3,
+    "short_balance_change_lot": -8,
     "stock_id": "2230",
     "trust_net_lot": 0.0,
-    "volume_lot": 2486.0
+    "volume_lot": 2127.0
   }
 }

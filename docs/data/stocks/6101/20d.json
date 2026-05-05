@@ -3,11 +3,11 @@
   "branch_daily_status": [],
   "branch_top": [],
   "branch_top_status": {
-    "attempts": 0,
-    "error": null,
+    "attempts": 3,
+    "error": "empty parseable branch table",
     "row_count": 0,
-    "status": "missing",
-    "updated_at": ""
+    "status": "empty",
+    "updated_at": "2026-05-05 21:12:47"
   },
   "chart": [
     {
@@ -399,9 +399,31 @@
       "ma60": null,
       "open": 40.75,
       "volume_lot": 81.0
+    },
+    {
+      "avg_price": 40.12792207792208,
+      "close": 40.25,
+      "date": "2026-05-05",
+      "high": 40.3,
+      "low": 40.0,
+      "ma10": 39.435,
+      "ma20": 39.62,
+      "ma5": 39.7,
+      "ma60": null,
+      "open": 40.25,
+      "volume_lot": 77.0
     }
   ],
   "daily": [
+    {
+      "avg_price": 40.12792207792208,
+      "close": 40.25,
+      "date": "2026-05-05",
+      "dealer_net_lot": 0.0,
+      "foreign_net_lot": 9.0,
+      "trust_net_lot": 0.0,
+      "volume_lot": 77.0
+    },
     {
       "avg_price": 40.410493827160494,
       "close": 40.25,
@@ -572,18 +594,26 @@
       "foreign_net_lot": 17.0,
       "trust_net_lot": 0.0,
       "volume_lot": 95.0
-    },
-    {
-      "avg_price": 38.01696428571429,
-      "close": 37.95,
-      "date": "2026-04-02",
-      "dealer_net_lot": 0.0,
-      "foreign_net_lot": -1.0,
-      "trust_net_lot": 0.0,
-      "volume_lot": 56.0
     }
   ],
   "margin": [
+    {
+      "date": "2026-05-05",
+      "margin_balance_lot": 5711,
+      "margin_buy_lot": 0,
+      "margin_cash_repay_lot": 0,
+      "margin_change_lot": -11,
+      "margin_prev_balance_lot": 5722,
+      "margin_sell_lot": 11,
+      "note": "OX",
+      "offset_lot": 0,
+      "short_balance_lot": 0,
+      "short_buy_lot": 0,
+      "short_change_lot": 0,
+      "short_prev_balance_lot": 0,
+      "short_sell_lot": 0,
+      "short_stock_repay_lot": 0
+    },
     {
       "date": "2026-04-30",
       "margin_balance_lot": 5727,
@@ -889,23 +919,6 @@
       "short_prev_balance_lot": 0,
       "short_sell_lot": 0,
       "short_stock_repay_lot": 0
-    },
-    {
-      "date": "2026-04-02",
-      "margin_balance_lot": 6000,
-      "margin_buy_lot": 0,
-      "margin_cash_repay_lot": 0,
-      "margin_change_lot": -17,
-      "margin_prev_balance_lot": 6017,
-      "margin_sell_lot": 17,
-      "note": "OX",
-      "offset_lot": 0,
-      "short_balance_lot": 0,
-      "short_buy_lot": 0,
-      "short_change_lot": 0,
-      "short_prev_balance_lot": 0,
-      "short_sell_lot": 0,
-      "short_stock_repay_lot": 0
     }
   ],
   "news": [],
@@ -1200,29 +1213,29 @@
     }
   ],
   "selection": {
-    "avg_price": 39.6208,
+    "avg_price": 39.688,
     "base_reason": "外資買超；融資下降；營收 2026-03，月增 554.79%，年增 560.85%，累計年增 550.73%",
-    "base_score": 42.65,
+    "base_score": 48.03,
     "branch_score": 0.0,
     "branch_status": "未取得",
-    "chip_score": 10.65,
+    "chip_score": 16.03,
     "close": 40.25,
     "close_vs_top_buy_avg_pct": 0.0,
-    "complete_chip_score": 42.65,
+    "complete_chip_score": 48.03,
     "confluence_branch_score": 0.0,
     "confluence_direction_score": 0.0,
     "confluence_inst_score": 0.0,
     "confluence_price_score": 0.0,
     "confluence_score": 0.0,
     "confluence_streak_score": 0.0,
-    "foreign_buy_streak": 0.0,
-    "foreign_net_lot": 45.0,
-    "foreign_net_volume_pct": 2.37,
-    "foreign_sell_streak": 1.0,
-    "inst_net_lot": 45.0,
+    "foreign_buy_streak": 1.0,
+    "foreign_net_lot": 55.0,
+    "foreign_net_volume_pct": 2.87,
+    "foreign_sell_streak": 0.0,
+    "inst_net_lot": 55.0,
     "inst_net_volume_pct": 0.0,
-    "latest_date": "2026-05-04",
-    "margin_balance_change_lot": -290.0,
+    "latest_date": "2026-05-05",
+    "margin_balance_change_lot": -289.0,
     "margin_score": 8.0,
     "market": "TPEX",
     "name": "寬魚國際",
@@ -1233,7 +1246,7 @@
     "revenue_month": "2026-03",
     "revenue_yoy_pct": 560.85,
     "selection_reason": "營收 2026-03，月增 554.79%，年增 560.85%，累計年增 550.73%",
-    "selection_score": 42.65,
+    "selection_score": 48.03,
     "short_balance_change_lot": 0.0,
     "stock_id": "6101",
     "top_buy_branch_avg_price": 0.0,
@@ -1243,25 +1256,25 @@
     "top_sell_branch_avg_price": 0.0,
     "top_sell_branch_name": "",
     "top_sell_branch_net_lot": 0.0,
-    "total_score": 42.65,
+    "total_score": 48.03,
     "trust_buy_streak": 0.0,
     "trust_net_lot": 0.0,
     "trust_net_volume_pct": 0.0,
     "trust_sell_streak": 0.0,
-    "volume_lot": 1896.0
+    "volume_lot": 1917.0
   },
   "stock": {
-    "avg_price": 39.6208,
+    "avg_price": 39.688,
     "close": 40.25,
-    "foreign_net_lot": 45.0,
+    "foreign_net_lot": 55.0,
     "in_watchlist": false,
-    "latest_date": "2026-05-04",
-    "margin_balance_change_lot": -290,
+    "latest_date": "2026-05-05",
+    "margin_balance_change_lot": -289,
     "market": "TPEX",
     "name": "寬魚國際",
     "short_balance_change_lot": 0,
     "stock_id": "6101",
     "trust_net_lot": 0.0,
-    "volume_lot": 1896.0
+    "volume_lot": 1917.0
   }
 }

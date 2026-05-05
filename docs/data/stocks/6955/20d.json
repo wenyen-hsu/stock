@@ -3,11 +3,11 @@
   "branch_daily_status": [],
   "branch_top": [],
   "branch_top_status": {
-    "attempts": 0,
-    "error": null,
+    "attempts": 3,
+    "error": "empty parseable branch table",
     "row_count": 0,
-    "status": "missing",
-    "updated_at": ""
+    "status": "empty",
+    "updated_at": "2026-05-05 21:10:57"
   },
   "chart": [
     {
@@ -412,9 +412,31 @@
       "ma60": null,
       "open": 164.0,
       "volume_lot": 35.04
+    },
+    {
+      "avg_price": 160.86372140488137,
+      "close": 162.5,
+      "date": "2026-05-05",
+      "high": 163.0,
+      "low": 158.0,
+      "ma10": null,
+      "ma20": null,
+      "ma5": 165.1,
+      "ma60": null,
+      "open": 161.5,
+      "volume_lot": 47.04
     }
   ],
   "daily": [
+    {
+      "avg_price": 160.86372140488137,
+      "close": 162.5,
+      "date": "2026-05-05",
+      "dealer_net_lot": 3.0,
+      "foreign_net_lot": 3.0,
+      "trust_net_lot": 0.0,
+      "volume_lot": 47.04
+    },
     {
       "avg_price": 165.0576264413746,
       "close": 165.5,
@@ -585,15 +607,6 @@
       "foreign_net_lot": -1.0,
       "trust_net_lot": 0.0,
       "volume_lot": 12.32
-    },
-    {
-      "avg_price": 162.95458261422473,
-      "close": 162.0,
-      "date": "2026-04-02",
-      "dealer_net_lot": 2.0,
-      "foreign_net_lot": 0.0,
-      "trust_net_lot": 0.0,
-      "volume_lot": 11.01
     }
   ],
   "margin": [],
@@ -829,28 +842,28 @@
     }
   ],
   "selection": {
-    "avg_price": 165.1021,
+    "avg_price": 164.5144,
     "base_reason": "外資買超；營收 2026-03，月增 15.58%，年增 20.22%，累計年增 18.81%",
-    "base_score": 44.21,
+    "base_score": 45.68,
     "branch_score": 0.0,
     "branch_status": "未取得",
-    "chip_score": 35.69,
-    "close": 165.5,
+    "chip_score": 37.16,
+    "close": 162.5,
     "close_vs_top_buy_avg_pct": 0.0,
-    "complete_chip_score": 44.21,
+    "complete_chip_score": 45.68,
     "confluence_branch_score": 0.0,
     "confluence_direction_score": 0.0,
     "confluence_inst_score": 0.0,
     "confluence_price_score": 0.0,
     "confluence_score": 0.0,
     "confluence_streak_score": 0.0,
-    "foreign_buy_streak": 1.0,
-    "foreign_net_lot": 26.0,
-    "foreign_net_volume_pct": 9.89,
+    "foreign_buy_streak": 2.0,
+    "foreign_net_lot": 29.0,
+    "foreign_net_volume_pct": 9.7,
     "foreign_sell_streak": 0.0,
-    "inst_net_lot": 26.0,
+    "inst_net_lot": 29.0,
     "inst_net_volume_pct": 0.0,
-    "latest_date": "2026-05-04",
+    "latest_date": "2026-05-05",
     "margin_balance_change_lot": 0.0,
     "margin_score": 0.0,
     "market": "TWSE",
@@ -862,7 +875,7 @@
     "revenue_month": "2026-03",
     "revenue_yoy_pct": 20.22,
     "selection_reason": "營收 2026-03，月增 15.58%，年增 20.22%，累計年增 18.81%",
-    "selection_score": 44.21,
+    "selection_score": 45.68,
     "short_balance_change_lot": 0.0,
     "stock_id": "6955",
     "top_buy_branch_avg_price": 0.0,
@@ -872,25 +885,25 @@
     "top_sell_branch_avg_price": 0.0,
     "top_sell_branch_name": "",
     "top_sell_branch_net_lot": 0.0,
-    "total_score": 44.21,
+    "total_score": 45.68,
     "trust_buy_streak": 0.0,
     "trust_net_lot": 0.0,
     "trust_net_volume_pct": 0.0,
     "trust_sell_streak": 0.0,
-    "volume_lot": 262.94
+    "volume_lot": 298.97
   },
   "stock": {
-    "avg_price": 165.1021,
-    "close": 165.5,
-    "foreign_net_lot": 26.0,
+    "avg_price": 164.5144,
+    "close": 162.5,
+    "foreign_net_lot": 29.0,
     "in_watchlist": false,
-    "latest_date": "2026-05-04",
+    "latest_date": "2026-05-05",
     "margin_balance_change_lot": null,
     "market": "TWSE",
     "name": "邦睿生技-創",
     "short_balance_change_lot": null,
     "stock_id": "6955",
     "trust_net_lot": 0.0,
-    "volume_lot": 262.94
+    "volume_lot": 298.97
   }
 }

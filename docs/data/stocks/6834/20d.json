@@ -3,11 +3,11 @@
   "branch_daily_status": [],
   "branch_top": [],
   "branch_top_status": {
-    "attempts": 0,
-    "error": null,
+    "attempts": 3,
+    "error": "empty parseable branch table",
     "row_count": 0,
-    "status": "missing",
-    "updated_at": ""
+    "status": "empty",
+    "updated_at": "2026-05-05 21:10:13"
   },
   "chart": [
     {
@@ -412,9 +412,31 @@
       "ma60": null,
       "open": 37.95,
       "volume_lot": 1550.12
+    },
+    {
+      "avg_price": 39.38674077419543,
+      "close": 38.65,
+      "date": "2026-05-05",
+      "high": 40.5,
+      "low": 38.65,
+      "ma10": 37.105,
+      "ma20": 36.4125,
+      "ma5": 38.35,
+      "ma60": null,
+      "open": 39.35,
+      "volume_lot": 686.39
     }
   ],
   "daily": [
+    {
+      "avg_price": 39.38674077419543,
+      "close": 38.65,
+      "date": "2026-05-05",
+      "dealer_net_lot": 7.72,
+      "foreign_net_lot": -32.0,
+      "trust_net_lot": 0.0,
+      "volume_lot": 686.39
+    },
     {
       "avg_price": 39.62082822081932,
       "close": 39.35,
@@ -585,18 +607,26 @@
       "foreign_net_lot": -9.0,
       "trust_net_lot": 0.0,
       "volume_lot": 128.3
-    },
-    {
-      "avg_price": 31.534978205612436,
-      "close": 31.3,
-      "date": "2026-04-02",
-      "dealer_net_lot": 0.0,
-      "foreign_net_lot": -21.0,
-      "trust_net_lot": 0.0,
-      "volume_lot": 195.92
     }
   ],
   "margin": [
+    {
+      "date": "2026-05-05",
+      "margin_balance_lot": 2152,
+      "margin_buy_lot": 60,
+      "margin_cash_repay_lot": 0,
+      "margin_change_lot": 1,
+      "margin_prev_balance_lot": 2151,
+      "margin_sell_lot": 59,
+      "note": "",
+      "offset_lot": 0,
+      "short_balance_lot": 3,
+      "short_buy_lot": 1,
+      "short_change_lot": -1,
+      "short_prev_balance_lot": 4,
+      "short_sell_lot": 0,
+      "short_stock_repay_lot": 0
+    },
     {
       "date": "2026-05-04",
       "margin_balance_lot": 2151,
@@ -919,23 +949,6 @@
       "short_prev_balance_lot": 0,
       "short_sell_lot": 0,
       "short_stock_repay_lot": 0
-    },
-    {
-      "date": "2026-04-02",
-      "margin_balance_lot": 1395,
-      "margin_buy_lot": 23,
-      "margin_cash_repay_lot": 0,
-      "margin_change_lot": -2,
-      "margin_prev_balance_lot": 1397,
-      "margin_sell_lot": 25,
-      "note": "",
-      "offset_lot": 0,
-      "short_balance_lot": 0,
-      "short_buy_lot": 0,
-      "short_change_lot": 0,
-      "short_prev_balance_lot": 0,
-      "short_sell_lot": 0,
-      "short_stock_repay_lot": 0
     }
   ],
   "news": [],
@@ -1230,30 +1243,30 @@
     }
   ],
   "selection": {
-    "avg_price": 37.4577,
+    "avg_price": 37.5809,
     "base_reason": "外資買超；融資增加；營收 2026-03，月增 44.58%，年增 32.6%，累計年增 19.69%",
-    "base_score": 44.58,
+    "base_score": 44.35,
     "branch_score": 0.0,
     "branch_status": "未取得",
-    "chip_score": 33.81,
-    "close": 39.35,
+    "chip_score": 33.53,
+    "close": 38.65,
     "close_vs_top_buy_avg_pct": 0.0,
-    "complete_chip_score": 44.58,
+    "complete_chip_score": 44.35,
     "confluence_branch_score": 0.0,
     "confluence_direction_score": 0.0,
     "confluence_inst_score": 0.0,
     "confluence_price_score": 0.0,
     "confluence_score": 0.0,
     "confluence_streak_score": 0.0,
-    "foreign_buy_streak": 2.0,
-    "foreign_net_lot": 2411.43,
-    "foreign_net_volume_pct": 12.26,
-    "foreign_sell_streak": 0.0,
-    "inst_net_lot": 2411.43,
+    "foreign_buy_streak": 0.0,
+    "foreign_net_lot": 2400.43,
+    "foreign_net_volume_pct": 11.91,
+    "foreign_sell_streak": 1.0,
+    "inst_net_lot": 2400.43,
     "inst_net_volume_pct": 0.0,
-    "latest_date": "2026-05-04",
-    "margin_balance_change_lot": 754.0,
-    "margin_score": -3.05,
+    "latest_date": "2026-05-05",
+    "margin_balance_change_lot": 757.0,
+    "margin_score": -3.0,
     "market": "TWSE",
     "name": "天二科技",
     "observed_days": 20,
@@ -1263,8 +1276,8 @@
     "revenue_month": "2026-03",
     "revenue_yoy_pct": 32.6,
     "selection_reason": "營收 2026-03，月增 44.58%，年增 32.6%，累計年增 19.69%",
-    "selection_score": 44.58,
-    "short_balance_change_lot": 4.0,
+    "selection_score": 44.35,
+    "short_balance_change_lot": 3.0,
     "stock_id": "6834",
     "top_buy_branch_avg_price": 0.0,
     "top_buy_branch_name": "",
@@ -1273,25 +1286,25 @@
     "top_sell_branch_avg_price": 0.0,
     "top_sell_branch_name": "",
     "top_sell_branch_net_lot": 0.0,
-    "total_score": 44.58,
+    "total_score": 44.35,
     "trust_buy_streak": 0.0,
     "trust_net_lot": 0.0,
     "trust_net_volume_pct": 0.0,
     "trust_sell_streak": 0.0,
-    "volume_lot": 19666.25
+    "volume_lot": 20156.72
   },
   "stock": {
-    "avg_price": 37.4577,
-    "close": 39.35,
-    "foreign_net_lot": 2411.43,
+    "avg_price": 37.5809,
+    "close": 38.65,
+    "foreign_net_lot": 2400.43,
     "in_watchlist": false,
-    "latest_date": "2026-05-04",
-    "margin_balance_change_lot": 754,
+    "latest_date": "2026-05-05",
+    "margin_balance_change_lot": 757,
     "market": "TWSE",
     "name": "天二科技",
-    "short_balance_change_lot": 4,
+    "short_balance_change_lot": 3,
     "stock_id": "6834",
     "trust_net_lot": 0.0,
-    "volume_lot": 19666.25
+    "volume_lot": 20156.72
   }
 }

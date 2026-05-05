@@ -412,9 +412,31 @@
       "ma60": null,
       "open": 224.0,
       "volume_lot": 57506.04
+    },
+    {
+      "avg_price": 234.80064403452675,
+      "close": 239.5,
+      "date": "2026-05-05",
+      "high": 240.0,
+      "low": 227.0,
+      "ma10": 224.35,
+      "ma20": 213.65,
+      "ma5": 227.4,
+      "ma60": null,
+      "open": 227.5,
+      "volume_lot": 162873.57
     }
   ],
   "daily": [
+    {
+      "avg_price": 234.80064403452675,
+      "close": 239.5,
+      "date": "2026-05-05",
+      "dealer_net_lot": 3132.77,
+      "foreign_net_lot": 82618.93,
+      "trust_net_lot": 3851.85,
+      "volume_lot": 162873.57
+    },
     {
       "avg_price": 226.56577651440523,
       "close": 227.5,
@@ -450,18 +472,26 @@
       "foreign_net_lot": 10630.28,
       "trust_net_lot": -186.95,
       "volume_lot": 104089.86
-    },
-    {
-      "avg_price": 225.36529996215515,
-      "close": 228.0,
-      "date": "2026-04-27",
-      "dealer_net_lot": 1343.27,
-      "foreign_net_lot": 19578.93,
-      "trust_net_lot": 3561.51,
-      "volume_lot": 109457.41
     }
   ],
   "margin": [
+    {
+      "date": "2026-05-05",
+      "margin_balance_lot": 57733,
+      "margin_buy_lot": 7455,
+      "margin_cash_repay_lot": 52,
+      "margin_change_lot": 3196,
+      "margin_prev_balance_lot": 54537,
+      "margin_sell_lot": 4207,
+      "note": "",
+      "offset_lot": 29,
+      "short_balance_lot": 888,
+      "short_buy_lot": 38,
+      "short_change_lot": 235,
+      "short_prev_balance_lot": 653,
+      "short_sell_lot": 273,
+      "short_stock_repay_lot": 0
+    },
     {
       "date": "2026-05-04",
       "margin_balance_lot": 54537,
@@ -528,23 +558,6 @@
       "short_change_lot": -35,
       "short_prev_balance_lot": 465,
       "short_sell_lot": 21,
-      "short_stock_repay_lot": 0
-    },
-    {
-      "date": "2026-04-27",
-      "margin_balance_lot": 58497,
-      "margin_buy_lot": 5069,
-      "margin_cash_repay_lot": 23,
-      "margin_change_lot": 2804,
-      "margin_prev_balance_lot": 55693,
-      "margin_sell_lot": 2242,
-      "note": "",
-      "offset_lot": 34,
-      "short_balance_lot": 465,
-      "short_buy_lot": 54,
-      "short_change_lot": 32,
-      "short_prev_balance_lot": 433,
-      "short_sell_lot": 86,
       "short_stock_repay_lot": 0
     }
   ],
@@ -840,15 +853,15 @@
     }
   ],
   "selection": {
-    "avg_price": 226.2278,
+    "avg_price": 229.6023,
     "base_reason": "外資買超；投信買超；融資下降；營收 2026-03，月增 34.9%，年增 45.57%，累計年增 29.68%",
-    "base_score": 70.76,
+    "base_score": 66.99,
     "branch_score": 0.0,
     "branch_status": "未取得",
-    "chip_score": 53.29,
-    "close": 227.5,
+    "chip_score": 49.62,
+    "close": 239.5,
     "close_vs_top_buy_avg_pct": 0.0,
-    "complete_chip_score": 70.76,
+    "complete_chip_score": 66.99,
     "confluence_branch_score": 0.0,
     "confluence_direction_score": 0.0,
     "confluence_inst_score": 0.0,
@@ -856,14 +869,14 @@
     "confluence_score": 0.0,
     "confluence_streak_score": 0.0,
     "foreign_buy_streak": 5.0,
-    "foreign_net_lot": 63080.98,
-    "foreign_net_volume_pct": 16.24,
+    "foreign_net_lot": 126120.99,
+    "foreign_net_volume_pct": 28.55,
     "foreign_sell_streak": 0.0,
-    "inst_net_lot": 67412.9,
+    "inst_net_lot": 130743.25,
     "inst_net_volume_pct": 0.0,
-    "latest_date": "2026-05-04",
-    "margin_balance_change_lot": -1156.0,
-    "margin_score": 0.33,
+    "latest_date": "2026-05-05",
+    "margin_balance_change_lot": -764.0,
+    "margin_score": 0.23,
     "market": "TWSE",
     "name": "鴻海",
     "observed_days": 5,
@@ -873,8 +886,8 @@
     "revenue_month": "2026-03",
     "revenue_yoy_pct": 45.57,
     "selection_reason": "營收 2026-03，月增 34.9%，年增 45.57%，累計年增 29.68%",
-    "selection_score": 70.76,
-    "short_balance_change_lot": 220.0,
+    "selection_score": 66.99,
+    "short_balance_change_lot": 423.0,
     "stock_id": "2317",
     "top_buy_branch_avg_price": 0.0,
     "top_buy_branch_name": "",
@@ -883,25 +896,25 @@
     "top_sell_branch_avg_price": 0.0,
     "top_sell_branch_name": "",
     "top_sell_branch_net_lot": 0.0,
-    "total_score": 70.76,
-    "trust_buy_streak": 1.0,
-    "trust_net_lot": 4331.92,
-    "trust_net_volume_pct": 1.12,
+    "total_score": 66.99,
+    "trust_buy_streak": 2.0,
+    "trust_net_lot": 4622.26,
+    "trust_net_volume_pct": 1.05,
     "trust_sell_streak": 0.0,
-    "volume_lot": 388340.42
+    "volume_lot": 441756.58
   },
   "stock": {
-    "avg_price": 226.2278,
-    "close": 227.5,
-    "foreign_net_lot": 63080.98,
+    "avg_price": 229.6023,
+    "close": 239.5,
+    "foreign_net_lot": 126120.99,
     "in_watchlist": false,
-    "latest_date": "2026-05-04",
-    "margin_balance_change_lot": -1156,
+    "latest_date": "2026-05-05",
+    "margin_balance_change_lot": -764,
     "market": "TWSE",
     "name": "鴻海",
-    "short_balance_change_lot": 220,
+    "short_balance_change_lot": 423,
     "stock_id": "2317",
-    "trust_net_lot": 4331.92,
-    "volume_lot": 388340.42
+    "trust_net_lot": 4622.26,
+    "volume_lot": 441756.58
   }
 }

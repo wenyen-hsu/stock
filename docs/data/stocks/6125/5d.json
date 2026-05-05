@@ -399,9 +399,31 @@
       "ma60": null,
       "open": 56.3,
       "volume_lot": 3180.0
+    },
+    {
+      "avg_price": 58.28112695179905,
+      "close": 58.8,
+      "date": "2026-05-05",
+      "high": 58.8,
+      "low": 57.7,
+      "ma10": 56.0,
+      "ma20": 55.275,
+      "ma5": 56.36,
+      "ma60": null,
+      "open": 58.4,
+      "volume_lot": 1473.0
     }
   ],
   "daily": [
+    {
+      "avg_price": 58.28112695179905,
+      "close": 58.8,
+      "date": "2026-05-05",
+      "dealer_net_lot": 32.41,
+      "foreign_net_lot": 29.0,
+      "trust_net_lot": 0.0,
+      "volume_lot": 1473.0
+    },
     {
       "avg_price": 58.311509433962264,
       "close": 58.1,
@@ -437,18 +459,26 @@
       "foreign_net_lot": 222.05,
       "trust_net_lot": 0.0,
       "volume_lot": 886.0
-    },
-    {
-      "avg_price": 53.21330188679245,
-      "close": 53.9,
-      "date": "2026-04-27",
-      "dealer_net_lot": -4.88,
-      "foreign_net_lot": 56.35,
-      "trust_net_lot": 0.0,
-      "volume_lot": 1060.0
     }
   ],
   "margin": [
+    {
+      "date": "2026-05-05",
+      "margin_balance_lot": 8962,
+      "margin_buy_lot": 88,
+      "margin_cash_repay_lot": 14,
+      "margin_change_lot": -11,
+      "margin_prev_balance_lot": 8973,
+      "margin_sell_lot": 85,
+      "note": "",
+      "offset_lot": 1,
+      "short_balance_lot": 73,
+      "short_buy_lot": 1,
+      "short_change_lot": -1,
+      "short_prev_balance_lot": 74,
+      "short_sell_lot": 0,
+      "short_stock_repay_lot": 0
+    },
     {
       "date": "2026-04-30",
       "margin_balance_lot": 8953,
@@ -498,23 +528,6 @@
       "short_change_lot": 3,
       "short_prev_balance_lot": 52,
       "short_sell_lot": 3,
-      "short_stock_repay_lot": 0
-    },
-    {
-      "date": "2026-04-27",
-      "margin_balance_lot": 8917,
-      "margin_buy_lot": 38,
-      "margin_cash_repay_lot": 9,
-      "margin_change_lot": 3,
-      "margin_prev_balance_lot": 8914,
-      "margin_sell_lot": 26,
-      "note": "",
-      "offset_lot": 0,
-      "short_balance_lot": 52,
-      "short_buy_lot": 8,
-      "short_change_lot": -8,
-      "short_prev_balance_lot": 60,
-      "short_sell_lot": 0,
       "short_stock_repay_lot": 0
     }
   ],
@@ -810,15 +823,15 @@
     }
   ],
   "selection": {
-    "avg_price": 56.2347,
+    "avg_price": 56.9707,
     "base_reason": "外資買超；融資增加；營收 2026-03，月增 46.17%，年增 49.97%，累計年增 30.77%",
-    "base_score": 60.41,
+    "base_score": 60.44,
     "branch_score": 0.0,
     "branch_status": "未取得",
     "chip_score": 42.0,
-    "close": 58.1,
+    "close": 58.8,
     "close_vs_top_buy_avg_pct": 0.0,
-    "complete_chip_score": 60.41,
+    "complete_chip_score": 60.44,
     "confluence_branch_score": 0.0,
     "confluence_direction_score": 0.0,
     "confluence_inst_score": 0.0,
@@ -826,14 +839,14 @@
     "confluence_score": 0.0,
     "confluence_streak_score": 0.0,
     "foreign_buy_streak": 5.0,
-    "foreign_net_lot": 1320.4,
-    "foreign_net_volume_pct": 16.44,
+    "foreign_net_lot": 1293.05,
+    "foreign_net_volume_pct": 15.31,
     "foreign_sell_streak": 0.0,
-    "inst_net_lot": 1320.4,
+    "inst_net_lot": 1293.05,
     "inst_net_volume_pct": 0.0,
-    "latest_date": "2026-05-04",
-    "margin_balance_change_lot": 39.0,
-    "margin_score": -0.31,
+    "latest_date": "2026-05-05",
+    "margin_balance_change_lot": 45.0,
+    "margin_score": -0.28,
     "market": "TPEX",
     "name": "廣運",
     "observed_days": 5,
@@ -843,8 +856,8 @@
     "revenue_month": "2026-03",
     "revenue_yoy_pct": 49.97,
     "selection_reason": "營收 2026-03，月增 46.17%，年增 49.97%，累計年增 30.77%",
-    "selection_score": 60.41,
-    "short_balance_change_lot": 10.0,
+    "selection_score": 60.44,
+    "short_balance_change_lot": 21.0,
     "stock_id": "6125",
     "top_buy_branch_avg_price": 0.0,
     "top_buy_branch_name": "",
@@ -853,25 +866,25 @@
     "top_sell_branch_avg_price": 0.0,
     "top_sell_branch_name": "",
     "top_sell_branch_net_lot": 0.0,
-    "total_score": 60.41,
+    "total_score": 60.44,
     "trust_buy_streak": 0.0,
     "trust_net_lot": 0.0,
     "trust_net_volume_pct": 0.0,
     "trust_sell_streak": 0.0,
-    "volume_lot": 8034.0
+    "volume_lot": 8447.0
   },
   "stock": {
-    "avg_price": 56.2347,
-    "close": 58.1,
-    "foreign_net_lot": 1320.4,
+    "avg_price": 56.9707,
+    "close": 58.8,
+    "foreign_net_lot": 1293.05,
     "in_watchlist": false,
-    "latest_date": "2026-05-04",
-    "margin_balance_change_lot": 39,
+    "latest_date": "2026-05-05",
+    "margin_balance_change_lot": 45,
     "market": "TPEX",
     "name": "廣運",
-    "short_balance_change_lot": 10,
+    "short_balance_change_lot": 21,
     "stock_id": "6125",
     "trust_net_lot": 0.0,
-    "volume_lot": 8034.0
+    "volume_lot": 8447.0
   }
 }

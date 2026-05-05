@@ -3,11 +3,11 @@
   "branch_daily_status": [],
   "branch_top": [],
   "branch_top_status": {
-    "attempts": 0,
-    "error": null,
+    "attempts": 3,
+    "error": "empty parseable branch table",
     "row_count": 0,
-    "status": "missing",
-    "updated_at": ""
+    "status": "empty",
+    "updated_at": "2026-05-05 21:07:48"
   },
   "chart": [
     {
@@ -412,9 +412,31 @@
       "ma60": null,
       "open": 40.0,
       "volume_lot": 69.47
+    },
+    {
+      "avg_price": 39.40958178333897,
+      "close": 39.5,
+      "date": "2026-05-05",
+      "high": 39.7,
+      "low": 39.1,
+      "ma10": 39.605,
+      "ma20": 39.7775,
+      "ma5": 39.85,
+      "ma60": null,
+      "open": 39.7,
+      "volume_lot": 44.35
     }
   ],
   "daily": [
+    {
+      "avg_price": 39.40958178333897,
+      "close": 39.5,
+      "date": "2026-05-05",
+      "dealer_net_lot": 0.0,
+      "foreign_net_lot": 11.0,
+      "trust_net_lot": 0.0,
+      "volume_lot": 44.35
+    },
     {
       "avg_price": 39.88639864115962,
       "close": 39.8,
@@ -585,15 +607,6 @@
       "foreign_net_lot": -11.0,
       "trust_net_lot": 0.0,
       "volume_lot": 27.17
-    },
-    {
-      "avg_price": 39.065795521702015,
-      "close": 38.85,
-      "date": "2026-04-02",
-      "dealer_net_lot": 2.0,
-      "foreign_net_lot": -33.0,
-      "trust_net_lot": 0.0,
-      "volume_lot": 106.6
     }
   ],
   "margin": [],
@@ -661,28 +674,28 @@
     }
   ],
   "selection": {
-    "avg_price": 39.5967,
+    "avg_price": 39.6231,
     "base_reason": "外資買超；營收 2026-03，月增 17.4%",
-    "base_score": 46.15,
+    "base_score": 48.35,
     "branch_score": 0.0,
     "branch_status": "未取得",
-    "chip_score": 44.06,
-    "close": 39.8,
+    "chip_score": 46.26,
+    "close": 39.5,
     "close_vs_top_buy_avg_pct": 0.0,
-    "complete_chip_score": 46.15,
+    "complete_chip_score": 48.35,
     "confluence_branch_score": 0.0,
     "confluence_direction_score": 0.0,
     "confluence_inst_score": 0.0,
     "confluence_price_score": 0.0,
     "confluence_score": 0.0,
     "confluence_streak_score": 0.0,
-    "foreign_buy_streak": 6.0,
-    "foreign_net_lot": 191.0,
-    "foreign_net_volume_pct": 10.08,
+    "foreign_buy_streak": 7.0,
+    "foreign_net_lot": 235.0,
+    "foreign_net_volume_pct": 12.82,
     "foreign_sell_streak": 0.0,
-    "inst_net_lot": 191.0,
+    "inst_net_lot": 235.0,
     "inst_net_volume_pct": 0.0,
-    "latest_date": "2026-05-04",
+    "latest_date": "2026-05-05",
     "margin_balance_change_lot": 0.0,
     "margin_score": 0.0,
     "market": "TWSE",
@@ -694,7 +707,7 @@
     "revenue_month": "2026-03",
     "revenue_yoy_pct": 0.0,
     "selection_reason": "營收 2026-03，月增 17.4%",
-    "selection_score": 46.15,
+    "selection_score": 48.35,
     "short_balance_change_lot": 0.0,
     "stock_id": "6722",
     "top_buy_branch_avg_price": 0.0,
@@ -704,25 +717,25 @@
     "top_sell_branch_avg_price": 0.0,
     "top_sell_branch_name": "",
     "top_sell_branch_net_lot": 0.0,
-    "total_score": 46.15,
+    "total_score": 48.35,
     "trust_buy_streak": 0.0,
     "trust_net_lot": 0.0,
     "trust_net_volume_pct": 0.0,
     "trust_sell_streak": 0.0,
-    "volume_lot": 1894.83
+    "volume_lot": 1832.59
   },
   "stock": {
-    "avg_price": 39.5967,
-    "close": 39.8,
-    "foreign_net_lot": 191.0,
+    "avg_price": 39.6231,
+    "close": 39.5,
+    "foreign_net_lot": 235.0,
     "in_watchlist": false,
-    "latest_date": "2026-05-04",
+    "latest_date": "2026-05-05",
     "margin_balance_change_lot": null,
     "market": "TWSE",
     "name": "輝創",
     "short_balance_change_lot": null,
     "stock_id": "6722",
     "trust_net_lot": 0.0,
-    "volume_lot": 1894.83
+    "volume_lot": 1832.59
   }
 }

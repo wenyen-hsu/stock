@@ -3,11 +3,11 @@
   "branch_daily_status": [],
   "branch_top": [],
   "branch_top_status": {
-    "attempts": 0,
-    "error": null,
+    "attempts": 3,
+    "error": "empty parseable branch table",
     "row_count": 0,
-    "status": "missing",
-    "updated_at": ""
+    "status": "empty",
+    "updated_at": "2026-05-05 21:06:06"
   },
   "chart": [
     {
@@ -412,9 +412,31 @@
       "ma60": null,
       "open": 11.15,
       "volume_lot": 135.6
+    },
+    {
+      "avg_price": 11.050148706533735,
+      "close": 11.0,
+      "date": "2026-05-05",
+      "high": 11.15,
+      "low": 11.0,
+      "ma10": 11.205,
+      "ma20": 10.8225,
+      "ma5": 11.17,
+      "ma60": null,
+      "open": 11.15,
+      "volume_lot": 53.46
     }
   ],
   "daily": [
+    {
+      "avg_price": 11.050148706533735,
+      "close": 11.0,
+      "date": "2026-05-05",
+      "dealer_net_lot": 2.0,
+      "foreign_net_lot": 4.0,
+      "trust_net_lot": 0.0,
+      "volume_lot": 53.46
+    },
     {
       "avg_price": 11.2465485707543,
       "close": 11.35,
@@ -585,18 +607,26 @@
       "foreign_net_lot": -60.0,
       "trust_net_lot": 0.0,
       "volume_lot": 320.88
-    },
-    {
-      "avg_price": 10.003959465807664,
-      "close": 9.97,
-      "date": "2026-04-02",
-      "dealer_net_lot": 0.0,
-      "foreign_net_lot": -10.0,
-      "trust_net_lot": 0.0,
-      "volume_lot": 119.21
     }
   ],
   "margin": [
+    {
+      "date": "2026-05-05",
+      "margin_balance_lot": 2626,
+      "margin_buy_lot": 10,
+      "margin_cash_repay_lot": 0,
+      "margin_change_lot": -4,
+      "margin_prev_balance_lot": 2630,
+      "margin_sell_lot": 14,
+      "note": "",
+      "offset_lot": 0,
+      "short_balance_lot": 0,
+      "short_buy_lot": 0,
+      "short_change_lot": 0,
+      "short_prev_balance_lot": 0,
+      "short_sell_lot": 0,
+      "short_stock_repay_lot": 0
+    },
     {
       "date": "2026-05-04",
       "margin_balance_lot": 2630,
@@ -919,23 +949,6 @@
       "short_prev_balance_lot": 0,
       "short_sell_lot": 0,
       "short_stock_repay_lot": 0
-    },
-    {
-      "date": "2026-04-02",
-      "margin_balance_lot": 2832,
-      "margin_buy_lot": 5,
-      "margin_cash_repay_lot": 0,
-      "margin_change_lot": -37,
-      "margin_prev_balance_lot": 2869,
-      "margin_sell_lot": 42,
-      "note": "X",
-      "offset_lot": 0,
-      "short_balance_lot": 0,
-      "short_buy_lot": 0,
-      "short_change_lot": 0,
-      "short_prev_balance_lot": 0,
-      "short_sell_lot": 0,
-      "short_stock_repay_lot": 0
     }
   ],
   "news": [],
@@ -1230,30 +1243,30 @@
     }
   ],
   "selection": {
-    "avg_price": 11.2193,
+    "avg_price": 11.2419,
     "base_reason": "外資買超；融資下降；營收 2026-03，月增 155.27%，年增 -11.46%，累計年增 -8.62%",
-    "base_score": 47.6,
+    "base_score": 49.36,
     "branch_score": 0.0,
     "branch_status": "未取得",
-    "chip_score": 42.29,
-    "close": 11.35,
+    "chip_score": 44.56,
+    "close": 11.0,
     "close_vs_top_buy_avg_pct": 0.0,
-    "complete_chip_score": 47.6,
+    "complete_chip_score": 49.36,
     "confluence_branch_score": 0.0,
     "confluence_direction_score": 0.0,
     "confluence_inst_score": 0.0,
     "confluence_price_score": 0.0,
     "confluence_score": 0.0,
     "confluence_streak_score": 0.0,
-    "foreign_buy_streak": 4.0,
-    "foreign_net_lot": 627.3,
-    "foreign_net_volume_pct": 10.36,
+    "foreign_buy_streak": 5.0,
+    "foreign_net_lot": 641.3,
+    "foreign_net_volume_pct": 10.7,
     "foreign_sell_streak": 0.0,
-    "inst_net_lot": 627.3,
+    "inst_net_lot": 641.3,
     "inst_net_volume_pct": 0.0,
-    "latest_date": "2026-05-04",
-    "margin_balance_change_lot": -239.0,
-    "margin_score": 3.95,
+    "latest_date": "2026-05-05",
+    "margin_balance_change_lot": -206.0,
+    "margin_score": 3.44,
     "market": "TWSE",
     "name": "艾美特-KY",
     "observed_days": 20,
@@ -1263,7 +1276,7 @@
     "revenue_month": "2026-03",
     "revenue_yoy_pct": -11.46,
     "selection_reason": "營收 2026-03，月增 155.27%，年增 -11.46%，累計年增 -8.62%",
-    "selection_score": 47.6,
+    "selection_score": 49.36,
     "short_balance_change_lot": 0.0,
     "stock_id": "1626",
     "top_buy_branch_avg_price": 0.0,
@@ -1273,25 +1286,25 @@
     "top_sell_branch_avg_price": 0.0,
     "top_sell_branch_name": "",
     "top_sell_branch_net_lot": 0.0,
-    "total_score": 47.6,
+    "total_score": 49.36,
     "trust_buy_streak": 0.0,
     "trust_net_lot": 0.0,
     "trust_net_volume_pct": 0.0,
     "trust_sell_streak": 0.0,
-    "volume_lot": 6056.51
+    "volume_lot": 5990.76
   },
   "stock": {
-    "avg_price": 11.2193,
-    "close": 11.35,
-    "foreign_net_lot": 627.3,
+    "avg_price": 11.2419,
+    "close": 11.0,
+    "foreign_net_lot": 641.3,
     "in_watchlist": false,
-    "latest_date": "2026-05-04",
-    "margin_balance_change_lot": -239,
+    "latest_date": "2026-05-05",
+    "margin_balance_change_lot": -206,
     "market": "TWSE",
     "name": "艾美特-KY",
     "short_balance_change_lot": 0,
     "stock_id": "1626",
     "trust_net_lot": 0.0,
-    "volume_lot": 6056.51
+    "volume_lot": 5990.76
   }
 }

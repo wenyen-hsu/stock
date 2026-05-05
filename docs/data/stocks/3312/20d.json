@@ -412,9 +412,31 @@
       "ma60": null,
       "open": 41.2,
       "volume_lot": 1770.86
+    },
+    {
+      "avg_price": 42.587697968439144,
+      "close": 42.05,
+      "date": "2026-05-05",
+      "high": 43.3,
+      "low": 41.5,
+      "ma10": 42.245,
+      "ma20": 40.7775,
+      "ma5": 41.42,
+      "ma60": null,
+      "open": 41.5,
+      "volume_lot": 2243.79
     }
   ],
   "daily": [
+    {
+      "avg_price": 42.587697968439144,
+      "close": 42.05,
+      "date": "2026-05-05",
+      "dealer_net_lot": 1.0,
+      "foreign_net_lot": 236.03,
+      "trust_net_lot": 0.0,
+      "volume_lot": 2243.79
+    },
     {
       "avg_price": 41.759751216360904,
       "close": 41.4,
@@ -585,18 +607,26 @@
       "foreign_net_lot": 141.0,
       "trust_net_lot": 0.0,
       "volume_lot": 316.71
-    },
-    {
-      "avg_price": 35.170711606877965,
-      "close": 34.95,
-      "date": "2026-04-02",
-      "dealer_net_lot": 6.0,
-      "foreign_net_lot": 134.0,
-      "trust_net_lot": 0.0,
-      "volume_lot": 394.36
     }
   ],
   "margin": [
+    {
+      "date": "2026-05-05",
+      "margin_balance_lot": 5151,
+      "margin_buy_lot": 300,
+      "margin_cash_repay_lot": 1,
+      "margin_change_lot": 190,
+      "margin_prev_balance_lot": 4961,
+      "margin_sell_lot": 109,
+      "note": "",
+      "offset_lot": 4,
+      "short_balance_lot": 6,
+      "short_buy_lot": 0,
+      "short_change_lot": 0,
+      "short_prev_balance_lot": 6,
+      "short_sell_lot": 0,
+      "short_stock_repay_lot": 0
+    },
     {
       "date": "2026-05-04",
       "margin_balance_lot": 4961,
@@ -919,23 +949,6 @@
       "short_prev_balance_lot": 6,
       "short_sell_lot": 0,
       "short_stock_repay_lot": 0
-    },
-    {
-      "date": "2026-04-02",
-      "margin_balance_lot": 5151,
-      "margin_buy_lot": 9,
-      "margin_cash_repay_lot": 3,
-      "margin_change_lot": -31,
-      "margin_prev_balance_lot": 5182,
-      "margin_sell_lot": 37,
-      "note": "",
-      "offset_lot": 0,
-      "short_balance_lot": 6,
-      "short_buy_lot": 0,
-      "short_change_lot": 0,
-      "short_prev_balance_lot": 6,
-      "short_sell_lot": 0,
-      "short_stock_repay_lot": 0
     }
   ],
   "news": [],
@@ -1230,30 +1243,30 @@
     }
   ],
   "selection": {
-    "avg_price": 42.871,
-    "base_reason": "外資買超；融資下降；營收 2026-03，月增 52.52%，年增 3.26%，累計年增 -0.81%",
-    "base_score": 34.42,
+    "avg_price": 42.9116,
+    "base_reason": "外資買超；營收 2026-03，月增 52.52%，年增 3.26%，累計年增 -0.81%",
+    "base_score": 38.96,
     "branch_score": 0.0,
     "branch_status": "未取得",
-    "chip_score": 28.77,
-    "close": 41.4,
+    "chip_score": 33.7,
+    "close": 42.05,
     "close_vs_top_buy_avg_pct": 0.0,
-    "complete_chip_score": 34.42,
+    "complete_chip_score": 38.96,
     "confluence_branch_score": 0.0,
     "confluence_direction_score": 0.0,
     "confluence_inst_score": 0.0,
     "confluence_price_score": 0.0,
     "confluence_score": 0.0,
     "confluence_streak_score": 0.0,
-    "foreign_buy_streak": 4.0,
-    "foreign_net_lot": 3641.2,
-    "foreign_net_volume_pct": 6.35,
+    "foreign_buy_streak": 5.0,
+    "foreign_net_lot": 3743.22,
+    "foreign_net_volume_pct": 6.32,
     "foreign_sell_streak": 0.0,
-    "inst_net_lot": 3641.2,
+    "inst_net_lot": 3743.22,
     "inst_net_volume_pct": 0.0,
-    "latest_date": "2026-05-04",
-    "margin_balance_change_lot": -221.0,
-    "margin_score": 0.39,
+    "latest_date": "2026-05-05",
+    "margin_balance_change_lot": 0.0,
+    "margin_score": 0.0,
     "market": "TWSE",
     "name": "弘憶股",
     "observed_days": 20,
@@ -1263,7 +1276,7 @@
     "revenue_month": "2026-03",
     "revenue_yoy_pct": 3.26,
     "selection_reason": "營收 2026-03，月增 52.52%，年增 3.26%，累計年增 -0.81%",
-    "selection_score": 34.42,
+    "selection_score": 38.96,
     "short_balance_change_lot": 0.0,
     "stock_id": "3312",
     "top_buy_branch_avg_price": 0.0,
@@ -1273,25 +1286,25 @@
     "top_sell_branch_avg_price": 0.0,
     "top_sell_branch_name": "",
     "top_sell_branch_net_lot": 0.0,
-    "total_score": 34.42,
+    "total_score": 38.96,
     "trust_buy_streak": 0.0,
     "trust_net_lot": 0.0,
     "trust_net_volume_pct": 0.0,
     "trust_sell_streak": 0.0,
-    "volume_lot": 57377.91
+    "volume_lot": 59227.34
   },
   "stock": {
-    "avg_price": 42.871,
-    "close": 41.4,
-    "foreign_net_lot": 3641.2,
+    "avg_price": 42.9116,
+    "close": 42.05,
+    "foreign_net_lot": 3743.22,
     "in_watchlist": false,
-    "latest_date": "2026-05-04",
-    "margin_balance_change_lot": -221,
+    "latest_date": "2026-05-05",
+    "margin_balance_change_lot": 0,
     "market": "TWSE",
     "name": "弘憶股",
     "short_balance_change_lot": 0,
     "stock_id": "3312",
     "trust_net_lot": 0.0,
-    "volume_lot": 57377.91
+    "volume_lot": 59227.34
   }
 }

@@ -412,9 +412,31 @@
       "ma60": null,
       "open": 4.96,
       "volume_lot": 3115.22
+    },
+    {
+      "avg_price": 4.9662216312361895,
+      "close": 4.96,
+      "date": "2026-05-05",
+      "high": 5.04,
+      "low": 4.91,
+      "ma10": 5.274,
+      "ma20": 5.4785,
+      "ma5": 5.092,
+      "ma60": null,
+      "open": 4.94,
+      "volume_lot": 2672.75
     }
   ],
   "daily": [
+    {
+      "avg_price": 4.9662216312361895,
+      "close": 4.96,
+      "date": "2026-05-05",
+      "dealer_net_lot": 0.0,
+      "foreign_net_lot": -599.0,
+      "trust_net_lot": 0.0,
+      "volume_lot": 2672.75
+    },
     {
       "avg_price": 4.931791932378408,
       "close": 4.94,
@@ -585,18 +607,26 @@
       "foreign_net_lot": -21.0,
       "trust_net_lot": 0.0,
       "volume_lot": 1252.17
-    },
-    {
-      "avg_price": 5.9492491131331215,
-      "close": 5.91,
-      "date": "2026-04-02",
-      "dealer_net_lot": 0.0,
-      "foreign_net_lot": -46.0,
-      "trust_net_lot": 0.0,
-      "volume_lot": 800.85
     }
   ],
   "margin": [
+    {
+      "date": "2026-05-05",
+      "margin_balance_lot": 1301,
+      "margin_buy_lot": 0,
+      "margin_cash_repay_lot": 2,
+      "margin_change_lot": -5,
+      "margin_prev_balance_lot": 1306,
+      "margin_sell_lot": 3,
+      "note": "OX",
+      "offset_lot": 0,
+      "short_balance_lot": 0,
+      "short_buy_lot": 0,
+      "short_change_lot": 0,
+      "short_prev_balance_lot": 0,
+      "short_sell_lot": 0,
+      "short_stock_repay_lot": 0
+    },
     {
       "date": "2026-05-04",
       "margin_balance_lot": 1306,
@@ -919,23 +949,6 @@
       "short_prev_balance_lot": 0,
       "short_sell_lot": 0,
       "short_stock_repay_lot": 0
-    },
-    {
-      "date": "2026-04-02",
-      "margin_balance_lot": 1930,
-      "margin_buy_lot": 0,
-      "margin_cash_repay_lot": 16,
-      "margin_change_lot": -25,
-      "margin_prev_balance_lot": 1955,
-      "margin_sell_lot": 9,
-      "note": "OX",
-      "offset_lot": 0,
-      "short_balance_lot": 0,
-      "short_buy_lot": 0,
-      "short_change_lot": 0,
-      "short_prev_balance_lot": 0,
-      "short_sell_lot": 0,
-      "short_stock_repay_lot": 0
     }
   ],
   "news": [],
@@ -1230,30 +1243,30 @@
     }
   ],
   "selection": {
-    "avg_price": 5.4183,
+    "avg_price": 5.375,
     "base_reason": "外資買超；融資下降；營收 2026-03，月增 -60.15%，年增 -67.3%，累計年增 -51.01%",
-    "base_score": 21.62,
+    "base_score": 10.24,
     "branch_score": 0.0,
     "branch_status": "未取得",
-    "chip_score": 29.81,
-    "close": 4.94,
+    "chip_score": 18.57,
+    "close": 4.96,
     "close_vs_top_buy_avg_pct": 0.0,
-    "complete_chip_score": 21.62,
+    "complete_chip_score": 10.24,
     "confluence_branch_score": 0.0,
     "confluence_direction_score": 0.0,
     "confluence_inst_score": 0.0,
     "confluence_price_score": 0.0,
     "confluence_score": 0.0,
     "confluence_streak_score": 0.0,
-    "foreign_buy_streak": 2.0,
-    "foreign_net_lot": 2921.43,
-    "foreign_net_volume_pct": 8.15,
-    "foreign_sell_streak": 0.0,
-    "inst_net_lot": 2921.43,
+    "foreign_buy_streak": 0.0,
+    "foreign_net_lot": 2368.43,
+    "foreign_net_volume_pct": 6.28,
+    "foreign_sell_streak": 1.0,
+    "inst_net_lot": 2368.43,
     "inst_net_volume_pct": 0.0,
-    "latest_date": "2026-05-04",
-    "margin_balance_change_lot": -649.0,
-    "margin_score": 1.81,
+    "latest_date": "2026-05-05",
+    "margin_balance_change_lot": -629.0,
+    "margin_score": 1.67,
     "market": "TWSE",
     "name": "益航",
     "observed_days": 20,
@@ -1263,7 +1276,7 @@
     "revenue_month": "2026-03",
     "revenue_yoy_pct": -67.3,
     "selection_reason": "營收 2026-03，月增 -60.15%，年增 -67.3%，累計年增 -51.01%",
-    "selection_score": 21.62,
+    "selection_score": 10.24,
     "short_balance_change_lot": 0.0,
     "stock_id": "2601",
     "top_buy_branch_avg_price": 0.0,
@@ -1273,25 +1286,25 @@
     "top_sell_branch_avg_price": 0.0,
     "top_sell_branch_name": "",
     "top_sell_branch_net_lot": 0.0,
-    "total_score": 21.62,
+    "total_score": 10.24,
     "trust_buy_streak": 0.0,
     "trust_net_lot": 0.0,
     "trust_net_volume_pct": 0.0,
     "trust_sell_streak": 0.0,
-    "volume_lot": 35865.53
+    "volume_lot": 37737.43
   },
   "stock": {
-    "avg_price": 5.4183,
-    "close": 4.94,
-    "foreign_net_lot": 2921.43,
+    "avg_price": 5.375,
+    "close": 4.96,
+    "foreign_net_lot": 2368.43,
     "in_watchlist": false,
-    "latest_date": "2026-05-04",
-    "margin_balance_change_lot": -649,
+    "latest_date": "2026-05-05",
+    "margin_balance_change_lot": -629,
     "market": "TWSE",
     "name": "益航",
     "short_balance_change_lot": 0,
     "stock_id": "2601",
     "trust_net_lot": 0.0,
-    "volume_lot": 35865.53
+    "volume_lot": 37737.43
   }
 }

@@ -3,11 +3,11 @@
   "branch_daily_status": [],
   "branch_top": [],
   "branch_top_status": {
-    "attempts": 0,
-    "error": null,
+    "attempts": 3,
+    "error": "empty parseable branch table",
     "row_count": 0,
-    "status": "missing",
-    "updated_at": ""
+    "status": "empty",
+    "updated_at": "2026-05-05 21:05:54"
   },
   "chart": [
     {
@@ -412,9 +412,31 @@
       "ma60": null,
       "open": 31.1,
       "volume_lot": 34.02
+    },
+    {
+      "avg_price": 31.1875,
+      "close": 31.4,
+      "date": "2026-05-05",
+      "high": 31.4,
+      "low": 30.65,
+      "ma10": 31.635,
+      "ma20": 31.435,
+      "ma5": 31.4,
+      "ma60": null,
+      "open": 30.65,
+      "volume_lot": 16.0
     }
   ],
   "daily": [
+    {
+      "avg_price": 31.1875,
+      "close": 31.4,
+      "date": "2026-05-05",
+      "dealer_net_lot": -1.0,
+      "foreign_net_lot": 7.0,
+      "trust_net_lot": 0.0,
+      "volume_lot": 16.0
+    },
     {
       "avg_price": 31.067605302607213,
       "close": 31.35,
@@ -585,18 +607,26 @@
       "foreign_net_lot": -2.0,
       "trust_net_lot": 0.0,
       "volume_lot": 12.0
-    },
-    {
-      "avg_price": 29.533185840707965,
-      "close": 29.45,
-      "date": "2026-04-02",
-      "dealer_net_lot": 2.0,
-      "foreign_net_lot": -4.0,
-      "trust_net_lot": 0.0,
-      "volume_lot": 9.04
     }
   ],
   "margin": [
+    {
+      "date": "2026-05-05",
+      "margin_balance_lot": 20,
+      "margin_buy_lot": 0,
+      "margin_cash_repay_lot": 0,
+      "margin_change_lot": -6,
+      "margin_prev_balance_lot": 26,
+      "margin_sell_lot": 6,
+      "note": "",
+      "offset_lot": 0,
+      "short_balance_lot": 0,
+      "short_buy_lot": 0,
+      "short_change_lot": 0,
+      "short_prev_balance_lot": 0,
+      "short_sell_lot": 0,
+      "short_stock_repay_lot": 0
+    },
     {
       "date": "2026-05-04",
       "margin_balance_lot": 26,
@@ -919,23 +949,6 @@
       "short_prev_balance_lot": 0,
       "short_sell_lot": 0,
       "short_stock_repay_lot": 0
-    },
-    {
-      "date": "2026-04-02",
-      "margin_balance_lot": 45,
-      "margin_buy_lot": 0,
-      "margin_cash_repay_lot": 0,
-      "margin_change_lot": 0,
-      "margin_prev_balance_lot": 45,
-      "margin_sell_lot": 0,
-      "note": "",
-      "offset_lot": 0,
-      "short_balance_lot": 0,
-      "short_buy_lot": 0,
-      "short_change_lot": 0,
-      "short_prev_balance_lot": 0,
-      "short_sell_lot": 0,
-      "short_stock_repay_lot": 0
     }
   ],
   "news": [],
@@ -1230,30 +1243,30 @@
     }
   ],
   "selection": {
-    "avg_price": 31.4041,
+    "avg_price": 31.4239,
     "base_reason": "外資買超；融資下降；營收 2026-03，月增 104.34%，年增 -1.44%，累計年增 2.57%",
-    "base_score": 47.78,
+    "base_score": 50.64,
     "branch_score": 0.0,
     "branch_status": "未取得",
-    "chip_score": 40.0,
-    "close": 31.35,
+    "chip_score": 42.0,
+    "close": 31.4,
     "close_vs_top_buy_avg_pct": 0.0,
-    "complete_chip_score": 47.78,
+    "complete_chip_score": 50.64,
     "confluence_branch_score": 0.0,
     "confluence_direction_score": 0.0,
     "confluence_inst_score": 0.0,
     "confluence_price_score": 0.0,
     "confluence_score": 0.0,
     "confluence_streak_score": 0.0,
-    "foreign_buy_streak": 1.0,
-    "foreign_net_lot": 207.0,
-    "foreign_net_volume_pct": 30.88,
+    "foreign_buy_streak": 2.0,
+    "foreign_net_lot": 218.0,
+    "foreign_net_volume_pct": 32.18,
     "foreign_sell_streak": 0.0,
-    "inst_net_lot": 207.0,
+    "inst_net_lot": 218.0,
     "inst_net_volume_pct": 0.0,
-    "latest_date": "2026-05-04",
-    "margin_balance_change_lot": -19.0,
-    "margin_score": 2.83,
+    "latest_date": "2026-05-05",
+    "margin_balance_change_lot": -25.0,
+    "margin_score": 3.69,
     "market": "TWSE",
     "name": "東明-KY",
     "observed_days": 20,
@@ -1263,7 +1276,7 @@
     "revenue_month": "2026-03",
     "revenue_yoy_pct": -1.44,
     "selection_reason": "營收 2026-03，月增 104.34%，年增 -1.44%，累計年增 2.57%",
-    "selection_score": 47.78,
+    "selection_score": 50.64,
     "short_balance_change_lot": 0.0,
     "stock_id": "5538",
     "top_buy_branch_avg_price": 0.0,
@@ -1273,25 +1286,25 @@
     "top_sell_branch_avg_price": 0.0,
     "top_sell_branch_name": "",
     "top_sell_branch_net_lot": 0.0,
-    "total_score": 47.78,
+    "total_score": 50.64,
     "trust_buy_streak": 0.0,
     "trust_net_lot": 0.0,
     "trust_net_volume_pct": 0.0,
     "trust_sell_streak": 0.0,
-    "volume_lot": 670.38
+    "volume_lot": 677.34
   },
   "stock": {
-    "avg_price": 31.4041,
-    "close": 31.35,
-    "foreign_net_lot": 207.0,
+    "avg_price": 31.4239,
+    "close": 31.4,
+    "foreign_net_lot": 218.0,
     "in_watchlist": false,
-    "latest_date": "2026-05-04",
-    "margin_balance_change_lot": -19,
+    "latest_date": "2026-05-05",
+    "margin_balance_change_lot": -25,
     "market": "TWSE",
     "name": "東明-KY",
     "short_balance_change_lot": 0,
     "stock_id": "5538",
     "trust_net_lot": 0.0,
-    "volume_lot": 670.38
+    "volume_lot": 677.34
   }
 }

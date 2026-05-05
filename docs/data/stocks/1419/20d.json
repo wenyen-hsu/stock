@@ -3,11 +3,11 @@
   "branch_daily_status": [],
   "branch_top": [],
   "branch_top_status": {
-    "attempts": 0,
-    "error": null,
+    "attempts": 3,
+    "error": "empty parseable branch table",
     "row_count": 0,
-    "status": "missing",
-    "updated_at": ""
+    "status": "empty",
+    "updated_at": "2026-05-05 21:04:43"
   },
   "chart": [
     {
@@ -412,9 +412,31 @@
       "ma60": null,
       "open": 64.4,
       "volume_lot": 154.22
+    },
+    {
+      "avg_price": 63.73567974319423,
+      "close": 63.1,
+      "date": "2026-05-05",
+      "high": 65.2,
+      "low": 62.7,
+      "ma10": 63.53,
+      "ma20": 63.315,
+      "ma5": 63.78,
+      "ma60": null,
+      "open": 64.3,
+      "volume_lot": 95.95
     }
   ],
   "daily": [
+    {
+      "avg_price": 63.73567974319423,
+      "close": 63.1,
+      "date": "2026-05-05",
+      "dealer_net_lot": 2.36,
+      "foreign_net_lot": -40.0,
+      "trust_net_lot": 0.0,
+      "volume_lot": 95.95
+    },
     {
       "avg_price": 64.54488039890806,
       "close": 64.8,
@@ -585,18 +607,26 @@
       "foreign_net_lot": 7.0,
       "trust_net_lot": 0.0,
       "volume_lot": 61.87
-    },
-    {
-      "avg_price": 61.16264382071782,
-      "close": 60.5,
-      "date": "2026-04-02",
-      "dealer_net_lot": -1.03,
-      "foreign_net_lot": -23.0,
-      "trust_net_lot": 0.0,
-      "volume_lot": 52.41
     }
   ],
   "margin": [
+    {
+      "date": "2026-05-05",
+      "margin_balance_lot": 1252,
+      "margin_buy_lot": 11,
+      "margin_cash_repay_lot": 0,
+      "margin_change_lot": 1,
+      "margin_prev_balance_lot": 1251,
+      "margin_sell_lot": 10,
+      "note": "",
+      "offset_lot": 0,
+      "short_balance_lot": 2,
+      "short_buy_lot": 0,
+      "short_change_lot": 0,
+      "short_prev_balance_lot": 2,
+      "short_sell_lot": 0,
+      "short_stock_repay_lot": 0
+    },
     {
       "date": "2026-05-04",
       "margin_balance_lot": 1251,
@@ -919,23 +949,6 @@
       "short_prev_balance_lot": 0,
       "short_sell_lot": 0,
       "short_stock_repay_lot": 0
-    },
-    {
-      "date": "2026-04-02",
-      "margin_balance_lot": 1286,
-      "margin_buy_lot": 7,
-      "margin_cash_repay_lot": 0,
-      "margin_change_lot": 5,
-      "margin_prev_balance_lot": 1281,
-      "margin_sell_lot": 2,
-      "note": "X",
-      "offset_lot": 0,
-      "short_balance_lot": 0,
-      "short_buy_lot": 0,
-      "short_change_lot": 0,
-      "short_prev_balance_lot": 0,
-      "short_sell_lot": 0,
-      "short_stock_repay_lot": 0
     }
   ],
   "news": [],
@@ -1230,30 +1243,30 @@
     }
   ],
   "selection": {
-    "avg_price": 63.2796,
+    "avg_price": 63.3525,
     "base_reason": "外資買超；投信買超；融資下降；營收 2026-03，月增 48.35%，年增 42.26%，累計年增 36.6%",
-    "base_score": 49.8,
+    "base_score": 43.2,
     "branch_score": 0.0,
     "branch_status": "未取得",
-    "chip_score": 30.04,
-    "close": 64.8,
+    "chip_score": 23.34,
+    "close": 63.1,
     "close_vs_top_buy_avg_pct": 0.0,
-    "complete_chip_score": 49.8,
+    "complete_chip_score": 43.2,
     "confluence_branch_score": 0.0,
     "confluence_direction_score": 0.0,
     "confluence_inst_score": 0.0,
     "confluence_price_score": 0.0,
     "confluence_score": 0.0,
     "confluence_streak_score": 0.0,
-    "foreign_buy_streak": 1.0,
-    "foreign_net_lot": 162.23,
-    "foreign_net_volume_pct": 7.81,
-    "foreign_sell_streak": 0.0,
-    "inst_net_lot": 163.23,
+    "foreign_buy_streak": 0.0,
+    "foreign_net_lot": 145.23,
+    "foreign_net_volume_pct": 6.85,
+    "foreign_sell_streak": 1.0,
+    "inst_net_lot": 146.23,
     "inst_net_volume_pct": 0.0,
-    "latest_date": "2026-05-04",
-    "margin_balance_change_lot": -30.0,
-    "margin_score": 1.5,
+    "latest_date": "2026-05-05",
+    "margin_balance_change_lot": -34.0,
+    "margin_score": 1.6,
     "market": "TWSE",
     "name": "新紡",
     "observed_days": 20,
@@ -1263,7 +1276,7 @@
     "revenue_month": "2026-03",
     "revenue_yoy_pct": 42.26,
     "selection_reason": "營收 2026-03，月增 48.35%，年增 42.26%，累計年增 36.6%",
-    "selection_score": 49.8,
+    "selection_score": 43.2,
     "short_balance_change_lot": 2.0,
     "stock_id": "1419",
     "top_buy_branch_avg_price": 0.0,
@@ -1273,25 +1286,25 @@
     "top_sell_branch_avg_price": 0.0,
     "top_sell_branch_name": "",
     "top_sell_branch_net_lot": 0.0,
-    "total_score": 49.8,
+    "total_score": 43.2,
     "trust_buy_streak": 0.0,
     "trust_net_lot": 1.0,
     "trust_net_volume_pct": 0.05,
     "trust_sell_streak": 0.0,
-    "volume_lot": 2076.23
+    "volume_lot": 2119.77
   },
   "stock": {
-    "avg_price": 63.2796,
-    "close": 64.8,
-    "foreign_net_lot": 162.23,
+    "avg_price": 63.3525,
+    "close": 63.1,
+    "foreign_net_lot": 145.23,
     "in_watchlist": false,
-    "latest_date": "2026-05-04",
-    "margin_balance_change_lot": -30,
+    "latest_date": "2026-05-05",
+    "margin_balance_change_lot": -34,
     "market": "TWSE",
     "name": "新紡",
     "short_balance_change_lot": 2,
     "stock_id": "1419",
     "trust_net_lot": 1.0,
-    "volume_lot": 2076.23
+    "volume_lot": 2119.77
   }
 }

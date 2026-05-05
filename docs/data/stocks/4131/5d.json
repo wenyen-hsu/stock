@@ -399,9 +399,31 @@
       "ma60": null,
       "open": 35.35,
       "volume_lot": 71.0
+    },
+    {
+      "avg_price": 35.07878787878788,
+      "close": 35.3,
+      "date": "2026-05-05",
+      "high": 35.5,
+      "low": 34.6,
+      "ma10": 35.41,
+      "ma20": 35.3975,
+      "ma5": 35.37,
+      "ma60": null,
+      "open": 35.5,
+      "volume_lot": 66.0
     }
   ],
   "daily": [
+    {
+      "avg_price": 35.07878787878788,
+      "close": 35.3,
+      "date": "2026-05-05",
+      "dealer_net_lot": 0.28,
+      "foreign_net_lot": 14.0,
+      "trust_net_lot": 0.0,
+      "volume_lot": 66.0
+    },
     {
       "avg_price": 35.23943661971831,
       "close": 35.3,
@@ -437,15 +459,6 @@
       "foreign_net_lot": 8.0,
       "trust_net_lot": 0.0,
       "volume_lot": 55.0
-    },
-    {
-      "avg_price": 35.5453125,
-      "close": 35.6,
-      "date": "2026-04-27",
-      "dealer_net_lot": 0.0,
-      "foreign_net_lot": 16.0,
-      "trust_net_lot": 0.0,
-      "volume_lot": 64.0
     }
   ],
   "margin": [],
@@ -741,7 +754,7 @@
     }
   ],
   "selection": {
-    "avg_price": 35.3763,
+    "avg_price": 35.2781,
     "base_reason": "外資買超；營收 2026-03，月增 71.45%，年增 41.68%，累計年增 -13.09%",
     "base_score": 58.21,
     "branch_score": 0.0,
@@ -757,12 +770,12 @@
     "confluence_score": 0.0,
     "confluence_streak_score": 0.0,
     "foreign_buy_streak": 5.0,
-    "foreign_net_lot": 67.0,
-    "foreign_net_volume_pct": 21.75,
+    "foreign_net_lot": 65.0,
+    "foreign_net_volume_pct": 20.97,
     "foreign_sell_streak": 0.0,
-    "inst_net_lot": 67.0,
+    "inst_net_lot": 65.0,
     "inst_net_volume_pct": 0.0,
-    "latest_date": "2026-05-04",
+    "latest_date": "2026-05-05",
     "margin_balance_change_lot": 0.0,
     "margin_score": 0.0,
     "market": "TPEX",
@@ -789,20 +802,20 @@
     "trust_net_lot": 0.0,
     "trust_net_volume_pct": 0.0,
     "trust_sell_streak": 0.0,
-    "volume_lot": 308.0
+    "volume_lot": 310.0
   },
   "stock": {
-    "avg_price": 35.3763,
+    "avg_price": 35.2781,
     "close": 35.3,
-    "foreign_net_lot": 67.0,
+    "foreign_net_lot": 65.0,
     "in_watchlist": false,
-    "latest_date": "2026-05-04",
+    "latest_date": "2026-05-05",
     "margin_balance_change_lot": null,
     "market": "TPEX",
     "name": "浩泰",
     "short_balance_change_lot": null,
     "stock_id": "4131",
     "trust_net_lot": 0.0,
-    "volume_lot": 308.0
+    "volume_lot": 310.0
   }
 }

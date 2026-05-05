@@ -412,9 +412,31 @@
       "ma60": null,
       "open": 29.6,
       "volume_lot": 217.9
+    },
+    {
+      "avg_price": 29.496777416244043,
+      "close": 29.6,
+      "date": "2026-05-05",
+      "high": 29.6,
+      "low": 29.4,
+      "ma10": 29.825,
+      "ma20": 29.87,
+      "ma5": 29.72,
+      "ma60": null,
+      "open": 29.6,
+      "volume_lot": 144.14
     }
   ],
   "daily": [
+    {
+      "avg_price": 29.496777416244043,
+      "close": 29.6,
+      "date": "2026-05-05",
+      "dealer_net_lot": 40.0,
+      "foreign_net_lot": -39.0,
+      "trust_net_lot": 0.0,
+      "volume_lot": 144.14
+    },
     {
       "avg_price": 29.53374483708123,
       "close": 29.6,
@@ -585,18 +607,26 @@
       "foreign_net_lot": -4.0,
       "trust_net_lot": 0.0,
       "volume_lot": 45.41
-    },
-    {
-      "avg_price": 29.09067599770746,
-      "close": 29.05,
-      "date": "2026-04-02",
-      "dealer_net_lot": 0.0,
-      "foreign_net_lot": -6.0,
-      "trust_net_lot": 0.0,
-      "volume_lot": 33.15
     }
   ],
   "margin": [
+    {
+      "date": "2026-05-05",
+      "margin_balance_lot": 114,
+      "margin_buy_lot": 0,
+      "margin_cash_repay_lot": 0,
+      "margin_change_lot": 0,
+      "margin_prev_balance_lot": 114,
+      "margin_sell_lot": 0,
+      "note": "",
+      "offset_lot": 0,
+      "short_balance_lot": 4,
+      "short_buy_lot": 0,
+      "short_change_lot": 0,
+      "short_prev_balance_lot": 4,
+      "short_sell_lot": 0,
+      "short_stock_repay_lot": 0
+    },
     {
       "date": "2026-05-04",
       "margin_balance_lot": 114,
@@ -919,23 +949,6 @@
       "short_prev_balance_lot": 0,
       "short_sell_lot": 0,
       "short_stock_repay_lot": 0
-    },
-    {
-      "date": "2026-04-02",
-      "margin_balance_lot": 94,
-      "margin_buy_lot": 0,
-      "margin_cash_repay_lot": 0,
-      "margin_change_lot": 0,
-      "margin_prev_balance_lot": 94,
-      "margin_sell_lot": 0,
-      "note": "",
-      "offset_lot": 0,
-      "short_balance_lot": 0,
-      "short_buy_lot": 0,
-      "short_change_lot": 0,
-      "short_prev_balance_lot": 0,
-      "short_sell_lot": 0,
-      "short_stock_repay_lot": 0
     }
   ],
   "news": [],
@@ -1230,15 +1243,15 @@
     }
   ],
   "selection": {
-    "avg_price": 29.8826,
+    "avg_price": 29.875,
     "base_reason": "外資買超；融資增加；營收 2026-03，月增 39.76%，年增 31.43%，累計年增 15.06%",
-    "base_score": 34.31,
+    "base_score": 29.36,
     "branch_score": 0.0,
     "branch_status": "未取得",
-    "chip_score": 21.9,
+    "chip_score": 16.93,
     "close": 29.6,
     "close_vs_top_buy_avg_pct": 0.0,
-    "complete_chip_score": 34.31,
+    "complete_chip_score": 29.36,
     "confluence_branch_score": 0.0,
     "confluence_direction_score": 0.0,
     "confluence_inst_score": 0.0,
@@ -1246,14 +1259,14 @@
     "confluence_score": 0.0,
     "confluence_streak_score": 0.0,
     "foreign_buy_streak": 0.0,
-    "foreign_net_lot": 270.18,
-    "foreign_net_volume_pct": 7.2,
-    "foreign_sell_streak": 2.0,
-    "inst_net_lot": 267.18,
+    "foreign_net_lot": 237.18,
+    "foreign_net_volume_pct": 6.14,
+    "foreign_sell_streak": 3.0,
+    "inst_net_lot": 234.18,
     "inst_net_volume_pct": 0.0,
-    "latest_date": "2026-05-04",
+    "latest_date": "2026-05-05",
     "margin_balance_change_lot": 20.0,
-    "margin_score": -0.43,
+    "margin_score": -0.41,
     "market": "TWSE",
     "name": "神腦",
     "observed_days": 20,
@@ -1263,7 +1276,7 @@
     "revenue_month": "2026-03",
     "revenue_yoy_pct": 31.43,
     "selection_reason": "營收 2026-03，月增 39.76%，年增 31.43%，累計年增 15.06%",
-    "selection_score": 34.31,
+    "selection_score": 29.36,
     "short_balance_change_lot": 4.0,
     "stock_id": "2450",
     "top_buy_branch_avg_price": 0.0,
@@ -1273,25 +1286,25 @@
     "top_sell_branch_avg_price": 0.0,
     "top_sell_branch_name": "",
     "top_sell_branch_net_lot": 0.0,
-    "total_score": 34.31,
+    "total_score": 29.36,
     "trust_buy_streak": 0.0,
     "trust_net_lot": -3.0,
     "trust_net_volume_pct": -0.08,
     "trust_sell_streak": 0.0,
-    "volume_lot": 3752.66
+    "volume_lot": 3863.64
   },
   "stock": {
-    "avg_price": 29.8826,
+    "avg_price": 29.875,
     "close": 29.6,
-    "foreign_net_lot": 270.18,
+    "foreign_net_lot": 237.18,
     "in_watchlist": false,
-    "latest_date": "2026-05-04",
+    "latest_date": "2026-05-05",
     "margin_balance_change_lot": 20,
     "market": "TWSE",
     "name": "神腦",
     "short_balance_change_lot": 4,
     "stock_id": "2450",
     "trust_net_lot": -3.0,
-    "volume_lot": 3752.66
+    "volume_lot": 3863.64
   }
 }
