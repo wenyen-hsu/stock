@@ -412,9 +412,31 @@
       "ma60": null,
       "open": 45.2,
       "volume_lot": 323.0
+    },
+    {
+      "avg_price": 45.09462365591398,
+      "close": 45.3,
+      "date": "2026-05-06",
+      "high": 45.3,
+      "low": 44.85,
+      "ma10": 43.775,
+      "ma20": 45.475,
+      "ma5": 44.67,
+      "ma60": null,
+      "open": 45.0,
+      "volume_lot": 93.0
     }
   ],
   "daily": [
+    {
+      "avg_price": 45.09462365591398,
+      "close": 45.3,
+      "date": "2026-05-06",
+      "dealer_net_lot": 0.0,
+      "foreign_net_lot": 11.0,
+      "trust_net_lot": 0.0,
+      "volume_lot": 93.0
+    },
     {
       "avg_price": 45.01996904024768,
       "close": 44.95,
@@ -450,15 +472,6 @@
       "foreign_net_lot": 44.0,
       "trust_net_lot": 0.0,
       "volume_lot": 114.0
-    },
-    {
-      "avg_price": 42.586,
-      "close": 42.3,
-      "date": "2026-04-28",
-      "dealer_net_lot": 0.0,
-      "foreign_net_lot": -3.0,
-      "trust_net_lot": 0.0,
-      "volume_lot": 25.0
     }
   ],
   "margin": [],
@@ -754,28 +767,28 @@
     }
   ],
   "selection": {
-    "avg_price": 44.7146,
+    "avg_price": 44.8411,
     "base_reason": "外資買超；營收 2026-03，月增 -18.99%，年增 1.8%，累計年增 -7.77%",
-    "base_score": 42.8,
+    "base_score": 44.8,
     "branch_score": 0.0,
     "branch_status": "未取得",
-    "chip_score": 46.0,
-    "close": 44.95,
+    "chip_score": 48.0,
+    "close": 45.3,
     "close_vs_top_buy_avg_pct": 0.0,
-    "complete_chip_score": 42.8,
+    "complete_chip_score": 44.8,
     "confluence_branch_score": 0.0,
     "confluence_direction_score": 0.0,
     "confluence_inst_score": 0.0,
     "confluence_price_score": 0.0,
     "confluence_score": 0.0,
     "confluence_streak_score": 0.0,
-    "foreign_buy_streak": 4.0,
-    "foreign_net_lot": 152.0,
-    "foreign_net_volume_pct": 24.05,
+    "foreign_buy_streak": 5.0,
+    "foreign_net_lot": 166.0,
+    "foreign_net_volume_pct": 23.71,
     "foreign_sell_streak": 0.0,
-    "inst_net_lot": 152.0,
+    "inst_net_lot": 166.0,
     "inst_net_volume_pct": 0.0,
-    "latest_date": "2026-05-05",
+    "latest_date": "2026-05-06",
     "margin_balance_change_lot": 0.0,
     "margin_score": 0.0,
     "market": "TPEX",
@@ -787,7 +800,7 @@
     "revenue_month": "2026-03",
     "revenue_yoy_pct": 1.8,
     "selection_reason": "營收 2026-03，月增 -18.99%，年增 1.8%，累計年增 -7.77%",
-    "selection_score": 42.8,
+    "selection_score": 44.8,
     "short_balance_change_lot": 0.0,
     "stock_id": "8084",
     "top_buy_branch_avg_price": 0.0,
@@ -797,25 +810,25 @@
     "top_sell_branch_avg_price": 0.0,
     "top_sell_branch_name": "",
     "top_sell_branch_net_lot": 0.0,
-    "total_score": 42.8,
+    "total_score": 44.8,
     "trust_buy_streak": 0.0,
     "trust_net_lot": 0.0,
     "trust_net_volume_pct": 0.0,
     "trust_sell_streak": 0.0,
-    "volume_lot": 632.0
+    "volume_lot": 700.0
   },
   "stock": {
-    "avg_price": 44.7146,
-    "close": 44.95,
-    "foreign_net_lot": 152.0,
+    "avg_price": 44.8411,
+    "close": 45.3,
+    "foreign_net_lot": 166.0,
     "in_watchlist": false,
-    "latest_date": "2026-05-05",
+    "latest_date": "2026-05-06",
     "margin_balance_change_lot": null,
     "market": "TPEX",
     "name": "巨虹",
     "short_balance_change_lot": null,
     "stock_id": "8084",
     "trust_net_lot": 0.0,
-    "volume_lot": 632.0
+    "volume_lot": 700.0
   }
 }

@@ -425,9 +425,31 @@
       "ma60": null,
       "open": 34.35,
       "volume_lot": 4330.03
+    },
+    {
+      "avg_price": 34.840348259551845,
+      "close": 35.1,
+      "date": "2026-05-06",
+      "high": 35.6,
+      "low": 34.35,
+      "ma10": 35.11,
+      "ma20": 35.66,
+      "ma5": 34.71,
+      "ma60": null,
+      "open": 35.2,
+      "volume_lot": 2765.98
     }
   ],
   "daily": [
+    {
+      "avg_price": 34.840348259551845,
+      "close": 35.1,
+      "date": "2026-05-06",
+      "dealer_net_lot": 0.92,
+      "foreign_net_lot": -88.95,
+      "trust_net_lot": 0.0,
+      "volume_lot": 2765.98
+    },
     {
       "avg_price": 34.12129925046795,
       "close": 35.0,
@@ -463,18 +485,26 @@
       "foreign_net_lot": -861.0,
       "trust_net_lot": 0.0,
       "volume_lot": 1474.45
-    },
-    {
-      "avg_price": 34.206285859318214,
-      "close": 34.65,
-      "date": "2026-04-28",
-      "dealer_net_lot": 0.63,
-      "foreign_net_lot": -494.0,
-      "trust_net_lot": 0.0,
-      "volume_lot": 2198.52
     }
   ],
   "margin": [
+    {
+      "date": "2026-05-06",
+      "margin_balance_lot": 5981,
+      "margin_buy_lot": 63,
+      "margin_cash_repay_lot": 0,
+      "margin_change_lot": -26,
+      "margin_prev_balance_lot": 6007,
+      "margin_sell_lot": 89,
+      "note": "",
+      "offset_lot": 11,
+      "short_balance_lot": 12,
+      "short_buy_lot": 3,
+      "short_change_lot": -3,
+      "short_prev_balance_lot": 15,
+      "short_sell_lot": 0,
+      "short_stock_repay_lot": 0
+    },
     {
       "date": "2026-05-05",
       "margin_balance_lot": 6007,
@@ -540,23 +570,6 @@
       "short_buy_lot": 2,
       "short_change_lot": -2,
       "short_prev_balance_lot": 16,
-      "short_sell_lot": 0,
-      "short_stock_repay_lot": 0
-    },
-    {
-      "date": "2026-04-28",
-      "margin_balance_lot": 6161,
-      "margin_buy_lot": 372,
-      "margin_cash_repay_lot": 0,
-      "margin_change_lot": 302,
-      "margin_prev_balance_lot": 5859,
-      "margin_sell_lot": 70,
-      "note": "",
-      "offset_lot": 2,
-      "short_balance_lot": 16,
-      "short_buy_lot": 1,
-      "short_change_lot": -1,
-      "short_prev_balance_lot": 17,
       "short_sell_lot": 0,
       "short_stock_repay_lot": 0
     }
@@ -853,15 +866,15 @@
     }
   ],
   "selection": {
-    "avg_price": 34.509,
-    "base_reason": "融資增加；營收 2026-03，月增 57.6%，年增 25.15%，累計年增 -10.3%",
-    "base_score": -28.83,
+    "avg_price": 34.6224,
+    "base_reason": "融資下降；營收 2026-03，月增 57.6%，年增 25.15%，累計年增 -10.3%",
+    "base_score": -25.86,
     "branch_score": 0.0,
     "branch_status": "未取得",
-    "chip_score": -35.62,
-    "close": 35.0,
+    "chip_score": -34.82,
+    "close": 35.1,
     "close_vs_top_buy_avg_pct": 0.0,
-    "complete_chip_score": -28.83,
+    "complete_chip_score": -25.86,
     "confluence_branch_score": 0.0,
     "confluence_direction_score": 0.0,
     "confluence_inst_score": 0.0,
@@ -869,14 +882,14 @@
     "confluence_score": 0.0,
     "confluence_streak_score": 0.0,
     "foreign_buy_streak": 0.0,
-    "foreign_net_lot": -1944.0,
-    "foreign_net_volume_pct": -14.52,
-    "foreign_sell_streak": 2.0,
-    "inst_net_lot": -1944.0,
+    "foreign_net_lot": -1538.95,
+    "foreign_net_volume_pct": -11.03,
+    "foreign_sell_streak": 3.0,
+    "inst_net_lot": -1538.95,
     "inst_net_volume_pct": 0.0,
-    "latest_date": "2026-05-05",
-    "margin_balance_change_lot": 148.0,
-    "margin_score": -0.89,
+    "latest_date": "2026-05-06",
+    "margin_balance_change_lot": -180.0,
+    "margin_score": 1.28,
     "market": "TWSE",
     "name": "合勤控",
     "observed_days": 5,
@@ -886,8 +899,8 @@
     "revenue_month": "2026-03",
     "revenue_yoy_pct": 25.15,
     "selection_reason": "營收 2026-03，月增 57.6%，年增 25.15%，累計年增 -10.3%",
-    "selection_score": -28.83,
-    "short_balance_change_lot": -2.0,
+    "selection_score": -25.86,
+    "short_balance_change_lot": -4.0,
     "stock_id": "3704",
     "top_buy_branch_avg_price": 0.0,
     "top_buy_branch_name": "",
@@ -896,25 +909,25 @@
     "top_sell_branch_avg_price": 0.0,
     "top_sell_branch_name": "",
     "top_sell_branch_net_lot": 0.0,
-    "total_score": -28.83,
+    "total_score": -25.86,
     "trust_buy_streak": 0.0,
     "trust_net_lot": 0.0,
     "trust_net_volume_pct": 0.0,
     "trust_sell_streak": 0.0,
-    "volume_lot": 13385.58
+    "volume_lot": 13953.04
   },
   "stock": {
-    "avg_price": 34.509,
-    "close": 35.0,
-    "foreign_net_lot": -1944.0,
+    "avg_price": 34.6224,
+    "close": 35.1,
+    "foreign_net_lot": -1538.95,
     "in_watchlist": false,
-    "latest_date": "2026-05-05",
-    "margin_balance_change_lot": 148,
+    "latest_date": "2026-05-06",
+    "margin_balance_change_lot": -180,
     "market": "TWSE",
     "name": "合勤控",
-    "short_balance_change_lot": -2,
+    "short_balance_change_lot": -4,
     "stock_id": "3704",
     "trust_net_lot": 0.0,
-    "volume_lot": 13385.58
+    "volume_lot": 13953.04
   }
 }

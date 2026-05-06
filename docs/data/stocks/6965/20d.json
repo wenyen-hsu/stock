@@ -425,9 +425,31 @@
       "ma60": null,
       "open": 86.9,
       "volume_lot": 18.4
+    },
+    {
+      "avg_price": 86.71229439904138,
+      "close": 86.8,
+      "date": "2026-05-06",
+      "high": 87.6,
+      "low": 85.9,
+      "ma10": 86.58,
+      "ma20": 87.485,
+      "ma5": 86.66,
+      "ma60": null,
+      "open": 86.7,
+      "volume_lot": 106.82
     }
   ],
   "daily": [
+    {
+      "avg_price": 86.71229439904138,
+      "close": 86.8,
+      "date": "2026-05-06",
+      "dealer_net_lot": 0.0,
+      "foreign_net_lot": 58.0,
+      "trust_net_lot": 0.0,
+      "volume_lot": 106.82
+    },
     {
       "avg_price": 86.08908577019241,
       "close": 85.6,
@@ -598,18 +620,26 @@
       "foreign_net_lot": 42.0,
       "trust_net_lot": 0.0,
       "volume_lot": 60.69
-    },
-    {
-      "avg_price": 85.97513766610611,
-      "close": 86.3,
-      "date": "2026-04-07",
-      "dealer_net_lot": 0.0,
-      "foreign_net_lot": 5.0,
-      "trust_net_lot": 0.0,
-      "volume_lot": 30.33
     }
   ],
   "margin": [
+    {
+      "date": "2026-05-06",
+      "margin_balance_lot": 43,
+      "margin_buy_lot": 0,
+      "margin_cash_repay_lot": 0,
+      "margin_change_lot": -1,
+      "margin_prev_balance_lot": 44,
+      "margin_sell_lot": 1,
+      "note": "",
+      "offset_lot": 0,
+      "short_balance_lot": 0,
+      "short_buy_lot": 0,
+      "short_change_lot": 0,
+      "short_prev_balance_lot": 0,
+      "short_sell_lot": 0,
+      "short_stock_repay_lot": 0
+    },
     {
       "date": "2026-05-05",
       "margin_balance_lot": 44,
@@ -932,23 +962,6 @@
       "short_prev_balance_lot": 0,
       "short_sell_lot": 0,
       "short_stock_repay_lot": 0
-    },
-    {
-      "date": "2026-04-07",
-      "margin_balance_lot": 48,
-      "margin_buy_lot": 0,
-      "margin_cash_repay_lot": 0,
-      "margin_change_lot": 0,
-      "margin_prev_balance_lot": 48,
-      "margin_sell_lot": 0,
-      "note": "",
-      "offset_lot": 0,
-      "short_balance_lot": 0,
-      "short_buy_lot": 0,
-      "short_change_lot": 0,
-      "short_prev_balance_lot": 0,
-      "short_sell_lot": 0,
-      "short_stock_repay_lot": 0
     }
   ],
   "news": [],
@@ -1147,30 +1160,30 @@
     }
   ],
   "selection": {
-    "avg_price": 87.4437,
+    "avg_price": 87.4103,
     "base_reason": "外資買超；融資下降；營收 2026-03，月增 30.11%，年增 -21.34%，累計年增 -20.07%",
-    "base_score": 38.99,
+    "base_score": 41.06,
     "branch_score": 0.0,
     "branch_status": "未取得",
-    "chip_score": 42.0,
-    "close": 85.6,
+    "chip_score": 44.0,
+    "close": 86.8,
     "close_vs_top_buy_avg_pct": 0.0,
-    "complete_chip_score": 38.99,
+    "complete_chip_score": 41.06,
     "confluence_branch_score": 0.0,
     "confluence_direction_score": 0.0,
     "confluence_inst_score": 0.0,
     "confluence_price_score": 0.0,
     "confluence_score": 0.0,
     "confluence_streak_score": 0.0,
-    "foreign_buy_streak": 2.0,
-    "foreign_net_lot": 205.01,
-    "foreign_net_volume_pct": 22.05,
+    "foreign_buy_streak": 3.0,
+    "foreign_net_lot": 258.01,
+    "foreign_net_volume_pct": 25.64,
     "foreign_sell_streak": 0.0,
-    "inst_net_lot": 205.01,
+    "inst_net_lot": 258.01,
     "inst_net_volume_pct": 0.0,
-    "latest_date": "2026-05-05",
-    "margin_balance_change_lot": -4.0,
-    "margin_score": 0.43,
+    "latest_date": "2026-05-06",
+    "margin_balance_change_lot": -5.0,
+    "margin_score": 0.5,
     "market": "TWSE",
     "name": "中傑-KY",
     "observed_days": 20,
@@ -1180,7 +1193,7 @@
     "revenue_month": "2026-03",
     "revenue_yoy_pct": -21.34,
     "selection_reason": "營收 2026-03，月增 30.11%，年增 -21.34%，累計年增 -20.07%",
-    "selection_score": 38.99,
+    "selection_score": 41.06,
     "short_balance_change_lot": 0.0,
     "stock_id": "6965",
     "top_buy_branch_avg_price": 0.0,
@@ -1190,25 +1203,25 @@
     "top_sell_branch_avg_price": 0.0,
     "top_sell_branch_name": "",
     "top_sell_branch_net_lot": 0.0,
-    "total_score": 38.99,
+    "total_score": 41.06,
     "trust_buy_streak": 0.0,
     "trust_net_lot": 0.0,
     "trust_net_volume_pct": 0.0,
     "trust_sell_streak": 0.0,
-    "volume_lot": 929.7
+    "volume_lot": 1006.19
   },
   "stock": {
-    "avg_price": 87.4437,
-    "close": 85.6,
-    "foreign_net_lot": 205.01,
+    "avg_price": 87.4103,
+    "close": 86.8,
+    "foreign_net_lot": 258.01,
     "in_watchlist": false,
-    "latest_date": "2026-05-05",
-    "margin_balance_change_lot": -4,
+    "latest_date": "2026-05-06",
+    "margin_balance_change_lot": -5,
     "market": "TWSE",
     "name": "中傑-KY",
     "short_balance_change_lot": 0,
     "stock_id": "6965",
     "trust_net_lot": 0.0,
-    "volume_lot": 929.7
+    "volume_lot": 1006.19
   }
 }

@@ -3,11 +3,11 @@
   "branch_daily_status": [],
   "branch_top": [],
   "branch_top_status": {
-    "attempts": 0,
-    "error": null,
+    "attempts": 3,
+    "error": "empty parseable branch table",
     "row_count": 0,
-    "status": "missing",
-    "updated_at": ""
+    "status": "empty",
+    "updated_at": "2026-05-06 23:40:55"
   },
   "chart": [
     {
@@ -412,9 +412,31 @@
       "ma60": null,
       "open": 47.25,
       "volume_lot": 264.0
+    },
+    {
+      "avg_price": 47.27609542356378,
+      "close": 48.05,
+      "date": "2026-05-06",
+      "high": 48.65,
+      "low": 45.75,
+      "ma10": 48.065,
+      "ma20": 48.0375,
+      "ma5": 47.33,
+      "ma60": null,
+      "open": 47.35,
+      "volume_lot": 1027.0
     }
   ],
   "daily": [
+    {
+      "avg_price": 47.27609542356378,
+      "close": 48.05,
+      "date": "2026-05-06",
+      "dealer_net_lot": -3.42,
+      "foreign_net_lot": -112.0,
+      "trust_net_lot": 0.0,
+      "volume_lot": 1027.0
+    },
     {
       "avg_price": 47.3280303030303,
       "close": 47.4,
@@ -585,18 +607,26 @@
       "foreign_net_lot": 113.0,
       "trust_net_lot": 0.0,
       "volume_lot": 886.0
-    },
-    {
-      "avg_price": 43.893347873500545,
-      "close": 44.8,
-      "date": "2026-04-07",
-      "dealer_net_lot": 63.55,
-      "foreign_net_lot": -339.0,
-      "trust_net_lot": 0.0,
-      "volume_lot": 917.0
     }
   ],
   "margin": [
+    {
+      "date": "2026-05-06",
+      "margin_balance_lot": 8645,
+      "margin_buy_lot": 127,
+      "margin_cash_repay_lot": 0,
+      "margin_change_lot": 92,
+      "margin_prev_balance_lot": 8553,
+      "margin_sell_lot": 35,
+      "note": "",
+      "offset_lot": 0,
+      "short_balance_lot": 3,
+      "short_buy_lot": 1,
+      "short_change_lot": -1,
+      "short_prev_balance_lot": 4,
+      "short_sell_lot": 0,
+      "short_stock_repay_lot": 0
+    },
     {
       "date": "2026-05-05",
       "margin_balance_lot": 8553,
@@ -902,23 +932,6 @@
       "short_prev_balance_lot": 4,
       "short_sell_lot": 0,
       "short_stock_repay_lot": 0
-    },
-    {
-      "date": "2026-04-07",
-      "margin_balance_lot": 10028,
-      "margin_buy_lot": 432,
-      "margin_cash_repay_lot": 0,
-      "margin_change_lot": 291,
-      "margin_prev_balance_lot": 9737,
-      "margin_sell_lot": 141,
-      "note": "",
-      "offset_lot": 0,
-      "short_balance_lot": 4,
-      "short_buy_lot": 0,
-      "short_change_lot": 0,
-      "short_prev_balance_lot": 4,
-      "short_sell_lot": 0,
-      "short_stock_repay_lot": 0
     }
   ],
   "news": [],
@@ -1213,15 +1226,15 @@
     }
   ],
   "selection": {
-    "avg_price": 48.1219,
+    "avg_price": 48.2432,
     "base_reason": "外資買超；融資下降；營收 2026-03，月增 7.48%，年增 68.07%，累計年增 83.69%",
-    "base_score": 47.05,
+    "base_score": 48.31,
     "branch_score": 0.0,
     "branch_status": "未取得",
-    "chip_score": 20.96,
-    "close": 47.4,
+    "chip_score": 21.44,
+    "close": 48.05,
     "close_vs_top_buy_avg_pct": 0.0,
-    "complete_chip_score": 47.05,
+    "complete_chip_score": 48.31,
     "confluence_branch_score": 0.0,
     "confluence_direction_score": 0.0,
     "confluence_inst_score": 0.0,
@@ -1229,14 +1242,14 @@
     "confluence_score": 0.0,
     "confluence_streak_score": 0.0,
     "foreign_buy_streak": 0.0,
-    "foreign_net_lot": 1496.0,
-    "foreign_net_volume_pct": 6.06,
-    "foreign_sell_streak": 1.0,
-    "inst_net_lot": 1496.0,
+    "foreign_net_lot": 1723.0,
+    "foreign_net_volume_pct": 6.94,
+    "foreign_sell_streak": 2.0,
+    "inst_net_lot": 1723.0,
     "inst_net_volume_pct": 0.0,
-    "latest_date": "2026-05-05",
-    "margin_balance_change_lot": -1184.0,
-    "margin_score": 4.79,
+    "latest_date": "2026-05-06",
+    "margin_balance_change_lot": -1383.0,
+    "margin_score": 5.57,
     "market": "TPEX",
     "name": "東浦",
     "observed_days": 20,
@@ -1246,8 +1259,8 @@
     "revenue_month": "2026-03",
     "revenue_yoy_pct": 68.07,
     "selection_reason": "營收 2026-03，月增 7.48%，年增 68.07%，累計年增 83.69%",
-    "selection_score": 47.05,
-    "short_balance_change_lot": 0.0,
+    "selection_score": 48.31,
+    "short_balance_change_lot": -1.0,
     "stock_id": "3290",
     "top_buy_branch_avg_price": 0.0,
     "top_buy_branch_name": "",
@@ -1256,25 +1269,25 @@
     "top_sell_branch_avg_price": 0.0,
     "top_sell_branch_name": "",
     "top_sell_branch_net_lot": 0.0,
-    "total_score": 47.05,
+    "total_score": 48.31,
     "trust_buy_streak": 0.0,
     "trust_net_lot": 0.0,
     "trust_net_volume_pct": 0.0,
     "trust_sell_streak": 0.0,
-    "volume_lot": 24701.0
+    "volume_lot": 24811.0
   },
   "stock": {
-    "avg_price": 48.1219,
-    "close": 47.4,
-    "foreign_net_lot": 1496.0,
+    "avg_price": 48.2432,
+    "close": 48.05,
+    "foreign_net_lot": 1723.0,
     "in_watchlist": false,
-    "latest_date": "2026-05-05",
-    "margin_balance_change_lot": -1184,
+    "latest_date": "2026-05-06",
+    "margin_balance_change_lot": -1383,
     "market": "TPEX",
     "name": "東浦",
-    "short_balance_change_lot": 0,
+    "short_balance_change_lot": -1,
     "stock_id": "3290",
     "trust_net_lot": 0.0,
-    "volume_lot": 24701.0
+    "volume_lot": 24811.0
   }
 }

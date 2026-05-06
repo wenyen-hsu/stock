@@ -425,9 +425,31 @@
       "ma60": null,
       "open": 39.7,
       "volume_lot": 44.35
+    },
+    {
+      "avg_price": 39.87669773635153,
+      "close": 40.05,
+      "date": "2026-05-06",
+      "high": 40.1,
+      "low": 39.5,
+      "ma10": 39.65,
+      "ma20": 39.855,
+      "ma5": 39.85,
+      "ma60": null,
+      "open": 39.8,
+      "volume_lot": 142.69
     }
   ],
   "daily": [
+    {
+      "avg_price": 39.87669773635153,
+      "close": 40.05,
+      "date": "2026-05-06",
+      "dealer_net_lot": -1.0,
+      "foreign_net_lot": 59.0,
+      "trust_net_lot": 0.0,
+      "volume_lot": 142.69
+    },
     {
       "avg_price": 39.40958178333897,
       "close": 39.5,
@@ -463,15 +485,6 @@
       "foreign_net_lot": 13.0,
       "trust_net_lot": 0.0,
       "volume_lot": 45.48
-    },
-    {
-      "avg_price": 39.69620370227655,
-      "close": 40.05,
-      "date": "2026-04-28",
-      "dealer_net_lot": 1.0,
-      "foreign_net_lot": 21.0,
-      "trust_net_lot": 0.0,
-      "volume_lot": 64.88
     }
   ],
   "margin": [],
@@ -539,13 +552,13 @@
     }
   ],
   "selection": {
-    "avg_price": 39.6483,
+    "avg_price": 39.7248,
     "base_reason": "外資買超；營收 2026-03，月增 17.4%",
     "base_score": 50.09,
     "branch_score": 0.0,
     "branch_status": "未取得",
     "chip_score": 48.0,
-    "close": 39.5,
+    "close": 40.05,
     "close_vs_top_buy_avg_pct": 0.0,
     "complete_chip_score": 50.09,
     "confluence_branch_score": 0.0,
@@ -555,12 +568,12 @@
     "confluence_score": 0.0,
     "confluence_streak_score": 0.0,
     "foreign_buy_streak": 5.0,
-    "foreign_net_lot": 67.0,
-    "foreign_net_volume_pct": 21.79,
+    "foreign_net_lot": 105.0,
+    "foreign_net_volume_pct": 27.25,
     "foreign_sell_streak": 0.0,
-    "inst_net_lot": 67.0,
+    "inst_net_lot": 105.0,
     "inst_net_volume_pct": 0.0,
-    "latest_date": "2026-05-05",
+    "latest_date": "2026-05-06",
     "margin_balance_change_lot": 0.0,
     "margin_score": 0.0,
     "market": "TWSE",
@@ -587,20 +600,20 @@
     "trust_net_lot": 0.0,
     "trust_net_volume_pct": 0.0,
     "trust_sell_streak": 0.0,
-    "volume_lot": 307.46
+    "volume_lot": 385.27
   },
   "stock": {
-    "avg_price": 39.6483,
-    "close": 39.5,
-    "foreign_net_lot": 67.0,
+    "avg_price": 39.7248,
+    "close": 40.05,
+    "foreign_net_lot": 105.0,
     "in_watchlist": false,
-    "latest_date": "2026-05-05",
+    "latest_date": "2026-05-06",
     "margin_balance_change_lot": null,
     "market": "TWSE",
     "name": "輝創",
     "short_balance_change_lot": null,
     "stock_id": "6722",
     "trust_net_lot": 0.0,
-    "volume_lot": 307.46
+    "volume_lot": 385.27
   }
 }

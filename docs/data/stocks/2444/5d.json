@@ -425,9 +425,31 @@
       "ma60": null,
       "open": 13.5,
       "volume_lot": 579.15
+    },
+    {
+      "avg_price": 13.613908058925857,
+      "close": 13.8,
+      "date": "2026-05-06",
+      "high": 13.8,
+      "low": 13.5,
+      "ma10": 13.58,
+      "ma20": 13.21,
+      "ma5": 13.53,
+      "ma60": null,
+      "open": 13.6,
+      "volume_lot": 683.5
     }
   ],
   "daily": [
+    {
+      "avg_price": 13.613908058925857,
+      "close": 13.8,
+      "date": "2026-05-06",
+      "dealer_net_lot": 0.0,
+      "foreign_net_lot": 104.02,
+      "trust_net_lot": 0.0,
+      "volume_lot": 683.5
+    },
     {
       "avg_price": 13.719444497203666,
       "close": 13.7,
@@ -463,18 +485,26 @@
       "foreign_net_lot": 110.0,
       "trust_net_lot": 0.0,
       "volume_lot": 512.62
-    },
-    {
-      "avg_price": 13.199799138453367,
-      "close": 12.95,
-      "date": "2026-04-28",
-      "dealer_net_lot": 0.0,
-      "foreign_net_lot": 80.0,
-      "trust_net_lot": 0.0,
-      "volume_lot": 722.89
     }
   ],
   "margin": [
+    {
+      "date": "2026-05-06",
+      "margin_balance_lot": 0,
+      "margin_buy_lot": 0,
+      "margin_cash_repay_lot": 0,
+      "margin_change_lot": 0,
+      "margin_prev_balance_lot": 0,
+      "margin_sell_lot": 0,
+      "note": "OX",
+      "offset_lot": 0,
+      "short_balance_lot": 0,
+      "short_buy_lot": 0,
+      "short_change_lot": 0,
+      "short_prev_balance_lot": 0,
+      "short_sell_lot": 0,
+      "short_stock_repay_lot": 0
+    },
     {
       "date": "2026-05-05",
       "margin_balance_lot": 0,
@@ -528,23 +558,6 @@
     },
     {
       "date": "2026-04-29",
-      "margin_balance_lot": 0,
-      "margin_buy_lot": 0,
-      "margin_cash_repay_lot": 0,
-      "margin_change_lot": 0,
-      "margin_prev_balance_lot": 0,
-      "margin_sell_lot": 0,
-      "note": "OX",
-      "offset_lot": 0,
-      "short_balance_lot": 0,
-      "short_buy_lot": 0,
-      "short_change_lot": 0,
-      "short_prev_balance_lot": 0,
-      "short_sell_lot": 0,
-      "short_stock_repay_lot": 0
-    },
-    {
-      "date": "2026-04-28",
       "margin_balance_lot": 0,
       "margin_buy_lot": 0,
       "margin_cash_repay_lot": 0,
@@ -853,13 +866,13 @@
     }
   ],
   "selection": {
-    "avg_price": 13.4403,
+    "avg_price": 13.5503,
     "base_reason": "外資買超；營收 2026-03，月增 36.55%，年增 -26.89%，累計年增 -30.73%",
     "base_score": 42.75,
     "branch_score": 0.0,
     "branch_status": "未取得",
     "chip_score": 48.0,
-    "close": 13.7,
+    "close": 13.8,
     "close_vs_top_buy_avg_pct": 0.0,
     "complete_chip_score": 42.75,
     "confluence_branch_score": 0.0,
@@ -869,12 +882,12 @@
     "confluence_score": 0.0,
     "confluence_streak_score": 0.0,
     "foreign_buy_streak": 5.0,
-    "foreign_net_lot": 655.0,
-    "foreign_net_volume_pct": 24.26,
+    "foreign_net_lot": 679.02,
+    "foreign_net_volume_pct": 25.53,
     "foreign_sell_streak": 0.0,
-    "inst_net_lot": 655.0,
+    "inst_net_lot": 679.02,
     "inst_net_volume_pct": 0.0,
-    "latest_date": "2026-05-05",
+    "latest_date": "2026-05-06",
     "margin_balance_change_lot": 0.0,
     "margin_score": 0.0,
     "market": "TWSE",
@@ -901,20 +914,20 @@
     "trust_net_lot": 0.0,
     "trust_net_volume_pct": 0.0,
     "trust_sell_streak": 0.0,
-    "volume_lot": 2699.55
+    "volume_lot": 2660.16
   },
   "stock": {
-    "avg_price": 13.4403,
-    "close": 13.7,
-    "foreign_net_lot": 655.0,
+    "avg_price": 13.5503,
+    "close": 13.8,
+    "foreign_net_lot": 679.02,
     "in_watchlist": false,
-    "latest_date": "2026-05-05",
+    "latest_date": "2026-05-06",
     "margin_balance_change_lot": 0,
     "market": "TWSE",
     "name": "兆勁",
     "short_balance_change_lot": 0,
     "stock_id": "2444",
     "trust_net_lot": 0.0,
-    "volume_lot": 2699.55
+    "volume_lot": 2660.16
   }
 }

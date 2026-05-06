@@ -7,7 +7,7 @@
     "error": "empty parseable branch table",
     "row_count": 0,
     "status": "empty",
-    "updated_at": "2026-05-05 21:01:34"
+    "updated_at": "2026-05-06 23:35:09"
   },
   "chart": [
     {
@@ -425,9 +425,31 @@
       "ma60": null,
       "open": 165.0,
       "volume_lot": 66.64
+    },
+    {
+      "avg_price": 160.3119060045881,
+      "close": 162.0,
+      "date": "2026-05-06",
+      "high": 162.0,
+      "low": 159.0,
+      "ma10": 160.35,
+      "ma20": 160.0,
+      "ma5": 161.1,
+      "ma60": null,
+      "open": 162.0,
+      "volume_lot": 82.39
     }
   ],
   "daily": [
+    {
+      "avg_price": 160.3119060045881,
+      "close": 162.0,
+      "date": "2026-05-06",
+      "dealer_net_lot": 0.49,
+      "foreign_net_lot": 13.0,
+      "trust_net_lot": 0.0,
+      "volume_lot": 82.39
+    },
     {
       "avg_price": 161.0434586872355,
       "close": 160.0,
@@ -598,18 +620,26 @@
       "foreign_net_lot": 39.0,
       "trust_net_lot": 0.0,
       "volume_lot": 181.02
-    },
-    {
-      "avg_price": 154.6136152847338,
-      "close": 155.0,
-      "date": "2026-04-07",
-      "dealer_net_lot": -0.0,
-      "foreign_net_lot": -8.0,
-      "trust_net_lot": 0.0,
-      "volume_lot": 32.35
     }
   ],
   "margin": [
+    {
+      "date": "2026-05-06",
+      "margin_balance_lot": 1023,
+      "margin_buy_lot": 2,
+      "margin_cash_repay_lot": 0,
+      "margin_change_lot": -3,
+      "margin_prev_balance_lot": 1026,
+      "margin_sell_lot": 5,
+      "note": "",
+      "offset_lot": 0,
+      "short_balance_lot": 0,
+      "short_buy_lot": 0,
+      "short_change_lot": 0,
+      "short_prev_balance_lot": 0,
+      "short_sell_lot": 0,
+      "short_stock_repay_lot": 0
+    },
     {
       "date": "2026-05-05",
       "margin_balance_lot": 1026,
@@ -932,23 +962,6 @@
       "short_prev_balance_lot": 0,
       "short_sell_lot": 0,
       "short_stock_repay_lot": 0
-    },
-    {
-      "date": "2026-04-07",
-      "margin_balance_lot": 1456,
-      "margin_buy_lot": 2,
-      "margin_cash_repay_lot": 7,
-      "margin_change_lot": -5,
-      "margin_prev_balance_lot": 1461,
-      "margin_sell_lot": 0,
-      "note": "",
-      "offset_lot": 0,
-      "short_balance_lot": 0,
-      "short_buy_lot": 0,
-      "short_change_lot": 0,
-      "short_prev_balance_lot": 0,
-      "short_sell_lot": 0,
-      "short_stock_repay_lot": 0
     }
   ],
   "news": [],
@@ -1243,29 +1256,29 @@
     }
   ],
   "selection": {
-    "avg_price": 159.3047,
+    "avg_price": 159.4248,
     "base_reason": "外資買超；融資下降；營收 2026-03，月增 129.26%，年增 77.63%，累計年增 28.69%",
-    "base_score": 51.52,
+    "base_score": 59.99,
     "branch_score": 0.0,
     "branch_status": "未取得",
-    "chip_score": 23.33,
-    "close": 160.0,
+    "chip_score": 31.8,
+    "close": 162.0,
     "close_vs_top_buy_avg_pct": 0.0,
-    "complete_chip_score": 51.52,
+    "complete_chip_score": 59.99,
     "confluence_branch_score": 0.0,
     "confluence_direction_score": 0.0,
     "confluence_inst_score": 0.0,
     "confluence_price_score": 0.0,
     "confluence_score": 0.0,
     "confluence_streak_score": 0.0,
-    "foreign_buy_streak": 0.0,
-    "foreign_net_lot": 145.0,
-    "foreign_net_volume_pct": 7.62,
-    "foreign_sell_streak": 2.0,
-    "inst_net_lot": 145.0,
+    "foreign_buy_streak": 1.0,
+    "foreign_net_lot": 166.0,
+    "foreign_net_volume_pct": 8.5,
+    "foreign_sell_streak": 0.0,
+    "inst_net_lot": 166.0,
     "inst_net_volume_pct": 0.0,
-    "latest_date": "2026-05-05",
-    "margin_balance_change_lot": -435.0,
+    "latest_date": "2026-05-06",
+    "margin_balance_change_lot": -433.0,
     "margin_score": 8.0,
     "market": "TWSE",
     "name": "裕慶-KY",
@@ -1276,7 +1289,7 @@
     "revenue_month": "2026-03",
     "revenue_yoy_pct": 77.63,
     "selection_reason": "營收 2026-03，月增 129.26%，年增 77.63%，累計年增 28.69%",
-    "selection_score": 51.52,
+    "selection_score": 59.99,
     "short_balance_change_lot": 0.0,
     "stock_id": "6957",
     "top_buy_branch_avg_price": 0.0,
@@ -1286,25 +1299,25 @@
     "top_sell_branch_avg_price": 0.0,
     "top_sell_branch_name": "",
     "top_sell_branch_net_lot": 0.0,
-    "total_score": 51.52,
+    "total_score": 59.99,
     "trust_buy_streak": 0.0,
     "trust_net_lot": 0.0,
     "trust_net_volume_pct": 0.0,
     "trust_sell_streak": 0.0,
-    "volume_lot": 1903.25
+    "volume_lot": 1953.29
   },
   "stock": {
-    "avg_price": 159.3047,
-    "close": 160.0,
-    "foreign_net_lot": 145.0,
+    "avg_price": 159.4248,
+    "close": 162.0,
+    "foreign_net_lot": 166.0,
     "in_watchlist": false,
-    "latest_date": "2026-05-05",
-    "margin_balance_change_lot": -435,
+    "latest_date": "2026-05-06",
+    "margin_balance_change_lot": -433,
     "market": "TWSE",
     "name": "裕慶-KY",
     "short_balance_change_lot": 0,
     "stock_id": "6957",
     "trust_net_lot": 0.0,
-    "volume_lot": 1903.25
+    "volume_lot": 1953.29
   }
 }

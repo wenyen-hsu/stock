@@ -3,11 +3,11 @@
   "branch_daily_status": [],
   "branch_top": [],
   "branch_top_status": {
-    "attempts": 0,
-    "error": null,
+    "attempts": 3,
+    "error": "empty parseable branch table",
     "row_count": 0,
-    "status": "missing",
-    "updated_at": ""
+    "status": "empty",
+    "updated_at": "2026-05-06 23:41:49"
   },
   "chart": [
     {
@@ -425,9 +425,31 @@
       "ma60": null,
       "open": 48.75,
       "volume_lot": 189.79
+    },
+    {
+      "avg_price": 49.47133262125025,
+      "close": 49.65,
+      "date": "2026-05-06",
+      "high": 50.0,
+      "low": 49.2,
+      "ma10": 48.415,
+      "ma20": 48.4875,
+      "ma5": 48.88,
+      "ma60": null,
+      "open": 49.95,
+      "volume_lot": 220.95
     }
   ],
   "daily": [
+    {
+      "avg_price": 49.47133262125025,
+      "close": 49.65,
+      "date": "2026-05-06",
+      "dealer_net_lot": 38.87,
+      "foreign_net_lot": -10.0,
+      "trust_net_lot": 0.0,
+      "volume_lot": 220.95
+    },
     {
       "avg_price": 48.92090898553168,
       "close": 49.25,
@@ -598,18 +620,26 @@
       "foreign_net_lot": 70.0,
       "trust_net_lot": 0.0,
       "volume_lot": 184.52
-    },
-    {
-      "avg_price": 46.317680633026335,
-      "close": 46.4,
-      "date": "2026-04-07",
-      "dealer_net_lot": 0.0,
-      "foreign_net_lot": -2.0,
-      "trust_net_lot": 0.0,
-      "volume_lot": 53.96
     }
   ],
   "margin": [
+    {
+      "date": "2026-05-06",
+      "margin_balance_lot": 997,
+      "margin_buy_lot": 20,
+      "margin_cash_repay_lot": 4,
+      "margin_change_lot": -16,
+      "margin_prev_balance_lot": 1013,
+      "margin_sell_lot": 32,
+      "note": "",
+      "offset_lot": 0,
+      "short_balance_lot": 0,
+      "short_buy_lot": 0,
+      "short_change_lot": 0,
+      "short_prev_balance_lot": 0,
+      "short_sell_lot": 0,
+      "short_stock_repay_lot": 0
+    },
     {
       "date": "2026-05-05",
       "margin_balance_lot": 1013,
@@ -932,23 +962,6 @@
       "short_prev_balance_lot": 0,
       "short_sell_lot": 0,
       "short_stock_repay_lot": 0
-    },
-    {
-      "date": "2026-04-07",
-      "margin_balance_lot": 1128,
-      "margin_buy_lot": 6,
-      "margin_cash_repay_lot": 0,
-      "margin_change_lot": 4,
-      "margin_prev_balance_lot": 1124,
-      "margin_sell_lot": 2,
-      "note": "",
-      "offset_lot": 0,
-      "short_balance_lot": 0,
-      "short_buy_lot": 0,
-      "short_change_lot": 0,
-      "short_prev_balance_lot": 0,
-      "short_sell_lot": 0,
-      "short_stock_repay_lot": 0
     }
   ],
   "news": [],
@@ -1243,30 +1256,30 @@
     }
   ],
   "selection": {
-    "avg_price": 48.3832,
+    "avg_price": 48.4825,
     "base_reason": "外資買超；融資下降；營收 2026-03，月增 112.87%，年增 1.97%，累計年增 1.13%",
-    "base_score": 46.72,
+    "base_score": 33.46,
     "branch_score": 0.0,
     "branch_status": "未取得",
-    "chip_score": 38.09,
-    "close": 49.25,
+    "chip_score": 24.42,
+    "close": 49.65,
     "close_vs_top_buy_avg_pct": 0.0,
-    "complete_chip_score": 46.72,
+    "complete_chip_score": 33.46,
     "confluence_branch_score": 0.0,
     "confluence_direction_score": 0.0,
     "confluence_inst_score": 0.0,
     "confluence_price_score": 0.0,
     "confluence_score": 0.0,
     "confluence_streak_score": 0.0,
-    "foreign_buy_streak": 6.0,
-    "foreign_net_lot": 266.39,
-    "foreign_net_volume_pct": 7.89,
-    "foreign_sell_streak": 0.0,
-    "inst_net_lot": 266.39,
+    "foreign_buy_streak": 0.0,
+    "foreign_net_lot": 258.39,
+    "foreign_net_volume_pct": 7.29,
+    "foreign_sell_streak": 1.0,
+    "inst_net_lot": 258.39,
     "inst_net_volume_pct": 0.0,
-    "latest_date": "2026-05-05",
-    "margin_balance_change_lot": -111.0,
-    "margin_score": 3.29,
+    "latest_date": "2026-05-06",
+    "margin_balance_change_lot": -131.0,
+    "margin_score": 3.7,
     "market": "TWSE",
     "name": "建碁",
     "observed_days": 20,
@@ -1276,7 +1289,7 @@
     "revenue_month": "2026-03",
     "revenue_yoy_pct": 1.97,
     "selection_reason": "營收 2026-03，月增 112.87%，年增 1.97%，累計年增 1.13%",
-    "selection_score": 46.72,
+    "selection_score": 33.46,
     "short_balance_change_lot": 0.0,
     "stock_id": "3046",
     "top_buy_branch_avg_price": 0.0,
@@ -1286,25 +1299,25 @@
     "top_sell_branch_avg_price": 0.0,
     "top_sell_branch_name": "",
     "top_sell_branch_net_lot": 0.0,
-    "total_score": 46.72,
+    "total_score": 33.46,
     "trust_buy_streak": 0.0,
     "trust_net_lot": 0.0,
     "trust_net_volume_pct": 0.0,
     "trust_sell_streak": 0.0,
-    "volume_lot": 3376.51
+    "volume_lot": 3543.49
   },
   "stock": {
-    "avg_price": 48.3832,
-    "close": 49.25,
-    "foreign_net_lot": 266.39,
+    "avg_price": 48.4825,
+    "close": 49.65,
+    "foreign_net_lot": 258.39,
     "in_watchlist": false,
-    "latest_date": "2026-05-05",
-    "margin_balance_change_lot": -111,
+    "latest_date": "2026-05-06",
+    "margin_balance_change_lot": -131,
     "market": "TWSE",
     "name": "建碁",
     "short_balance_change_lot": 0,
     "stock_id": "3046",
     "trust_net_lot": 0.0,
-    "volume_lot": 3376.51
+    "volume_lot": 3543.49
   }
 }

@@ -425,9 +425,31 @@
       "ma60": null,
       "open": 279.0,
       "volume_lot": 4539.83
+    },
+    {
+      "avg_price": 294.19072438416674,
+      "close": 301.0,
+      "date": "2026-05-06",
+      "high": 304.5,
+      "low": 283.0,
+      "ma10": 280.95,
+      "ma20": 275.2,
+      "ma5": 281.0,
+      "ma60": null,
+      "open": 283.0,
+      "volume_lot": 24158.94
     }
   ],
   "daily": [
+    {
+      "avg_price": 294.19072438416674,
+      "close": 301.0,
+      "date": "2026-05-06",
+      "dealer_net_lot": 1042.34,
+      "foreign_net_lot": 6525.55,
+      "trust_net_lot": -503.0,
+      "volume_lot": 24158.94
+    },
     {
       "avg_price": 279.1339273205945,
       "close": 279.5,
@@ -463,18 +485,26 @@
       "foreign_net_lot": -2395.2,
       "trust_net_lot": -92.0,
       "volume_lot": 7261.84
-    },
-    {
-      "avg_price": 283.3179253996559,
-      "close": 281.5,
-      "date": "2026-04-28",
-      "dealer_net_lot": -112.14,
-      "foreign_net_lot": -812.39,
-      "trust_net_lot": -51.41,
-      "volume_lot": 5090.75
     }
   ],
   "margin": [
+    {
+      "date": "2026-05-06",
+      "margin_balance_lot": 9580,
+      "margin_buy_lot": 2846,
+      "margin_cash_repay_lot": 1,
+      "margin_change_lot": 1399,
+      "margin_prev_balance_lot": 8181,
+      "margin_sell_lot": 1446,
+      "note": "",
+      "offset_lot": 4,
+      "short_balance_lot": 196,
+      "short_buy_lot": 7,
+      "short_change_lot": 43,
+      "short_prev_balance_lot": 153,
+      "short_sell_lot": 50,
+      "short_stock_repay_lot": 0
+    },
     {
       "date": "2026-05-05",
       "margin_balance_lot": 8181,
@@ -542,29 +572,22 @@
       "short_prev_balance_lot": 155,
       "short_sell_lot": 11,
       "short_stock_repay_lot": 0
-    },
-    {
-      "date": "2026-04-28",
-      "margin_balance_lot": 8219,
-      "margin_buy_lot": 500,
-      "margin_cash_repay_lot": 7,
-      "margin_change_lot": 203,
-      "margin_prev_balance_lot": 8016,
-      "margin_sell_lot": 290,
-      "note": "",
-      "offset_lot": 1,
-      "short_balance_lot": 155,
-      "short_buy_lot": 10,
-      "short_change_lot": -9,
-      "short_prev_balance_lot": 164,
-      "short_sell_lot": 1,
-      "short_stock_repay_lot": 0
     }
   ],
   "news": [
     {
       "content_excerpt": "",
-      "fetched_at": "2026-05-05 20:58:40",
+      "fetched_at": "2026-05-06 23:30:25",
+      "published_at": "2026-05-06 12:02:00",
+      "source": "Yahoo股市",
+      "stock_id": "2376",
+      "summary": "MoneyDJ新聞 2026-05-06 12:02:44 張以忠 發佈技嘉(2376)AI伺服器動能持續強勁，法人指出，儘管第2季進入傳統板卡淡季，但AI伺服器需求持續熱絡，將支撐第二季營收動能，目",
+      "title": "技嘉AI伺服器能見度高，今、明年獲利看增",
+      "url": "https://tw.stock.yahoo.com/news/%E6%8A%80%E5%98%89ai%E4%BC%BA%E6%9C%8D%E5%99%A8%E8%83%BD%E8%A6%8B%E5%BA%A6%E9%AB%98-%E4%BB%8A-%E6%98%8E%E5%B9%B4%E7%8D%B2%E5%88%A9%E7%9C%8B%E5%A2%9E-040200867.html"
+    },
+    {
+      "content_excerpt": "",
+      "fetched_at": "2026-05-06 23:30:25",
       "published_at": "2026-04-30 11:38:05",
       "source": "Yahoo股市",
       "stock_id": "2376",
@@ -574,7 +597,7 @@
     },
     {
       "content_excerpt": "",
-      "fetched_at": "2026-05-05 20:58:40",
+      "fetched_at": "2026-05-06 23:30:25",
       "published_at": "2026-04-30 11:38:00",
       "source": "Yahoo股市",
       "stock_id": "2376",
@@ -584,7 +607,7 @@
     },
     {
       "content_excerpt": "",
-      "fetched_at": "2026-05-05 20:58:40",
+      "fetched_at": "2026-05-06 23:30:25",
       "published_at": "2026-04-26 08:41:07",
       "source": "Yahoo股市",
       "stock_id": "2376",
@@ -594,7 +617,7 @@
     },
     {
       "content_excerpt": "",
-      "fetched_at": "2026-05-05 20:58:40",
+      "fetched_at": "2026-05-06 23:30:25",
       "published_at": "2026-04-23 04:10:00",
       "source": "Yahoo股市",
       "stock_id": "2376",
@@ -604,7 +627,7 @@
     },
     {
       "content_excerpt": "",
-      "fetched_at": "2026-05-05 20:58:40",
+      "fetched_at": "2026-05-06 11:09:50",
       "published_at": "2026-04-22 10:59:36",
       "source": "Yahoo股市",
       "stock_id": "2376",
@@ -1014,30 +1037,30 @@
     }
   ],
   "selection": {
-    "avg_price": 277.5698,
-    "base_reason": "融資增加；營收 2026-03，月增 18.6%，年增 74.84%，累計年增 59.8%",
-    "base_score": -15.82,
+    "avg_price": 285.3087,
+    "base_reason": "外資買超；融資增加；營收 2026-03，月增 18.6%，年增 74.84%，累計年增 59.8%",
+    "base_score": 34.45,
     "branch_score": 0.0,
     "branch_status": "未取得",
-    "chip_score": -37.95,
-    "close": 279.5,
+    "chip_score": 14.06,
+    "close": 301.0,
     "close_vs_top_buy_avg_pct": 0.0,
-    "complete_chip_score": -15.82,
+    "complete_chip_score": 34.45,
     "confluence_branch_score": 0.0,
     "confluence_direction_score": 0.0,
     "confluence_inst_score": 0.0,
     "confluence_price_score": 0.0,
     "confluence_score": 0.0,
     "confluence_streak_score": 0.0,
-    "foreign_buy_streak": 3.0,
-    "foreign_net_lot": -2029.31,
-    "foreign_net_volume_pct": -6.99,
+    "foreign_buy_streak": 4.0,
+    "foreign_net_lot": 5308.64,
+    "foreign_net_volume_pct": 11.04,
     "foreign_sell_streak": 0.0,
-    "inst_net_lot": -3074.85,
+    "inst_net_lot": 3811.51,
     "inst_net_volume_pct": 0.0,
-    "latest_date": "2026-05-05",
-    "margin_balance_change_lot": 165.0,
-    "margin_score": -0.47,
+    "latest_date": "2026-05-06",
+    "margin_balance_change_lot": 1361.0,
+    "margin_score": -2.21,
     "market": "TWSE",
     "name": "技嘉",
     "observed_days": 5,
@@ -1047,8 +1070,8 @@
     "revenue_month": "2026-03",
     "revenue_yoy_pct": 74.84,
     "selection_reason": "營收 2026-03，月增 18.6%，年增 74.84%，累計年增 59.8%",
-    "selection_score": -15.82,
-    "short_balance_change_lot": -11.0,
+    "selection_score": 34.45,
+    "short_balance_change_lot": 41.0,
     "stock_id": "2376",
     "top_buy_branch_avg_price": 0.0,
     "top_buy_branch_name": "",
@@ -1057,25 +1080,25 @@
     "top_sell_branch_avg_price": 0.0,
     "top_sell_branch_name": "",
     "top_sell_branch_net_lot": 0.0,
-    "total_score": -15.82,
+    "total_score": 34.45,
     "trust_buy_streak": 0.0,
-    "trust_net_lot": -1045.54,
-    "trust_net_volume_pct": -3.6,
+    "trust_net_lot": -1497.13,
+    "trust_net_volume_pct": -3.11,
     "trust_sell_streak": 5.0,
-    "volume_lot": 29037.13
+    "volume_lot": 48105.31
   },
   "stock": {
-    "avg_price": 277.5698,
-    "close": 279.5,
-    "foreign_net_lot": -2029.31,
+    "avg_price": 285.3087,
+    "close": 301.0,
+    "foreign_net_lot": 5308.64,
     "in_watchlist": true,
-    "latest_date": "2026-05-05",
-    "margin_balance_change_lot": 165,
+    "latest_date": "2026-05-06",
+    "margin_balance_change_lot": 1361,
     "market": "TWSE",
     "name": "技嘉",
-    "short_balance_change_lot": -11,
+    "short_balance_change_lot": 41,
     "stock_id": "2376",
-    "trust_net_lot": -1045.54,
-    "volume_lot": 29037.13
+    "trust_net_lot": -1497.13,
+    "volume_lot": 48105.31
   }
 }

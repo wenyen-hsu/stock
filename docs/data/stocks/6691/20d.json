@@ -3,11 +3,11 @@
   "branch_daily_status": [],
   "branch_top": [],
   "branch_top_status": {
-    "attempts": 0,
-    "error": null,
+    "attempts": 3,
+    "error": "empty parseable branch table",
     "row_count": 0,
-    "status": "missing",
-    "updated_at": ""
+    "status": "empty",
+    "updated_at": "2026-05-06 23:33:53"
   },
   "chart": [
     {
@@ -425,9 +425,31 @@
       "ma60": null,
       "open": 638.0,
       "volume_lot": 403.93
+    },
+    {
+      "avg_price": 658.797053146082,
+      "close": 677.0,
+      "date": "2026-05-06",
+      "high": 680.0,
+      "low": 634.0,
+      "ma10": 653.4,
+      "ma20": 645.05,
+      "ma5": 644.8,
+      "ma60": null,
+      "open": 645.0,
+      "volume_lot": 1057.33
     }
   ],
   "daily": [
+    {
+      "avg_price": 658.797053146082,
+      "close": 677.0,
+      "date": "2026-05-06",
+      "dealer_net_lot": 45.34,
+      "foreign_net_lot": 258.22,
+      "trust_net_lot": 0.0,
+      "volume_lot": 1057.33
+    },
     {
       "avg_price": 635.5791063325172,
       "close": 639.0,
@@ -598,18 +620,26 @@
       "foreign_net_lot": -9.9,
       "trust_net_lot": 88.11,
       "volume_lot": 525.97
-    },
-    {
-      "avg_price": 565.2630647926779,
-      "close": 562.0,
-      "date": "2026-04-07",
-      "dealer_net_lot": -6.44,
-      "foreign_net_lot": -83.66,
-      "trust_net_lot": 67.0,
-      "volume_lot": 331.27
     }
   ],
   "margin": [
+    {
+      "date": "2026-05-06",
+      "margin_balance_lot": 1574,
+      "margin_buy_lot": 37,
+      "margin_cash_repay_lot": 1,
+      "margin_change_lot": -132,
+      "margin_prev_balance_lot": 1706,
+      "margin_sell_lot": 168,
+      "note": "",
+      "offset_lot": 0,
+      "short_balance_lot": 8,
+      "short_buy_lot": 0,
+      "short_change_lot": 2,
+      "short_prev_balance_lot": 6,
+      "short_sell_lot": 2,
+      "short_stock_repay_lot": 0
+    },
     {
       "date": "2026-05-05",
       "margin_balance_lot": 1706,
@@ -932,23 +962,6 @@
       "short_prev_balance_lot": 14,
       "short_sell_lot": 0,
       "short_stock_repay_lot": 0
-    },
-    {
-      "date": "2026-04-07",
-      "margin_balance_lot": 2073,
-      "margin_buy_lot": 13,
-      "margin_cash_repay_lot": 0,
-      "margin_change_lot": 8,
-      "margin_prev_balance_lot": 2065,
-      "margin_sell_lot": 5,
-      "note": "",
-      "offset_lot": 1,
-      "short_balance_lot": 14,
-      "short_buy_lot": 0,
-      "short_change_lot": 2,
-      "short_prev_balance_lot": 12,
-      "short_sell_lot": 2,
-      "short_stock_repay_lot": 0
     }
   ],
   "news": [],
@@ -1243,30 +1256,30 @@
     }
   ],
   "selection": {
-    "avg_price": 644.8366,
+    "avg_price": 647.5678,
     "base_reason": "外資買超；融資下降；營收 2026-03，月增 55.81%，年增 112.73%，累計年增 76.8%",
-    "base_score": 52.85,
+    "base_score": 47.14,
     "branch_score": 0.0,
     "branch_status": "未取得",
-    "chip_score": 26.36,
-    "close": 639.0,
+    "chip_score": 19.84,
+    "close": 677.0,
     "close_vs_top_buy_avg_pct": 0.0,
-    "complete_chip_score": 52.85,
+    "complete_chip_score": 47.14,
     "confluence_branch_score": 0.0,
     "confluence_direction_score": 0.0,
     "confluence_inst_score": 0.0,
     "confluence_price_score": 0.0,
     "confluence_score": 0.0,
     "confluence_streak_score": 0.0,
-    "foreign_buy_streak": 0.0,
-    "foreign_net_lot": 2098.92,
-    "foreign_net_volume_pct": 14.65,
-    "foreign_sell_streak": 1.0,
-    "inst_net_lot": 1475.64,
+    "foreign_buy_streak": 1.0,
+    "foreign_net_lot": 2440.8,
+    "foreign_net_volume_pct": 16.21,
+    "foreign_sell_streak": 0.0,
+    "inst_net_lot": 1750.52,
     "inst_net_volume_pct": 0.0,
-    "latest_date": "2026-05-05",
-    "margin_balance_change_lot": -359.0,
-    "margin_score": 2.49,
+    "latest_date": "2026-05-06",
+    "margin_balance_change_lot": -499.0,
+    "margin_score": 3.3,
     "market": "TWSE",
     "name": "洋基工程",
     "observed_days": 20,
@@ -1276,7 +1289,7 @@
     "revenue_month": "2026-03",
     "revenue_yoy_pct": 112.73,
     "selection_reason": "營收 2026-03，月增 55.81%，年增 112.73%，累計年增 76.8%",
-    "selection_score": 52.85,
+    "selection_score": 47.14,
     "short_balance_change_lot": -6.0,
     "stock_id": "6691",
     "top_buy_branch_avg_price": 0.0,
@@ -1286,25 +1299,25 @@
     "top_sell_branch_avg_price": 0.0,
     "top_sell_branch_name": "",
     "top_sell_branch_net_lot": 0.0,
-    "total_score": 52.85,
-    "trust_buy_streak": 2.0,
-    "trust_net_lot": -623.28,
-    "trust_net_volume_pct": -4.35,
+    "total_score": 47.14,
+    "trust_buy_streak": 0.0,
+    "trust_net_lot": -690.28,
+    "trust_net_volume_pct": -4.58,
     "trust_sell_streak": 0.0,
-    "volume_lot": 14329.9
+    "volume_lot": 15055.96
   },
   "stock": {
-    "avg_price": 644.8366,
-    "close": 639.0,
-    "foreign_net_lot": 2098.92,
+    "avg_price": 647.5678,
+    "close": 677.0,
+    "foreign_net_lot": 2440.8,
     "in_watchlist": false,
-    "latest_date": "2026-05-05",
-    "margin_balance_change_lot": -359,
+    "latest_date": "2026-05-06",
+    "margin_balance_change_lot": -499,
     "market": "TWSE",
     "name": "洋基工程",
     "short_balance_change_lot": -6,
     "stock_id": "6691",
-    "trust_net_lot": -623.28,
-    "volume_lot": 14329.9
+    "trust_net_lot": -690.28,
+    "volume_lot": 15055.96
   }
 }

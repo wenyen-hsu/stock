@@ -425,9 +425,31 @@
       "ma60": null,
       "open": 21.5,
       "volume_lot": 58189.84
+    },
+    {
+      "avg_price": 22.167446322505914,
+      "close": 22.2,
+      "date": "2026-05-06",
+      "high": 22.3,
+      "low": 21.95,
+      "ma10": 21.17,
+      "ma20": 21.0875,
+      "ma5": 21.72,
+      "ma60": null,
+      "open": 21.95,
+      "volume_lot": 68298.08
     }
   ],
   "daily": [
+    {
+      "avg_price": 22.167446322505914,
+      "close": 22.2,
+      "date": "2026-05-06",
+      "dealer_net_lot": -220.59,
+      "foreign_net_lot": 40519.8,
+      "trust_net_lot": -7207.0,
+      "volume_lot": 68298.08
+    },
     {
       "avg_price": 21.699823140953022,
       "close": 21.8,
@@ -463,18 +485,26 @@
       "foreign_net_lot": 33071.94,
       "trust_net_lot": 531.0,
       "volume_lot": 62206.13
-    },
-    {
-      "avg_price": 21.070351467545304,
-      "close": 21.3,
-      "date": "2026-04-28",
-      "dealer_net_lot": -1694.77,
-      "foreign_net_lot": 42864.66,
-      "trust_net_lot": 1001.65,
-      "volume_lot": 77572.77
     }
   ],
   "margin": [
+    {
+      "date": "2026-05-06",
+      "margin_balance_lot": 10555,
+      "margin_buy_lot": 785,
+      "margin_cash_repay_lot": 0,
+      "margin_change_lot": -1081,
+      "margin_prev_balance_lot": 11636,
+      "margin_sell_lot": 1866,
+      "note": "",
+      "offset_lot": 11,
+      "short_balance_lot": 44,
+      "short_buy_lot": 0,
+      "short_change_lot": 2,
+      "short_prev_balance_lot": 42,
+      "short_sell_lot": 3,
+      "short_stock_repay_lot": 1
+    },
     {
       "date": "2026-05-05",
       "margin_balance_lot": 11636,
@@ -541,23 +571,6 @@
       "short_change_lot": 41,
       "short_prev_balance_lot": 28,
       "short_sell_lot": 43,
-      "short_stock_repay_lot": 0
-    },
-    {
-      "date": "2026-04-28",
-      "margin_balance_lot": 15393,
-      "margin_buy_lot": 565,
-      "margin_cash_repay_lot": 20,
-      "margin_change_lot": -540,
-      "margin_prev_balance_lot": 15933,
-      "margin_sell_lot": 1085,
-      "note": "",
-      "offset_lot": 0,
-      "short_balance_lot": 28,
-      "short_buy_lot": 2,
-      "short_change_lot": 12,
-      "short_prev_balance_lot": 16,
-      "short_sell_lot": 14,
       "short_stock_repay_lot": 0
     }
   ],
@@ -853,15 +866,15 @@
     }
   ],
   "selection": {
-    "avg_price": 21.4246,
+    "avg_price": 21.6645,
     "base_reason": "外資買超；融資下降；營收 2026-03，月增 -41.86%，年增 -49.83%，累計年增 -13.74%",
-    "base_score": 6.79,
+    "base_score": 4.49,
     "branch_score": 0.0,
     "branch_status": "未取得",
-    "chip_score": 15.5,
-    "close": 21.8,
+    "chip_score": 13.0,
+    "close": 22.2,
     "close_vs_top_buy_avg_pct": 0.0,
-    "complete_chip_score": 6.79,
+    "complete_chip_score": 4.49,
     "confluence_branch_score": 0.0,
     "confluence_direction_score": 0.0,
     "confluence_inst_score": 0.0,
@@ -869,14 +882,14 @@
     "confluence_score": 0.0,
     "confluence_streak_score": 0.0,
     "foreign_buy_streak": 5.0,
-    "foreign_net_lot": 168044.23,
-    "foreign_net_volume_pct": 50.12,
+    "foreign_net_lot": 165699.38,
+    "foreign_net_volume_pct": 50.82,
     "foreign_sell_streak": 0.0,
-    "inst_net_lot": 127006.55,
+    "inst_net_lot": 116453.05,
     "inst_net_volume_pct": 0.0,
-    "latest_date": "2026-05-05",
-    "margin_balance_change_lot": -4297.0,
-    "margin_score": 1.29,
+    "latest_date": "2026-05-06",
+    "margin_balance_change_lot": -4838.0,
+    "margin_score": 1.49,
     "market": "TWSE",
     "name": "凱基金",
     "observed_days": 5,
@@ -886,8 +899,8 @@
     "revenue_month": "2026-03",
     "revenue_yoy_pct": -49.83,
     "selection_reason": "營收 2026-03，月增 -41.86%，年增 -49.83%，累計年增 -13.74%",
-    "selection_score": 6.79,
-    "short_balance_change_lot": 26.0,
+    "selection_score": 4.49,
+    "short_balance_change_lot": 16.0,
     "stock_id": "2883",
     "top_buy_branch_avg_price": 0.0,
     "top_buy_branch_name": "",
@@ -896,25 +909,25 @@
     "top_sell_branch_avg_price": 0.0,
     "top_sell_branch_name": "",
     "top_sell_branch_net_lot": 0.0,
-    "total_score": 6.79,
+    "total_score": 4.49,
     "trust_buy_streak": 0.0,
-    "trust_net_lot": -41037.68,
-    "trust_net_volume_pct": -12.24,
-    "trust_sell_streak": 3.0,
-    "volume_lot": 335313.42
+    "trust_net_lot": -49246.33,
+    "trust_net_volume_pct": -15.1,
+    "trust_sell_streak": 4.0,
+    "volume_lot": 326038.73
   },
   "stock": {
-    "avg_price": 21.4246,
-    "close": 21.8,
-    "foreign_net_lot": 168044.23,
+    "avg_price": 21.6645,
+    "close": 22.2,
+    "foreign_net_lot": 165699.38,
     "in_watchlist": false,
-    "latest_date": "2026-05-05",
-    "margin_balance_change_lot": -4297,
+    "latest_date": "2026-05-06",
+    "margin_balance_change_lot": -4838,
     "market": "TWSE",
     "name": "凱基金",
-    "short_balance_change_lot": 26,
+    "short_balance_change_lot": 16,
     "stock_id": "2883",
-    "trust_net_lot": -41037.68,
-    "volume_lot": 335313.42
+    "trust_net_lot": -49246.33,
+    "volume_lot": 326038.73
   }
 }

@@ -199,7 +199,13 @@
     }
     .panel-title { font-weight: 850; }
     .panel-body { padding: 14px; }
-    .table-wrap { overflow: auto; max-height: 64vh; }
+    .table-wrap {
+      position: relative;
+      z-index: 1;
+      overflow: auto;
+      max-height: 64vh;
+      background: var(--panel);
+    }
     table { width: 100%; border-collapse: collapse; font-size: 13px; white-space: nowrap; }
     th, td { border-bottom: 1px solid #edf1f4; padding: 8px 10px; text-align: right; }
     th { position: sticky; top: 0; background: #f8fafb; color: #344054; z-index: 1; font-size: 12px; }
@@ -259,12 +265,21 @@
       height: 330px;
       min-height: 260px;
       position: relative;
+      overflow: hidden;
+      contain: layout paint;
     }
     .revenue-chart-wrap { height: 300px; }
+    .margin-chart-wrap { height: 300px; }
     .price-chart-wrap canvas { cursor: zoom-in; }
     #price-chart,
     #revenue-chart,
-    #margin-chart { width: 100%; height: 100%; display: block; }
+    #margin-chart {
+      width: 100% !important;
+      height: 100% !important;
+      max-width: 100%;
+      max-height: 100%;
+      display: block;
+    }
     .legend {
       display: flex;
       gap: 12px;
@@ -634,7 +649,7 @@
           <div class="panel-actions"><button class="secondary single-refresh" data-section="daily">更新融資融券</button></div>
         </div>
         <div class="panel-body">
-          <div class="revenue-chart-wrap"><canvas id="margin-chart"></canvas></div>
+          <div class="revenue-chart-wrap margin-chart-wrap"><canvas id="margin-chart"></canvas></div>
           <div class="legend" id="margin-legend"></div>
         </div>
         <div class="table-wrap" id="margin-table"></div>
@@ -1055,6 +1070,8 @@
       if (!canvas || !legend) return;
       const wrap = canvas.parentElement;
       const dpr = window.devicePixelRatio || 1;
+      canvas.style.width = `${wrap.clientWidth}px`;
+      canvas.style.height = `${wrap.clientHeight}px`;
       canvas.width = Math.floor(wrap.clientWidth * dpr);
       canvas.height = Math.floor(wrap.clientHeight * dpr);
       const ctx = canvas.getContext("2d");
@@ -1184,6 +1201,8 @@
       if (!canvas || !legend) return;
       const wrap = canvas.parentElement;
       const dpr = window.devicePixelRatio || 1;
+      canvas.style.width = `${wrap.clientWidth}px`;
+      canvas.style.height = `${wrap.clientHeight}px`;
       canvas.width = Math.floor(wrap.clientWidth * dpr);
       canvas.height = Math.floor(wrap.clientHeight * dpr);
       const ctx = canvas.getContext("2d");
@@ -1299,6 +1318,8 @@
       if (!canvas || !legend) return;
       const wrap = canvas.parentElement;
       const dpr = window.devicePixelRatio || 1;
+      canvas.style.width = `${wrap.clientWidth}px`;
+      canvas.style.height = `${wrap.clientHeight}px`;
       canvas.width = Math.floor(wrap.clientWidth * dpr);
       canvas.height = Math.floor(wrap.clientHeight * dpr);
       const ctx = canvas.getContext("2d");

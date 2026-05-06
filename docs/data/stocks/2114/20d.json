@@ -3,11 +3,11 @@
   "branch_daily_status": [],
   "branch_top": [],
   "branch_top_status": {
-    "attempts": 3,
-    "error": "empty parseable branch table",
+    "attempts": 0,
+    "error": null,
     "row_count": 0,
-    "status": "empty",
-    "updated_at": "2026-05-05 21:10:35"
+    "status": "missing",
+    "updated_at": ""
   },
   "chart": [
     {
@@ -425,9 +425,31 @@
       "ma60": null,
       "open": 88.1,
       "volume_lot": 61.48
+    },
+    {
+      "avg_price": 87.8880587181109,
+      "close": 87.8,
+      "date": "2026-05-06",
+      "high": 88.5,
+      "low": 87.5,
+      "ma10": 88.41,
+      "ma20": 88.52,
+      "ma5": 88.18,
+      "ma60": null,
+      "open": 88.5,
+      "volume_lot": 75.89
     }
   ],
   "daily": [
+    {
+      "avg_price": 87.8880587181109,
+      "close": 87.8,
+      "date": "2026-05-06",
+      "dealer_net_lot": 0.0,
+      "foreign_net_lot": 0.0,
+      "trust_net_lot": 0.0,
+      "volume_lot": 75.89
+    },
     {
       "avg_price": 87.99393288765269,
       "close": 87.9,
@@ -598,18 +620,26 @@
       "foreign_net_lot": 14.0,
       "trust_net_lot": 0.0,
       "volume_lot": 49.72
-    },
-    {
-      "avg_price": 87.18861668042477,
-      "close": 87.3,
-      "date": "2026-04-07",
-      "dealer_net_lot": 2.0,
-      "foreign_net_lot": 9.0,
-      "trust_net_lot": 0.0,
-      "volume_lot": 71.47
     }
   ],
   "margin": [
+    {
+      "date": "2026-05-06",
+      "margin_balance_lot": 56,
+      "margin_buy_lot": 0,
+      "margin_cash_repay_lot": 0,
+      "margin_change_lot": -4,
+      "margin_prev_balance_lot": 60,
+      "margin_sell_lot": 4,
+      "note": "",
+      "offset_lot": 0,
+      "short_balance_lot": 0,
+      "short_buy_lot": 0,
+      "short_change_lot": 0,
+      "short_prev_balance_lot": 0,
+      "short_sell_lot": 0,
+      "short_stock_repay_lot": 0
+    },
     {
       "date": "2026-05-05",
       "margin_balance_lot": 60,
@@ -932,23 +962,6 @@
       "short_prev_balance_lot": 0,
       "short_sell_lot": 0,
       "short_stock_repay_lot": 0
-    },
-    {
-      "date": "2026-04-07",
-      "margin_balance_lot": 67,
-      "margin_buy_lot": 1,
-      "margin_cash_repay_lot": 0,
-      "margin_change_lot": 1,
-      "margin_prev_balance_lot": 66,
-      "margin_sell_lot": 0,
-      "note": "",
-      "offset_lot": 0,
-      "short_balance_lot": 0,
-      "short_buy_lot": 0,
-      "short_change_lot": 0,
-      "short_prev_balance_lot": 0,
-      "short_sell_lot": 0,
-      "short_stock_repay_lot": 0
     }
   ],
   "news": [],
@@ -1243,15 +1256,15 @@
     }
   ],
   "selection": {
-    "avg_price": 88.3662,
+    "avg_price": 88.4274,
     "base_reason": "外資買超；融資下降；營收 2026-03，月增 32.59%，年增 7.55%，累計年增 9.5%",
-    "base_score": 41.48,
+    "base_score": 43.14,
     "branch_score": 0.0,
     "branch_status": "未取得",
-    "chip_score": 33.92,
-    "close": 87.9,
+    "chip_score": 34.94,
+    "close": 87.8,
     "close_vs_top_buy_avg_pct": 0.0,
-    "complete_chip_score": 41.48,
+    "complete_chip_score": 43.14,
     "confluence_branch_score": 0.0,
     "confluence_direction_score": 0.0,
     "confluence_inst_score": 0.0,
@@ -1259,14 +1272,14 @@
     "confluence_score": 0.0,
     "confluence_streak_score": 0.0,
     "foreign_buy_streak": 0.0,
-    "foreign_net_lot": 96.39,
-    "foreign_net_volume_pct": 12.4,
-    "foreign_sell_streak": 1.0,
-    "inst_net_lot": 96.39,
+    "foreign_net_lot": 87.39,
+    "foreign_net_volume_pct": 11.18,
+    "foreign_sell_streak": 0.0,
+    "inst_net_lot": 87.39,
     "inst_net_volume_pct": 0.0,
-    "latest_date": "2026-05-05",
-    "margin_balance_change_lot": -6.0,
-    "margin_score": 0.77,
+    "latest_date": "2026-05-06",
+    "margin_balance_change_lot": -11.0,
+    "margin_score": 1.41,
     "market": "TWSE",
     "name": "鑫永銓",
     "observed_days": 20,
@@ -1276,7 +1289,7 @@
     "revenue_month": "2026-03",
     "revenue_yoy_pct": 7.55,
     "selection_reason": "營收 2026-03，月增 32.59%，年增 7.55%，累計年增 9.5%",
-    "selection_score": 41.48,
+    "selection_score": 43.14,
     "short_balance_change_lot": 0.0,
     "stock_id": "2114",
     "top_buy_branch_avg_price": 0.0,
@@ -1286,25 +1299,25 @@
     "top_sell_branch_avg_price": 0.0,
     "top_sell_branch_name": "",
     "top_sell_branch_net_lot": 0.0,
-    "total_score": 41.48,
+    "total_score": 43.14,
     "trust_buy_streak": 0.0,
     "trust_net_lot": 0.0,
     "trust_net_volume_pct": 0.0,
     "trust_sell_streak": 0.0,
-    "volume_lot": 777.35
+    "volume_lot": 781.76
   },
   "stock": {
-    "avg_price": 88.3662,
-    "close": 87.9,
-    "foreign_net_lot": 96.39,
+    "avg_price": 88.4274,
+    "close": 87.8,
+    "foreign_net_lot": 87.39,
     "in_watchlist": false,
-    "latest_date": "2026-05-05",
-    "margin_balance_change_lot": -6,
+    "latest_date": "2026-05-06",
+    "margin_balance_change_lot": -11,
     "market": "TWSE",
     "name": "鑫永銓",
     "short_balance_change_lot": 0,
     "stock_id": "2114",
     "trust_net_lot": 0.0,
-    "volume_lot": 777.35
+    "volume_lot": 781.76
   }
 }

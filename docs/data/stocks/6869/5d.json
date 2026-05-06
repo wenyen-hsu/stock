@@ -425,9 +425,31 @@
       "ma60": null,
       "open": 84.7,
       "volume_lot": 518.73
+    },
+    {
+      "avg_price": 83.18887073811032,
+      "close": 83.0,
+      "date": "2026-05-06",
+      "high": 84.3,
+      "low": 82.4,
+      "ma10": 83.68,
+      "ma20": 84.44,
+      "ma5": 83.6,
+      "ma60": null,
+      "open": 83.8,
+      "volume_lot": 486.05
     }
   ],
   "daily": [
+    {
+      "avg_price": 83.18887073811032,
+      "close": 83.0,
+      "date": "2026-05-06",
+      "dealer_net_lot": -4.1,
+      "foreign_net_lot": 20.0,
+      "trust_net_lot": 0.0,
+      "volume_lot": 486.05
+    },
     {
       "avg_price": 83.60861644519585,
       "close": 83.8,
@@ -463,18 +485,26 @@
       "foreign_net_lot": 36.0,
       "trust_net_lot": 0.0,
       "volume_lot": 331.93
-    },
-    {
-      "avg_price": 81.09056278863464,
-      "close": 81.6,
-      "date": "2026-04-28",
-      "dealer_net_lot": 0.39,
-      "foreign_net_lot": 31.0,
-      "trust_net_lot": 0.0,
-      "volume_lot": 383.27
     }
   ],
   "margin": [
+    {
+      "date": "2026-05-06",
+      "margin_balance_lot": 2900,
+      "margin_buy_lot": 27,
+      "margin_cash_repay_lot": 1,
+      "margin_change_lot": -16,
+      "margin_prev_balance_lot": 2916,
+      "margin_sell_lot": 42,
+      "note": "",
+      "offset_lot": 0,
+      "short_balance_lot": 31,
+      "short_buy_lot": 3,
+      "short_change_lot": -3,
+      "short_prev_balance_lot": 34,
+      "short_sell_lot": 0,
+      "short_stock_repay_lot": 0
+    },
     {
       "date": "2026-05-05",
       "margin_balance_lot": 2916,
@@ -540,23 +570,6 @@
       "short_buy_lot": 1,
       "short_change_lot": 1,
       "short_prev_balance_lot": 42,
-      "short_sell_lot": 2,
-      "short_stock_repay_lot": 0
-    },
-    {
-      "date": "2026-04-28",
-      "margin_balance_lot": 2873,
-      "margin_buy_lot": 6,
-      "margin_cash_repay_lot": 2,
-      "margin_change_lot": -4,
-      "margin_prev_balance_lot": 2877,
-      "margin_sell_lot": 8,
-      "note": "",
-      "offset_lot": 0,
-      "short_balance_lot": 42,
-      "short_buy_lot": 0,
-      "short_change_lot": 2,
-      "short_prev_balance_lot": 40,
       "short_sell_lot": 2,
       "short_stock_repay_lot": 0
     }
@@ -853,15 +866,15 @@
     }
   ],
   "selection": {
-    "avg_price": 83.0361,
+    "avg_price": 83.3646,
     "base_reason": "外資買超；融資增加；營收 2026-03，月增 32.69%，年增 99.33%，累計年增 67.15%",
-    "base_score": 68.31,
+    "base_score": 67.94,
     "branch_score": 0.0,
     "branch_status": "未取得",
-    "chip_score": 45.69,
-    "close": 83.8,
+    "chip_score": 44.94,
+    "close": 83.0,
     "close_vs_top_buy_avg_pct": 0.0,
-    "complete_chip_score": 68.31,
+    "complete_chip_score": 67.94,
     "confluence_branch_score": 0.0,
     "confluence_direction_score": 0.0,
     "confluence_inst_score": 0.0,
@@ -869,14 +882,14 @@
     "confluence_score": 0.0,
     "confluence_streak_score": 0.0,
     "foreign_buy_streak": 5.0,
-    "foreign_net_lot": 289.84,
-    "foreign_net_volume_pct": 12.11,
+    "foreign_net_lot": 278.84,
+    "foreign_net_volume_pct": 11.17,
     "foreign_sell_streak": 0.0,
-    "inst_net_lot": 289.84,
+    "inst_net_lot": 278.84,
     "inst_net_volume_pct": 0.0,
-    "latest_date": "2026-05-05",
-    "margin_balance_change_lot": 39.0,
-    "margin_score": -1.38,
+    "latest_date": "2026-05-06",
+    "margin_balance_change_lot": 27.0,
+    "margin_score": -1.0,
     "market": "TWSE",
     "name": "雲豹能源",
     "observed_days": 5,
@@ -886,8 +899,8 @@
     "revenue_month": "2026-03",
     "revenue_yoy_pct": 99.33,
     "selection_reason": "營收 2026-03，月增 32.69%，年增 99.33%，累計年增 67.15%",
-    "selection_score": 68.31,
-    "short_balance_change_lot": -6.0,
+    "selection_score": 67.94,
+    "short_balance_change_lot": -11.0,
     "stock_id": "6869",
     "top_buy_branch_avg_price": 0.0,
     "top_buy_branch_name": "",
@@ -896,25 +909,25 @@
     "top_sell_branch_avg_price": 0.0,
     "top_sell_branch_name": "",
     "top_sell_branch_net_lot": 0.0,
-    "total_score": 68.31,
+    "total_score": 67.94,
     "trust_buy_streak": 0.0,
     "trust_net_lot": 0.0,
     "trust_net_volume_pct": 0.0,
     "trust_sell_streak": 0.0,
-    "volume_lot": 2393.03
+    "volume_lot": 2495.81
   },
   "stock": {
-    "avg_price": 83.0361,
-    "close": 83.8,
-    "foreign_net_lot": 289.84,
+    "avg_price": 83.3646,
+    "close": 83.0,
+    "foreign_net_lot": 278.84,
     "in_watchlist": false,
-    "latest_date": "2026-05-05",
-    "margin_balance_change_lot": 39,
+    "latest_date": "2026-05-06",
+    "margin_balance_change_lot": 27,
     "market": "TWSE",
     "name": "雲豹能源",
-    "short_balance_change_lot": -6,
+    "short_balance_change_lot": -11,
     "stock_id": "6869",
     "trust_net_lot": 0.0,
-    "volume_lot": 2393.03
+    "volume_lot": 2495.81
   }
 }

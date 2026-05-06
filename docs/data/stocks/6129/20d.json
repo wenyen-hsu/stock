@@ -6,6 +6,13 @@
       "error": null,
       "row_count": 0,
       "status": "missing",
+      "trade_date": "2026-05-06"
+    },
+    {
+      "attempts": 0,
+      "error": null,
+      "row_count": 0,
+      "status": "missing",
       "trade_date": "2026-05-05"
     },
     {
@@ -133,95 +140,88 @@
       "row_count": 0,
       "status": "missing",
       "trade_date": "2026-04-08"
-    },
-    {
-      "attempts": 0,
-      "error": null,
-      "row_count": 0,
-      "status": "missing",
-      "trade_date": "2026-04-07"
     }
   ],
   "branch_top": [
     {
-      "avg_price": 16.69,
+      "avg_price": 16.74,
       "broker_name": "新加坡商瑞銀",
-      "buy_lot": 748.0,
-      "net_lot": 576.0,
+      "buy_lot": 790.0,
+      "net_lot": 618.0,
       "rank_no": 1,
       "sell_lot": 172.0
     },
     {
-      "avg_price": 16.78,
+      "avg_price": 17.05,
       "broker_name": "台灣摩根士丹利",
-      "buy_lot": 480.0,
-      "net_lot": 327.0,
+      "buy_lot": 548.0,
+      "net_lot": 410.0,
       "rank_no": 2,
-      "sell_lot": 153.0
+      "sell_lot": 138.0
     },
     {
-      "avg_price": 17.35,
+      "avg_price": 17.47,
       "broker_name": "台新",
-      "buy_lot": 473.0,
-      "net_lot": 259.0,
+      "buy_lot": 538.0,
+      "net_lot": 324.0,
       "rank_no": 3,
       "sell_lot": 214.0
     },
     {
-      "avg_price": 16.64,
-      "broker_name": "美商高盛",
-      "buy_lot": 388.0,
-      "net_lot": 224.0,
+      "avg_price": 16.92,
+      "broker_name": "摩根大通",
+      "buy_lot": 882.0,
+      "net_lot": 228.0,
       "rank_no": 4,
-      "sell_lot": 164.0
+      "sell_lot": 654.0
     },
     {
-      "avg_price": 16.99,
-      "broker_name": "元大",
-      "buy_lot": 279.0,
-      "net_lot": 211.0,
+      "avg_price": 16.76,
+      "broker_name": "美商高盛",
+      "buy_lot": 379.0,
+      "net_lot": 224.0,
       "rank_no": 5,
-      "sell_lot": 67.0
+      "sell_lot": 155.0
+    },
+    {
+      "avg_price": 17.74,
+      "broker_name": "元大-竹科",
+      "buy_lot": 415.0,
+      "net_lot": 215.0,
+      "rank_no": 6,
+      "sell_lot": 200.0
+    },
+    {
+      "avg_price": 17.09,
+      "broker_name": "元大",
+      "buy_lot": 281.0,
+      "net_lot": 201.0,
+      "rank_no": 7,
+      "sell_lot": 80.0
     },
     {
       "avg_price": 17.02,
-      "broker_name": "港商野村",
-      "buy_lot": 298.0,
-      "net_lot": 194.0,
-      "rank_no": 6,
-      "sell_lot": 104.0
-    },
-    {
-      "avg_price": 16.84,
-      "broker_name": "凱基-台北",
-      "buy_lot": 1347.0,
-      "net_lot": 179.0,
-      "rank_no": 7,
-      "sell_lot": 1168.0
-    },
-    {
-      "avg_price": 16.97,
       "broker_name": "美林",
-      "buy_lot": 388.0,
-      "net_lot": 155.0,
+      "buy_lot": 426.0,
+      "net_lot": 186.0,
       "rank_no": 8,
-      "sell_lot": 233.0
+      "sell_lot": 240.0
     },
     {
-      "avg_price": 17.17,
-      "broker_name": "台新-台南",
-      "buy_lot": 131.0,
-      "net_lot": 113.0,
+      "avg_price": 17.18,
+      "broker_name": "港商野村",
+      "buy_lot": 335.0,
+      "net_lot": 176.0,
       "rank_no": 9,
-      "sell_lot": 18.0
+      "sell_lot": 159.0
     },
     {
-      "avg_price": 16.79,
-      "broker_name": "摩根大通",
-      "buy_lot": 746.0,
-      "net_lot": 82.0,
+      "avg_price": 16.99,
+      "broker_name": "凱基-台北",
+      "buy_lot": 1387.0,
+      "net_lot": 135.0,
       "rank_no": 10,
-      "sell_lot": 664.0
+      "sell_lot": 1252.0
     }
   ],
   "branch_top_status": {
@@ -229,7 +229,7 @@
     "error": null,
     "row_count": 20,
     "status": "success",
-    "updated_at": "2026-05-05 20:59:34"
+    "updated_at": "2026-05-06 23:31:30"
   },
   "chart": [
     {
@@ -634,9 +634,31 @@
       "ma60": null,
       "open": 17.2,
       "volume_lot": 2073.0
+    },
+    {
+      "avg_price": 17.584074074074074,
+      "close": 17.45,
+      "date": "2026-05-06",
+      "high": 18.2,
+      "low": 17.25,
+      "ma10": 17.16,
+      "ma20": 16.695,
+      "ma5": 17.27,
+      "ma60": null,
+      "open": 18.2,
+      "volume_lot": 1485.0
     }
   ],
   "daily": [
+    {
+      "avg_price": 17.584074074074074,
+      "close": 17.45,
+      "date": "2026-05-06",
+      "dealer_net_lot": -0.49,
+      "foreign_net_lot": -137.0,
+      "trust_net_lot": 0.0,
+      "volume_lot": 1485.0
+    },
     {
       "avg_price": 17.959310178485286,
       "close": 18.1,
@@ -807,18 +829,26 @@
       "foreign_net_lot": 45.0,
       "trust_net_lot": 0.0,
       "volume_lot": 565.0
-    },
-    {
-      "avg_price": 14.537139423076923,
-      "close": 14.45,
-      "date": "2026-04-07",
-      "dealer_net_lot": 0.68,
-      "foreign_net_lot": -13.0,
-      "trust_net_lot": 0.0,
-      "volume_lot": 416.0
     }
   ],
   "margin": [
+    {
+      "date": "2026-05-06",
+      "margin_balance_lot": 88,
+      "margin_buy_lot": 0,
+      "margin_cash_repay_lot": 0,
+      "margin_change_lot": 0,
+      "margin_prev_balance_lot": 88,
+      "margin_sell_lot": 0,
+      "note": "OX",
+      "offset_lot": 0,
+      "short_balance_lot": 0,
+      "short_buy_lot": 0,
+      "short_change_lot": 0,
+      "short_prev_balance_lot": 0,
+      "short_sell_lot": 0,
+      "short_stock_repay_lot": 0
+    },
     {
       "date": "2026-05-05",
       "margin_balance_lot": 88,
@@ -1110,23 +1140,6 @@
     },
     {
       "date": "2026-04-08",
-      "margin_balance_lot": 157,
-      "margin_buy_lot": 0,
-      "margin_cash_repay_lot": 0,
-      "margin_change_lot": 0,
-      "margin_prev_balance_lot": 157,
-      "margin_sell_lot": 0,
-      "note": "OX",
-      "offset_lot": 0,
-      "short_balance_lot": 0,
-      "short_buy_lot": 0,
-      "short_change_lot": 0,
-      "short_prev_balance_lot": 0,
-      "short_sell_lot": 0,
-      "short_stock_repay_lot": 0
-    },
-    {
-      "date": "2026-04-07",
       "margin_balance_lot": 157,
       "margin_buy_lot": 0,
       "margin_cash_repay_lot": 0,
@@ -1435,30 +1448,30 @@
     }
   ],
   "selection": {
-    "avg_price": 17.0061,
+    "avg_price": 17.0876,
     "base_reason": "外資買超；融資下降；營收 2026-03，月增 60.47%，年增 69.82%，累計年增 61.31%",
-    "base_score": 61.9,
-    "branch_score": 4.74,
+    "base_score": 53.11,
+    "branch_score": 12.78,
     "branch_status": "已取得",
-    "chip_score": 37.59,
-    "close": 18.1,
-    "close_vs_top_buy_avg_pct": 8.45,
-    "complete_chip_score": 91.81,
-    "confluence_branch_score": 3.13,
+    "chip_score": 28.81,
+    "close": 17.45,
+    "close_vs_top_buy_avg_pct": 4.24,
+    "complete_chip_score": 89.61,
+    "confluence_branch_score": 3.2,
     "confluence_direction_score": 6.0,
-    "confluence_inst_score": 14.78,
-    "confluence_price_score": 0.0,
-    "confluence_score": 29.91,
-    "confluence_streak_score": 6.0,
-    "foreign_buy_streak": 9.0,
-    "foreign_net_lot": 2175.0,
-    "foreign_net_volume_pct": 9.85,
-    "foreign_sell_streak": 0.0,
-    "inst_net_lot": 2175.0,
-    "inst_net_volume_pct": 9.85,
-    "latest_date": "2026-05-05",
+    "confluence_inst_score": 13.29,
+    "confluence_price_score": 14.0,
+    "confluence_score": 36.5,
+    "confluence_streak_score": 0.0,
+    "foreign_buy_streak": 0.0,
+    "foreign_net_lot": 2051.0,
+    "foreign_net_volume_pct": 8.86,
+    "foreign_sell_streak": 1.0,
+    "inst_net_lot": 2051.0,
+    "inst_net_volume_pct": 8.86,
+    "latest_date": "2026-05-06",
     "margin_balance_change_lot": -69.0,
-    "margin_score": 0.31,
+    "margin_score": 0.3,
     "market": "TPEX",
     "name": "普誠",
     "observed_days": 20,
@@ -1467,36 +1480,36 @@
     "revenue_momentum_score": 24.0,
     "revenue_month": "2026-03",
     "revenue_yoy_pct": 69.82,
-    "selection_reason": "外資主導買超；前大買超分點約占成交 2.61%；收盤距區間均價 6.43%；收盤距分點均價 8.45%；連買：外9 / 投0；營收 2026-03，月增 60.47%，年增 69.82%，累計年增 61.31%",
-    "selection_score": 61.9,
+    "selection_reason": "外資主導買超；前大買超分點約占成交 2.67%；收盤距區間均價 2.12%；收盤距分點均價 4.24%；營收 2026-03，月增 60.47%，年增 69.82%，累計年增 61.31%",
+    "selection_score": 53.11,
     "short_balance_change_lot": 0.0,
     "stock_id": "6129",
-    "top_buy_branch_avg_price": 16.69,
+    "top_buy_branch_avg_price": 16.74,
     "top_buy_branch_name": "新加坡商瑞銀",
-    "top_buy_branch_net_lot": 576.0,
-    "top_buy_branch_volume_pct": 2.61,
-    "top_sell_branch_avg_price": 16.66,
+    "top_buy_branch_net_lot": 618.0,
+    "top_buy_branch_volume_pct": 2.67,
+    "top_sell_branch_avg_price": 16.87,
     "top_sell_branch_name": "統一-中壢",
-    "top_sell_branch_net_lot": -171.0,
-    "total_score": 61.9,
+    "top_sell_branch_net_lot": -196.0,
+    "total_score": 53.11,
     "trust_buy_streak": 0.0,
     "trust_net_lot": 0.0,
     "trust_net_volume_pct": 0.0,
     "trust_sell_streak": 0.0,
-    "volume_lot": 22074.0
+    "volume_lot": 23143.0
   },
   "stock": {
-    "avg_price": 17.0061,
-    "close": 18.1,
-    "foreign_net_lot": 2175.0,
+    "avg_price": 17.0876,
+    "close": 17.45,
+    "foreign_net_lot": 2051.0,
     "in_watchlist": false,
-    "latest_date": "2026-05-05",
+    "latest_date": "2026-05-06",
     "margin_balance_change_lot": -69,
     "market": "TPEX",
     "name": "普誠",
     "short_balance_change_lot": 0,
     "stock_id": "6129",
     "trust_net_lot": 0.0,
-    "volume_lot": 22074.0
+    "volume_lot": 23143.0
   }
 }

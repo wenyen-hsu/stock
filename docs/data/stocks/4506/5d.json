@@ -412,9 +412,31 @@
       "ma60": null,
       "open": 117.0,
       "volume_lot": 71.0
+    },
+    {
+      "avg_price": 118.24193548387096,
+      "close": 118.5,
+      "date": "2026-05-06",
+      "high": 119.0,
+      "low": 117.0,
+      "ma10": 118.05,
+      "ma20": 119.0,
+      "ma5": 117.8,
+      "ma60": null,
+      "open": 119.0,
+      "volume_lot": 93.0
     }
   ],
   "daily": [
+    {
+      "avg_price": 118.24193548387096,
+      "close": 118.5,
+      "date": "2026-05-06",
+      "dealer_net_lot": 0.0,
+      "foreign_net_lot": 11.0,
+      "trust_net_lot": 0.0,
+      "volume_lot": 93.0
+    },
     {
       "avg_price": 117.66901408450704,
       "close": 119.0,
@@ -450,18 +472,26 @@
       "foreign_net_lot": 2.0,
       "trust_net_lot": 0.0,
       "volume_lot": 37.0
-    },
-    {
-      "avg_price": 117.48275862068965,
-      "close": 117.0,
-      "date": "2026-04-28",
-      "dealer_net_lot": 0.0,
-      "foreign_net_lot": 14.0,
-      "trust_net_lot": 0.0,
-      "volume_lot": 58.0
     }
   ],
   "margin": [
+    {
+      "date": "2026-05-06",
+      "margin_balance_lot": 2,
+      "margin_buy_lot": 1,
+      "margin_cash_repay_lot": 0,
+      "margin_change_lot": 1,
+      "margin_prev_balance_lot": 1,
+      "margin_sell_lot": 0,
+      "note": "",
+      "offset_lot": 0,
+      "short_balance_lot": 0,
+      "short_buy_lot": 0,
+      "short_change_lot": 0,
+      "short_prev_balance_lot": 0,
+      "short_sell_lot": 0,
+      "short_stock_repay_lot": 0
+    },
     {
       "date": "2026-05-05",
       "margin_balance_lot": 1,
@@ -498,23 +528,6 @@
     },
     {
       "date": "2026-04-29",
-      "margin_balance_lot": 1,
-      "margin_buy_lot": 0,
-      "margin_cash_repay_lot": 0,
-      "margin_change_lot": 0,
-      "margin_prev_balance_lot": 1,
-      "margin_sell_lot": 0,
-      "note": "",
-      "offset_lot": 0,
-      "short_balance_lot": 0,
-      "short_buy_lot": 0,
-      "short_change_lot": 0,
-      "short_prev_balance_lot": 0,
-      "short_sell_lot": 0,
-      "short_stock_repay_lot": 0
-    },
-    {
-      "date": "2026-04-28",
       "margin_balance_lot": 1,
       "margin_buy_lot": 0,
       "margin_cash_repay_lot": 0,
@@ -823,15 +836,15 @@
     }
   ],
   "selection": {
-    "avg_price": 117.4522,
-    "base_reason": "外資買超；營收 2026-03，月增 47.41%，年增 9.29%，累計年增 14.2%",
-    "base_score": 56.74,
+    "avg_price": 117.6355,
+    "base_reason": "外資買超；融資增加；營收 2026-03，月增 47.41%，年增 9.29%，累計年增 14.2%",
+    "base_score": 56.54,
     "branch_score": 0.0,
     "branch_status": "未取得",
     "chip_score": 48.0,
-    "close": 119.0,
+    "close": 118.5,
     "close_vs_top_buy_avg_pct": 0.0,
-    "complete_chip_score": 56.74,
+    "complete_chip_score": 56.54,
     "confluence_branch_score": 0.0,
     "confluence_direction_score": 0.0,
     "confluence_inst_score": 0.0,
@@ -839,14 +852,14 @@
     "confluence_score": 0.0,
     "confluence_streak_score": 0.0,
     "foreign_buy_streak": 5.0,
-    "foreign_net_lot": 83.0,
-    "foreign_net_volume_pct": 23.31,
+    "foreign_net_lot": 80.0,
+    "foreign_net_volume_pct": 20.46,
     "foreign_sell_streak": 0.0,
-    "inst_net_lot": 83.0,
+    "inst_net_lot": 80.0,
     "inst_net_volume_pct": 0.0,
-    "latest_date": "2026-05-05",
-    "margin_balance_change_lot": 0.0,
-    "margin_score": 0.0,
+    "latest_date": "2026-05-06",
+    "margin_balance_change_lot": 1.0,
+    "margin_score": -0.2,
     "market": "TPEX",
     "name": "崇友",
     "observed_days": 5,
@@ -856,7 +869,7 @@
     "revenue_month": "2026-03",
     "revenue_yoy_pct": 9.29,
     "selection_reason": "營收 2026-03，月增 47.41%，年增 9.29%，累計年增 14.2%",
-    "selection_score": 56.74,
+    "selection_score": 56.54,
     "short_balance_change_lot": 0.0,
     "stock_id": "4506",
     "top_buy_branch_avg_price": 0.0,
@@ -866,25 +879,25 @@
     "top_sell_branch_avg_price": 0.0,
     "top_sell_branch_name": "",
     "top_sell_branch_net_lot": 0.0,
-    "total_score": 56.74,
+    "total_score": 56.54,
     "trust_buy_streak": 0.0,
     "trust_net_lot": 0.0,
     "trust_net_volume_pct": 0.0,
     "trust_sell_streak": 0.0,
-    "volume_lot": 356.0
+    "volume_lot": 391.0
   },
   "stock": {
-    "avg_price": 117.4522,
-    "close": 119.0,
-    "foreign_net_lot": 83.0,
+    "avg_price": 117.6355,
+    "close": 118.5,
+    "foreign_net_lot": 80.0,
     "in_watchlist": false,
-    "latest_date": "2026-05-05",
-    "margin_balance_change_lot": 0,
+    "latest_date": "2026-05-06",
+    "margin_balance_change_lot": 1,
     "market": "TPEX",
     "name": "崇友",
     "short_balance_change_lot": 0,
     "stock_id": "4506",
     "trust_net_lot": 0.0,
-    "volume_lot": 356.0
+    "volume_lot": 391.0
   }
 }
