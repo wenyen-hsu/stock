@@ -3,11 +3,11 @@
   "branch_daily_status": [],
   "branch_top": [],
   "branch_top_status": {
-    "attempts": 3,
-    "error": "empty parseable branch table",
+    "attempts": 0,
+    "error": null,
     "row_count": 0,
-    "status": "empty",
-    "updated_at": "2026-05-06 23:35:41"
+    "status": "missing",
+    "updated_at": ""
   },
   "chart": [
     {
@@ -360,9 +360,75 @@
       "ma60": null,
       "open": 181.5,
       "volume_lot": 396.29
+    },
+    {
+      "avg_price": 179.64459497344274,
+      "close": 179.0,
+      "date": "2026-05-07",
+      "high": 181.5,
+      "low": 176.5,
+      "ma10": 178.15,
+      "ma20": 179.975,
+      "ma5": 179.9,
+      "ma60": null,
+      "open": 180.0,
+      "volume_lot": 527.92
+    },
+    {
+      "avg_price": 179.97816421364203,
+      "close": 180.5,
+      "date": "2026-05-08",
+      "high": 183.5,
+      "low": 177.5,
+      "ma10": 178.4,
+      "ma20": 179.5,
+      "ma5": 179.0,
+      "ma60": null,
+      "open": 180.0,
+      "volume_lot": 478.39
+    },
+    {
+      "avg_price": 181.23298357550533,
+      "close": 179.5,
+      "date": "2026-05-11",
+      "high": 185.0,
+      "low": 179.0,
+      "ma10": 178.85,
+      "ma20": 179.35,
+      "ma5": 178.7,
+      "ma60": null,
+      "open": 182.0,
+      "volume_lot": 601.85
     }
   ],
   "daily": [
+    {
+      "avg_price": 181.23298357550533,
+      "close": 179.5,
+      "date": "2026-05-11",
+      "dealer_net_lot": 6.0,
+      "foreign_net_lot": 29.0,
+      "trust_net_lot": 0.0,
+      "volume_lot": 601.85
+    },
+    {
+      "avg_price": 179.97816421364203,
+      "close": 180.5,
+      "date": "2026-05-08",
+      "dealer_net_lot": 0.0,
+      "foreign_net_lot": 91.0,
+      "trust_net_lot": 40.0,
+      "volume_lot": 478.39
+    },
+    {
+      "avg_price": 179.64459497344274,
+      "close": 179.0,
+      "date": "2026-05-07",
+      "dealer_net_lot": -17.35,
+      "foreign_net_lot": 124.98,
+      "trust_net_lot": 0.0,
+      "volume_lot": 527.92
+    },
     {
       "avg_price": 177.0202728277491,
       "close": 176.0,
@@ -515,38 +581,23 @@
       "foreign_net_lot": -100.0,
       "trust_net_lot": 0.0,
       "volume_lot": 893.35
-    },
-    {
-      "avg_price": 183.28760395917035,
-      "close": 182.5,
-      "date": "2026-04-10",
-      "dealer_net_lot": 0.0,
-      "foreign_net_lot": -237.18,
-      "trust_net_lot": 0.0,
-      "volume_lot": 710.86
-    },
-    {
-      "avg_price": 187.29266811318806,
-      "close": 190.0,
-      "date": "2026-04-09",
-      "dealer_net_lot": 0.0,
-      "foreign_net_lot": 396.0,
-      "trust_net_lot": 0.0,
-      "volume_lot": 1113.02
-    },
-    {
-      "avg_price": 181.3837928290929,
-      "close": 185.0,
-      "date": "2026-04-08",
-      "dealer_net_lot": 0.0,
-      "foreign_net_lot": 176.99,
-      "trust_net_lot": 0.0,
-      "volume_lot": 742.81
     }
   ],
   "margin": [],
   "news": [],
   "revenues": [
+    {
+      "cumulative_revenue_million": 5585.66,
+      "cumulative_yoy_pct": null,
+      "last_year_cumulative_revenue_million": null,
+      "last_year_revenue_million": null,
+      "mom_pct": 14.07,
+      "prev_month_revenue_million": 1435.55,
+      "revenue_million": 1637.46,
+      "revenue_month": "2026-04",
+      "source": "finmind",
+      "yoy_pct": null
+    },
     {
       "cumulative_revenue_million": 3948.2,
       "cumulative_yoy_pct": null,
@@ -585,40 +636,40 @@
     }
   ],
   "selection": {
-    "avg_price": 181.19,
-    "base_reason": "外資買超；投信買超；營收 2026-03，月增 7.42%",
-    "base_score": 38.35,
+    "avg_price": 180.3619,
+    "base_reason": "外資買超；投信買超；營收 2026-04，月增 14.07%",
+    "base_score": 48.83,
     "branch_score": 0.0,
     "branch_status": "未取得",
-    "chip_score": 37.46,
-    "close": 176.0,
+    "chip_score": 47.14,
+    "close": 179.5,
     "close_vs_top_buy_avg_pct": 0.0,
-    "complete_chip_score": 38.35,
+    "complete_chip_score": 48.83,
     "confluence_branch_score": 0.0,
     "confluence_direction_score": 0.0,
     "confluence_inst_score": 0.0,
     "confluence_price_score": 0.0,
     "confluence_score": 0.0,
     "confluence_streak_score": 0.0,
-    "foreign_buy_streak": 0.0,
-    "foreign_net_lot": 662.11,
-    "foreign_net_volume_pct": 5.18,
-    "foreign_sell_streak": 1.0,
-    "inst_net_lot": 1397.11,
+    "foreign_buy_streak": 3.0,
+    "foreign_net_lot": 571.27,
+    "foreign_net_volume_pct": 4.83,
+    "foreign_sell_streak": 0.0,
+    "inst_net_lot": 1346.27,
     "inst_net_volume_pct": 0.0,
-    "latest_date": "2026-05-06",
+    "latest_date": "2026-05-11",
     "margin_balance_change_lot": 0.0,
     "margin_score": 0.0,
     "market": "TWSE",
     "name": "世紀風電",
     "observed_days": 20,
     "revenue_cumulative_yoy_pct": 0.0,
-    "revenue_mom_pct": 7.42,
-    "revenue_momentum_score": 0.89,
-    "revenue_month": "2026-03",
+    "revenue_mom_pct": 14.07,
+    "revenue_momentum_score": 1.69,
+    "revenue_month": "2026-04",
     "revenue_yoy_pct": 0.0,
-    "selection_reason": "營收 2026-03，月增 7.42%",
-    "selection_score": 38.35,
+    "selection_reason": "營收 2026-04，月增 14.07%",
+    "selection_score": 48.83,
     "short_balance_change_lot": 0.0,
     "stock_id": "2072",
     "top_buy_branch_avg_price": 0.0,
@@ -628,25 +679,25 @@
     "top_sell_branch_avg_price": 0.0,
     "top_sell_branch_name": "",
     "top_sell_branch_net_lot": 0.0,
-    "total_score": 38.35,
+    "total_score": 48.83,
     "trust_buy_streak": 0.0,
-    "trust_net_lot": 735.0,
-    "trust_net_volume_pct": 5.75,
+    "trust_net_lot": 775.0,
+    "trust_net_volume_pct": 6.55,
     "trust_sell_streak": 0.0,
-    "volume_lot": 12789.21
+    "volume_lot": 11830.68
   },
   "stock": {
-    "avg_price": 181.19,
-    "close": 176.0,
-    "foreign_net_lot": 662.11,
+    "avg_price": 180.3619,
+    "close": 179.5,
+    "foreign_net_lot": 571.27,
     "in_watchlist": false,
-    "latest_date": "2026-05-06",
+    "latest_date": "2026-05-11",
     "margin_balance_change_lot": null,
     "market": "TWSE",
     "name": "世紀風電",
     "short_balance_change_lot": null,
     "stock_id": "2072",
-    "trust_net_lot": 735.0,
-    "volume_lot": 12789.21
+    "trust_net_lot": 775.0,
+    "volume_lot": 11830.68
   }
 }

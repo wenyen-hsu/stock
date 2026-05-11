@@ -532,6 +532,7 @@
       <button class="tab" data-tab="watchlist">自選股</button>
       <button class="tab" data-tab="detail">個股</button>
       <button class="tab" data-tab="us-news">美股新聞</button>
+      <button class="tab" data-tab="ci-us-news">GitHub 新聞預覽</button>
       <button class="tab" data-tab="coverage">資料狀態</button>
     </section>
 
@@ -744,6 +745,50 @@
       </section>
     </section>
 
+    <section id="ci-us-news-view" style="display:none;">
+      <section class="panel">
+        <div class="panel-head">
+          <div>
+            <div class="panel-title">GitHub 新聞預覽</div>
+            <div class="muted" id="ci-us-news-note">讀取 GitHub Action 自動抓取的新聞；這裡只預覽，還不會寫入本機 SQLite 或 Obsidian。</div>
+          </div>
+        </div>
+        <div class="panel-body">
+          <section class="controls" style="padding:0; margin-bottom:12px;">
+            <div>
+              <label for="ci-us-industry">產業篩選</label>
+              <select id="ci-us-industry">
+                <option value="">全部</option>
+                <option value="半導體 / AI">半導體 / AI</option>
+                <option value="AI / 伺服器">AI / 伺服器</option>
+                <option value="軟體雲端">軟體雲端</option>
+                <option value="電動車">電動車</option>
+                <option value="金融">金融</option>
+                <option value="能源">能源</option>
+                <option value="生技醫療">生技醫療</option>
+                <option value="消費零售">消費零售</option>
+                <option value="原物料">原物料</option>
+                <option value="總體經濟">總體經濟</option>
+                <option value="其他">其他</option>
+              </select>
+            </div>
+            <div>
+              <label for="ci-us-source">來源篩選</label>
+              <select id="ci-us-source">
+                <option value="">全部</option>
+              </select>
+            </div>
+            <div>
+              <label for="ci-us-query">搜尋</label>
+              <input id="ci-us-query" placeholder="標題、摘要、來源" />
+            </div>
+          </section>
+          <div class="news-section-title">GitHub Action 抓取結果</div>
+          <div id="ci-us-news-list"></div>
+        </div>
+      </section>
+    </section>
+
     <section id="coverage-view" class="panel" style="display:none;">
       <div class="panel-head">
         <div class="panel-title">更新中心</div>
@@ -803,7 +848,7 @@
       <a href="https://finance.yahoo.com/" target="_blank" rel="noreferrer">Yahoo Finance</a>、
       <a href="https://www.cnbc.com/" target="_blank" rel="noreferrer">CNBC</a>、
       <a href="https://www.marketwatch.com/" target="_blank" rel="noreferrer">MarketWatch</a>
-      RSS；產業分類預設由本機關鍵字規則快速判斷，可選擇 Ollama 模型輔助分類並記錄 token 數。
+      RSS；GitHub 新聞預覽讀取 GitHub Action 產出的靜態新聞 JSON，不寫入本機資料庫；產業分類預設由本機關鍵字規則快速判斷，可選擇 Ollama 模型輔助分類並記錄 token 數。
     </section>
   </main>
 
@@ -811,7 +856,7 @@
     window.STOCK_CHIP_STATIC = true;
   </script>
   <script>
-    const state = { tab: "ranking", previousTab: "ranking", detail: null, broker: "", lastDataUpdatedAt: "", chartRange: 20, rankingRows: [], rankingSort: null, usNewsRows: [], columnGroup: "core" };
+    const state = { tab: "ranking", previousTab: "ranking", detail: null, broker: "", lastDataUpdatedAt: "", chartRange: 20, rankingRows: [], rankingSort: null, usNewsRows: [], ciUsNewsRows: [], ciUsNewsMeta: {}, columnGroup: "core" };
     const STATIC_MODE = window.STOCK_CHIP_STATIC === true;
     const staticCache = {};
     const chartColors = {
@@ -931,6 +976,34 @@
         const limit = Number(parsed.searchParams.get("limit") || 80);
         const rows = (data.rows || []).filter(row => !industry || row.industry === industry).slice(0, limit);
         return {rows};
+      }
+      if (parsed.pathname === "/api/ci-us-news") {
+        let data;
+        try {
+          data = await staticData("data/ci_us_news.json");
+        } catch (_err) {
+          data = await staticData("data/us_news.json");
+        }
+        const industry = parsed.searchParams.get("industry") || "";
+        const source = parsed.searchParams.get("source") || "";
+        const q = String(parsed.searchParams.get("q") || "").trim().toLowerCase();
+        const limit = Number(parsed.searchParams.get("limit") || 200);
+        const rows = (data.rows || []).filter(row => {
+          if (industry && row.industry !== industry) return false;
+          if (source && row.source !== source) return false;
+          if (q) {
+            const text = [row.title, row.summary, row.reason, row.source, row.industry].join(" ").toLowerCase();
+            if (!text.includes(q)) return false;
+          }
+          return true;
+        }).slice(0, limit);
+        return {
+          generated_at: data.generated_at || "",
+          row_count: data.row_count || (data.rows || []).length,
+          fetched_count: data.fetched_count || 0,
+          rows,
+          sources: [...new Set((data.rows || []).map(row => row.source).filter(Boolean))].sort(),
+        };
       }
       throw new Error(`靜態版不支援：${parsed.pathname}`);
     }
@@ -1473,6 +1546,54 @@
           <div class="news-text">${esc(row.reason || row.summary || "")}</div>
         </article>`;
       }).join("")}</div>`;
+    }
+    function renderCIUSNews(data) {
+      const target = document.querySelector("#ci-us-news-list");
+      const note = document.querySelector("#ci-us-news-note");
+      const sourceSelect = document.querySelector("#ci-us-source");
+      if (!target || !note) return;
+      const rows = data?.rows || [];
+      state.ciUsNewsRows = rows;
+      state.ciUsNewsMeta = data || {};
+      if (sourceSelect && !sourceSelect.dataset.loaded) {
+        const current = sourceSelect.value;
+        sourceSelect.innerHTML = `<option value="">全部</option>${(data?.sources || []).map(source => `<option value="${esc(source)}">${esc(source)}</option>`).join("")}`;
+        sourceSelect.value = current;
+        sourceSelect.dataset.loaded = "1";
+      }
+      const generated = data?.generated_at || "";
+      const fallback = data?.fallback ? "，目前以正式新聞檔暫代，等 GitHub Action 下一次成功後會改讀 CI 檔" : "";
+      note.textContent = generated
+        ? `GitHub Action 新聞 ${fmt(data?.row_count || rows.length)} 則，最後抓取 ${generated}${fallback}`
+        : `尚未產生 GitHub Action 新聞檔${fallback}`;
+      if (!rows.length) {
+        target.innerHTML = `<div class="empty">目前沒有可預覽的 GitHub 新聞。</div>`;
+        return;
+      }
+      target.innerHTML = `<div class="news-list">${rows.map(row => {
+        const sentimentClass = row.sentiment === "偏多" ? "good" : row.sentiment === "偏空" ? "bad" : "";
+        return `<article class="news-item">
+          <a class="news-title" href="${esc(row.url)}" target="_self" rel="noreferrer">${esc(row.title)}</a>
+          <a class="news-open" href="${esc(row.url)}" target="_self" rel="noreferrer">開啟原文</a>
+          <div class="news-meta">${esc(row.symbol || "MARKET")} · ${esc(row.source || "")} · ${esc(row.published_at || "")} · 抓取 ${esc(row.fetched_at || "")}</div>
+          <div class="tag-list">
+            <span class="tag">${esc(row.industry || "其他")}</span>
+            <span class="tag">${esc(row.event_type || "一般新聞")}</span>
+            <span class="tag ${sentimentClass}">${esc(row.sentiment || "中性")}</span>
+            <span class="tag">${esc(row.classified_by || "rules")}</span>
+            <span class="tag">信心 ${esc(fmt(row.confidence || 0))}</span>
+          </div>
+          ${row.matched_keywords ? `<div class="news-match">命中詞：${esc(row.matched_keywords)}</div>` : ""}
+          <div class="news-text">${esc(row.summary || row.reason || "")}</div>
+        </article>`;
+      }).join("")}</div>`;
+    }
+    async function loadCIUSNews() {
+      const industry = document.querySelector("#ci-us-industry")?.value || "";
+      const source = document.querySelector("#ci-us-source")?.value || "";
+      const q = document.querySelector("#ci-us-query")?.value || "";
+      const data = await getJSON(`/api/ci-us-news?industry=${encodeURIComponent(industry)}&source=${encodeURIComponent(source)}&q=${encodeURIComponent(q)}&limit=200`);
+      renderCIUSNews(data);
     }
     function renderObsidianStatus(data) {
       const note = document.querySelector("#obsidian-note");
@@ -2159,11 +2280,13 @@
       document.querySelector("#ranking-view").style.display = state.tab === "ranking" || state.tab === "watchlist" ? "" : "none";
       document.querySelector("#detail-view").style.display = state.tab === "detail" ? "" : "none";
       document.querySelector("#us-news-view").style.display = state.tab === "us-news" ? "" : "none";
+      document.querySelector("#ci-us-news-view").style.display = state.tab === "ci-us-news" ? "" : "none";
       document.querySelector("#coverage-view").style.display = state.tab === "coverage" ? "" : "none";
       if (state.tab === "ranking") await loadRanking(false);
       if (state.tab === "watchlist") await loadRanking(true);
       if (state.tab === "detail") await loadDetail();
       if (state.tab === "us-news") await loadUSNews();
+      if (state.tab === "ci-us-news") await loadCIUSNews();
       if (state.tab === "coverage") {
         await loadCoverage();
         startJobPolling();
@@ -2202,6 +2325,12 @@
     document.querySelector("#refresh-news").addEventListener("click", refreshNews);
     document.querySelector("#refresh-us-news").addEventListener("click", refreshUSNews);
     document.querySelector("#us-industry").addEventListener("change", loadUSNews);
+    document.querySelector("#ci-us-industry").addEventListener("change", loadCIUSNews);
+    document.querySelector("#ci-us-source").addEventListener("change", loadCIUSNews);
+    document.querySelector("#ci-us-query").addEventListener("input", () => {
+      clearTimeout(window.__ciNewsQ);
+      window.__ciNewsQ = setTimeout(loadCIUSNews, 250);
+    });
     document.querySelector("#static-export").addEventListener("click", event => runStaticAction("export", event.target));
     document.querySelector("#static-publish").addEventListener("click", event => runStaticAction("publish", event.target));
     document.querySelector("#cancel-update").addEventListener("click", cancelCurrentUpdate);

@@ -438,9 +438,75 @@
       "ma60": null,
       "open": 23.0,
       "volume_lot": 107.5
+    },
+    {
+      "avg_price": 26.323131470713374,
+      "close": 27.0,
+      "date": "2026-05-07",
+      "high": 27.0,
+      "low": 23.95,
+      "ma10": 23.51,
+      "ma20": 23.86,
+      "ma5": 23.39,
+      "ma60": null,
+      "open": 24.2,
+      "volume_lot": 176.28
+    },
+    {
+      "avg_price": 27.760016219034195,
+      "close": 28.25,
+      "date": "2026-05-08",
+      "high": 29.0,
+      "low": 26.55,
+      "ma10": 23.755,
+      "ma20": 24.32,
+      "ma5": 24.74,
+      "ma60": null,
+      "open": 27.0,
+      "volume_lot": 207.16
+    },
+    {
+      "avg_price": 28.347487029657238,
+      "close": 27.85,
+      "date": "2026-05-11",
+      "high": 29.0,
+      "low": 27.35,
+      "ma10": 24.11,
+      "ma20": 24.7175,
+      "ma5": 26.0,
+      "ma60": null,
+      "open": 27.4,
+      "volume_lot": 93.1
     }
   ],
   "daily": [
+    {
+      "avg_price": 28.347487029657238,
+      "close": 27.85,
+      "date": "2026-05-11",
+      "dealer_net_lot": 13.0,
+      "foreign_net_lot": 1.0,
+      "trust_net_lot": 0.0,
+      "volume_lot": 93.1
+    },
+    {
+      "avg_price": 27.760016219034195,
+      "close": 28.25,
+      "date": "2026-05-08",
+      "dealer_net_lot": 3.0,
+      "foreign_net_lot": 156.0,
+      "trust_net_lot": 0.0,
+      "volume_lot": 207.16
+    },
+    {
+      "avg_price": 26.323131470713374,
+      "close": 27.0,
+      "date": "2026-05-07",
+      "dealer_net_lot": -1.0,
+      "foreign_net_lot": 69.08,
+      "trust_net_lot": 0.0,
+      "volume_lot": 176.28
+    },
     {
       "avg_price": 24.334210869039424,
       "close": 24.55,
@@ -593,33 +659,6 @@
       "foreign_net_lot": 92.0,
       "trust_net_lot": 0.0,
       "volume_lot": 156.31
-    },
-    {
-      "avg_price": 19.66111460618987,
-      "close": 19.9,
-      "date": "2026-04-10",
-      "dealer_net_lot": 7.0,
-      "foreign_net_lot": 81.95,
-      "trust_net_lot": 0.0,
-      "volume_lot": 130.34
-    },
-    {
-      "avg_price": 19.545668900471583,
-      "close": 19.05,
-      "date": "2026-04-09",
-      "dealer_net_lot": -1.0,
-      "foreign_net_lot": 4.0,
-      "trust_net_lot": 0.0,
-      "volume_lot": 8.06
-    },
-    {
-      "avg_price": 18.986091831849375,
-      "close": 19.5,
-      "date": "2026-04-08",
-      "dealer_net_lot": 35.0,
-      "foreign_net_lot": 192.0,
-      "trust_net_lot": 0.0,
-      "volume_lot": 332.11
     }
   ],
   "margin": [],
@@ -915,13 +954,13 @@
     }
   ],
   "selection": {
-    "avg_price": 23.7346,
+    "avg_price": 25.1636,
     "base_reason": "外資買超；營收 2026-03，月增 -21.51%，年增 -15.25%，累計年增 152.35%",
     "base_score": 42.27,
     "branch_score": 0.0,
     "branch_status": "未取得",
     "chip_score": 38.0,
-    "close": 24.55,
+    "close": 27.85,
     "close_vs_top_buy_avg_pct": 0.0,
     "complete_chip_score": 42.27,
     "confluence_branch_score": 0.0,
@@ -930,13 +969,13 @@
     "confluence_price_score": 0.0,
     "confluence_score": 0.0,
     "confluence_streak_score": 0.0,
-    "foreign_buy_streak": 3.0,
-    "foreign_net_lot": 1532.3,
-    "foreign_net_volume_pct": 56.83,
+    "foreign_buy_streak": 6.0,
+    "foreign_net_lot": 1480.42,
+    "foreign_net_volume_pct": 54.79,
     "foreign_sell_streak": 0.0,
-    "inst_net_lot": 1532.3,
+    "inst_net_lot": 1480.42,
     "inst_net_volume_pct": 0.0,
-    "latest_date": "2026-05-06",
+    "latest_date": "2026-05-11",
     "margin_balance_change_lot": 0.0,
     "margin_score": 0.0,
     "market": "TWSE",
@@ -963,20 +1002,20 @@
     "trust_net_lot": 0.0,
     "trust_net_volume_pct": 0.0,
     "trust_sell_streak": 0.0,
-    "volume_lot": 2696.09
+    "volume_lot": 2702.12
   },
   "stock": {
-    "avg_price": 23.7346,
-    "close": 24.55,
-    "foreign_net_lot": 1532.3,
+    "avg_price": 25.1636,
+    "close": 27.85,
+    "foreign_net_lot": 1480.42,
     "in_watchlist": false,
-    "latest_date": "2026-05-06",
+    "latest_date": "2026-05-11",
     "margin_balance_change_lot": null,
     "market": "TWSE",
     "name": "鼎固-KY",
     "short_balance_change_lot": null,
     "stock_id": "2923",
     "trust_net_lot": 0.0,
-    "volume_lot": 2696.09
+    "volume_lot": 2702.12
   }
 }
