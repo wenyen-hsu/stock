@@ -477,9 +477,31 @@
       "ma60": null,
       "open": null,
       "volume_lot": 0.0
+    },
+    {
+      "avg_price": null,
+      "close": null,
+      "date": "2026-05-12",
+      "high": null,
+      "low": null,
+      "ma10": null,
+      "ma20": null,
+      "ma5": null,
+      "ma60": null,
+      "open": null,
+      "volume_lot": 0.0
     }
   ],
   "daily": [
+    {
+      "avg_price": null,
+      "close": null,
+      "date": "2026-05-12",
+      "dealer_net_lot": 0.0,
+      "foreign_net_lot": 0.0,
+      "trust_net_lot": 0.0,
+      "volume_lot": 0.0
+    },
     {
       "avg_price": null,
       "close": null,
@@ -511,15 +533,6 @@
       "avg_price": null,
       "close": null,
       "date": "2026-05-06",
-      "dealer_net_lot": 0.0,
-      "foreign_net_lot": 0.0,
-      "trust_net_lot": 0.0,
-      "volume_lot": 0.0
-    },
-    {
-      "avg_price": null,
-      "close": null,
-      "date": "2026-05-05",
       "dealer_net_lot": 0.0,
       "foreign_net_lot": 0.0,
       "trust_net_lot": 0.0,
@@ -528,6 +541,23 @@
   ],
   "margin": [
     {
+      "date": "2026-05-12",
+      "margin_balance_lot": 10364,
+      "margin_buy_lot": 0,
+      "margin_cash_repay_lot": 0,
+      "margin_change_lot": 0,
+      "margin_prev_balance_lot": 10364,
+      "margin_sell_lot": 0,
+      "note": "",
+      "offset_lot": 0,
+      "short_balance_lot": 0,
+      "short_buy_lot": 0,
+      "short_change_lot": 0,
+      "short_prev_balance_lot": 0,
+      "short_sell_lot": 0,
+      "short_stock_repay_lot": 0
+    },
+    {
       "date": "2026-05-11",
       "margin_balance_lot": 10364,
       "margin_buy_lot": 0,
@@ -580,23 +610,6 @@
     },
     {
       "date": "2026-05-06",
-      "margin_balance_lot": 10364,
-      "margin_buy_lot": 0,
-      "margin_cash_repay_lot": 0,
-      "margin_change_lot": 0,
-      "margin_prev_balance_lot": 10364,
-      "margin_sell_lot": 0,
-      "note": "",
-      "offset_lot": 0,
-      "short_balance_lot": 0,
-      "short_buy_lot": 0,
-      "short_change_lot": 0,
-      "short_prev_balance_lot": 0,
-      "short_sell_lot": 0,
-      "short_stock_repay_lot": 0
-    },
-    {
-      "date": "2026-05-05",
       "margin_balance_lot": 10364,
       "margin_buy_lot": 0,
       "margin_cash_repay_lot": 0,
@@ -637,7 +650,8 @@
     "foreign_sell_streak": 0.0,
     "inst_net_lot": 0.0,
     "inst_net_volume_pct": 0.0,
-    "latest_date": "2026-05-11",
+    "latest_date": "2026-05-12",
+    "latest_volume_lot": 0.0,
     "margin_balance_change_lot": 0.0,
     "margin_score": 0.0,
     "market": "TWSE",
@@ -664,20 +678,31 @@
     "trust_net_lot": 0.0,
     "trust_net_volume_pct": 0.0,
     "trust_sell_streak": 0.0,
-    "volume_lot": 0.0
+    "volume_5d_avg_lot": 0.0,
+    "volume_avg_lot": 0.0,
+    "volume_lot": 0.0,
+    "volume_ratio_1d": 0.0,
+    "volume_ratio_5d": 0.0,
+    "volume_score": 0.0,
+    "volume_signal": "無量能資料"
   },
   "stock": {
     "avg_price": null,
     "close": null,
     "foreign_net_lot": 0.0,
     "in_watchlist": false,
-    "latest_date": "2026-05-11",
+    "latest_date": "2026-05-12",
+    "latest_volume_lot": 0.0,
     "margin_balance_change_lot": 0,
     "market": "TWSE",
     "name": "巨騰-DR",
     "short_balance_change_lot": 0,
     "stock_id": "9136",
     "trust_net_lot": 0.0,
-    "volume_lot": 0.0
+    "volume_5d_avg_lot": 0.0,
+    "volume_avg_lot": 0.0,
+    "volume_lot": 0.0,
+    "volume_ratio_1d": null,
+    "volume_ratio_5d": null
   }
 }

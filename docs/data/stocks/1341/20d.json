@@ -477,9 +477,31 @@
       "ma60": null,
       "open": 61.2,
       "volume_lot": 5.02
+    },
+    {
+      "avg_price": 61.00641241984475,
+      "close": 60.9,
+      "date": "2026-05-12",
+      "high": 61.1,
+      "low": 60.9,
+      "ma10": 61.28,
+      "ma20": 60.94,
+      "ma5": 61.6,
+      "ma60": null,
+      "open": 61.0,
+      "volume_lot": 11.85
     }
   ],
   "daily": [
+    {
+      "avg_price": 61.00641241984475,
+      "close": 60.9,
+      "date": "2026-05-12",
+      "dealer_net_lot": 0.0,
+      "foreign_net_lot": 1.0,
+      "trust_net_lot": 0.0,
+      "volume_lot": 11.85
+    },
     {
       "avg_price": 61.503184713375795,
       "close": 61.4,
@@ -650,15 +672,6 @@
       "foreign_net_lot": 1.0,
       "trust_net_lot": 0.0,
       "volume_lot": 3.09
-    },
-    {
-      "avg_price": 59.77211528872046,
-      "close": 59.8,
-      "date": "2026-04-13",
-      "dealer_net_lot": 0.0,
-      "foreign_net_lot": 1.0,
-      "trust_net_lot": 0.0,
-      "volume_lot": 10.03
     }
   ],
   "margin": [],
@@ -954,13 +967,13 @@
     }
   ],
   "selection": {
-    "avg_price": 61.0729,
-    "base_reason": "外資買超；營收 2026-04，月增 -13.78%，年增 18.06%，累計年增 3.44%",
+    "avg_price": 61.1422,
+    "base_reason": "外資買超；放量；營收 2026-04，月增 -13.78%，年增 18.06%，累計年增 3.44%",
     "base_score": 50.15,
     "branch_score": 0.0,
     "branch_status": "未取得",
     "chip_score": 48.0,
-    "close": 61.4,
+    "close": 60.9,
     "close_vs_top_buy_avg_pct": 0.0,
     "complete_chip_score": 50.15,
     "confluence_branch_score": 0.0,
@@ -969,13 +982,14 @@
     "confluence_price_score": 0.0,
     "confluence_score": 0.0,
     "confluence_streak_score": 0.0,
-    "foreign_buy_streak": 6.0,
+    "foreign_buy_streak": 7.0,
     "foreign_net_lot": 35.28,
-    "foreign_net_volume_pct": 20.15,
+    "foreign_net_volume_pct": 19.94,
     "foreign_sell_streak": 0.0,
     "inst_net_lot": 35.28,
     "inst_net_volume_pct": 0.0,
-    "latest_date": "2026-05-11",
+    "latest_date": "2026-05-12",
+    "latest_volume_lot": 11.85,
     "margin_balance_change_lot": 0.0,
     "margin_score": 0.0,
     "market": "TWSE",
@@ -1002,20 +1016,31 @@
     "trust_net_lot": 0.0,
     "trust_net_volume_pct": 0.0,
     "trust_sell_streak": 0.0,
-    "volume_lot": 175.06
+    "volume_5d_avg_lot": 14.82,
+    "volume_avg_lot": 8.84,
+    "volume_lot": 176.88,
+    "volume_ratio_1d": 1.34,
+    "volume_ratio_5d": 1.68,
+    "volume_score": 17.9,
+    "volume_signal": "放量"
   },
   "stock": {
-    "avg_price": 61.0729,
-    "close": 61.4,
+    "avg_price": 61.1422,
+    "close": 60.9,
     "foreign_net_lot": 35.28,
     "in_watchlist": false,
-    "latest_date": "2026-05-11",
+    "latest_date": "2026-05-12",
+    "latest_volume_lot": 11.85,
     "margin_balance_change_lot": null,
     "market": "TWSE",
     "name": "富林-KY",
     "short_balance_change_lot": null,
     "stock_id": "1341",
     "trust_net_lot": 0.0,
-    "volume_lot": 175.06
+    "volume_5d_avg_lot": 14.82,
+    "volume_avg_lot": 8.84,
+    "volume_lot": 176.88,
+    "volume_ratio_1d": 1.34,
+    "volume_ratio_5d": 1.68
   }
 }

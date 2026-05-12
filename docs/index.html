@@ -493,6 +493,7 @@
           <option value="foreign_buy">外資買超</option>
           <option value="foreign_5d_revenue_growth">外資近5日買超 + 營收成長</option>
           <option value="inst_buy_volume">法人買超 + 占量</option>
+          <option value="volume_expansion">成交量放大</option>
           <option value="revenue_volume_breakout">營收成長 + 量能</option>
           <option value="margin_down_foreign_buy">融資下降 + 外資買超</option>
           <option value="trust_buy">投信買超</option>
@@ -812,7 +813,8 @@
         </div>
         <div class="layout-2">
           <div>
-            <div class="panel-title" style="margin-bottom:8px;">已抓區間分點排行</div>
+            <div class="panel-title" style="margin-bottom:8px;">分點資料覆蓋狀態</div>
+            <div class="muted" style="margin-bottom:8px;">目前只補自選股與排名候選股，分點資料不參與全市場基礎排行；未有分點排行不代表行情、法人或營收缺資料。</div>
             <div id="coverage-table"></div>
           </div>
           <div>
@@ -1679,16 +1681,23 @@
       btn.textContent = original;
     }
     const rankingCols = [
-      {key:"stock_id", label:"代號", sortType:"text", format: v => v, groups:["core","chip","foreign","revenue","margin","branch"]},
-      {key:"name", label:"名稱", sortType:"text", groups:["core","chip","foreign","revenue","margin","branch"]},
+      {key:"stock_id", label:"代號", sortType:"text", format: v => v, groups:["core","chip","foreign","revenue","margin","volume","branch"]},
+      {key:"name", label:"名稱", sortType:"text", groups:["core","chip","foreign","revenue","margin","volume","branch"]},
       {key:"market", label:"市場", sortType:"text", groups:["core"]},
-      {key:"close", label:"收盤", groups:["core","chip","foreign","revenue","margin"]},
+      {key:"close", label:"收盤", groups:["core","chip","foreign","revenue","margin","volume"]},
       {key:"observed_days", label:"資料日", groups:["core"]},
       {key:"total_score", label:"基礎分", signed:true, groups:["core"]},
       {key:"chip_score", label:"法人分", signed:true, groups:["core","chip"]},
       {key:"revenue_momentum_score", label:"營收分", signed:true, groups:["core","revenue"]},
       {key:"margin_score", label:"融資分", signed:true, groups:["core","margin"]},
-      {key:"volume_lot", label:"成交量", groups:["core","chip","foreign"]},
+      {key:"volume_lot", label:"成交量", groups:["core","chip","foreign","volume"]},
+      {key:"latest_volume_lot", label:"最新日量", groups:["volume"]},
+      {key:"volume_avg_lot", label:"區間均量", groups:["volume"]},
+      {key:"volume_5d_avg_lot", label:"5日均量", groups:["volume"]},
+      {key:"volume_ratio_1d", label:"單日量倍", groups:["volume"]},
+      {key:"volume_ratio_5d", label:"5日量倍", groups:["volume"]},
+      {key:"volume_score", label:"量能分", signed:true, groups:["volume"]},
+      {key:"volume_signal", label:"量能", sortType:"text", groups:["volume"]},
       {key:"foreign_net_lot", label:"外資", signed:true, groups:["chip","foreign"]},
       {key:"trust_net_lot", label:"投信", signed:true, groups:["chip"]},
       {key:"inst_net_lot", label:"外資+投信", signed:true, groups:["chip"]},
@@ -1713,6 +1722,7 @@
       {key:"foreign", label:"外資籌碼", tip:"外資籌碼：只看外資相關資料，包含區間外資買賣超、外資占成交量比例、最近一日外資、外資連買與連賣。適合判斷外資是否持續偏多或短線轉向。"},
       {key:"revenue", label:"營收", tip:"營收：顯示最新營收月份、營收分、月增率與年增率，用來判斷基本面動能是否同步轉強。"},
       {key:"margin", label:"融資券", tip:"融資券：觀察融資餘額與融券餘額增減。融資快速增加可能代表散戶追價，融資下降且法人買超通常較乾淨。"},
+      {key:"volume", label:"量能", tip:"量能：比較最新日成交量與區間平均量、5日均量與區間均量。單日量倍高代表當天成交明顯放大，5日量倍高代表最近一段時間量能持續升溫。"},
       {key:"branch", label:"分點", tip:"分點：顯示區間買超分點、分點分與抓取狀態。這是進階資料，若狀態為缺資料或空回應，不應拿來影響全市場排行。"}
     ];
     function visibleRankingCols() {
@@ -1789,6 +1799,8 @@
         ["基礎選股分", selection.total_score, "法人 + 融資融券 + 營收"],
         ["法人分", selection.chip_score, `法人占量 ${fmt(selection.inst_net_volume_pct)}%`],
         ["融資分", selection.margin_score, `融資 ${fmt(selection.margin_balance_change_lot)} / 融券 ${fmt(selection.short_balance_change_lot)}`],
+        ["量能", selection.volume_signal || "無資料", `單日 ${fmt(selection.volume_ratio_1d)} 倍 / 5日 ${fmt(selection.volume_ratio_5d)} 倍`],
+        ["量能分", selection.volume_score, "獨立指標，尚未併入基礎分"],
         ["營收動能", selection.revenue_momentum_score, `${esc(selection.revenue_month || "無月份")} 年增 ${fmt(selection.revenue_yoy_pct)}%`],
         ["分點狀態", selection.branch_status || "未取得", "分點分只作個股進階確認"],
         ["分點分", selection.branch_score, `買超分點 ${esc(selection.top_buy_branch_name || "未取得")}`],
@@ -1963,7 +1975,7 @@
         {key:"empty_count", label:"空回應"},
         {key:"failed_count", label:"失敗"},
         {key:"total_stocks", label:"總數"},
-        {key:"remaining", label:"剩餘"}
+        {key:"remaining", label:"未有分點排行"}
       ]);
       await loadStaticPublishStatus();
     }
@@ -2164,6 +2176,8 @@
       renderMetrics(document.querySelector("#detail-metrics"), [
         ["收盤", fmt(data.stock.close)],
         [`${days}日均價`, fmt(data.stock.avg_price)],
+        ["單日量倍", fmt(data.stock.volume_ratio_1d)],
+        ["5日量倍", fmt(data.stock.volume_ratio_5d)],
         [`${days}日外資`, fmt(data.stock.foreign_net_lot), cls(data.stock.foreign_net_lot)],
         [`${days}日投信`, fmt(data.stock.trust_net_lot), cls(data.stock.trust_net_lot)],
         [`${days}日融資`, fmt(data.stock.margin_balance_change_lot), cls(data.stock.margin_balance_change_lot)],

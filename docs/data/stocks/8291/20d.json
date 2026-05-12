@@ -464,9 +464,31 @@
       "ma60": null,
       "open": 38.9,
       "volume_lot": 109.0
+    },
+    {
+      "avg_price": 42.75,
+      "close": 42.75,
+      "date": "2026-05-12",
+      "high": 42.75,
+      "low": 42.75,
+      "ma10": 28.98,
+      "ma20": null,
+      "ma5": 35.71,
+      "ma60": null,
+      "open": 42.75,
+      "volume_lot": 61.0
     }
   ],
   "daily": [
+    {
+      "avg_price": 42.75,
+      "close": 42.75,
+      "date": "2026-05-12",
+      "dealer_net_lot": 0.0,
+      "foreign_net_lot": 0.0,
+      "trust_net_lot": 0.0,
+      "volume_lot": 61.0
+    },
     {
       "avg_price": 38.9,
       "close": 38.9,
@@ -637,15 +659,6 @@
       "foreign_net_lot": 0.0,
       "trust_net_lot": 0.0,
       "volume_lot": 20.0
-    },
-    {
-      "avg_price": null,
-      "close": null,
-      "date": "2026-04-13",
-      "dealer_net_lot": 0.0,
-      "foreign_net_lot": 0.0,
-      "trust_net_lot": 0.0,
-      "volume_lot": 0.0
     }
   ],
   "margin": [],
@@ -941,13 +954,13 @@
     }
   ],
   "selection": {
-    "avg_price": 27.619,
-    "base_reason": "營收 2026-03，月增 7.97%，年增 401.0%，累計年增 188.95%",
+    "avg_price": 28.4006,
+    "base_reason": "放量；營收 2026-03，月增 7.97%，年增 401.0%，累計年增 188.95%",
     "base_score": 21.36,
     "branch_score": 0.0,
     "branch_status": "未取得",
     "chip_score": 0.0,
-    "close": 38.9,
+    "close": 42.75,
     "close_vs_top_buy_avg_pct": 0.0,
     "complete_chip_score": 21.36,
     "confluence_branch_score": 0.0,
@@ -962,7 +975,8 @@
     "foreign_sell_streak": 0.0,
     "inst_net_lot": 0.0,
     "inst_net_volume_pct": 0.0,
-    "latest_date": "2026-05-11",
+    "latest_date": "2026-05-12",
+    "latest_volume_lot": 61.0,
     "margin_balance_change_lot": 0.0,
     "margin_score": 0.0,
     "market": "TPEX",
@@ -989,20 +1003,31 @@
     "trust_net_lot": 0.0,
     "trust_net_volume_pct": 0.0,
     "trust_sell_streak": 0.0,
-    "volume_lot": 1120.0
+    "volume_5d_avg_lot": 125.4,
+    "volume_avg_lot": 59.05,
+    "volume_lot": 1181.0,
+    "volume_ratio_1d": 1.03,
+    "volume_ratio_5d": 2.12,
+    "volume_score": 18.37,
+    "volume_signal": "放量"
   },
   "stock": {
-    "avg_price": 27.619,
-    "close": 38.9,
+    "avg_price": 28.4006,
+    "close": 42.75,
     "foreign_net_lot": 0.0,
     "in_watchlist": false,
-    "latest_date": "2026-05-11",
+    "latest_date": "2026-05-12",
+    "latest_volume_lot": 61.0,
     "margin_balance_change_lot": null,
     "market": "TPEX",
     "name": "尚茂",
     "short_balance_change_lot": null,
     "stock_id": "8291",
     "trust_net_lot": 0.0,
-    "volume_lot": 1120.0
+    "volume_5d_avg_lot": 125.4,
+    "volume_avg_lot": 59.05,
+    "volume_lot": 1181.0,
+    "volume_ratio_1d": 1.03,
+    "volume_ratio_5d": 2.12
   }
 }
