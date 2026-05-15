@@ -156,6 +156,22 @@ python3 -m stock_chip.export_static --out docs --include-all-details
 
 靜態版自選股只存於使用者自己的瀏覽器 `localStorage`。更新每日、營收、分點、新聞等按鈕會隱藏；需要重新抓資料時，請回本機 GUI 或 CLI 更新後重新匯出並 push。
 
+### 美股新聞自動更新
+
+Repo 內有 GitHub Actions workflow：`.github/workflows/fetch-us-news.yml`。
+
+- 定時：每小時約第 17 分鐘自動抓 Yahoo Finance、CNBC、MarketWatch RSS。
+- 手動：GitHub Actions 頁面可執行 `Fetch US News`。
+- 輸出：只更新 `docs/data/us_news.json`，不依賴本機 `data/stock_chip.sqlite`。
+- 分類：CI 使用本機 rules 分類，token 為 0；Ollama / AI 細分類仍建議在本機同步後執行。
+- 去重：依正規化 URL 產生 `news_id`，同新聞重複抓取時會合併，不會重複顯示；預設每個 RSS 抓 15 則，最多保留 1000 則。
+
+本機若要把 CI 已抓的新聞同步到 SQLite 與 Obsidian，可在 GUI 更新中心執行「同步 GitHub 新聞到本機」，或使用 CLI：
+
+```bash
+python3 -m stock_chip.import_us_news_static --json docs/data/us_news.json --db data/stock_chip.sqlite
+```
+
 ## 主要輸出
 
 - `data/stock_chip.sqlite`：本機 SQLite 資料庫

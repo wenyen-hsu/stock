@@ -4,6 +4,9 @@ import argparse
 import csv
 import datetime as dt
 import json
+import os
+import select
+import signal
 import sqlite3
 import subprocess
 import sys
@@ -14,19 +17,26 @@ from http import HTTPStatus
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 from urllib.parse import parse_qs, urlparse
+from urllib.request import Request, urlopen
 
 from stock_chip.branch import branch_coverage, run_branch, run_branch_daily
 from stock_chip.news import ensure_news_tables, load_cached_news, refresh_stock_news
+from stock_chip.obsidian_news import export_obsidian_vault, obsidian_vault_status
+from stock_chip.us_news import ensure_us_news_tables, import_static_us_news, load_cached_us_news, refresh_us_news
 from stock_chip.official import (
     connect_db,
     fetch_tpex_institutional_all,
+    fetch_tpex_margin_all,
     fetch_tpex_prices_all,
     fetch_twse_institutional_all,
+    fetch_twse_margin_all,
     fetch_twse_prices_all,
     shares_to_lots,
     upsert_institutional,
+    upsert_margin,
     upsert_prices,
 )
+from stock_chip.quality import score_input_coverage
 from stock_chip.revenue import run_revenue
 from stock_chip.scan import recent_dates, run_scan
 
@@ -36,7 +46,9 @@ DB_PATH = ROOT / "data" / "stock_chip.sqlite"
 REPORTS_DIR = ROOT / "reports"
 WATCHLIST = ["2376", "2382", "2324", "6196"]
 UPDATE_JOBS: dict[str, dict[str, object]] = {}
-UPDATE_LOCK = threading.Lock()
+UPDATE_LOCK = threading.RLock()
+CI_US_NEWS_PAGES_URL = "https://wenyen-hsu.github.io/stock/data/ci_us_news.json"
+CI_US_NEWS_SITE_URL = "https://wenyen-hsu.github.io/stock/"
 
 
 INDEX_HTML = """<!doctype html>
@@ -102,12 +114,23 @@ INDEX_HTML = """<!doctype html>
       cursor: not-allowed;
     }
     button:disabled:hover { background: #cbd5dc; }
-    button.secondary {
+    button.secondary,
+    a.secondary {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 38px;
+      padding: 0 12px;
       border: 1px solid var(--line);
+      border-radius: 6px;
       background: #fff;
       color: var(--ink);
+      font-size: 14px;
+      font-weight: 800;
+      text-decoration: none;
     }
-    button.secondary:hover { background: #eef6f5; }
+    button.secondary:hover,
+    a.secondary:hover { background: #eef6f5; }
     .toolbar {
       display: grid;
       grid-template-columns: repeat(6, minmax(120px, 1fr));
@@ -138,6 +161,91 @@ INDEX_HTML = """<!doctype html>
     }
     .metric .label { color: var(--muted); font-size: 13px; }
     .metric .value { font-size: 24px; font-weight: 850; margin-top: 4px; }
+    .assist-grid {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(120px, 1fr));
+      gap: 10px;
+      padding: 14px;
+    }
+    .assist-card {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 10px;
+      background: #fbfdff;
+    }
+    .assist-label { color: var(--muted); font-size: 12px; font-weight: 800; }
+    .assist-value { color: var(--ink); font-size: 22px; font-weight: 900; margin-top: 4px; }
+    .assist-note { color: var(--muted); font-size: 12px; line-height: 1.45; margin-top: 6px; }
+    .assist-reason {
+      border-top: 1px solid var(--line);
+      padding: 12px 14px;
+      color: #344054;
+      font-size: 13px;
+      line-height: 1.6;
+    }
+    .status-grid {
+      display: grid;
+      grid-template-columns: repeat(6, minmax(110px, 1fr));
+      gap: 10px;
+      padding: 14px;
+    }
+    .status-card {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 10px;
+      background: #fbfdff;
+    }
+    .status-card.good { border-color: #bfe3d0; background: #f3fbf6; }
+    .status-card.warn { border-color: #f6c76d; background: #fffbf0; }
+    .status-card.bad { border-color: #efc4c0; background: #fff7f6; }
+    .status-name { color: var(--muted); font-size: 12px; font-weight: 800; }
+    .status-value { margin-top: 4px; color: var(--ink); font-size: 16px; font-weight: 900; }
+    .status-detail { margin-top: 5px; color: var(--muted); font-size: 12px; line-height: 1.45; }
+    .judgement-box {
+      border-top: 1px solid var(--line);
+      padding: 13px 14px;
+      color: #26384d;
+      font-size: 14px;
+      line-height: 1.65;
+      background: #fbfdff;
+    }
+    .column-controls {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      padding: 12px 14px;
+      border-top: 1px solid var(--line);
+      background: #fbfdff;
+    }
+    .column-controls .toggle { height: 28px; font-size: 12px; }
+    .tooltip-anchor { position: relative; }
+    .tooltip-anchor::after {
+      content: attr(data-tip);
+      position: absolute;
+      left: 0;
+      top: calc(100% + 8px);
+      z-index: 20;
+      width: min(320px, 72vw);
+      padding: 10px 12px;
+      border: 1px solid #cfd9e1;
+      border-radius: 8px;
+      background: #102a43;
+      color: #f8fafc;
+      box-shadow: 0 10px 24px rgba(15, 23, 42, .18);
+      font-size: 12px;
+      font-weight: 700;
+      line-height: 1.55;
+      white-space: normal;
+      pointer-events: none;
+      opacity: 0;
+      transform: translateY(-4px);
+      transition: opacity .12s ease, transform .12s ease;
+    }
+    .tooltip-anchor:hover::after,
+    .tooltip-anchor:focus-within::after {
+      opacity: 1;
+      transform: translateY(0);
+    }
     .panel {
       background: var(--panel);
       border: 1px solid var(--line);
@@ -155,7 +263,13 @@ INDEX_HTML = """<!doctype html>
     }
     .panel-title { font-weight: 850; }
     .panel-body { padding: 14px; }
-    .table-wrap { overflow: auto; max-height: 64vh; }
+    .table-wrap {
+      position: relative;
+      z-index: 1;
+      overflow: auto;
+      max-height: 64vh;
+      background: var(--panel);
+    }
     table { width: 100%; border-collapse: collapse; font-size: 13px; white-space: nowrap; }
     th, td { border-bottom: 1px solid #edf1f4; padding: 8px 10px; text-align: right; }
     th { position: sticky; top: 0; background: #f8fafb; color: #344054; z-index: 1; font-size: 12px; }
@@ -210,13 +324,26 @@ INDEX_HTML = """<!doctype html>
       font-size: 12px;
       font-weight: 800;
     }
-    .price-chart-wrap {
+    .price-chart-wrap,
+    .revenue-chart-wrap {
       height: 330px;
       min-height: 260px;
       position: relative;
+      overflow: hidden;
+      contain: layout paint;
     }
+    .revenue-chart-wrap { height: 300px; }
+    .margin-chart-wrap { height: 300px; }
     .price-chart-wrap canvas { cursor: zoom-in; }
-    #price-chart { width: 100%; height: 100%; display: block; }
+    #price-chart,
+    #revenue-chart,
+    #margin-chart {
+      width: 100% !important;
+      height: 100% !important;
+      max-width: 100%;
+      max-height: 100%;
+      display: block;
+    }
     .legend {
       display: flex;
       gap: 12px;
@@ -243,9 +370,18 @@ INDEX_HTML = """<!doctype html>
       border-color: #9ccdc8;
       background: #f6fbfa;
     }
+    .job-card.stale-warn {
+      border-color: #f6c76d;
+      background: #fffbf0;
+    }
+    .job-card.stale-bad {
+      border-color: #efb3ad;
+      background: #fff7f6;
+    }
     .job-title { font-weight: 850; margin-bottom: 6px; }
     .job-desc { color: var(--muted); font-size: 13px; line-height: 1.5; min-height: 38px; }
     .job-time { color: var(--muted); font-size: 12px; margin-top: 8px; line-height: 1.5; }
+    .job-extra { color: #344054; font-size: 12px; margin-top: 8px; line-height: 1.5; }
     .job-card button { margin-top: 12px; min-width: 120px; }
     .publish-box {
       border: 1px solid var(--line);
@@ -270,6 +406,8 @@ INDEX_HTML = """<!doctype html>
     .status-pill.running { background: #fff4e5; color: var(--warn); }
     .status-pill.failed { background: #fff1f0; color: var(--danger); }
     .status-pill.done { background: #ecfdf3; color: var(--good); }
+    .status-pill.warn { background: #fff4e5; color: var(--warn); }
+    .status-pill.bad { background: #fff1f0; color: var(--danger); }
     .job-meta {
       display: flex;
       justify-content: space-between;
@@ -299,21 +437,74 @@ INDEX_HTML = """<!doctype html>
       margin-left: 8px;
       vertical-align: middle;
     }
-    .news-list { display: grid; gap: 12px; }
-    .news-item {
-      border-bottom: 1px solid #edf1f4;
-      padding-bottom: 12px;
+    .obsidian-status {
+      display: flex;
+      justify-content: space-between;
+      gap: 14px;
+      align-items: flex-start;
+      margin: 4px 0 16px;
+      padding: 12px 14px;
+      border: 1px solid #d8e2ea;
+      border-radius: 8px;
+      background: #f6f8fa;
     }
-    .news-item:last-child { border-bottom: 0; padding-bottom: 0; }
+    .obsidian-kicker {
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 800;
+      margin-bottom: 4px;
+    }
+    .obsidian-text { color: #344054; font-size: 13px; line-height: 1.55; }
+    .news-section-title {
+      margin: 16px 0 10px;
+      color: var(--ink);
+      font-size: 15px;
+      font-weight: 850;
+    }
+    .news-list { display: grid; gap: 10px; }
+    .news-item {
+      padding: 14px;
+      border: 1px solid #dce5ec;
+      border-radius: 8px;
+      background: #fbfdff;
+    }
+    .news-item:nth-child(even) { background: #f7fafc; }
     .news-title {
+      display: block;
       color: var(--ink);
       font-weight: 850;
       text-decoration: none;
       line-height: 1.45;
     }
     .news-title:hover { color: var(--accent-dark); text-decoration: underline; }
+    .news-open {
+      display: inline-flex;
+      margin-top: 4px;
+      color: var(--accent-dark);
+      font-size: 12px;
+      font-weight: 800;
+      text-decoration: none;
+    }
+    .news-open:hover { text-decoration: underline; }
     .news-meta { color: var(--muted); font-size: 12px; margin: 5px 0 7px; }
     .news-text { color: #344054; font-size: 13px; line-height: 1.65; white-space: pre-wrap; }
+    .news-match { color: #475467; font-size: 12px; line-height: 1.5; margin-top: 6px; }
+    .tag-list { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 6px; }
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      min-height: 24px;
+      padding: 3px 8px;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      color: #344054;
+      background: #f8fafb;
+      font-size: 12px;
+      font-weight: 700;
+    }
+    .tag.good { color: var(--good); border-color: #bfe3d0; background: #f3fbf6; }
+    .tag.bad { color: var(--danger); border-color: #efc4c0; background: #fff6f5; }
+    .tag.ai { color: var(--accent-dark); border-color: #b8d9d5; background: #f0faf8; }
     pre {
       margin: 0;
       padding: 14px;
@@ -323,6 +514,8 @@ INDEX_HTML = """<!doctype html>
       border-radius: 8px;
       font-size: 13px;
     }
+    pre a { color: #93c5fd; font-weight: 800; }
+    pre a:hover { color: #bfdbfe; }
     .empty { padding: 20px; color: var(--muted); }
     .sources {
       margin-top: 18px;
@@ -338,7 +531,7 @@ INDEX_HTML = """<!doctype html>
     @media (max-width: 1000px) {
       main { padding: 14px; }
       .toolbar { grid-template-columns: repeat(2, minmax(140px, 1fr)); }
-      .metrics, .layout-2, .update-grid { grid-template-columns: 1fr; }
+      .metrics, .layout-2, .update-grid, .assist-grid, .status-grid { grid-template-columns: 1fr; }
     }
   </style>
 </head>
@@ -359,10 +552,14 @@ INDEX_HTML = """<!doctype html>
       <div>
         <label for="ranking">排行</label>
         <select id="ranking">
-          <option value="total_score">總分</option>
+          <option value="total_score">基礎選股分</option>
           <option value="chip_score">法人籌碼分數</option>
-          <option value="branch_score">分點分數</option>
           <option value="foreign_buy">外資買超</option>
+          <option value="foreign_5d_revenue_growth">外資近5日買超 + 營收成長</option>
+          <option value="inst_buy_volume">法人買超 + 占量</option>
+          <option value="volume_expansion">成交量放大</option>
+          <option value="revenue_volume_breakout">營收成長 + 量能</option>
+          <option value="margin_down_foreign_buy">融資下降 + 外資買超</option>
           <option value="trust_buy">投信買超</option>
           <option value="inst_buy">外資 + 投信</option>
           <option value="near_avg_with_inst_buy">接近均價且法人買超</option>
@@ -381,6 +578,10 @@ INDEX_HTML = """<!doctype html>
         <input id="query" placeholder="代號或名稱" />
       </div>
       <div>
+        <label for="min-volume">最低成交量(張)</label>
+        <input id="min-volume" type="number" min="0" step="100" placeholder="不限" />
+      </div>
+      <div>
         <label for="limit">筆數</label>
         <select id="limit">
           <option value="20">20</option>
@@ -395,6 +596,8 @@ INDEX_HTML = """<!doctype html>
       <button class="tab active" data-tab="ranking">排行</button>
       <button class="tab" data-tab="watchlist">自選股</button>
       <button class="tab" data-tab="detail">個股</button>
+      <button class="tab" data-tab="us-news">美股新聞</button>
+      <button class="tab" data-tab="ci-us-news">GitHub 新聞預覽</button>
       <button class="tab" data-tab="coverage">資料狀態</button>
     </section>
 
@@ -405,6 +608,7 @@ INDEX_HTML = """<!doctype html>
         <div class="panel-title" id="ranking-title">排行</div>
         <div class="muted" id="ranking-note"></div>
       </div>
+      <div class="column-controls" id="ranking-columns"></div>
       <div class="table-wrap" id="ranking-table"></div>
     </section>
 
@@ -427,12 +631,30 @@ INDEX_HTML = """<!doctype html>
         </div>
       </div>
       <section class="metrics" id="detail-metrics"></section>
+      <section class="panel" id="detail-status-panel">
+        <div class="panel-head">
+          <div>
+            <div class="panel-title">資料品質與判斷摘要</div>
+            <div class="muted">區分已更新、缺資料與來源空回應，避免把缺資料誤判成 0。</div>
+          </div>
+        </div>
+        <div id="detail-data-status"></div>
+        <div class="judgement-box" id="detail-judgement"></div>
+      </section>
+      <section class="panel" id="selection-panel">
+        <div class="panel-head">
+          <div>
+            <div class="panel-title">選股輔助</div>
+            <div class="muted">共振分拆解：法人方向、分點集中、成本位置、連買續航與綜合理由</div>
+          </div>
+        </div>
+        <div id="selection-assist"></div>
+      </section>
       <section class="panel">
         <div class="panel-head">
           <div class="panel-title">股價走勢</div>
           <div class="chart-toolbar">
-            <span>線圖</span>
-            <label class="toggle series-option" data-series="close"><span class="legend-swatch"></span><input type="checkbox" id="close-toggle" checked /> 收盤</label>
+            <span>蠟燭圖</span>
             <label class="toggle ma-option" data-ma="5"><span class="legend-swatch"></span><input type="checkbox" class="ma-toggle" value="5" checked /> MA5</label>
             <label class="toggle ma-option" data-ma="10"><span class="legend-swatch"></span><input type="checkbox" class="ma-toggle" value="10" checked /> MA10</label>
             <label class="toggle ma-option" data-ma="20"><span class="legend-swatch"></span><input type="checkbox" class="ma-toggle" value="20" checked /> MA20</label>
@@ -477,25 +699,169 @@ INDEX_HTML = """<!doctype html>
             <div><div class="panel-title">24 個月營收</div><div class="muted" id="revenue-note"></div></div>
             <div class="panel-actions"><button class="secondary single-refresh" data-section="revenue">更新營收</button></div>
           </div>
+          <div class="panel-body">
+            <div class="revenue-chart-wrap"><canvas id="revenue-chart"></canvas></div>
+            <div class="legend" id="revenue-legend"></div>
+          </div>
           <div class="table-wrap" id="revenue-table"></div>
         </div>
       </section>
       <section class="panel">
         <div class="panel-head">
-          <div><div class="panel-title">區間合計買超前十分點</div><div class="muted" id="branch-top-note">點分點看最近 10 日</div></div>
+          <div>
+            <div class="panel-title">融資融券餘額</div>
+            <div class="muted" id="margin-note">取自 TWSE / TPEx 信用交易公開資料，單位為張</div>
+          </div>
+          <div class="panel-actions"><button class="secondary single-refresh" data-section="daily">更新融資融券</button></div>
+        </div>
+        <div class="panel-body">
+          <div class="revenue-chart-wrap margin-chart-wrap"><canvas id="margin-chart"></canvas></div>
+          <div class="legend" id="margin-legend"></div>
+        </div>
+        <div class="table-wrap" id="margin-table"></div>
+      </section>
+      <section class="panel">
+        <div class="panel-head">
+          <div><div class="panel-title">區間合計買超前十分點</div><div class="muted" id="branch-top-note">點分點看每日明細</div></div>
           <div class="panel-actions"><button class="secondary single-refresh" data-section="branch_top">更新分點排行</button></div>
         </div>
         <div class="table-wrap" id="branch-top-table"></div>
       </section>
       <section class="panel">
         <div class="panel-head">
-          <div class="panel-title" id="broker-title">分點最近 10 日</div>
+          <div class="panel-title" id="broker-title">分點每日明細</div>
           <div class="panel-actions">
             <div class="broker-list" id="broker-list"></div>
-            <button class="secondary single-refresh" data-section="branch_daily">更新近10日</button>
+            <button class="secondary single-refresh" data-section="branch_daily">更新每日明細</button>
           </div>
         </div>
         <div class="table-wrap" id="broker-daily-table"></div>
+      </section>
+    </section>
+
+    <section id="us-news-view" style="display:none;">
+      <section class="panel">
+        <div class="panel-head">
+          <div>
+            <div class="panel-title">美股新聞</div>
+            <div class="muted" id="us-news-note">來源：Yahoo Finance 個股 RSS、CNBC 與 MarketWatch 市場 RSS；預設用本機規則快速分類，實際 LLM token 為 0。</div>
+          </div>
+          <div class="news-actions">
+            <button class="secondary" id="refresh-us-news">抓取美股新聞</button>
+          </div>
+        </div>
+        <div class="panel-body">
+          <section class="controls" style="padding:0; margin-bottom:12px;">
+            <div>
+              <label for="us-news-mode">抓取模式</label>
+              <select id="us-news-mode">
+                <option value="market" selected>市場新聞</option>
+                <option value="symbols">指定個股 + 市場新聞</option>
+              </select>
+            </div>
+            <div>
+              <label for="us-symbols">美股代號（選填）</label>
+              <input id="us-symbols" value="" placeholder="AAPL,NVDA,TSLA" />
+            </div>
+            <div>
+              <label for="us-limit">每個 RSS 最多幾則</label>
+              <select id="us-limit">
+                <option value="5" selected>5</option>
+                <option value="8">8</option>
+                <option value="15">15</option>
+                <option value="25">25</option>
+              </select>
+            </div>
+            <label class="toggle" style="align-self:end; min-height:42px;">
+              <input type="checkbox" id="us-use-ollama" /> Ollama 分類
+            </label>
+          </section>
+          <section class="controls" style="padding:0; margin-bottom:12px;">
+            <div>
+              <label for="us-industry">產業篩選</label>
+              <select id="us-industry">
+                <option value="">全部</option>
+                <option value="半導體 / AI">半導體 / AI</option>
+                <option value="AI / 伺服器">AI / 伺服器</option>
+                <option value="軟體雲端">軟體雲端</option>
+                <option value="電動車">電動車</option>
+                <option value="金融">金融</option>
+                <option value="能源">能源</option>
+                <option value="生技醫療">生技醫療</option>
+                <option value="消費零售">消費零售</option>
+                <option value="原物料">原物料</option>
+                <option value="總體經濟">總體經濟</option>
+                <option value="其他">其他</option>
+              </select>
+            </div>
+            <div style="align-self:end;">
+              <div class="muted">先抓來源 RSS，再依標題與摘要關鍵字分類；產業選單只篩選已抓結果。</div>
+            </div>
+          </section>
+          <div class="obsidian-status">
+            <div>
+              <div class="obsidian-kicker">Obsidian Vault 同步狀態</div>
+              <div class="obsidian-text" id="obsidian-note">讀取 Obsidian 同步狀態...</div>
+            </div>
+          </div>
+          <div class="news-section-title">新聞列表</div>
+          <div id="us-news-list"></div>
+        </div>
+      </section>
+    </section>
+
+    <section id="ci-us-news-view" style="display:none;">
+      <section class="panel">
+        <div class="panel-head">
+          <div>
+            <div class="panel-title">GitHub 新聞預覽</div>
+            <div class="muted" id="ci-us-news-note">讀取 GitHub Action 自動抓取的新聞；這裡只預覽，還不會寫入本機 SQLite 或 Obsidian。</div>
+          </div>
+        </div>
+        <div class="panel-body">
+          <section class="controls" style="padding:0; margin-bottom:12px;">
+            <div>
+              <label for="ci-us-mode">預覽來源</label>
+              <select id="ci-us-mode">
+                <option value="live" selected>GitHub Pages 最新</option>
+                <option value="local">本機快取</option>
+              </select>
+            </div>
+            <div>
+              <label for="ci-us-industry">產業篩選</label>
+              <select id="ci-us-industry">
+                <option value="">全部</option>
+                <option value="半導體 / AI">半導體 / AI</option>
+                <option value="AI / 伺服器">AI / 伺服器</option>
+                <option value="軟體雲端">軟體雲端</option>
+                <option value="電動車">電動車</option>
+                <option value="金融">金融</option>
+                <option value="能源">能源</option>
+                <option value="生技醫療">生技醫療</option>
+                <option value="消費零售">消費零售</option>
+                <option value="原物料">原物料</option>
+                <option value="總體經濟">總體經濟</option>
+                <option value="其他">其他</option>
+              </select>
+            </div>
+            <div>
+              <label for="ci-us-source">來源篩選</label>
+              <select id="ci-us-source">
+                <option value="">全部</option>
+              </select>
+            </div>
+            <div>
+              <label for="ci-us-query">搜尋</label>
+              <input id="ci-us-query" placeholder="標題、摘要、來源" />
+            </div>
+            <div style="align-self:end; display:flex; gap:8px; flex-wrap:wrap;">
+              <a class="secondary" id="ci-us-site-link" href="https://wenyen-hsu.github.io/stock/" target="_blank" rel="noreferrer">開啟 GitHub Pages</a>
+              <a class="secondary" id="ci-us-json-link" href="https://wenyen-hsu.github.io/stock/data/ci_us_news.json" target="_blank" rel="noreferrer">查看 JSON</a>
+            </div>
+          </section>
+          <div class="news-section-title" id="ci-us-news-title">GitHub Action 抓取結果</div>
+          <div id="ci-us-news-list"></div>
+        </div>
       </section>
     </section>
 
@@ -522,13 +888,17 @@ INDEX_HTML = """<!doctype html>
         </div>
         <div class="layout-2">
           <div>
-            <div class="panel-title" style="margin-bottom:8px;">已抓區間分點排行</div>
+            <div class="panel-title" style="margin-bottom:8px;">分點資料覆蓋狀態</div>
+            <div class="muted" style="margin-bottom:8px;">目前只補自選股與排名候選股，分點資料不參與全市場基礎排行；未有分點排行不代表行情、法人或營收缺資料。</div>
             <div id="coverage-table"></div>
           </div>
           <div>
             <div class="job-meta">
               <div class="panel-title">最近任務</div>
               <span class="status-pill" id="job-status">尚未執行</span>
+            </div>
+            <div class="publish-actions" id="job-actions" style="display:none;">
+              <button class="secondary" id="cancel-update">停止目前更新</button>
             </div>
             <pre class="log-box" id="job-log">尚未執行更新任務。</pre>
           </div>
@@ -541,7 +911,7 @@ INDEX_HTML = """<!doctype html>
       每日行情、成交均價、外資、投信、自營商買賣超取自
       <a href="https://www.twse.com.tw/" target="_blank" rel="noreferrer">TWSE 臺灣證券交易所</a>
       與 <a href="https://www.tpex.org.tw/" target="_blank" rel="noreferrer">TPEx 櫃買中心</a>
-      公開資料；區間外資、投信、均價、排行分數由本機 SQLite 依最近交易日重新彙總。
+      公開資料；融資融券取自 TWSE / TPEx 信用交易公開資料；區間外資、投信、均價、排行分數由本機 SQLite 依最近交易日重新彙總。
       月營收 24 個月歷史目前使用
       <a href="https://finmindtrade.com/" target="_blank" rel="noreferrer">FinMind</a>
       免費 API，月增率與年增率由本機依月營收與去年同期計算。
@@ -551,6 +921,11 @@ INDEX_HTML = """<!doctype html>
       個股新聞採手動按鈕觸發，來源為
       <a href="https://tw.stock.yahoo.com/" target="_blank" rel="noreferrer">Yahoo 股市</a>
       RSS 與公開文章頁，本機只保留標題、連結與內文摘錄。
+      美股新聞採手動按鈕觸發，來源為
+      <a href="https://finance.yahoo.com/" target="_blank" rel="noreferrer">Yahoo Finance</a>、
+      <a href="https://www.cnbc.com/" target="_blank" rel="noreferrer">CNBC</a>、
+      <a href="https://www.marketwatch.com/" target="_blank" rel="noreferrer">MarketWatch</a>
+      RSS；GitHub 新聞預覽讀取 GitHub Action 產出的靜態新聞 JSON，不寫入本機資料庫；產業分類預設由本機關鍵字規則快速判斷，可選擇 Ollama 模型輔助分類並記錄 token 數。
     </section>
   </main>
 
@@ -558,10 +933,23 @@ INDEX_HTML = """<!doctype html>
     window.STOCK_CHIP_STATIC = false;
   </script>
   <script>
-    const state = { tab: "ranking", previousTab: "ranking", detail: null, broker: "", lastDataUpdatedAt: "", chartRange: 20, rankingRows: [], rankingSort: null };
+    const state = { tab: "ranking", previousTab: "ranking", detail: null, broker: "", lastDataUpdatedAt: "", chartRange: 20, rankingRows: [], rankingSort: null, usNewsRows: [], ciUsNewsRows: [], ciUsNewsMeta: {}, columnGroup: "core" };
     const STATIC_MODE = window.STOCK_CHIP_STATIC === true;
     const staticCache = {};
-    const chartColors = { close: "#0f766e", ma5: "#b42318", ma10: "#175cd3", ma20: "#f59e0b", ma60: "#7a5af8" };
+    const chartColors = {
+      up: "#b42318",
+      down: "#087f5b",
+      flat: "#667085",
+      ma5: "#b42318",
+      ma10: "#175cd3",
+      ma20: "#f59e0b",
+      ma60: "#7a5af8",
+      revenueCurrent: "#0f766e",
+      revenueLastYear: "#94a3b8",
+      revenueYoy: "#b42318",
+      margin: "#175cd3",
+      short: "#f59e0b"
+    };
     const fmt = (v) => {
       if (v === null || v === undefined || v === "") return "";
       const n = Number(v);
@@ -570,6 +958,23 @@ INDEX_HTML = """<!doctype html>
     };
     const cls = (v) => Number(v) > 0 ? "pos" : Number(v) < 0 ? "neg" : "";
     const esc = (v) => String(v ?? "").replace(/[&<>"']/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
+    function linkifyUrls(text) {
+      return esc(text).replace(/(https?:[/][/][^\\s]+)/g, url => `<a href="${url}" target="_blank" rel="noreferrer">${url}</a>`);
+    }
+    function parseLocalTime(value) {
+      if (!value) return null;
+      const text = String(value).replace(" ", "T");
+      const date = new Date(text);
+      return Number.isNaN(date.getTime()) ? null : date;
+    }
+    function freshness(value, warnHours = 24, badHours = 48) {
+      const date = parseLocalTime(value);
+      if (!date) return { klass: "bad", label: "尚無資料", detail: "" };
+      const hours = Math.max(0, (Date.now() - date.getTime()) / 36e5);
+      if (hours >= badHours) return { klass: "bad", label: "過期", detail: `${Math.round(hours)} 小時前` };
+      if (hours >= warnHours) return { klass: "warn", label: "偏舊", detail: `${Math.round(hours)} 小時前` };
+      return { klass: "done", label: "新鮮", detail: `${Math.round(hours)} 小時前` };
+    }
     function staticWatchlistIds() {
       try {
         const saved = JSON.parse(localStorage.getItem("stockChipWatchlist") || "null");
@@ -587,13 +992,15 @@ INDEX_HTML = """<!doctype html>
       staticCache[path] = await res.json();
       return staticCache[path];
     }
-    function staticFilterRows(rows, market, q, limit) {
+    function staticFilterRows(rows, market, q, limit, minVolume = 0) {
       const text = String(q || "").trim().toLowerCase();
       const max = Number(limit || 50);
+      const volumeFloor = Number(minVolume || 0);
       const output = [];
       for (const row of rows || []) {
         if (market && row.market !== market) continue;
         if (text && !String(row.stock_id || "").toLowerCase().includes(text) && !String(row.name || "").toLowerCase().includes(text)) continue;
+        if (volumeFloor > 0 && Number(row.volume_lot || 0) < volumeFloor) continue;
         output.push(row);
         if (output.length >= max) break;
       }
@@ -616,7 +1023,7 @@ INDEX_HTML = """<!doctype html>
           : await staticData(`data/rankings/${days}d/${ranking}.json`);
         return {
           title: `${days} 日排行：${ranking}`,
-          rows: staticFilterRows(source.rows || source, parsed.searchParams.get("market") || "", q, parsed.searchParams.get("limit") || 50),
+          rows: staticFilterRows(source.rows || source, parsed.searchParams.get("market") || "", q, parsed.searchParams.get("limit") || 50, parsed.searchParams.get("min_volume") || 0),
         };
       }
       if (parsed.pathname === "/api/watchlist") {
@@ -625,7 +1032,7 @@ INDEX_HTML = """<!doctype html>
         const order = new Map(ids.map((id, idx) => [id, idx]));
         const rows = (source.rows || source).filter(row => order.has(String(row.stock_id)))
           .sort((a, b) => order.get(String(a.stock_id)) - order.get(String(b.stock_id)));
-        return {rows: staticFilterRows(rows, parsed.searchParams.get("market") || "", parsed.searchParams.get("q") || "", parsed.searchParams.get("limit") || 50)};
+        return {rows: staticFilterRows(rows, parsed.searchParams.get("market") || "", parsed.searchParams.get("q") || "", parsed.searchParams.get("limit") || 50, parsed.searchParams.get("min_volume") || 0)};
       }
       if (parsed.pathname === "/api/stock") {
         const stockId = parsed.searchParams.get("stock_id") || "2376";
@@ -639,6 +1046,43 @@ INDEX_HTML = """<!doctype html>
       if (parsed.pathname === "/api/update-tasks") {
         const meta = await staticData("data/meta.json");
         return {running: false, latest_job: null, latest_data_updated_at: meta.exported_at || "", tasks: []};
+      }
+      if (parsed.pathname === "/api/us-news") {
+        const data = await staticData("data/us_news.json");
+        const industry = parsed.searchParams.get("industry") || "";
+        const limit = Number(parsed.searchParams.get("limit") || 80);
+        const rows = (data.rows || []).filter(row => !industry || row.industry === industry).slice(0, limit);
+        return {rows};
+      }
+      if (parsed.pathname === "/api/ci-us-news" || parsed.pathname === "/api/ci-us-news-live") {
+        let data;
+        try {
+          data = await staticData("data/ci_us_news.json");
+        } catch (_err) {
+          data = await staticData("data/us_news.json");
+        }
+        const industry = parsed.searchParams.get("industry") || "";
+        const source = parsed.searchParams.get("source") || "";
+        const q = String(parsed.searchParams.get("q") || "").trim().toLowerCase();
+        const limit = Number(parsed.searchParams.get("limit") || 200);
+        const rows = (data.rows || []).filter(row => {
+          if (industry && row.industry !== industry) return false;
+          if (source && row.source !== source) return false;
+          if (q) {
+            const text = [row.title, row.summary, row.reason, row.source, row.industry].join(" ").toLowerCase();
+            if (!text.includes(q)) return false;
+          }
+          return true;
+        }).slice(0, limit);
+        return {
+          generated_at: data.generated_at || "",
+          row_count: data.row_count || (data.rows || []).length,
+          fetched_count: data.fetched_count || 0,
+          rows,
+          sources: [...new Set((data.rows || []).map(row => row.source).filter(Boolean))].sort(),
+          source_mode: parsed.pathname === "/api/ci-us-news-live" ? "github_pages" : "local",
+          source_url: parsed.pathname === "/api/ci-us-news-live" ? "https://wenyen-hsu.github.io/stock/data/ci_us_news.json" : "data/ci_us_news.json",
+        };
       }
       throw new Error(`靜態版不支援：${parsed.pathname}`);
     }
@@ -667,13 +1111,26 @@ INDEX_HTML = """<!doctype html>
       return res.json();
     }
     function params() {
+      const ranking = document.querySelector("#ranking").value;
+      const daysSelect = document.querySelector("#days");
+      if (ranking === "foreign_5d_revenue_growth" && daysSelect.value !== "5") {
+        daysSelect.value = "5";
+      }
       return new URLSearchParams({
-        days: document.querySelector("#days").value,
-        ranking: document.querySelector("#ranking").value,
+        days: daysSelect.value,
+        ranking,
         market: document.querySelector("#market").value,
         q: document.querySelector("#query").value.trim(),
+        min_volume: document.querySelector("#min-volume").value.trim(),
         limit: document.querySelector("#limit").value
       });
+    }
+    function enforceRankingDays() {
+      const ranking = document.querySelector("#ranking").value;
+      const daysSelect = document.querySelector("#days");
+      if (ranking === "foreign_5d_revenue_growth" && daysSelect.value !== "5") {
+        daysSelect.value = "5";
+      }
     }
     function renderMetrics(target, rows) {
       target.innerHTML = rows.map(([label, value, klass]) =>
@@ -729,11 +1186,6 @@ INDEX_HTML = """<!doctype html>
       return [...document.querySelectorAll(".ma-toggle:checked")].map(input => input.value);
     }
     function syncSeriesSwatches() {
-      document.querySelectorAll(".series-option").forEach(label => {
-        const swatch = label.querySelector(".legend-swatch");
-        const color = chartColors[label.dataset.series] || "#607080";
-        if (swatch) swatch.style.background = color;
-      });
       document.querySelectorAll(".ma-option").forEach(label => {
         const swatch = label.querySelector(".legend-swatch");
         const color = chartColors[`ma${label.dataset.ma}`] || "#607080";
@@ -770,6 +1222,8 @@ INDEX_HTML = """<!doctype html>
       if (!canvas || !legend) return;
       const wrap = canvas.parentElement;
       const dpr = window.devicePixelRatio || 1;
+      canvas.style.width = `${wrap.clientWidth}px`;
+      canvas.style.height = `${wrap.clientHeight}px`;
       canvas.width = Math.floor(wrap.clientWidth * dpr);
       canvas.height = Math.floor(wrap.clientHeight * dpr);
       const ctx = canvas.getContext("2d");
@@ -779,23 +1233,25 @@ INDEX_HTML = """<!doctype html>
         legend.innerHTML = `<span class="muted">沒有股價資料。</span>`;
         return;
       }
-      const series = [];
-      if (document.querySelector("#close-toggle")?.checked) {
-        series.push({ key: "close", label: "收盤", color: chartColors.close });
-      }
-      selectedMaPeriods().forEach(period => series.push({ key: `ma${period}`, label: `MA${period}`, color: chartColors[`ma${period}`] }));
+      const maSeries = selectedMaPeriods().map(period => ({ key: `ma${period}`, label: `MA${period}`, color: chartColors[`ma${period}`] }));
       const values = [];
-      rows.forEach(row => series.forEach(s => {
-        const n = Number(row[s.key]);
-        if (Number.isFinite(n) && n > 0) values.push(n);
-      }));
+      rows.forEach(row => {
+        ["open", "high", "low", "close"].forEach(key => {
+          const n = Number(row[key]);
+          if (Number.isFinite(n) && n > 0) values.push(n);
+        });
+        maSeries.forEach(s => {
+          const n = Number(row[s.key]);
+          if (Number.isFinite(n) && n > 0) values.push(n);
+        });
+      });
       if (!values.length) {
         legend.innerHTML = `<span class="muted">沒有可繪製的價格。</span>`;
         return;
       }
       const w = wrap.clientWidth;
       const h = wrap.clientHeight;
-      const pad = { top: 12, right: 54, bottom: 34, left: 48 };
+      const pad = { top: 12, right: 54, bottom: 72, left: 48 };
       let min = Math.min(...values);
       let max = Math.max(...values);
       const span = max - min || max * 0.04 || 1;
@@ -825,10 +1281,42 @@ INDEX_HTML = """<!doctype html>
         if (idx % tickStep !== 0 && idx !== rows.length - 1) return;
         ctx.fillText(String(row.date).slice(5), x(idx), h - pad.bottom + 10);
       });
+      const volumeMax = Math.max(...rows.map(row => Number(row.volume_lot || 0)), 0);
+      const volumeTop = h - 44;
+      const volumeBottom = h - 18;
+      const slot = rows.length <= 1 ? (w - pad.left - pad.right) : (w - pad.left - pad.right) / rows.length;
+      const candleWidth = Math.max(4, Math.min(14, slot * 0.58));
+      rows.forEach((row, idx) => {
+        const open = Number(row.open);
+        const high = Number(row.high);
+        const low = Number(row.low);
+        const close = Number(row.close);
+        if (![open, high, low, close].every(Number.isFinite)) return;
+        const cx = x(idx);
+        const color = close > open ? chartColors.up : close < open ? chartColors.down : chartColors.flat;
+        const top = y(Math.max(open, close));
+        const bottom = y(Math.min(open, close));
+        ctx.strokeStyle = color;
+        ctx.fillStyle = color;
+        ctx.lineWidth = 1.5;
+        if (volumeMax > 0) {
+          const volume = Number(row.volume_lot || 0);
+          const vh = (volume / volumeMax) * (volumeBottom - volumeTop);
+          ctx.globalAlpha = 0.22;
+          ctx.fillRect(cx - candleWidth / 2, volumeBottom - vh, candleWidth, Math.max(1, vh));
+          ctx.globalAlpha = 1;
+        }
+        ctx.beginPath();
+        ctx.moveTo(cx, y(high));
+        ctx.lineTo(cx, y(low));
+        ctx.stroke();
+        const bodyHeight = Math.max(2, bottom - top);
+        ctx.fillRect(cx - candleWidth / 2, top, candleWidth, bodyHeight);
+      });
       function drawLine(s) {
         ctx.beginPath();
         ctx.strokeStyle = s.color;
-        ctx.lineWidth = s.key === "close" ? 2.5 : 1.8;
+        ctx.lineWidth = 1.8;
         let started = false;
         rows.forEach((row, idx) => {
           const n = Number(row[s.key]);
@@ -845,12 +1333,221 @@ INDEX_HTML = """<!doctype html>
         });
         ctx.stroke();
       }
-      series.forEach(drawLine);
+      maSeries.forEach(drawLine);
       const latest = rows[rows.length - 1];
-      legend.innerHTML = series.map(s => {
+      const candleLegend = [
+        `<span class="legend-item"><span class="legend-swatch" style="background:${chartColors.up}"></span>上漲K</span>`,
+        `<span class="legend-item"><span class="legend-swatch" style="background:${chartColors.down}"></span>下跌K</span>`,
+        `<span class="legend-item">收盤 ${esc(fmt(latest?.close))}</span>`,
+        `<span class="legend-item">量 ${esc(fmt(latest?.volume_lot))} 張</span>`
+      ].join("");
+      legend.innerHTML = candleLegend + maSeries.map(s => {
         const value = latest?.[s.key];
         return `<span class="legend-item"><span class="legend-swatch" style="background:${s.color}"></span>${esc(s.label)} ${esc(fmt(value))}</span>`;
       }).join("") + `<span class="muted">顯示 ${rows.length} / ${allRows.length} 日，滾輪可縮放</span>`;
+    }
+    function renderRevenueChart() {
+      const canvas = document.querySelector("#revenue-chart");
+      const legend = document.querySelector("#revenue-legend");
+      const rows = [...(state.detail?.revenues || [])].reverse().slice(-12);
+      if (!canvas || !legend) return;
+      const wrap = canvas.parentElement;
+      const dpr = window.devicePixelRatio || 1;
+      canvas.style.width = `${wrap.clientWidth}px`;
+      canvas.style.height = `${wrap.clientHeight}px`;
+      canvas.width = Math.floor(wrap.clientWidth * dpr);
+      canvas.height = Math.floor(wrap.clientHeight * dpr);
+      const ctx = canvas.getContext("2d");
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      ctx.clearRect(0, 0, wrap.clientWidth, wrap.clientHeight);
+      if (!rows.length) {
+        legend.innerHTML = `<span class="muted">沒有營收資料。</span>`;
+        return;
+      }
+      const values = [];
+      rows.forEach(row => {
+        const current = Number(row.revenue_million);
+        const lastYear = Number(row.last_year_revenue_million);
+        if (Number.isFinite(current) && current > 0) values.push(current);
+        if (Number.isFinite(lastYear) && lastYear > 0) values.push(lastYear);
+      });
+      if (!values.length) {
+        legend.innerHTML = `<span class="muted">沒有可繪製的營收。</span>`;
+        return;
+      }
+      const w = wrap.clientWidth;
+      const h = wrap.clientHeight;
+      const pad = { top: 14, right: 20, bottom: 42, left: 64 };
+      const max = Math.max(...values) * 1.16;
+      const y = value => pad.top + (max - value) * (h - pad.top - pad.bottom) / max;
+      const baseY = h - pad.bottom;
+      ctx.font = "12px -apple-system, BlinkMacSystemFont, Segoe UI, sans-serif";
+      ctx.lineWidth = 1;
+      ctx.strokeStyle = "#edf1f4";
+      ctx.fillStyle = "#607080";
+      ctx.textAlign = "right";
+      ctx.textBaseline = "middle";
+      for (let i = 0; i <= 4; i++) {
+        const gy = pad.top + i * (h - pad.top - pad.bottom) / 4;
+        const value = max - i * max / 4;
+        ctx.beginPath();
+        ctx.moveTo(pad.left, gy);
+        ctx.lineTo(w - pad.right, gy);
+        ctx.stroke();
+        ctx.fillText(fmt(value), pad.left - 8, gy);
+      }
+      const plotW = w - pad.left - pad.right;
+      const groupW = plotW / rows.length;
+      const barW = Math.max(5, Math.min(18, groupW * 0.26));
+      const yoyValues = rows.map(row => Number(row.yoy_pct)).filter(Number.isFinite);
+      let yoyMin = yoyValues.length ? Math.min(...yoyValues) : 0;
+      let yoyMax = yoyValues.length ? Math.max(...yoyValues) : 0;
+      const yoySpan = yoyMax - yoyMin || Math.max(Math.abs(yoyMax), 10);
+      yoyMin -= yoySpan * 0.18;
+      yoyMax += yoySpan * 0.18;
+      const yPct = value => pad.top + (yoyMax - value) * (h - pad.top - pad.bottom) / (yoyMax - yoyMin || 1);
+      rows.forEach((row, idx) => {
+        const center = pad.left + groupW * idx + groupW / 2;
+        const lastYear = Number(row.last_year_revenue_million);
+        const current = Number(row.revenue_million);
+        [
+          { value: lastYear, x: center - barW * 0.65, color: chartColors.revenueLastYear },
+          { value: current, x: center + barW * 0.65, color: chartColors.revenueCurrent }
+        ].forEach(bar => {
+          if (!Number.isFinite(bar.value) || bar.value <= 0) return;
+          const top = y(bar.value);
+          ctx.fillStyle = bar.color;
+          ctx.fillRect(bar.x - barW / 2, top, barW, Math.max(1, baseY - top));
+        });
+        ctx.fillStyle = "#607080";
+        ctx.textAlign = "center";
+        ctx.textBaseline = "top";
+        ctx.fillText(String(row.revenue_month || "").slice(2), center, baseY + 10);
+      });
+      if (yoyValues.length) {
+        ctx.strokeStyle = chartColors.revenueYoy;
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        let started = false;
+        rows.forEach((row, idx) => {
+          const yoy = Number(row.yoy_pct);
+          if (!Number.isFinite(yoy)) {
+            started = false;
+            return;
+          }
+          const center = pad.left + groupW * idx + groupW / 2;
+          const py = yPct(yoy);
+          if (!started) {
+            ctx.moveTo(center, py);
+            started = true;
+          } else {
+            ctx.lineTo(center, py);
+          }
+        });
+        ctx.stroke();
+        rows.forEach((row, idx) => {
+          const yoy = Number(row.yoy_pct);
+          if (!Number.isFinite(yoy)) return;
+          const center = pad.left + groupW * idx + groupW / 2;
+          ctx.fillStyle = chartColors.revenueYoy;
+          ctx.beginPath();
+          ctx.arc(center, yPct(yoy), 2.6, 0, Math.PI * 2);
+          ctx.fill();
+        });
+      }
+      const latest = rows[rows.length - 1];
+      legend.innerHTML = [
+        `<span class="legend-item"><span class="legend-swatch" style="background:${chartColors.revenueCurrent}"></span>本期 ${esc(fmt(latest?.revenue_million))} 百萬</span>`,
+        `<span class="legend-item"><span class="legend-swatch" style="background:${chartColors.revenueLastYear}"></span>去年同期 ${esc(fmt(latest?.last_year_revenue_million))} 百萬</span>`,
+        `<span class="legend-item"><span class="legend-swatch" style="background:${chartColors.revenueYoy}"></span>YoY 線</span>`,
+        `<span class="${cls(latest?.yoy_pct)}">年增 ${esc(fmt(latest?.yoy_pct))}%</span>`
+      ].join("");
+    }
+    function renderMarginChart() {
+      const canvas = document.querySelector("#margin-chart");
+      const legend = document.querySelector("#margin-legend");
+      const rows = [...(state.detail?.margin || [])].reverse();
+      if (!canvas || !legend) return;
+      const wrap = canvas.parentElement;
+      const dpr = window.devicePixelRatio || 1;
+      canvas.style.width = `${wrap.clientWidth}px`;
+      canvas.style.height = `${wrap.clientHeight}px`;
+      canvas.width = Math.floor(wrap.clientWidth * dpr);
+      canvas.height = Math.floor(wrap.clientHeight * dpr);
+      const ctx = canvas.getContext("2d");
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      ctx.clearRect(0, 0, wrap.clientWidth, wrap.clientHeight);
+      if (!rows.length) {
+        legend.innerHTML = `<span class="muted">沒有融資融券資料。</span>`;
+        return;
+      }
+      const series = [
+        { key: "margin_balance_lot", label: "融資餘額", color: chartColors.margin },
+        { key: "short_balance_lot", label: "融券餘額", color: chartColors.short }
+      ];
+      const values = [];
+      rows.forEach(row => series.forEach(s => {
+        const n = Number(row[s.key]);
+        if (Number.isFinite(n)) values.push(n);
+      }));
+      if (!values.length) {
+        legend.innerHTML = `<span class="muted">沒有可繪製的融資融券餘額。</span>`;
+        return;
+      }
+      const w = wrap.clientWidth;
+      const h = wrap.clientHeight;
+      const pad = { top: 14, right: 28, bottom: 38, left: 62 };
+      let min = Math.min(...values);
+      let max = Math.max(...values);
+      const span = max - min || Math.max(max * 0.08, 1);
+      min -= span * 0.12;
+      max += span * 0.12;
+      const x = idx => pad.left + (rows.length <= 1 ? 0 : idx * (w - pad.left - pad.right) / (rows.length - 1));
+      const y = value => pad.top + (max - value) * (h - pad.top - pad.bottom) / (max - min);
+      ctx.font = "12px -apple-system, BlinkMacSystemFont, Segoe UI, sans-serif";
+      ctx.lineWidth = 1;
+      ctx.strokeStyle = "#edf1f4";
+      ctx.fillStyle = "#607080";
+      ctx.textAlign = "right";
+      ctx.textBaseline = "middle";
+      for (let i = 0; i <= 4; i++) {
+        const gy = pad.top + i * (h - pad.top - pad.bottom) / 4;
+        const value = max - i * (max - min) / 4;
+        ctx.beginPath();
+        ctx.moveTo(pad.left, gy);
+        ctx.lineTo(w - pad.right, gy);
+        ctx.stroke();
+        ctx.fillText(fmt(value), pad.left - 8, gy);
+      }
+      ctx.textAlign = "center";
+      ctx.textBaseline = "top";
+      const tickStep = Math.max(1, Math.ceil(rows.length / 5));
+      rows.forEach((row, idx) => {
+        if (idx % tickStep !== 0 && idx !== rows.length - 1) return;
+        ctx.fillText(String(row.date || "").slice(5), x(idx), h - pad.bottom + 10);
+      });
+      series.forEach(s => {
+        ctx.beginPath();
+        ctx.strokeStyle = s.color;
+        ctx.lineWidth = 2;
+        let started = false;
+        rows.forEach((row, idx) => {
+          const n = Number(row[s.key]);
+          if (!Number.isFinite(n)) {
+            started = false;
+            return;
+          }
+          if (!started) {
+            ctx.moveTo(x(idx), y(n));
+            started = true;
+          } else {
+            ctx.lineTo(x(idx), y(n));
+          }
+        });
+        ctx.stroke();
+      });
+      const latest = rows[rows.length - 1];
+      legend.innerHTML = series.map(s => `<span class="legend-item"><span class="legend-swatch" style="background:${s.color}"></span>${esc(s.label)} ${esc(fmt(latest?.[s.key]))}</span>`).join("");
     }
     function renderNews() {
       const target = document.querySelector("#news-list");
@@ -868,7 +1565,8 @@ INDEX_HTML = """<!doctype html>
       target.innerHTML = `<div class="news-list">${rows.map(row => {
         const text = row.content_excerpt || row.summary || "";
         return `<article class="news-item">
-          <a class="news-title" href="${esc(row.url)}" target="_blank" rel="noreferrer">${esc(row.title)}</a>
+          <a class="news-title" href="${esc(row.url)}" target="_self" rel="noreferrer">${esc(row.title)}</a>
+          <a class="news-open" href="${esc(row.url)}" target="_self" rel="noreferrer">開啟原文</a>
           <div class="news-meta">${esc(row.source || "Yahoo股市")} · ${esc(row.published_at || "")} · 抓取 ${esc(row.fetched_at || "")}</div>
           <div class="news-text">${esc(text)}</div>
         </article>`;
@@ -894,6 +1592,156 @@ INDEX_HTML = """<!doctype html>
         btn.textContent = "抓取新聞";
       }
     }
+    function renderUSNews(rows) {
+      const target = document.querySelector("#us-news-list");
+      const note = document.querySelector("#us-news-note");
+      if (!target || !note) return;
+      const latestFetch = rows.map(row => row.fetched_at).filter(Boolean).sort().at(-1);
+      const aiCount = rows.filter(row => String(row.classified_by || "").startsWith("ollama:")).length;
+      const tokenTotal = rows.reduce((sum, row) => sum + Number(row.classification_total_tokens || 0), 0);
+      note.textContent = latestFetch
+        ? `本機快取 ${rows.length} 則，最後抓取 ${latestFetch}，Ollama 分類 ${aiCount} 則，分類 token ${fmt(tokenTotal)}`
+        : "尚無快取；按「抓取美股新聞」後會抓 Yahoo Finance、CNBC、MarketWatch RSS，預設用 0 token 規則分類";
+      if (!rows.length) {
+        target.innerHTML = `<div class="empty">${STATIC_MODE ? "靜態版目前未匯出美股新聞。" : "尚無美股新聞快取。"}</div>`;
+        return;
+      }
+      target.innerHTML = `<div class="news-list">${rows.map(row => {
+        const sentimentClass = row.sentiment === "偏多" ? "good" : row.sentiment === "偏空" ? "bad" : "";
+        const classifierClass = String(row.classified_by || "").startsWith("ollama:") ? "ai" : "";
+        return `<article class="news-item">
+          <a class="news-title" href="${esc(row.url)}" target="_self" rel="noreferrer">${esc(row.title)}</a>
+          <a class="news-open" href="${esc(row.url)}" target="_self" rel="noreferrer">開啟原文</a>
+          <div class="news-meta">${esc(row.symbol || "MARKET")} · ${esc(row.source || "")} · ${esc(row.published_at || "")} · 抓取 ${esc(row.fetched_at || "")}</div>
+          <div class="tag-list">
+            <span class="tag">${esc(row.industry || "其他")}</span>
+            <span class="tag">${esc(row.event_type || "一般新聞")}</span>
+            <span class="tag ${sentimentClass}">${esc(row.sentiment || "中性")}</span>
+            <span class="tag ${classifierClass}">${esc(row.classified_by || "rules")}</span>
+            <span class="tag">信心 ${esc(fmt(row.confidence || 0))}</span>
+            <span class="tag">token ${esc(fmt(row.classification_total_tokens || 0))}</span>
+          </div>
+          ${row.matched_keywords ? `<div class="news-match">命中詞：${esc(row.matched_keywords)}</div>` : ""}
+          <div class="news-text">${esc(row.reason || row.summary || "")}</div>
+        </article>`;
+      }).join("")}</div>`;
+    }
+    function renderCIUSNews(data) {
+      const target = document.querySelector("#ci-us-news-list");
+      const note = document.querySelector("#ci-us-news-note");
+      const sourceSelect = document.querySelector("#ci-us-source");
+      if (!target || !note) return;
+      const rows = data?.rows || [];
+      state.ciUsNewsRows = rows;
+      state.ciUsNewsMeta = data || {};
+      if (sourceSelect && !sourceSelect.dataset.loaded) {
+        const current = sourceSelect.value;
+        sourceSelect.innerHTML = `<option value="">全部</option>${(data?.sources || []).map(source => `<option value="${esc(source)}">${esc(source)}</option>`).join("")}`;
+        sourceSelect.value = current;
+        sourceSelect.dataset.loaded = "1";
+      }
+      const generated = data?.generated_at || "";
+      const fallback = data?.fallback ? "，目前以正式新聞檔暫代，等 GitHub Action 下一次成功後會改讀 CI 檔" : "";
+      const sourceLabel = data?.source_mode === "github_pages" ? "GitHub Pages 最新" : "本機快取";
+      note.textContent = generated
+        ? `${sourceLabel}：GitHub Action 新聞 ${fmt(data?.row_count || rows.length)} 則，最後抓取 ${generated}${fallback}`
+        : `${sourceLabel}：尚未產生 GitHub Action 新聞檔${fallback}`;
+      const title = document.querySelector("#ci-us-news-title");
+      if (title) title.textContent = data?.source_mode === "github_pages" ? "GitHub Pages 最新抓取結果" : "本機快取抓取結果";
+      if (!rows.length) {
+        target.innerHTML = `<div class="empty">目前沒有可預覽的 GitHub 新聞。</div>`;
+        return;
+      }
+      target.innerHTML = `<div class="news-list">${rows.map(row => {
+        const sentimentClass = row.sentiment === "偏多" ? "good" : row.sentiment === "偏空" ? "bad" : "";
+        return `<article class="news-item">
+          <a class="news-title" href="${esc(row.url)}" target="_self" rel="noreferrer">${esc(row.title)}</a>
+          <a class="news-open" href="${esc(row.url)}" target="_self" rel="noreferrer">開啟原文</a>
+          <div class="news-meta">${esc(row.symbol || "MARKET")} · ${esc(row.source || "")} · ${esc(row.published_at || "")} · 抓取 ${esc(row.fetched_at || "")}</div>
+          <div class="tag-list">
+            <span class="tag">${esc(row.industry || "其他")}</span>
+            <span class="tag">${esc(row.event_type || "一般新聞")}</span>
+            <span class="tag ${sentimentClass}">${esc(row.sentiment || "中性")}</span>
+            <span class="tag">${esc(row.classified_by || "rules")}</span>
+            <span class="tag">信心 ${esc(fmt(row.confidence || 0))}</span>
+          </div>
+          ${row.matched_keywords ? `<div class="news-match">命中詞：${esc(row.matched_keywords)}</div>` : ""}
+          <div class="news-text">${esc(row.summary || row.reason || "")}</div>
+        </article>`;
+      }).join("")}</div>`;
+    }
+    async function loadCIUSNews() {
+      const industry = document.querySelector("#ci-us-industry")?.value || "";
+      const source = document.querySelector("#ci-us-source")?.value || "";
+      const q = document.querySelector("#ci-us-query")?.value || "";
+      const mode = document.querySelector("#ci-us-mode")?.value || "live";
+      const endpoint = mode === "local" ? "/api/ci-us-news" : "/api/ci-us-news-live";
+      const data = await getJSON(`${endpoint}?industry=${encodeURIComponent(industry)}&source=${encodeURIComponent(source)}&q=${encodeURIComponent(q)}&limit=200`);
+      renderCIUSNews(data);
+    }
+    function renderObsidianStatus(data) {
+      const note = document.querySelector("#obsidian-note");
+      if (!note) return;
+      if (!data?.exists) {
+        note.innerHTML = "尚未建立 vault；抓取美股新聞後會自動建立 <strong>obsidian/news-vault</strong>。";
+        return;
+      }
+      note.innerHTML = `
+        <strong>${esc(data.vault_dir || "obsidian/news-vault")}</strong>
+        <span>raw ${esc(fmt(data.raw_count || 0))} 則（保留近 ${esc(fmt(data.retention_days || 3))} 日）</span>
+        <span>daily ${esc(fmt(data.daily_count || 0))} 檔</span>
+        <span>產業 ${esc(fmt(data.industry_count || 0))} 檔</span>
+        <span>最後同步 ${esc(data.updated_at || "-")}</span>
+      `;
+    }
+    async function loadObsidianStatus() {
+      if (STATIC_MODE) {
+        renderObsidianStatus({exists:false});
+        return;
+      }
+      try {
+        renderObsidianStatus(await getJSON("/api/obsidian/status"));
+      } catch (err) {
+        const note = document.querySelector("#obsidian-note");
+        if (note) note.textContent = `Obsidian 狀態讀取失敗：${err.message}`;
+      }
+    }
+    async function loadUSNews() {
+      const industry = document.querySelector("#us-industry")?.value || "";
+      const [data] = await Promise.all([
+        getJSON(`/api/us-news?industry=${encodeURIComponent(industry)}&limit=80`),
+        loadObsidianStatus()
+      ]);
+      state.usNewsRows = data.rows || [];
+      renderUSNews(state.usNewsRows);
+    }
+    async function refreshUSNews() {
+      const btn = document.querySelector("#refresh-us-news");
+      if (!btn) return;
+      const original = btn.textContent;
+      btn.disabled = true;
+      btn.textContent = "抓取中";
+      document.querySelector("#us-news-note").textContent = document.querySelector("#us-use-ollama").checked
+        ? "正在抓取 RSS 並執行 Ollama 分類，第一次可能需要較久..."
+        : "正在抓取 RSS 並執行本機規則快速分類，分類 token 為 0...";
+      try {
+        const mode = document.querySelector("#us-news-mode").value;
+        const symbols = mode === "symbols"
+          ? document.querySelector("#us-symbols").value.split(",").map(item => item.trim()).filter(Boolean)
+          : [];
+        const limit = Number(document.querySelector("#us-limit").value || 5);
+        const useOllama = document.querySelector("#us-use-ollama").checked;
+        const result = await postJSON("/api/us-news/refresh", { symbols, limit, use_ollama: useOllama, include_symbol_news: mode === "symbols" });
+        state.usNewsRows = result.rows || [];
+        renderUSNews(state.usNewsRows);
+        if (result.obsidian) renderObsidianStatus(result.obsidian);
+      } catch (err) {
+        document.querySelector("#us-news-note").textContent = `抓取失敗：${err.message}`;
+      } finally {
+        btn.disabled = false;
+        btn.textContent = original;
+      }
+    }
     async function refreshSingleSection(section, btn) {
       const stock = state.detail?.stock?.stock_id || document.querySelector("#detail-stock").value.trim();
       const days = Number(document.querySelector("#days").value || 20);
@@ -915,21 +1763,69 @@ INDEX_HTML = """<!doctype html>
       btn.textContent = original;
     }
     const rankingCols = [
-      {key:"stock_id", label:"代號", sortType:"text", format: v => v},
-      {key:"name", label:"名稱", sortType:"text"},
-      {key:"market", label:"市場", sortType:"text"},
-      {key:"close", label:"收盤"},
-      {key:"observed_days", label:"資料日"},
-      {key:"total_score", label:"總分", signed:true},
-      {key:"chip_score", label:"法人分", signed:true},
-      {key:"branch_score", label:"分點分", signed:true},
-      {key:"foreign_net_lot", label:"外資", signed:true},
-      {key:"trust_net_lot", label:"投信", signed:true},
-      {key:"avg_price", label:"均價"},
-      {key:"top_buy_branch_name", label:"買超分點", sortType:"text"},
-      {key:"top_buy_branch_net_lot", label:"買超", signed:true},
-      {key:"top_buy_branch_avg_price", label:"買超均價"}
+      {key:"stock_id", label:"代號", sortType:"text", format: v => v, groups:["core","chip","foreign","revenue","margin","volume","branch"]},
+      {key:"name", label:"名稱", sortType:"text", groups:["core","chip","foreign","revenue","margin","volume","branch"]},
+      {key:"market", label:"市場", sortType:"text", groups:["core"]},
+      {key:"close", label:"收盤", groups:["core","chip","foreign","revenue","margin","volume"]},
+      {key:"observed_days", label:"資料日", groups:["core"]},
+      {key:"total_score", label:"基礎分", signed:true, groups:["core"]},
+      {key:"chip_score", label:"法人分", signed:true, groups:["core","chip"]},
+      {key:"revenue_momentum_score", label:"營收分", signed:true, groups:["core","revenue"]},
+      {key:"margin_score", label:"融資分", signed:true, groups:["core","margin"]},
+      {key:"volume_lot", label:"成交量", groups:["core","chip","foreign","volume"]},
+      {key:"latest_volume_lot", label:"最新日量", groups:["volume"]},
+      {key:"volume_avg_lot", label:"區間均量", groups:["volume"]},
+      {key:"volume_5d_avg_lot", label:"5日均量", groups:["volume"]},
+      {key:"volume_ratio_1d", label:"單日量倍", groups:["volume"]},
+      {key:"volume_ratio_5d", label:"5日量倍", groups:["volume"]},
+      {key:"volume_score", label:"量能分", signed:true, groups:["volume"]},
+      {key:"volume_signal", label:"量能", sortType:"text", groups:["volume"]},
+      {key:"foreign_net_lot", label:"外資", signed:true, groups:["chip","foreign"]},
+      {key:"trust_net_lot", label:"投信", signed:true, groups:["chip"]},
+      {key:"inst_net_lot", label:"外資+投信", signed:true, groups:["chip"]},
+      {key:"foreign_net_volume_pct", label:"外資占量%", signed:true, groups:["chip","foreign"]},
+      {key:"latest_foreign_net_lot", label:"最近一日外資", signed:true, groups:["foreign"]},
+      {key:"foreign_buy_streak", label:"外資連買", groups:["foreign"]},
+      {key:"foreign_sell_streak", label:"外資連賣", groups:["foreign"]},
+      {key:"margin_balance_change_lot", label:"融資增減", signed:true, groups:["margin"]},
+      {key:"short_balance_change_lot", label:"融券增減", signed:true, groups:["margin"]},
+      {key:"avg_price", label:"均價", groups:["core"]},
+      {key:"branch_status", label:"分點狀態", sortType:"text", groups:["branch"]},
+      {key:"top_buy_branch_name", label:"買超分點", sortType:"text", groups:["branch"]},
+      {key:"branch_score", label:"分點分", signed:true, groups:["branch"]},
+      {key:"revenue_month", label:"營收月", sortType:"text", groups:["revenue"]},
+      {key:"revenue_mom_pct", label:"月增%", signed:true, groups:["revenue"]},
+      {key:"revenue_yoy_pct", label:"年增%", signed:true, groups:["revenue"]},
+      {key:"base_reason", label:"理由", sortType:"text", groups:["core"]}
     ];
+    const columnGroups = [
+      {key:"core", label:"核心", tip:"核心：用全市場較穩定可取得的資料做快速排序，包含收盤、資料日、基礎分、法人分、營收分、融資分、成交量與均價。"},
+      {key:"chip", label:"法人籌碼", tip:"法人籌碼：觀察外資、投信買賣超與外資占成交量比例。占量越高，代表法人買賣超相對當期成交量越集中。"},
+      {key:"foreign", label:"外資籌碼", tip:"外資籌碼：只看外資相關資料，包含區間外資買賣超、外資占成交量比例、最近一日外資、外資連買與連賣。適合判斷外資是否持續偏多或短線轉向。"},
+      {key:"revenue", label:"營收", tip:"營收：顯示最新營收月份、營收分、月增率與年增率，用來判斷基本面動能是否同步轉強。"},
+      {key:"margin", label:"融資券", tip:"融資券：觀察融資餘額與融券餘額增減。融資快速增加可能代表散戶追價，融資下降且法人買超通常較乾淨。"},
+      {key:"volume", label:"量能", tip:"量能：比較最新日成交量與區間平均量、5日均量與區間均量。單日量倍高代表當天成交明顯放大，5日量倍高代表最近一段時間量能持續升溫。"},
+      {key:"branch", label:"分點", tip:"分點：顯示區間買超分點、分點分與抓取狀態。這是進階資料，若狀態為缺資料或空回應，不應拿來影響全市場排行。"}
+    ];
+    function visibleRankingCols() {
+      return rankingCols.filter(col => (col.groups || ["core"]).includes(state.columnGroup));
+    }
+    function renderColumnControls() {
+      const target = document.querySelector("#ranking-columns");
+      if (!target) return;
+      target.innerHTML = columnGroups.map(group => `
+        <label class="toggle tooltip-anchor" data-tip="${esc(group.tip)}" title="${esc(group.tip)}">
+          <input type="radio" name="column-group" value="${esc(group.key)}" ${state.columnGroup === group.key ? "checked" : ""} />
+          ${esc(group.label)}
+        </label>
+      `).join("");
+      target.querySelectorAll("input[name='column-group']").forEach(input => {
+        input.addEventListener("change", () => {
+          state.columnGroup = input.value;
+          renderRankingTable();
+        });
+      });
+    }
     async function loadMeta() {
       const meta = await getJSON("/api/meta?days=" + document.querySelector("#days").value);
       renderMetrics(document.querySelector("#metrics"), [
@@ -960,8 +1856,10 @@ INDEX_HTML = """<!doctype html>
       renderRankingTable();
     }
     function renderRankingTable() {
-      const rows = sortRows(state.rankingRows || [], rankingCols, state.rankingSort);
-      renderTable(document.querySelector("#ranking-table"), rows, rankingCols, {
+      renderColumnControls();
+      const cols = visibleRankingCols();
+      const rows = sortRows(state.rankingRows || [], cols, state.rankingSort);
+      renderTable(document.querySelector("#ranking-table"), rows, cols, {
         rowId: row => row.stock_id,
         onClick: stock => openDetail(stock),
         sort: state.rankingSort,
@@ -971,6 +1869,108 @@ INDEX_HTML = """<!doctype html>
           renderRankingTable();
         }
       });
+    }
+    function renderSelectionAssist(selection) {
+      const target = document.querySelector("#selection-assist");
+      if (!target) return;
+      if (!selection) {
+        target.innerHTML = `<div class="empty">目前沒有足夠資料可計算選股輔助。</div>`;
+        return;
+      }
+      const cards = [
+        ["基礎選股分", selection.total_score, "法人 + 融資融券 + 營收"],
+        ["法人分", selection.chip_score, `法人占量 ${fmt(selection.inst_net_volume_pct)}%`],
+        ["融資分", selection.margin_score, `融資 ${fmt(selection.margin_balance_change_lot)} / 融券 ${fmt(selection.short_balance_change_lot)}`],
+        ["量能", selection.volume_signal || "無資料", `單日 ${fmt(selection.volume_ratio_1d)} 倍 / 5日 ${fmt(selection.volume_ratio_5d)} 倍`],
+        ["量能分", selection.volume_score, "獨立指標，尚未併入基礎分"],
+        ["營收動能", selection.revenue_momentum_score, `${esc(selection.revenue_month || "無月份")} 年增 ${fmt(selection.revenue_yoy_pct)}%`],
+        ["分點狀態", selection.branch_status || "未取得", "分點分只作個股進階確認"],
+        ["分點分", selection.branch_score, `買超分點 ${esc(selection.top_buy_branch_name || "未取得")}`],
+        ["共振分", selection.confluence_score, `距分點均價 ${fmt(selection.close_vs_top_buy_avg_pct)}%`],
+        ["完整籌碼分", selection.complete_chip_score, "基礎選股分 + 共振分"],
+      ];
+      target.innerHTML = `
+        <div class="assist-grid">
+          ${cards.map(([label, value, note]) => `
+            <div class="assist-card">
+              <div class="assist-label">${esc(label)}</div>
+              <div class="assist-value ${cls(value)}">${esc(typeof value === "number" ? fmt(value) : value)}</div>
+              <div class="assist-note">${esc(note)}</div>
+            </div>
+          `).join("")}
+        </div>
+        <div class="assist-reason">${esc(selection.base_reason || selection.selection_reason || "")}</div>
+      `;
+    }
+    function renderDataQuality(data) {
+      const target = document.querySelector("#detail-data-status");
+      const judgement = document.querySelector("#detail-judgement");
+      if (!target || !judgement) return;
+      const days = Number(document.querySelector("#days").value || 20);
+      const branchStatus = data.branch_top_status || {};
+      const statusText = {success:"已取得", empty:"來源空回應", failed:"抓取失敗", missing:"尚未抓取"}[branchStatus.status] || branchStatus.status || "未知";
+      const items = [
+        {
+          name: "每日行情",
+          ok: (data.daily || []).length >= Math.min(days, 5),
+          warn: (data.daily || []).length > 0,
+          value: `${fmt((data.daily || []).length)} / ${days} 日`,
+          detail: data.stock?.latest_date || "-"
+        },
+        {
+          name: "法人買賣超",
+          ok: (data.daily || []).some(row => Number(row.foreign_net_lot || 0) !== 0 || Number(row.trust_net_lot || 0) !== 0 || Number(row.dealer_net_lot || 0) !== 0),
+          warn: (data.daily || []).length > 0,
+          value: "每日進出",
+          detail: "0 可能是真 0，也可能是來源未提供"
+        },
+        {
+          name: "24月營收",
+          ok: (data.revenues || []).length >= 12,
+          warn: (data.revenues || []).length > 0,
+          value: `${fmt((data.revenues || []).length)} 個月`,
+          detail: data.revenues?.[0]?.revenue_month || "-"
+        },
+        {
+          name: "融資融券",
+          ok: (data.margin || []).length >= Math.min(days, 5),
+          warn: (data.margin || []).length > 0,
+          value: `${fmt((data.margin || []).length)} / ${days} 日`,
+          detail: data.margin?.[0]?.date || "-"
+        },
+        {
+          name: "分點排行",
+          ok: branchStatus.status === "success" && (data.branch_top || []).length > 0,
+          warn: ["empty", "missing"].includes(branchStatus.status),
+          value: statusText,
+          detail: branchStatus.updated_at || branchStatus.error || "-"
+        },
+        {
+          name: "新聞",
+          ok: (data.news || []).length > 0,
+          warn: false,
+          value: `${fmt((data.news || []).length)} 則`,
+          detail: (data.news || []).map(row => row.fetched_at).filter(Boolean).sort().at(-1) || "手動抓取"
+        }
+      ];
+      target.innerHTML = `<div class="status-grid">${items.map(item => {
+        const klass = item.ok ? "good" : item.warn ? "warn" : "bad";
+        return `<div class="status-card ${klass}">
+          <div class="status-name">${esc(item.name)}</div>
+          <div class="status-value">${esc(item.ok ? "可用" : item.warn ? "部分" : "缺資料")}</div>
+          <div class="status-detail">${esc(item.value)} · ${esc(item.detail)}</div>
+        </div>`;
+      }).join("")}</div>`;
+      const s = data.selection || {};
+      const notes = [];
+      if (Number(s.chip_score || 0) > 55) notes.push("法人籌碼偏強");
+      else if (Number(s.chip_score || 0) < 35) notes.push("法人籌碼偏弱");
+      if (Number(s.revenue_yoy_pct || 0) > 0 && Number(s.revenue_mom_pct || 0) > 0) notes.push("營收月增與年增同步為正");
+      else if ((data.revenues || []).length) notes.push("營收動能需要再確認");
+      if (Number(data.stock?.margin_balance_change_lot || 0) > 0 && Number(data.stock?.foreign_net_lot || 0) > 0) notes.push("外資買超但融資也增加，需留意追價風險");
+      if (branchStatus.status !== "success") notes.push("分點資料未完整，分點分只作參考");
+      if (!notes.length) notes.push("目前資料不足，先以基礎行情、法人與營收做初步觀察");
+      judgement.textContent = `初步判斷：${notes.join("；")}。這不是買賣建議，主要用來提醒目前資料完整度與矛盾點。`;
     }
     async function expandStockFromSearch() {
       const q = document.querySelector("#query").value.trim();
@@ -989,6 +1989,32 @@ INDEX_HTML = """<!doctype html>
         btn.textContent = "補資料失敗";
         document.querySelector("#ranking-table").innerHTML = `<div class="empty">補進資料庫失敗：${esc(err.message)}</div>`;
       }
+    }
+    async function openStockFromQuery() {
+      const q = document.querySelector("#query").value.trim();
+      if (!q) return false;
+      try {
+        const data = await getJSON(`/api/stock/resolve?query=${encodeURIComponent(q)}`);
+        if (data.stock_id) {
+          await openDetail(data.stock_id);
+          return true;
+        }
+      } catch (err) {
+        if (!STATIC_MODE) {
+          try {
+            const days = Number(document.querySelector("#days").value || 20);
+            const result = await postJSON("/api/stock/ensure", { query: q, days });
+            document.querySelector("#query").value = result.stock_id;
+            await loadMeta();
+            await openDetail(result.stock_id);
+            return true;
+          } catch (ensureErr) {
+            document.querySelector("#detail-title").textContent = "找不到股票";
+            document.querySelector("#detail-subtitle").textContent = ensureErr.message;
+          }
+        }
+      }
+      return false;
     }
     function updateWatchlistButton() {
       const btn = document.querySelector("#watchlist-toggle");
@@ -1031,7 +2057,7 @@ INDEX_HTML = """<!doctype html>
         {key:"empty_count", label:"空回應"},
         {key:"failed_count", label:"失敗"},
         {key:"total_stocks", label:"總數"},
-        {key:"remaining", label:"剩餘"}
+        {key:"remaining", label:"未有分點排行"}
       ]);
       await loadStaticPublishStatus();
     }
@@ -1041,13 +2067,29 @@ INDEX_HTML = """<!doctype html>
         return;
       }
       document.querySelector("#update-tasks").innerHTML = tasks.map(task => `
-        <div class="job-card ${task.id === "all_data" ? "primary-job" : ""}">
+        ${(() => {
+          const stale = freshness(task.last_data_updated_at, task.warn_hours || 24, task.bad_hours || 48);
+          const staleClass = stale.klass === "warn" ? "stale-warn" : stale.klass === "bad" ? "stale-bad" : "";
+          const runState = task.run_state || "";
+          const runLabel = task.run_label || "";
+          const runClass = runState === "done" ? "done" : runState === "running" ? "running" : runState === "pending" ? "warn" : "";
+          const buttonLabel = running
+            ? (runLabel || "等待中")
+            : task.id === "all_data" ? "一鍵更新"
+              : task.id === "all_market_revenue" ? "補齊全市場"
+              : "開始更新";
+          const extra = task.extra_status ? `<div class="job-extra">${esc(task.extra_status)}</div>` : "";
+          return `<div class="job-card ${task.id === "all_data" ? "primary-job" : ""} ${staleClass}">
           <div class="job-title">${esc(task.title)}</div>
           <div class="job-desc">${esc(task.description)}</div>
+          ${runLabel ? `<div class="job-time"><span class="status-pill ${runClass}">${esc(runLabel)}</span></div>` : ""}
           <div class="job-time">最後更新：${esc(task.last_updated_at || "尚未更新")}</div>
           <div class="job-time">資料更新：${esc(task.last_data_updated_at || "尚無資料")}</div>
-          <button class="${task.id === "all_data" ? "" : "secondary"}" data-task="${esc(task.id)}" ${running ? "disabled" : ""}>${running ? "執行中" : task.id === "all_data" ? "一鍵更新" : "開始更新"}</button>
-        </div>
+          <div class="job-time"><span class="status-pill ${stale.klass}">${esc(stale.label)}</span> ${esc(stale.detail)}</div>
+          ${extra}
+          <button class="${task.id === "all_data" ? "" : "secondary"}" data-task="${esc(task.id)}" ${running ? "disabled" : ""}>${esc(buttonLabel)}</button>
+        </div>`;
+        })()}
       `).join("");
       document.querySelectorAll("[data-task]").forEach(btn => btn.addEventListener("click", async () => {
         btn.disabled = true;
@@ -1065,24 +2107,48 @@ INDEX_HTML = """<!doctype html>
     function renderJob(job) {
       const status = document.querySelector("#job-status");
       const log = document.querySelector("#job-log");
+      const actions = document.querySelector("#job-actions");
       if (!job) {
         status.className = "status-pill";
         status.textContent = `尚未執行 · 最後更新 ${state.lastDataUpdatedAt || "-"}`;
+        if (actions) actions.style.display = "none";
         log.textContent = state.lastDataUpdatedAt
           ? `最後資料更新：${state.lastDataUpdatedAt}`
           : "尚未執行更新任務。";
         return;
       }
-      const statusText = {queued:"排隊中", running:"執行中", done:"完成", failed:"失敗"}[job.status] || job.status;
-      status.className = `status-pill ${job.status === "done" ? "done" : job.status === "failed" ? "failed" : job.status === "running" ? "running" : ""}`;
+      const statusText = {queued:"排隊中", running:"執行中", done:"完成", failed:"失敗", interrupted:"未正常結束"}[job.status] || job.status;
+      status.className = `status-pill ${job.status === "done" ? "done" : job.status === "failed" ? "failed" : job.possible_stuck ? "bad" : job.status === "running" ? "running" : job.status === "interrupted" ? "warn" : ""}`;
       status.textContent = `${statusText} · ${job.title || ""} · 最後更新 ${job.updated_at || "-"}`;
+      if (actions) actions.style.display = job.status === "running" ? "" : "none";
+      const health = job.health || {};
       log.textContent = [
         job.current_step ? `目前步驟：${job.current_step}` : "",
         job.started_at ? `開始：${job.started_at}` : "",
         job.updated_at ? `最後更新：${job.updated_at}` : "",
+        job.current_process_pid ? `子程序 PID：${job.current_process_pid}` : "",
+        health.last_write_at ? `分點最後寫入：${health.last_write_at}` : "",
+        health.stale_minutes !== undefined ? `距離最後寫入：約 ${health.stale_minutes} 分鐘` : "",
+        health.status_summary ? `分點進度：${health.status_summary}` : "",
+        job.possible_stuck ? "狀態判斷：可能卡住，建議停止後重新分批更新。" : "",
         job.finished_at ? `結束：${job.finished_at}` : "",
         job.error ? `錯誤：${job.error}` : "",
       ].filter(Boolean).join("\\n");
+    }
+    async function cancelCurrentUpdate() {
+      const btn = document.querySelector("#cancel-update");
+      if (!btn) return;
+      btn.disabled = true;
+      btn.textContent = "停止中";
+      try {
+        await postJSON("/api/update/cancel", {});
+        startJobPolling();
+      } catch (err) {
+        document.querySelector("#job-log").textContent = `停止失敗：${err.message}`;
+      } finally {
+        btn.disabled = false;
+        btn.textContent = "停止目前更新";
+      }
     }
     function renderStaticPublishStatus(data, message = "") {
       const status = document.querySelector("#static-publish-status");
@@ -1095,14 +2161,15 @@ INDEX_HTML = """<!doctype html>
       note.innerHTML = [
         data?.pages_url ? `<a href="${esc(data.pages_url)}" target="_blank" rel="noreferrer">${esc(data.pages_url)}</a>` : "",
         data?.exported_at ? `靜態資料匯出：${esc(data.exported_at)}` : "",
+        data?.ci_news?.generated_at ? `CI 新聞：${esc(data.ci_news.generated_at)}（${esc(fmt(data.ci_news.row_count || 0))} 則）` : "",
         data?.commit ? `目前 commit：${esc(data.commit)}` : "",
       ].filter(Boolean).join(" · ") || "尚無發布資訊";
-      log.textContent = message || [
+      log.innerHTML = linkifyUrls(message || [
         `分支：${data?.branch || "-"}`,
         `docs 變更：${fmt(data?.docs_changed || 0)} 個檔案`,
         `reports 變更：${fmt(data?.reports_changed || 0)} 個檔案`,
         `Pages：${data?.pages_url || "-"}`,
-      ].join("\\n");
+      ].join("\\n"));
     }
     async function loadStaticPublishStatus() {
       if (STATIC_MODE) return;
@@ -1115,7 +2182,7 @@ INDEX_HTML = """<!doctype html>
           status.className = "status-pill failed";
           status.textContent = "讀取失敗";
         }
-        if (log) log.textContent = err.message;
+        if (log) log.innerHTML = linkifyUrls(err.message);
       }
     }
     async function runStaticAction(action, btn) {
@@ -1134,7 +2201,7 @@ INDEX_HTML = """<!doctype html>
           status.className = "status-pill failed";
           status.textContent = "失敗";
         }
-        if (log) log.textContent = err.message;
+        if (log) log.innerHTML = linkifyUrls(err.message);
       } finally {
         btn.textContent = original;
         document.querySelectorAll("#static-export, #static-publish").forEach(item => item.disabled = false);
@@ -1191,10 +2258,18 @@ INDEX_HTML = """<!doctype html>
       renderMetrics(document.querySelector("#detail-metrics"), [
         ["收盤", fmt(data.stock.close)],
         [`${days}日均價`, fmt(data.stock.avg_price)],
+        ["單日量倍", fmt(data.stock.volume_ratio_1d)],
+        ["5日量倍", fmt(data.stock.volume_ratio_5d)],
         [`${days}日外資`, fmt(data.stock.foreign_net_lot), cls(data.stock.foreign_net_lot)],
-        [`${days}日投信`, fmt(data.stock.trust_net_lot), cls(data.stock.trust_net_lot)]
+        [`${days}日投信`, fmt(data.stock.trust_net_lot), cls(data.stock.trust_net_lot)],
+        [`${days}日融資`, fmt(data.stock.margin_balance_change_lot), cls(data.stock.margin_balance_change_lot)],
+        [`${days}日融券`, fmt(data.stock.short_balance_change_lot), cls(data.stock.short_balance_change_lot)]
       ]);
+      renderDataQuality(data);
+      renderSelectionAssist(data.selection);
       renderPriceChart();
+      renderRevenueChart();
+      renderMarginChart();
       renderNews();
       renderTable(document.querySelector("#daily-table"), data.daily, [
         {key:"date", label:"日期"},
@@ -1213,6 +2288,24 @@ INDEX_HTML = """<!doctype html>
         {key:"yoy_pct", label:"年增%", signed:true},
         {key:"last_year_revenue_million", label:"去年同期"}
       ]);
+      const marginLatest = data.margin?.[0];
+      document.querySelector("#margin-note").textContent = marginLatest
+        ? `最新 ${marginLatest.date}，融資餘額 ${fmt(marginLatest.margin_balance_lot)} 張，融券餘額 ${fmt(marginLatest.short_balance_lot)} 張`
+        : "沒有資料時可按右側更新，或先執行官方行情與排行。";
+      renderTable(document.querySelector("#margin-table"), data.margin || [], [
+        {key:"date", label:"日期"},
+        {key:"margin_buy_lot", label:"資買"},
+        {key:"margin_sell_lot", label:"資賣"},
+        {key:"margin_cash_repay_lot", label:"現償"},
+        {key:"margin_balance_lot", label:"融資餘額"},
+        {key:"margin_change_lot", label:"資增減", signed:true},
+        {key:"short_sell_lot", label:"券賣"},
+        {key:"short_buy_lot", label:"券買"},
+        {key:"short_stock_repay_lot", label:"券償"},
+        {key:"short_balance_lot", label:"融券餘額"},
+        {key:"short_change_lot", label:"券增減", signed:true},
+        {key:"offset_lot", label:"資券互抵"}
+      ]);
       const branchTopStatus = data.branch_top_status;
       const branchTopNote = document.querySelector("#branch-top-note");
       if (!data.branch_top.length && branchTopStatus) {
@@ -1222,7 +2315,7 @@ INDEX_HTML = """<!doctype html>
         document.querySelector("#branch-top-table").innerHTML =
           `<div class="empty">區間分點排行狀態：${esc(statusText)}，最後更新：${esc(branchTopStatus.updated_at || "-")}${esc(detail)}</div>`;
       } else {
-        if (branchTopNote) branchTopNote.textContent = "點分點看最近 10 日";
+        if (branchTopNote) branchTopNote.textContent = `這是 ${days} 日區間合計；點分點看最近 ${days} 個交易日明細`;
         renderTable(document.querySelector("#branch-top-table"), data.branch_top, [
           {key:"rank_no", label:"排名"},
           {key:"broker_name", label:"分點"},
@@ -1250,7 +2343,8 @@ INDEX_HTML = """<!doctype html>
         state.broker = btn.dataset.broker;
         renderBrokerDaily();
       }));
-      document.querySelector("#broker-title").textContent = state.broker ? `${state.broker} 最近 10 日` : "分點最近 10 日";
+      const days = document.querySelector("#days").value;
+      document.querySelector("#broker-title").textContent = state.broker ? `${state.broker} 最近 ${days} 個交易日` : `分點最近 ${days} 個交易日`;
       const rows = (data?.branch_daily || []).filter(row => row.broker_name === state.broker);
       const statuses = data?.branch_daily_status || [];
       const success = statuses.filter(row => row.status === "success").length;
@@ -1259,8 +2353,8 @@ INDEX_HTML = """<!doctype html>
         const message = failed.length
           ? `尚缺 ${failed.length} 個交易日分點日資料；狀態：${failed.map(row => `${row.trade_date} ${row.status}`).join("、")}`
           : success
-            ? "單日分點頁已抓取，但此分點最近 10 日未進入 HiStock 可解析的單日前排行。"
-            : "尚未抓取分點最近 10 日資料。";
+            ? `單日分點頁已抓取，但此分點最近 ${days} 個交易日未進入 HiStock 可解析的單日前排行。`
+            : `尚未抓取分點最近 ${days} 個交易日資料。`;
         document.querySelector("#broker-daily-table").innerHTML = `<div class="empty">${esc(message)}</div>`;
         return;
       }
@@ -1276,35 +2370,81 @@ INDEX_HTML = """<!doctype html>
     }
     async function reload() {
       await loadMeta();
+      const showTwStockOverview = state.tab === "ranking" || state.tab === "watchlist" || state.tab === "detail";
+      document.querySelector(".toolbar").style.display = showTwStockOverview ? "" : "none";
+      document.querySelector("#metrics").style.display = showTwStockOverview ? "" : "none";
       document.querySelector("#ranking-view").style.display = state.tab === "ranking" || state.tab === "watchlist" ? "" : "none";
       document.querySelector("#detail-view").style.display = state.tab === "detail" ? "" : "none";
+      document.querySelector("#us-news-view").style.display = state.tab === "us-news" ? "" : "none";
+      document.querySelector("#ci-us-news-view").style.display = state.tab === "ci-us-news" ? "" : "none";
       document.querySelector("#coverage-view").style.display = state.tab === "coverage" ? "" : "none";
       if (state.tab === "ranking") await loadRanking(false);
       if (state.tab === "watchlist") await loadRanking(true);
       if (state.tab === "detail") await loadDetail();
+      if (state.tab === "us-news") await loadUSNews();
+      if (state.tab === "ci-us-news") await loadCIUSNews();
       if (state.tab === "coverage") {
         await loadCoverage();
         startJobPolling();
       }
     }
     document.querySelectorAll(".tab").forEach(btn => btn.addEventListener("click", () => setTab(btn.dataset.tab)));
-    ["days","ranking","market","limit"].forEach(id => document.querySelector("#" + id).addEventListener("change", reload));
-    document.querySelector("#query").addEventListener("input", () => { clearTimeout(window.__q); window.__q = setTimeout(reload, 250); });
+    document.querySelector("#ranking").addEventListener("change", () => {
+      enforceRankingDays();
+      reload();
+    });
+    document.querySelector("#days").addEventListener("change", () => {
+      enforceRankingDays();
+      reload();
+    });
+    ["market","limit"].forEach(id => document.querySelector("#" + id).addEventListener("change", reload));
+    document.querySelector("#min-volume").addEventListener("input", () => {
+      clearTimeout(window.__vol);
+      window.__vol = setTimeout(reload, 250);
+    });
+    document.querySelector("#query").addEventListener("input", () => {
+      clearTimeout(window.__q);
+      window.__q = setTimeout(() => {
+        if (state.tab === "detail") openStockFromQuery();
+        else reload();
+      }, 300);
+    });
+    document.querySelector("#query").addEventListener("keydown", event => {
+      if (event.key !== "Enter") return;
+      event.preventDefault();
+      if (state.tab === "detail") openStockFromQuery();
+    });
     document.querySelector("#refresh").addEventListener("click", reload);
     document.querySelector("#back-detail").addEventListener("click", goBackFromDetail);
     document.querySelector("#load-detail").addEventListener("click", loadDetail);
     document.querySelector("#watchlist-toggle").addEventListener("click", toggleWatchlist);
     document.querySelector("#refresh-news").addEventListener("click", refreshNews);
+    document.querySelector("#refresh-us-news").addEventListener("click", refreshUSNews);
+    document.querySelector("#us-industry").addEventListener("change", loadUSNews);
+    document.querySelector("#ci-us-mode").addEventListener("change", () => {
+      const sourceSelect = document.querySelector("#ci-us-source");
+      if (sourceSelect) {
+        sourceSelect.dataset.loaded = "";
+        sourceSelect.innerHTML = `<option value="">全部</option>`;
+      }
+      loadCIUSNews();
+    });
+    document.querySelector("#ci-us-industry").addEventListener("change", loadCIUSNews);
+    document.querySelector("#ci-us-source").addEventListener("change", loadCIUSNews);
+    document.querySelector("#ci-us-query").addEventListener("input", () => {
+      clearTimeout(window.__ciNewsQ);
+      window.__ciNewsQ = setTimeout(loadCIUSNews, 250);
+    });
     document.querySelector("#static-export").addEventListener("click", event => runStaticAction("export", event.target));
     document.querySelector("#static-publish").addEventListener("click", event => runStaticAction("publish", event.target));
+    document.querySelector("#cancel-update").addEventListener("click", cancelCurrentUpdate);
     document.querySelector("#detail-stock").addEventListener("change", loadDetail);
     document.querySelectorAll(".ma-toggle").forEach(input => input.addEventListener("change", renderPriceChart));
-    document.querySelector("#close-toggle").addEventListener("change", renderPriceChart);
     document.querySelectorAll(".single-refresh").forEach(btn => {
       btn.addEventListener("click", () => refreshSingleSection(btn.dataset.section, btn));
     });
     if (STATIC_MODE) {
-      document.querySelectorAll(".single-refresh, #refresh-news").forEach(btn => btn.style.display = "none");
+      document.querySelectorAll(".single-refresh, #refresh-news, #refresh-us-news, #us-use-ollama").forEach(btn => btn.style.display = "none");
       document.querySelector("#static-publish-box").style.display = "none";
       document.querySelector("#watchlist-toggle").title = "靜態版自選股儲存在此瀏覽器";
     }
@@ -1316,7 +2456,11 @@ INDEX_HTML = """<!doctype html>
     syncSeriesSwatches();
     window.addEventListener("resize", () => {
       clearTimeout(window.__chartResize);
-      window.__chartResize = setTimeout(renderPriceChart, 120);
+      window.__chartResize = setTimeout(() => {
+        renderPriceChart();
+        renderRevenueChart();
+        renderMarginChart();
+      }, 120);
     });
     reload().catch(err => {
       document.querySelector("#ranking-table").innerHTML = `<div class="empty">${esc(err.message)}</div>`;
@@ -1345,6 +2489,7 @@ def as_float(value: str | None) -> float:
 
 def ensure_gui_tables(conn: sqlite3.Connection) -> None:
     ensure_news_tables(conn)
+    ensure_us_news_tables(conn)
     conn.execute(
         """
         CREATE TABLE IF NOT EXISTS user_watchlist (
@@ -1450,9 +2595,19 @@ def normalize_scan_row(row: dict[str, str], days: int) -> dict[str, object]:
         "observed_days": int(as_float(row.get("observed_days"))),
         "close": as_float(row.get("close")),
         "avg_price": as_float(row.get(f"{days}d_avg_price")),
+        "volume_lot": as_float(row.get(f"{days}d_volume_lot")),
         "foreign_net_lot": as_float(row.get(f"{days}d_foreign_net_lot")),
         "trust_net_lot": as_float(row.get(f"{days}d_trust_net_lot")),
         "inst_net_lot": as_float(row.get(f"{days}d_inst_net_lot")),
+        "foreign_net_volume_pct": as_float(row.get("foreign_net_volume_pct")),
+        "trust_net_volume_pct": as_float(row.get("trust_net_volume_pct")),
+        "latest_volume_lot": as_float(row.get("latest_volume_lot")),
+        "volume_avg_lot": as_float(row.get("volume_avg_lot")),
+        "volume_5d_avg_lot": as_float(row.get("volume_5d_avg_lot")),
+        "volume_ratio_1d": as_float(row.get("volume_ratio_1d")),
+        "volume_ratio_5d": as_float(row.get("volume_ratio_5d")),
+        "volume_score": as_float(row.get("volume_score")),
+        "volume_signal": row.get("volume_signal") or "",
         "top_buy_branch_name": row.get("top_buy_branch_name") or "",
         "top_buy_branch_net_lot": as_float(row.get("top_buy_branch_net_lot")),
         "top_buy_branch_avg_price": as_float(row.get("top_buy_branch_avg_price")),
@@ -1461,6 +2616,33 @@ def normalize_scan_row(row: dict[str, str], days: int) -> dict[str, object]:
         "top_sell_branch_avg_price": as_float(row.get("top_sell_branch_avg_price")),
         "branch_score": as_float(row.get("branch_score")),
         "chip_score": as_float(row.get("chip_score")),
+        "margin_score": as_float(row.get("margin_score")),
+        "base_score": as_float(row.get("base_score")),
+        "selection_score": as_float(row.get("selection_score")),
+        "complete_chip_score": as_float(row.get("complete_chip_score")),
+        "confluence_score": as_float(row.get("confluence_score")),
+        "revenue_momentum_score": as_float(row.get("revenue_momentum_score")),
+        "revenue_month": row.get("revenue_month") or "",
+        "revenue_mom_pct": as_float(row.get("revenue_mom_pct")),
+        "revenue_yoy_pct": as_float(row.get("revenue_yoy_pct")),
+        "revenue_cumulative_yoy_pct": as_float(row.get("revenue_cumulative_yoy_pct")),
+        "confluence_inst_score": as_float(row.get("confluence_inst_score")),
+        "confluence_branch_score": as_float(row.get("confluence_branch_score")),
+        "confluence_price_score": as_float(row.get("confluence_price_score")),
+        "confluence_streak_score": as_float(row.get("confluence_streak_score")),
+        "confluence_direction_score": as_float(row.get("confluence_direction_score")),
+        "inst_net_volume_pct": as_float(row.get("inst_net_volume_pct")),
+        "top_buy_branch_volume_pct": as_float(row.get("top_buy_branch_volume_pct")),
+        "close_vs_top_buy_avg_pct": as_float(row.get("close_vs_top_buy_avg_pct")),
+        "foreign_buy_streak": as_float(row.get("foreign_buy_streak")),
+        "foreign_sell_streak": as_float(row.get("foreign_sell_streak")),
+        "trust_buy_streak": as_float(row.get("trust_buy_streak")),
+        "trust_sell_streak": as_float(row.get("trust_sell_streak")),
+        "margin_balance_change_lot": as_float(row.get("margin_balance_change_lot")),
+        "short_balance_change_lot": as_float(row.get("short_balance_change_lot")),
+        "branch_status": row.get("branch_status") or ("已取得" if row.get("top_buy_branch_name") else "未取得"),
+        "selection_reason": row.get("selection_reason") or "",
+        "base_reason": row.get("base_reason") or "",
         "total_score": as_float(row.get("total_score")),
     }
 
@@ -1470,7 +2652,14 @@ def ranking_path(days: int, ranking: str) -> Path:
         "total_score": "ranking_total_score",
         "chip_score": "ranking_chip_score",
         "branch_score": "ranking_branch_score",
+        "confluence_score": "ranking_confluence_score",
+        "selection_score": "ranking_selection_score",
         "foreign_buy": "ranking_foreign_buy",
+        "foreign_5d_revenue_growth": "ranking_foreign_5d_revenue_growth",
+        "inst_buy_volume": "ranking_inst_buy_volume",
+        "volume_expansion": "ranking_volume_expansion",
+        "revenue_volume_breakout": "ranking_revenue_volume_breakout",
+        "margin_down_foreign_buy": "ranking_margin_down_foreign_buy",
         "trust_buy": "ranking_trust_buy",
         "inst_buy": "ranking_inst_buy",
         "foreign_trust_same_buy": "ranking_foreign_trust_same_buy",
@@ -1479,13 +2668,38 @@ def ranking_path(days: int, ranking: str) -> Path:
     return REPORTS_DIR / f"{names.get(ranking, 'ranking_total_score')}_{days}d.csv"
 
 
-def filtered_rows(rows: list[dict[str, object]], market: str, q: str, limit: int) -> list[dict[str, object]]:
+RANKING_LABELS = {
+    "total_score": "基礎選股分",
+    "chip_score": "法人籌碼分數",
+    "selection_score": "基礎選股分",
+    "foreign_buy": "外資買超",
+    "foreign_5d_revenue_growth": "外資近5日買超 + 營收成長",
+    "inst_buy_volume": "法人買超 + 占量",
+    "volume_expansion": "成交量放大",
+    "revenue_volume_breakout": "營收成長 + 量能",
+    "margin_down_foreign_buy": "融資下降 + 外資買超",
+    "trust_buy": "投信買超",
+    "inst_buy": "外資 + 投信",
+    "foreign_trust_same_buy": "外資投信同步買超",
+    "near_avg_with_inst_buy": "接近均價且法人買超",
+}
+
+
+def filtered_rows(
+    rows: list[dict[str, object]],
+    market: str,
+    q: str,
+    limit: int,
+    min_volume: float = 0.0,
+) -> list[dict[str, object]]:
     text = q.lower()
     output = []
     for row in rows:
         if market and row.get("market") != market:
             continue
         if text and text not in str(row.get("stock_id", "")).lower() and text not in str(row.get("name", "")).lower():
+            continue
+        if min_volume > 0 and float(row.get("volume_lot") or 0) < min_volume:
             continue
         output.append(row)
         if len(output) >= limit:
@@ -1529,26 +2743,78 @@ def db_meta(days: int) -> dict[str, object]:
     }
 
 
+def resolve_local_stock(query: str) -> dict[str, object]:
+    text = query.strip()
+    if not text:
+        raise ValueError("請輸入股票代號或名稱")
+    like = f"%{text}%"
+    with connect_db(DB_PATH) as conn:
+        exact = conn.execute(
+            """
+            SELECT stock_id, name, market
+            FROM stocks
+            WHERE stock_id = ? OR name = ?
+            ORDER BY stock_id
+            LIMIT 1
+            """,
+            (text, text),
+        ).fetchone()
+        row = exact or conn.execute(
+            """
+            SELECT stock_id, name, market
+            FROM stocks
+            WHERE stock_id LIKE ? OR name LIKE ?
+            ORDER BY
+                CASE
+                    WHEN stock_id LIKE ? THEN 0
+                    WHEN name LIKE ? THEN 1
+                    ELSE 2
+                END,
+                stock_id
+            LIMIT 1
+            """,
+            (like, like, f"{text}%", f"{text}%"),
+        ).fetchone()
+    if not row:
+        raise ValueError(f"找不到股票 {text}")
+    return {"stock_id": row[0], "name": row[1], "market": row[2]}
+
+
 UPDATE_TASKS = [
     {
         "id": "all_data",
         "title": "一鍵更新全部資料",
-        "description": "依序更新官方行情排行、營收、新聞標題、自選股分點與排行前 100 區間分點。",
+        "description": "增量更新：官方行情、成交量、法人買賣超、融資融券只補缺漏交易日；營收先補 24 個月歷史，之後只補最新月份；分點只補自選股與排名前 100 候選。",
     },
     {
         "id": "official_scan",
         "title": "官方行情與排行",
-        "description": "更新上市上櫃近 20 個交易日行情、法人買賣超，並重算 20 日與 5 日排行。",
+        "description": "更新上市上櫃近 20 個交易日行情、成交量、法人買賣超、融資融券，並重算 20 日與 5 日排行。",
     },
     {
-        "id": "watchlist_revenue",
-        "title": "自選股營收",
-        "description": "更新自選股近 24 個月營收與去年同期，用於個股頁營收表。",
+        "id": "candidate_revenue",
+        "title": "候選股營收",
+        "description": "更新 20 日基礎分前 300 檔加自選股的 24 個月營收，用於營收策略篩選。",
+    },
+    {
+        "id": "all_market_revenue",
+        "title": "全市場營收補齊",
+        "description": "第一次補齊全部上市上櫃股票 24 個月營收；已有歷史資料後，一鍵更新只補最新應公布月份的近 3 個月資料。",
+    },
+    {
+        "id": "quality_check",
+        "title": "分數資料完整性檢查",
+        "description": "檢查基礎分需要的行情成交量、法人買賣超、融資融券、月營收是否覆蓋全部上市上櫃股票。",
     },
     {
         "id": "watchlist_branch_daily",
-        "title": "自選股近 10 日分點",
-        "description": "補自選股最近 10 個交易日的 HiStock 單日分點頁，只抓缺漏資料。",
+        "title": "自選股近 20 日分點",
+        "description": "補自選股最近 20 個交易日的 HiStock 單日分點頁，只抓缺漏資料；5 日頁面會取其中最近 5 日。",
+    },
+    {
+        "id": "watchlist_branch_top",
+        "title": "自選股區間分點",
+        "description": "補自選股最新 20 日區間買超前十分點；同一最新交易日已成功或空回應就不重抓。",
     },
     {
         "id": "watchlist_news",
@@ -1556,9 +2822,29 @@ UPDATE_TASKS = [
         "description": "更新自選股 Yahoo 股市 RSS 標題與連結；文章內文保留到個股頁手動抓取。",
     },
     {
+        "id": "us_news_obsidian",
+        "title": "本機抓取美股新聞",
+        "description": "直接抓取美股 RSS，寫入本機 SQLite，使用 0 token 規則分類，並同步 Obsidian。",
+    },
+    {
+        "id": "sync_ci_us_news",
+        "title": "同步 GitHub 新聞到本機",
+        "description": "讀取 docs/data/ci_us_news.json，去重匯入本機 SQLite，重新規則分類，並同步 Obsidian。",
+    },
+    {
         "id": "top100_branch",
         "title": "排行前 100 區間分點",
         "description": "依目前 20 日總分排行取前 100 檔，更新區間買超前十分點，再重算排行。",
+    },
+    {
+        "id": "all_market_branch_top",
+        "title": "全市場區間分點補齊",
+        "description": "獨立重型任務：補齊全部上市上櫃 20 日區間買超前十分點；同一最新交易日已成功或空回應就跳過，只補缺漏。",
+    },
+    {
+        "id": "retry_branch_failed",
+        "title": "重試分點失敗項目",
+        "description": "只重試最近 20 日區間分點狀態為失敗或空回應的股票，避免重跑已成功項目。",
     },
 ]
 
@@ -1571,13 +2857,165 @@ def normalize_time(value: object) -> str:
     return str(value or "").replace("T", " ")[:19]
 
 
+def candidate_revenue_ids(limit: int = 300) -> list[str]:
+    rows = read_csv(REPORTS_DIR / "scan_all_20d.csv")
+    if rows:
+        rows = sorted(rows, key=lambda row: as_float(row.get("total_score")), reverse=True)
+        ids = []
+        for row in rows:
+            stock_id = (row.get("stock_id") or "").strip()
+            if stock_id and stock_id not in ids:
+                ids.append(stock_id)
+            if len(ids) >= limit:
+                break
+    else:
+        ids = top_stock_ids_from_report(20, limit)
+    for stock_id in current_watchlist_ids():
+        if stock_id not in ids:
+            ids.append(stock_id)
+    return ids
+
+
+def revenue_missing_stock_ids(stock_ids: list[str]) -> list[str]:
+    if not stock_ids:
+        return []
+    with connect_db(DB_PATH) as conn:
+        placeholders = ",".join("?" for _ in stock_ids)
+        rows = conn.execute(
+            f"""
+            SELECT DISTINCT stock_id
+            FROM monthly_revenues
+            WHERE stock_id IN ({placeholders})
+            """,
+            stock_ids,
+        ).fetchall()
+    covered = {row[0] for row in rows}
+    return [stock_id for stock_id in stock_ids if stock_id not in covered]
+
+
+def expected_latest_revenue_month(today: dt.date | None = None) -> str:
+    """Monthly revenue for the latest completed calendar month."""
+    today = today or dt.date.today()
+    first_day = today.replace(day=1)
+    previous_month = first_day - dt.timedelta(days=1)
+    return previous_month.strftime("%Y-%m")
+
+
+def revenue_missing_month_stock_ids(stock_ids: list[str], revenue_month: str) -> list[str]:
+    if not stock_ids:
+        return []
+    with connect_db(DB_PATH) as conn:
+        placeholders = ",".join("?" for _ in stock_ids)
+        rows = conn.execute(
+            f"""
+            SELECT DISTINCT stock_id
+            FROM monthly_revenues
+            WHERE stock_id IN ({placeholders})
+              AND revenue_month = ?
+            """,
+            [*stock_ids, revenue_month],
+        ).fetchall()
+    covered = {row[0] for row in rows}
+    return [stock_id for stock_id in stock_ids if stock_id not in covered]
+
+
+def chunked(items: list[str], size: int) -> list[list[str]]:
+    return [items[index : index + size] for index in range(0, len(items), size)]
+
+
+def all_market_stock_ids() -> list[str]:
+    with connect_db(DB_PATH) as conn:
+        rows = conn.execute(
+            """
+            SELECT stock_id
+            FROM stocks
+            WHERE market IN ('TWSE', 'TPEX')
+            ORDER BY stock_id
+            """
+        ).fetchall()
+    return [row[0] for row in rows]
+
+
+def revenue_coverage_status(candidate_limit: int = 300) -> dict[str, object]:
+    candidate_ids = candidate_revenue_ids(candidate_limit)
+    market_ids = all_market_stock_ids()
+    with connect_db(DB_PATH) as conn:
+        candidate_count = 0
+        if candidate_ids:
+            placeholders = ",".join("?" for _ in candidate_ids)
+            candidate_count = conn.execute(
+                f"SELECT COUNT(DISTINCT stock_id) FROM monthly_revenues WHERE stock_id IN ({placeholders})",
+                candidate_ids,
+            ).fetchone()[0]
+        market_count = 0
+        if market_ids:
+            placeholders = ",".join("?" for _ in market_ids)
+            market_count = conn.execute(
+                f"SELECT COUNT(DISTINCT stock_id) FROM monthly_revenues WHERE stock_id IN ({placeholders})",
+                market_ids,
+            ).fetchone()[0]
+    return {
+        "candidate_total": len(candidate_ids),
+        "candidate_count": candidate_count,
+        "market_total": len(market_ids),
+        "market_count": market_count,
+    }
+
+
+def failed_branch_ids(days: int = 20, limit: int = 100) -> list[str]:
+    with connect_db(DB_PATH) as conn:
+        dates = recent_dates(conn, days)
+        if not dates:
+            return []
+        rows = conn.execute(
+            """
+            SELECT stock_id
+            FROM branch_fetch_status
+            WHERE trade_date = ?
+              AND window_days = ?
+              AND source = 'histock'
+              AND status IN ('failed', 'empty')
+            ORDER BY updated_at DESC
+            LIMIT ?
+            """,
+            (dates[-1], days, limit),
+        ).fetchall()
+    ids: list[str] = []
+    for row in rows:
+        stock_id = str(row[0])
+        if stock_id not in ids:
+            ids.append(stock_id)
+    return ids
+
+
+def branch_coverage_summary(days: int = 20) -> dict[str, int]:
+    with connect_db(DB_PATH) as conn:
+        dates = recent_dates(conn, days)
+        rows = branch_coverage(conn, dates[-1], days) if dates else []
+    return {
+        "covered": sum(int(row.get("stocks_with_branch") or 0) for row in rows),
+        "attempted": sum(int(row.get("attempted") or 0) for row in rows),
+        "empty": sum(int(row.get("empty_count") or 0) for row in rows),
+        "failed": sum(int(row.get("failed_count") or 0) for row in rows),
+        "total": sum(int(row.get("total_stocks") or 0) for row in rows),
+        "remaining": sum(int(row.get("remaining") or 0) for row in rows),
+    }
+
+
 def data_update_times() -> dict[str, str]:
     with connect_db(DB_PATH) as conn:
         ensure_gui_tables(conn)
         watchlist = current_watchlist_ids()
         placeholders = ",".join("?" for _ in watchlist) if watchlist else "''"
         official = conn.execute("SELECT MAX(updated_at) FROM trading_days").fetchone()[0]
-        revenue = conn.execute(
+        candidate_ids = candidate_revenue_ids(300)
+        candidate_placeholders = ",".join("?" for _ in candidate_ids) if candidate_ids else "''"
+        candidate_revenue = conn.execute(
+            f"SELECT MAX(updated_at) FROM monthly_revenues WHERE stock_id IN ({candidate_placeholders})",
+            candidate_ids,
+        ).fetchone()[0]
+        all_market_revenue = conn.execute("SELECT MAX(updated_at) FROM monthly_revenues").fetchone()[0]
+        watchlist_revenue = conn.execute(
             f"SELECT MAX(updated_at) FROM monthly_revenues WHERE stock_id IN ({placeholders})",
             watchlist,
         ).fetchone()[0]
@@ -1590,10 +3028,20 @@ def data_update_times() -> dict[str, str]:
             """,
             watchlist,
         ).fetchone()[0]
+        watchlist_branch_top = conn.execute(
+            f"""
+            SELECT MAX(updated_at)
+            FROM branch_fetch_status
+            WHERE stock_id IN ({placeholders})
+              AND window_days = 20
+            """,
+            watchlist,
+        ).fetchone()[0]
         news = conn.execute(
             f"SELECT MAX(fetched_at) FROM stock_news WHERE stock_id IN ({placeholders})",
             watchlist,
         ).fetchone()[0]
+        us_news = conn.execute("SELECT MAX(fetched_at) FROM us_stock_news").fetchone()[0]
         top100_branch = conn.execute(
             """
             SELECT MAX(updated_at)
@@ -1604,10 +3052,16 @@ def data_update_times() -> dict[str, str]:
         ).fetchone()[0]
     times = {
         "official_scan": normalize_time(official),
-        "watchlist_revenue": normalize_time(revenue),
+            "candidate_revenue": normalize_time(max(str(candidate_revenue or ""), str(watchlist_revenue or ""))),
+            "all_market_revenue": normalize_time(all_market_revenue),
+        "quality_check": normalize_time(max(str(official or ""), str(all_market_revenue or ""))),
         "watchlist_branch_daily": normalize_time(branch_daily),
+        "watchlist_branch_top": normalize_time(watchlist_branch_top),
         "watchlist_news": normalize_time(news),
+        "us_news_obsidian": normalize_time(us_news),
+        "sync_ci_us_news": normalize_time(ci_us_news_status().get("generated_at", "")),
         "top100_branch": normalize_time(top100_branch),
+        "retry_branch_failed": normalize_time(top100_branch),
     }
     times["all_data"] = max((value for value in times.values() if value), default="")
     return times
@@ -1696,6 +3150,53 @@ def running_job() -> dict[str, object] | None:
     return None
 
 
+def parse_local_time(value: object) -> dt.datetime | None:
+    text = str(value or "").strip()
+    if not text:
+        return None
+    try:
+        return dt.datetime.fromisoformat(text.replace(" ", "T")[:19])
+    except ValueError:
+        return None
+
+
+def branch_update_health() -> dict[str, object]:
+    with connect_db(DB_PATH) as conn:
+        rows = conn.execute(
+            """
+            SELECT status, COUNT(*), MAX(updated_at)
+            FROM branch_fetch_status
+            WHERE window_days = 20
+              AND source = 'histock'
+            GROUP BY status
+            ORDER BY status
+            """
+        ).fetchall()
+        distinct_count, latest_topn = conn.execute(
+            """
+            SELECT COUNT(DISTINCT stock_id), MAX(updated_at)
+            FROM broker_branch_topn
+            WHERE window_days = 20
+              AND source = 'histock'
+            """
+        ).fetchone()
+    latest_status = max((str(row[2] or "") for row in rows), default="")
+    latest_write = normalize_time(max([latest_status, str(latest_topn or "")]))
+    last_dt = parse_local_time(latest_write)
+    stale_minutes = None
+    if last_dt:
+        stale_minutes = max(0, int((dt.datetime.now() - last_dt).total_seconds() // 60))
+    summary = "、".join(f"{status}:{count}" for status, count, _updated in rows)
+    if distinct_count:
+        summary = f"{summary}，已抓 {distinct_count} 檔" if summary else f"已抓 {distinct_count} 檔"
+    return {
+        "last_write_at": latest_write,
+        "stale_minutes": stale_minutes,
+        "status_summary": summary,
+        "possibly_stuck": stale_minutes is not None and stale_minutes >= 10,
+    }
+
+
 def update_task_state() -> dict[str, object]:
     memory_jobs = recent_jobs()
     persisted = persisted_jobs()
@@ -1703,6 +3204,16 @@ def update_task_state() -> dict[str, object]:
     for job in memory_jobs:
         by_id[str(job["id"])] = job
     jobs = sorted(by_id.values(), key=lambda job: str(job.get("updated_at") or job.get("created_at") or ""), reverse=True)[:8]
+    active_job = running_job()
+    active_health = branch_update_health() if active_job and "區間分點" in str(active_job.get("current_step") or "") else {}
+    if active_health:
+        active_job["health"] = active_health
+        active_job["possible_stuck"] = bool(active_health.get("possibly_stuck"))
+    if active_job is None:
+        for job in jobs:
+            if job.get("status") in {"queued", "running"}:
+                job["status"] = "interrupted"
+                job["current_step"] = "上次執行未正常結束；目前沒有背景更新在跑。"
     latest = jobs[0] if jobs else None
     latest_by_task: dict[str, dict[str, object]] = {}
     for job in jobs:
@@ -1710,7 +3221,9 @@ def update_task_state() -> dict[str, object]:
         if task_id and task_id not in latest_by_task:
             latest_by_task[task_id] = job
     data_times = data_update_times()
+    ci_news = ci_us_news_status()
     latest_data_updated_at = max((value for value in data_times.values() if value), default="")
+    all_data_progress = all_data_task_progress(active_job)
     tasks = []
     for task in UPDATE_TASKS:
         task_item = dict(task)
@@ -1718,15 +3231,122 @@ def update_task_state() -> dict[str, object]:
         task_item["last_job_status"] = latest_task_job.get("status") if latest_task_job else ""
         task_item["last_job_updated_at"] = latest_task_job.get("updated_at") if latest_task_job else ""
         task_item["last_data_updated_at"] = data_times.get(str(task["id"]), "")
-        task_item["last_updated_at"] = task_item["last_job_updated_at"] or task_item["last_data_updated_at"]
+        task_item["last_updated_at"] = max(
+            str(task_item["last_job_updated_at"] or ""),
+            str(task_item["last_data_updated_at"] or ""),
+        )
+        if str(task["id"]) == "sync_ci_us_news":
+            task_item["extra_status"] = str(ci_news.get("sync_note") or "")
+        if str(task["id"]) in {"watchlist_news", "us_news_obsidian", "sync_ci_us_news"}:
+            task_item["warn_hours"] = 12
+            task_item["bad_hours"] = 36
+        if str(task["id"]) in {"candidate_revenue", "all_market_revenue"}:
+            revenue_status = revenue_coverage_status(300)
+            if str(task["id"]) == "candidate_revenue":
+                missing_count = max(0, int(revenue_status["candidate_total"]) - int(revenue_status["candidate_count"]))
+                task_item["extra_status"] = (
+                    f"候選股已補 {revenue_status['candidate_count']} / {revenue_status['candidate_total']} 檔"
+                    + (f"，待補 {missing_count} 檔" if missing_count else "")
+                )
+            else:
+                missing_count = max(0, int(revenue_status["market_total"]) - int(revenue_status["market_count"]))
+                expected_month = expected_latest_revenue_month()
+                latest_missing = len(revenue_missing_month_stock_ids(all_market_stock_ids(), expected_month))
+                task_item["extra_status"] = (
+                    f"全市場已補 {revenue_status['market_count']} / {revenue_status['market_total']} 檔"
+                    + (f"，待補 {missing_count} 檔" if missing_count else "")
+                    + f"；{expected_month} 缺 {latest_missing} 檔"
+                )
+        if str(task["id"]) == "quality_check":
+            quality = score_input_coverage(DB_PATH, 20)
+            coverage = quality.get("coverage") or {}
+            parts = []
+            for key in ("price", "institutional", "margin", "revenue"):
+                item = coverage.get(key) or {}
+                parts.append(f"{item.get('label', key)} {item.get('covered', 0)} / {quality.get('total', 0)}")
+            task_item["extra_status"] = "；".join(parts)
+        if active_job:
+            progress = all_data_progress.get(str(task["id"]))
+            if progress:
+                task_item.update(progress)
+            elif str(active_job.get("task_id") or "") == str(task["id"]):
+                task_item["run_state"] = "running"
+                task_item["run_label"] = "執行中"
+        if str(task["id"]) == "all_market_branch_top":
+            summary = branch_coverage_summary(20)
+            task_item["extra_status"] = (
+                f"已抓排行 {summary['covered']} / {summary['total']} 檔"
+                f"，已嘗試 {summary['attempted']} 檔"
+                f"，空回應 {summary['empty']} 檔"
+                f"，未有分點排行 {summary['remaining']} 檔"
+            )
+        if str(task["id"]) in {"top100_branch", "all_market_branch_top"} and active_health:
+            task_item["extra_status"] = "；".join(
+                str(part)
+                for part in [
+                    f"最後寫入 {active_health.get('last_write_at') or '-'}",
+                    f"停滯 {active_health.get('stale_minutes')} 分鐘" if active_health.get("stale_minutes") is not None else "",
+                    str(active_health.get("status_summary") or ""),
+                    "可能卡住" if active_health.get("possibly_stuck") else "",
+                ]
+                if part
+            )
+        if str(task["id"]) == "retry_branch_failed":
+            failed_ids = failed_branch_ids(20, 100)
+            task_item["extra_status"] = f"目前可重試 {len(failed_ids)} 檔" + (f"：{', '.join(failed_ids[:8])}" if failed_ids else "")
         tasks.append(task_item)
     return {
         "tasks": tasks,
-        "running": running_job() is not None,
+        "running": active_job is not None,
         "latest_job": latest,
         "latest_data_updated_at": latest_data_updated_at,
         "jobs": jobs,
     }
+
+
+def all_data_task_progress(active_job: dict[str, object] | None) -> dict[str, dict[str, str]]:
+    if not active_job or active_job.get("task_id") != "all_data":
+        return {}
+    current = str(active_job.get("current_step") or "")
+    ranges = [
+        ("official_scan", "官方行情與排行", ["更新官方行情與 20 日排行", "重算 5 日排行"]),
+        ("all_market_revenue", "全市場營收補齊", ["補齊全市場缺漏營收", "補最新月份營收", "全市場營收已補齊", "最新月份營收已補齊", "重算營收策略排行"]),
+        ("watchlist_news", "自選股新聞標題", ["更新 Yahoo 股市 RSS 標題"]),
+        ("sync_ci_us_news", "同步 GitHub 新聞到本機", ["匯入 docs/data/ci_us_news.json 並同步 Obsidian"]),
+        ("us_news_obsidian", "本機抓取美股新聞", ["更新美股新聞並同步 Obsidian"]),
+        ("watchlist_branch_daily", "自選股近 20 日分點", ["補自選股最近 20 日分點"]),
+        ("watchlist_branch_top", "自選股區間分點", ["補自選股 20 日區間分點", "重算自選股分點排行"]),
+        ("top100_branch", "排行前 100 區間分點", ["更新前 100 檔 20 日區間分點", "重算 20 日排行", "重算 5 日排行"]),
+        ("quality_check", "分數資料完整性檢查", ["檢查基礎分資料完整性"]),
+        ("static_export", "匯出 GitHub Pages 靜態資料", ["匯出 GitHub Pages 靜態資料"]),
+    ]
+    flat: list[tuple[str, str, str]] = []
+    for task_id, title, labels in ranges:
+        for label in labels:
+            flat.append((task_id, title, label))
+    current_index = next(
+        (idx for idx, (_task_id, _title, label) in enumerate(flat) if current == label or current.startswith(label)),
+        -1,
+    )
+    if current_index < 0 and current == "完成":
+        current_index = len(flat)
+    output: dict[str, dict[str, str]] = {"all_data": {"run_state": "running", "run_label": "執行中"}}
+    for task_id, title, labels in ranges:
+        step_indices = [idx for idx, (step_task_id, _title, _label) in enumerate(flat) if step_task_id == task_id]
+        if current_index >= len(flat):
+            state, label = "done", "已完成"
+        elif current_index in step_indices:
+            state, label = "running", "執行中"
+        elif current_index > max(step_indices):
+            state, label = "done", "已完成"
+        else:
+            state, label = "pending", "等待中"
+        output[task_id] = {
+            "run_state": state,
+            "run_label": label,
+            "run_group": title,
+        }
+    return output
 
 
 def top_stock_ids_from_report(days: int, limit: int) -> list[str]:
@@ -1746,9 +3366,15 @@ def update_steps(task_id: str, days: int) -> tuple[str, list[tuple[str, list[str
     watchlist = ",".join(current_watchlist_ids())
     if task_id == "all_data":
         steps: list[tuple[str, list[str]]] = []
-        for child_task in ("official_scan", "watchlist_revenue", "watchlist_news", "watchlist_branch_daily", "top100_branch"):
+        for child_task in ("official_scan", "all_market_revenue", "watchlist_news", "sync_ci_us_news", "us_news_obsidian", "watchlist_branch_daily", "watchlist_branch_top", "top100_branch"):
             _title, child_steps = update_steps(child_task, days)
             steps.extend(child_steps)
+        steps.append(
+            (
+                "檢查基礎分資料完整性",
+                [py, "-m", "stock_chip.quality", "--days", "20", "--strict"],
+            )
+        )
         steps.append(
             (
                 "匯出 GitHub Pages 靜態資料",
@@ -1770,28 +3396,152 @@ def update_steps(task_id: str, days: int) -> tuple[str, list[tuple[str, list[str
                 ),
             ],
         )
-    if task_id == "watchlist_revenue":
-        return (
-            "自選股營收",
+    if task_id == "candidate_revenue":
+        all_candidate_ids = candidate_revenue_ids(300)
+        missing_ids = revenue_missing_stock_ids(all_candidate_ids)
+        candidate_ids = ",".join(missing_ids)
+        steps: list[tuple[str, list[str]]] = []
+        if candidate_ids:
+            steps.append(
+                (
+                    f"補候選股缺漏營收 {len(missing_ids)} 檔",
+                    [
+                        py,
+                        "-m",
+                        "stock_chip.revenue",
+                        "--months",
+                        "24",
+                        "--watchlist",
+                        candidate_ids,
+                        "--sleep",
+                        "0.15",
+                        "--retries",
+                        "2",
+                        "--timeout",
+                        "20",
+                    ],
+                )
+            )
+        else:
+            steps.append(
+                (
+                    "候選股營收已補齊，略過抓取",
+                    [py, "-c", "print('candidate revenue already covered')"],
+                )
+            )
+        steps.extend(
             [
                 (
-                    "更新 24 個月營收",
-                    [py, "-m", "stock_chip.revenue", "--months", "24", "--watchlist", watchlist, "--sleep", "0.4"],
+                    "重算營收策略排行",
+                    [py, "-m", "stock_chip.scan", "--days", "5", "--limit", "100", "--watchlist", watchlist],
+                ),
+                (
+                    "重算 20 日排行",
+                    [py, "-m", "stock_chip.scan", "--days", "20", "--limit", "100", "--watchlist", watchlist],
+                )
+            ]
+        )
+        return (
+            "候選股營收",
+            steps,
+        )
+    if task_id == "all_market_revenue":
+        market_ids = all_market_stock_ids()
+        all_missing_ids = revenue_missing_stock_ids(market_ids)
+        expected_month = expected_latest_revenue_month()
+        latest_missing_ids = [
+            stock_id
+            for stock_id in revenue_missing_month_stock_ids(market_ids, expected_month)
+            if stock_id not in set(all_missing_ids)
+        ]
+        steps = []
+        for batch_index, batch_ids in enumerate(chunked(all_missing_ids, 50), start=1):
+            steps.append(
+                (
+                    f"補齊全市場缺漏營收 {len(all_missing_ids)} 檔 batch {batch_index}",
+                    [
+                        py,
+                        "-m",
+                        "stock_chip.revenue",
+                        "--months",
+                        "24",
+                        "--watchlist",
+                        ",".join(batch_ids),
+                        "--sleep",
+                        "0.05",
+                        "--retries",
+                        "1",
+                        "--timeout",
+                        "10",
+                    ],
+                )
+            )
+        for batch_index, batch_ids in enumerate(chunked(latest_missing_ids, 50), start=1):
+            steps.append(
+                (
+                    f"補最新月份營收 {expected_month} 缺漏 {len(latest_missing_ids)} 檔 batch {batch_index}",
+                    [
+                        py,
+                        "-m",
+                        "stock_chip.revenue",
+                        "--months",
+                        "3",
+                        "--watchlist",
+                        ",".join(batch_ids),
+                        "--sleep",
+                        "0.05",
+                        "--retries",
+                        "1",
+                        "--timeout",
+                        "8",
+                    ],
+                )
+            )
+        if not latest_missing_ids:
+            steps.append(
+                (
+                    f"最新月份營收已補齊，略過抓取 {expected_month}",
+                    [py, "-c", f"print('latest revenue month already covered: {expected_month}')"],
+                )
+            )
+        steps.extend(
+            [
+                (
+                    "重算營收策略排行",
+                    [py, "-m", "stock_chip.scan", "--days", "5", "--limit", "100", "--watchlist", watchlist],
+                ),
+                (
+                    "重算 20 日排行",
+                    [py, "-m", "stock_chip.scan", "--days", "20", "--limit", "100", "--watchlist", watchlist],
+                )
+            ]
+        )
+        return (
+            "全市場營收補齊",
+            steps,
+        )
+    if task_id == "quality_check":
+        return (
+            "分數資料完整性檢查",
+            [
+                (
+                    "檢查基礎分資料完整性",
+                    [py, "-m", "stock_chip.quality", "--days", "20", "--strict"],
                 )
             ],
         )
     if task_id == "watchlist_branch_daily":
         return (
-            "自選股近 10 日分點",
+            "自選股近 20 日分點",
             [
                 (
-                    "補自選股最近 10 日分點",
+                    "補自選股最近 20 日分點",
                     [
                         py,
                         "-m",
                         "stock_chip.branch",
                         "--days",
-                        "10",
+                        "20",
                         "--top",
                         "80",
                         "--daily",
@@ -1804,6 +3554,35 @@ def update_steps(task_id: str, days: int) -> tuple[str, list[tuple[str, list[str
                         "8,20,45",
                     ],
                 )
+            ],
+        )
+    if task_id == "watchlist_branch_top":
+        return (
+            "自選股區間分點",
+            [
+                (
+                    "補自選股 20 日區間分點",
+                    [
+                        py,
+                        "-m",
+                        "stock_chip.branch",
+                        "--days",
+                        "20",
+                        "--top",
+                        "10",
+                        "--watchlist",
+                        watchlist,
+                        "--skip-existing",
+                        "--sleep",
+                        "0.8",
+                        "--retry-sleeps",
+                        "2,5",
+                    ],
+                ),
+                (
+                    "重算自選股分點排行",
+                    [py, "-m", "stock_chip.scan", "--days", "20", "--limit", "100", "--watchlist", watchlist],
+                ),
             ],
         )
     if task_id == "watchlist_news":
@@ -1822,6 +3601,59 @@ def update_steps(task_id: str, days: int) -> tuple[str, list[tuple[str, list[str
                         "5",
                         "--sleep",
                         "0.5",
+                    ],
+                )
+            ],
+        )
+    if task_id == "us_news_obsidian":
+        return (
+            "本機抓取美股新聞",
+            [
+                (
+                    "更新美股新聞並同步 Obsidian",
+                    [
+                        py,
+                        "-m",
+                        "stock_chip.us_news",
+                        "--symbols",
+                        "AAPL,MSFT,NVDA,TSLA",
+                        "--limit",
+                        "25",
+                        "--market-only",
+                        "--no-ollama",
+                    ],
+                )
+            ],
+        )
+    if task_id == "sync_ci_us_news":
+        return (
+            "同步 GitHub 新聞到本機",
+            [
+                (
+                    "下載 GitHub 最新新聞 JSON",
+                    [
+                        py,
+                        "-c",
+                        (
+                            "from pathlib import Path; import requests; "
+                            "url='https://raw.githubusercontent.com/wenyen-hsu/stock/main/docs/data/ci_us_news.json'; "
+                            "resp=requests.get(url, timeout=30); resp.raise_for_status(); "
+                            "path=Path('docs/data/ci_us_news.json'); path.parent.mkdir(parents=True, exist_ok=True); "
+                            "path.write_text(resp.text, encoding='utf-8'); "
+                            "print(f'downloaded {len(resp.text)} bytes from {url}')"
+                        ),
+                    ],
+                ),
+                (
+                    "匯入 docs/data/ci_us_news.json 並同步 Obsidian",
+                    [
+                        py,
+                        "-m",
+                        "stock_chip.import_us_news_static",
+                        "--json",
+                        "docs/data/ci_us_news.json",
+                        "--db",
+                        str(DB_PATH),
                     ],
                 )
             ],
@@ -1846,10 +3678,92 @@ def update_steps(task_id: str, days: int) -> tuple[str, list[tuple[str, list[str
                         "10",
                         "--watchlist",
                         branch_watchlist,
+                        "--skip-existing",
                         "--sleep",
-                        "1.5",
+                        "0.8",
                         "--retry-sleeps",
-                        "8,20,45",
+                        "2,5",
+                    ],
+                ),
+                (
+                    "重算 20 日排行",
+                    [py, "-m", "stock_chip.scan", "--days", "20", "--limit", "100", "--watchlist", watchlist],
+                ),
+                (
+                    "重算 5 日排行",
+                    [py, "-m", "stock_chip.scan", "--days", "5", "--limit", "100", "--watchlist", watchlist],
+                ),
+            ],
+        )
+    if task_id == "all_market_branch_top":
+        total = len(all_market_stock_ids())
+        batch_size = 80
+        steps: list[tuple[str, list[str]]] = []
+        for offset in range(0, total, batch_size):
+            end = min(total, offset + batch_size)
+            steps.append(
+                (
+                    f"全市場 20 日區間分點 batch {offset // batch_size + 1}（{offset + 1}-{end} / {total}）",
+                    [
+                        py,
+                        "-m",
+                        "stock_chip.branch",
+                        "--days",
+                        "20",
+                        "--top",
+                        "10",
+                        "--all",
+                        "--markets",
+                        "TWSE,TPEX",
+                        "--limit",
+                        str(batch_size),
+                        "--offset",
+                        str(offset),
+                        "--skip-existing",
+                        "--sleep",
+                        "0.8",
+                        "--retry-sleeps",
+                        "2,5",
+                    ],
+                )
+            )
+        steps.extend(
+            [
+                (
+                    "重算 20 日排行",
+                    [py, "-m", "stock_chip.scan", "--days", "20", "--limit", "100"],
+                ),
+                (
+                    "重算 5 日排行",
+                    [py, "-m", "stock_chip.scan", "--days", "5", "--limit", "100"],
+                ),
+            ]
+        )
+        return ("全市場區間分點補齊", steps)
+    if task_id == "retry_branch_failed":
+        ids = failed_branch_ids(20, 100)
+        if not ids:
+            ids = current_watchlist_ids()
+        branch_watchlist = ",".join(ids)
+        return (
+            "重試分點失敗項目",
+            [
+                (
+                    "重試最近 20 日區間分點失敗項目",
+                    [
+                        py,
+                        "-m",
+                        "stock_chip.branch",
+                        "--days",
+                        "20",
+                        "--top",
+                        "10",
+                        "--watchlist",
+                        branch_watchlist,
+                        "--sleep",
+                        "1.2",
+                        "--retry-sleeps",
+                        "5,15,30",
                     ],
                 ),
                 (
@@ -1886,6 +3800,7 @@ def run_update_job(job_id: str, steps: list[tuple[str, list[str]]]) -> None:
         job["updated_at"] = job["started_at"]
         running_snapshot = dict(job)
     persist_job(running_snapshot)
+    step_errors: list[str] = []
     try:
         for label, args in steps:
             with UPDATE_LOCK:
@@ -1894,18 +3809,69 @@ def run_update_job(job_id: str, steps: list[tuple[str, list[str]]]) -> None:
                 job["updated_at"] = now_text()
                 step_snapshot = dict(job)
             persist_job(step_snapshot)
-            proc = subprocess.run(
+            proc = subprocess.Popen(
                 args,
                 cwd=ROOT,
                 text=True,
-                capture_output=True,
-                timeout=60 * 60,
-                check=False,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.STDOUT,
+                bufsize=1,
             )
+            with UPDATE_LOCK:
+                job = UPDATE_JOBS[job_id]
+                job["current_process_pid"] = proc.pid
+                job["step_started_at"] = now_text()
+                pid_snapshot = dict(job)
+            persist_job(pid_snapshot)
+            recent_output = ""
+            step_started = time.monotonic()
+            assert proc.stdout is not None
+            while True:
+                if time.monotonic() - step_started > 60 * 60:
+                    proc.kill()
+                    remaining = proc.stdout.read()
+                    if remaining:
+                        recent_output = (recent_output + remaining)[-2000:]
+                        append_job_log(job_id, remaining[-2000:])
+                    proc.wait()
+                    with UPDATE_LOCK:
+                        job = UPDATE_JOBS[job_id]
+                        job["current_process_pid"] = ""
+                        timeout_snapshot = dict(job)
+                    persist_job(timeout_snapshot)
+                    message = f"{label} 逾時，已停止子程序"
+                    if str(job.get("task_id") or "") == "all_data" and not label.startswith("更新官方行情"):
+                        step_errors.append(message)
+                        append_job_log(job_id, message + "\n")
+                        break
+                    raise RuntimeError(message)
+                ready, _w, _x = select.select([proc.stdout], [], [], 1)
+                if ready:
+                    line = proc.stdout.readline()
+                    if line:
+                        recent_output = (recent_output + line)[-2000:]
+                        append_job_log(job_id, line[-1000:])
+                        continue
+                if proc.poll() is not None:
+                    remaining = proc.stdout.read()
+                    if remaining:
+                        recent_output = (recent_output + remaining)[-2000:]
+                        append_job_log(job_id, remaining[-2000:])
+                    break
+            if step_errors and step_errors[-1].startswith(label):
+                continue
+            with UPDATE_LOCK:
+                job = UPDATE_JOBS[job_id]
+                job["current_process_pid"] = ""
             if proc.returncode != 0:
-                if proc.stderr:
-                    append_job_log(job_id, proc.stderr[-2000:])
-                raise RuntimeError(f"{label} 失敗，exit code {proc.returncode}")
+                message = f"{label} 失敗，exit code {proc.returncode}"
+                if recent_output:
+                    append_job_log(job_id, recent_output[-2000:])
+                if str(job.get("task_id") or "") == "all_data" and not label.startswith("更新官方行情"):
+                    step_errors.append(message)
+                    append_job_log(job_id, message + "\n")
+                    continue
+                raise RuntimeError(message)
             with UPDATE_LOCK:
                 job = UPDATE_JOBS[job_id]
                 job["updated_at"] = now_text()
@@ -1913,10 +3879,12 @@ def run_update_job(job_id: str, steps: list[tuple[str, list[str]]]) -> None:
             persist_job(step_done_snapshot)
         with UPDATE_LOCK:
             job = UPDATE_JOBS[job_id]
-            job["status"] = "done"
+            job["status"] = "failed" if step_errors else "done"
             job["finished_at"] = now_text()
             job["updated_at"] = job["finished_at"]
-            job["current_step"] = "完成"
+            job["current_step"] = "完成（部分失敗）" if step_errors else "完成"
+            if step_errors:
+                job["error"] = "；".join(step_errors[:5])
             done_snapshot = dict(job)
         persist_job(done_snapshot)
     except Exception as exc:
@@ -1957,6 +3925,29 @@ def start_update_task(task_id: str, days: int) -> dict[str, object]:
     return dict(job)
 
 
+def cancel_running_update() -> dict[str, object]:
+    job = running_job()
+    with UPDATE_LOCK:
+        if not job:
+            return {"cancelled": False, "message": "目前沒有執行中的更新。"}
+        job_id = str(job.get("id") or "")
+        pid = int(job.get("current_process_pid") or 0)
+        live_job = UPDATE_JOBS.get(job_id)
+        if live_job:
+            live_job["current_step"] = "停止中"
+            live_job["updated_at"] = now_text()
+            snapshot = dict(live_job)
+        else:
+            snapshot = dict(job)
+    if pid:
+        try:
+            os.kill(pid, signal.SIGTERM)
+        except ProcessLookupError:
+            pass
+    persist_job(snapshot)
+    return {"cancelled": True, "pid": pid, "job": snapshot}
+
+
 def run_git(args: list[str], timeout: int = 120) -> str:
     proc = subprocess.run(
         ["git", *args],
@@ -1993,6 +3984,39 @@ def git_changed_count(paths: list[str]) -> int:
     return len([line for line in output.splitlines() if line.strip()])
 
 
+def merge_latest_remote_for_publish(branch: str) -> str:
+    if not branch:
+        raise RuntimeError("目前不在任何 Git branch，無法發布")
+    run_git(["fetch", "origin", branch], timeout=10 * 60)
+    remote_ref = f"origin/{branch}"
+    ahead = subprocess.run(
+        ["git", "merge-base", "--is-ancestor", remote_ref, "HEAD"],
+        cwd=ROOT,
+        check=False,
+    )
+    if ahead.returncode == 0:
+        return "本機已包含遠端最新 commit。"
+    merge = subprocess.run(
+        ["git", "merge", "--no-edit", remote_ref],
+        cwd=ROOT,
+        text=True,
+        capture_output=True,
+        timeout=10 * 60,
+        check=False,
+    )
+    if merge.returncode == 0:
+        return (merge.stdout or "").strip() or "已合併遠端最新 commit。"
+    status = run_git(["status", "--porcelain"])
+    unmerged = [line for line in status.splitlines() if line[:2] in {"UU", "AA", "DD", "DU", "UD", "UA", "AU"}]
+    if unmerged == ["UU docs/data/us_news.json"]:
+        run_git(["checkout", "--theirs", "docs/data/us_news.json"])
+        run_git(["add", "docs/data/us_news.json"])
+        run_git(["commit", "-m", "Merge latest CI news before static publish"], timeout=120)
+        return "已自動採用 GitHub Action 最新新聞檔並完成合併。"
+    detail = (merge.stderr or merge.stdout or "").strip()
+    raise RuntimeError(detail or "合併遠端最新 commit 失敗")
+
+
 def static_publish_status() -> dict[str, object]:
     meta_path = ROOT / "docs" / "data" / "meta.json"
     meta: dict[str, object] = {}
@@ -2011,8 +4035,137 @@ def static_publish_status() -> dict[str, object]:
         "exported_at": meta.get("exported_at", ""),
         "latest_date": meta.get("latest_date", ""),
         "static_stock_count": meta.get("static_stock_count", 0),
+        "ci_news": ci_us_news_status(),
         "docs_changed": git_changed_count(["docs"]) if (ROOT / ".git").exists() else 0,
         "reports_changed": git_changed_count(["reports"]) if (ROOT / ".git").exists() else 0,
+    }
+
+
+def ci_us_news_status() -> dict[str, object]:
+    path = ROOT / "docs" / "data" / "ci_us_news.json"
+    if not path.exists():
+        path = ROOT / "docs" / "data" / "us_news.json"
+    payload: dict[str, object] = {}
+    if path.exists():
+        try:
+            payload = json.loads(path.read_text(encoding="utf-8"))
+        except json.JSONDecodeError:
+            payload = {}
+    rows = payload.get("rows", []) if isinstance(payload, dict) else []
+    mtime = dt.datetime.fromtimestamp(path.stat().st_mtime).strftime("%Y-%m-%d %H:%M:%S") if path.exists() else ""
+    generated_at = payload.get("generated_at", "") if isinstance(payload, dict) else ""
+    generated_at = normalize_time(generated_at) or mtime
+    local_latest = ""
+    try:
+        with connect_db(DB_PATH) as conn:
+            local_latest = normalize_time(conn.execute("SELECT MAX(fetched_at) FROM us_stock_news").fetchone()[0])
+    except Exception:
+        local_latest = ""
+    synced = bool(generated_at and local_latest and local_latest >= generated_at)
+    if not path.exists():
+        sync_note = "尚未產生 GitHub CI 新聞檔。"
+    elif synced:
+        sync_note = f"本機已同步到 GitHub 新聞；CI {generated_at}，本機 {local_latest}。"
+    elif local_latest:
+        sync_note = f"本機可能落後 GitHub 新聞；CI {generated_at}，本機 {local_latest}。"
+    else:
+        sync_note = f"本機尚未匯入 GitHub 新聞；CI {generated_at}。"
+    return {
+        "path": str(path),
+        "exists": path.exists(),
+        "generated_at": generated_at,
+        "row_count": len(rows) if isinstance(rows, list) else 0,
+        "fetched_count": payload.get("fetched_count", 0) if isinstance(payload, dict) else 0,
+        "mtime": mtime,
+        "local_latest": local_latest,
+        "synced": synced,
+        "sync_note": sync_note,
+    }
+
+
+def filter_ci_us_news_payload(
+    payload: dict[str, object],
+    industry: str = "",
+    source: str = "",
+    query: str = "",
+    limit: int = 200,
+) -> tuple[list[dict[str, object]], list[str]]:
+    rows = payload.get("rows", []) if isinstance(payload, dict) else []
+    if not isinstance(rows, list):
+        rows = []
+    q = query.strip().lower()
+    filtered: list[dict[str, object]] = []
+    for row in rows:
+        if not isinstance(row, dict):
+            continue
+        if industry and row.get("industry") != industry:
+            continue
+        if source and row.get("source") != source:
+            continue
+        if q:
+            text = " ".join(str(row.get(key) or "") for key in ("title", "summary", "reason", "source", "industry")).lower()
+            if q not in text:
+                continue
+        filtered.append(row)
+        if len(filtered) >= limit:
+            break
+    sources = sorted({str(row.get("source") or "") for row in rows if isinstance(row, dict) and row.get("source")})
+    return filtered, sources
+
+
+def load_ci_us_news_preview(industry: str = "", source: str = "", query: str = "", limit: int = 200) -> dict[str, object]:
+    path = ROOT / "docs" / "data" / "ci_us_news.json"
+    fallback = False
+    if not path.exists():
+        path = ROOT / "docs" / "data" / "us_news.json"
+        fallback = True
+    payload: dict[str, object] = {}
+    if path.exists():
+        payload = json.loads(path.read_text(encoding="utf-8"))
+    rows = payload.get("rows", []) if isinstance(payload, dict) else []
+    if not isinstance(rows, list):
+        rows = []
+    filtered, sources = filter_ci_us_news_payload(payload, industry=industry, source=source, query=query, limit=limit)
+    return {
+        "path": str(path),
+        "fallback": fallback,
+        "generated_at": payload.get("generated_at", "") if isinstance(payload, dict) else "",
+        "row_count": payload.get("row_count", len(rows)) if isinstance(payload, dict) else len(rows),
+        "fetched_count": payload.get("fetched_count", 0) if isinstance(payload, dict) else 0,
+        "rows": filtered,
+        "sources": sources,
+        "source_mode": "local",
+        "source_url": str(path),
+    }
+
+
+def load_ci_us_news_live(industry: str = "", source: str = "", query: str = "", limit: int = 200) -> dict[str, object]:
+    request = Request(
+        CI_US_NEWS_PAGES_URL,
+        headers={
+            "User-Agent": "stock-chip-local-preview/1.0",
+            "Accept": "application/json,text/plain,*/*",
+        },
+    )
+    with urlopen(request, timeout=12) as response:
+        payload = json.loads(response.read().decode("utf-8"))
+    if not isinstance(payload, dict):
+        payload = {}
+    rows = payload.get("rows", [])
+    if not isinstance(rows, list):
+        rows = []
+    filtered, sources = filter_ci_us_news_payload(payload, industry=industry, source=source, query=query, limit=limit)
+    return {
+        "path": CI_US_NEWS_PAGES_URL,
+        "fallback": False,
+        "generated_at": payload.get("generated_at", ""),
+        "row_count": payload.get("row_count", len(rows)),
+        "fetched_count": payload.get("fetched_count", 0),
+        "rows": filtered,
+        "sources": sources,
+        "source_mode": "github_pages",
+        "source_url": CI_US_NEWS_PAGES_URL,
+        "site_url": CI_US_NEWS_SITE_URL,
     }
 
 
@@ -2035,6 +4188,7 @@ def export_static_pages() -> dict[str, object]:
 
 
 def publish_static_pages() -> dict[str, object]:
+    branch = run_git(["branch", "--show-current"])
     export_result = export_static_pages()
     run_git(["add", "docs", "reports"])
     staged = subprocess.run(
@@ -2052,11 +4206,20 @@ def publish_static_pages() -> dict[str, object]:
     if staged.returncode not in {0, 1}:
         raise RuntimeError("檢查 staged 變更失敗")
     message = f"Update static stock data {now_text()}"
-    run_git(["commit", "-m", message], timeout=120)
-    run_git(["push", "origin", run_git(["branch", "--show-current"])], timeout=10 * 60)
+    if staged.returncode == 1:
+        run_git(["commit", "-m", message], timeout=120)
+    pre_sync = merge_latest_remote_for_publish(branch)
+    try:
+        run_git(["push", "origin", branch], timeout=10 * 60)
+        retry_note = ""
+    except RuntimeError as exc:
+        if "fetch first" not in str(exc) and "non-fast-forward" not in str(exc):
+            raise
+        retry_note = merge_latest_remote_for_publish(branch)
+        run_git(["push", "origin", branch], timeout=10 * 60)
     status = static_publish_status()
     return {
-        "message": f"已發布到 GitHub Pages：{status.get('pages_url') or '-'}",
+        "message": f"已發布到 GitHub Pages：{status.get('pages_url') or '-'}\n{pre_sync}{('\\n' + retry_note) if retry_note else ''}",
         "status": status,
         "published": True,
     }
@@ -2099,7 +4262,7 @@ def refresh_stock_section(stock_id: str, section: str, days: int) -> dict[str, o
     if section == "branch_daily":
         result = run_branch_daily(
             db_path=DB_PATH,
-            days=10,
+            days=days,
             top_n=80,
             stock_ids=[stock_id],
             sleep_seconds=0.8,
@@ -2143,14 +4306,17 @@ def ensure_stock_data(query: str, days: int) -> dict[str, object]:
 
     price_rows = []
     inst_rows = []
+    margin_rows = []
     for trade_date in dates:
         day = dt.date.fromisoformat(trade_date)
         if target_market == "TWSE":
             daily_prices = fetch_twse_prices_all(day, stock_only=True)
             daily_inst = fetch_twse_institutional_all(day, stock_only=True)
+            daily_margin = fetch_twse_margin_all(day, stock_only=True)
         elif target_market == "TPEX":
             daily_prices = fetch_tpex_prices_all(day, stock_only=True)
             daily_inst = fetch_tpex_institutional_all(day, stock_only=True)
+            daily_margin = fetch_tpex_margin_all(day, stock_only=True)
         else:
             daily_prices = [
                 *fetch_twse_prices_all(day, stock_only=True),
@@ -2160,14 +4326,20 @@ def ensure_stock_data(query: str, days: int) -> dict[str, object]:
                 *fetch_twse_institutional_all(day, stock_only=True),
                 *fetch_tpex_institutional_all(day, stock_only=True),
             ]
+            daily_margin = [
+                *fetch_twse_margin_all(day, stock_only=True),
+                *fetch_tpex_margin_all(day, stock_only=True),
+            ]
         price_rows.extend(row for row in daily_prices if row.stock_id == target_id)
         inst_rows.extend(row for row in daily_inst if row.stock_id == target_id)
+        margin_rows.extend(row for row in daily_margin if row.stock_id == target_id)
 
     if not price_rows:
         raise ValueError(f"近 {days} 個交易日沒有 {target_id} {target_name} 的行情資料")
     with connect_db(DB_PATH) as conn:
         upsert_prices(conn, price_rows)
         upsert_institutional(conn, inst_rows)
+        upsert_margin(conn, margin_rows)
         conn.commit()
 
     watchlist = current_watchlist_ids()
@@ -2190,6 +4362,7 @@ def ensure_stock_data(query: str, days: int) -> dict[str, object]:
         "market": target_market,
         "price_rows": len(price_rows),
         "institutional_rows": len(inst_rows),
+        "margin_rows": len(margin_rows),
         "dates": dates,
     }
 
@@ -2198,7 +4371,7 @@ def stock_detail(stock_id: str, days: int) -> dict[str, object]:
     with connect_db(DB_PATH) as conn:
         dates = recent_dates(conn, days)
         if not dates:
-            return {"stock": {"stock_id": stock_id, "name": stock_id}, "daily": [], "chart": [], "branch_top": [], "branch_daily": [], "revenues": []}
+            return {"stock": {"stock_id": stock_id, "name": stock_id}, "daily": [], "margin": [], "chart": [], "branch_top": [], "branch_daily": [], "revenues": []}
         latest_date = dates[-1]
         placeholders = ",".join("?" for _ in dates)
         stock_row = conn.execute(
@@ -2242,6 +4415,16 @@ def stock_detail(stock_id: str, days: int) -> dict[str, object]:
         avg_price = None
         if turnover_row and turnover_row[1]:
             avg_price = turnover_row[0] / turnover_row[1]
+        latest_volume = daily_raw[0][3] if daily_raw else None
+        volume_avg = volume / len(daily_raw) if daily_raw else None
+        recent5_daily = daily_raw[: min(5, len(daily_raw))]
+        volume_5d_avg = (
+            sum(row[3] or 0 for row in recent5_daily) / len(recent5_daily)
+            if recent5_daily
+            else None
+        )
+        volume_ratio_1d = latest_volume / volume_avg if latest_volume is not None and volume_avg else None
+        volume_ratio_5d = volume_5d_avg / volume_avg if volume_5d_avg is not None and volume_avg else None
         foreign_net = sum(row[4] or 0 for row in daily_raw)
         trust_net = sum(row[5] or 0 for row in daily_raw)
         daily = [
@@ -2256,13 +4439,56 @@ def stock_detail(stock_id: str, days: int) -> dict[str, object]:
             }
             for row in daily_raw
         ]
+        margin_raw = conn.execute(
+            f"""
+            SELECT
+                date, margin_buy, margin_sell, margin_cash_repay,
+                margin_prev_balance, margin_balance,
+                short_buy, short_sell, short_stock_repay,
+                short_prev_balance, short_balance, offset, note
+            FROM margin_trades
+            WHERE stock_id = ?
+              AND date IN ({placeholders})
+            ORDER BY date DESC
+            """,
+            [stock_id, *dates],
+        ).fetchall()
+        margin = [
+            {
+                "date": row[0],
+                "margin_buy_lot": row[1],
+                "margin_sell_lot": row[2],
+                "margin_cash_repay_lot": row[3],
+                "margin_prev_balance_lot": row[4],
+                "margin_balance_lot": row[5],
+                "margin_change_lot": (row[5] - row[4]) if row[5] is not None and row[4] is not None else None,
+                "short_buy_lot": row[6],
+                "short_sell_lot": row[7],
+                "short_stock_repay_lot": row[8],
+                "short_prev_balance_lot": row[9],
+                "short_balance_lot": row[10],
+                "short_change_lot": (row[10] - row[9]) if row[10] is not None and row[9] is not None else None,
+                "offset_lot": row[11],
+                "note": row[12],
+            }
+            for row in margin_raw
+        ]
+        margin_balance_change = None
+        short_balance_change = None
+        if margin:
+            latest_margin = margin[0]
+            oldest_margin = margin[-1]
+            if latest_margin["margin_balance_lot"] is not None and oldest_margin["margin_prev_balance_lot"] is not None:
+                margin_balance_change = latest_margin["margin_balance_lot"] - oldest_margin["margin_prev_balance_lot"]
+            if latest_margin["short_balance_lot"] is not None and oldest_margin["short_prev_balance_lot"] is not None:
+                short_balance_change = latest_margin["short_balance_lot"] - oldest_margin["short_prev_balance_lot"]
         chart_dates = recent_dates(conn, max(240, days))
         chart: list[dict[str, object]] = []
         if chart_dates:
             chart_placeholders = ",".join("?" for _ in chart_dates)
             chart_raw = conn.execute(
                 f"""
-                SELECT date, close, avg_price, volume
+                SELECT date, open, high, low, close, avg_price, volume
                 FROM daily_prices
                 WHERE stock_id = ?
                   AND date IN ({chart_placeholders})
@@ -2270,13 +4496,16 @@ def stock_detail(stock_id: str, days: int) -> dict[str, object]:
                 """,
                 [stock_id, *chart_dates],
             ).fetchall()
-            closes: list[float | None] = [row[1] for row in chart_raw]
+            closes: list[float | None] = [row[4] for row in chart_raw]
             for idx, row in enumerate(chart_raw):
                 item: dict[str, object] = {
                     "date": row[0],
-                    "close": row[1],
-                    "avg_price": row[2],
-                    "volume_lot": shares_to_lots(row[3]),
+                    "open": row[1],
+                    "high": row[2],
+                    "low": row[3],
+                    "close": row[4],
+                    "avg_price": row[5],
+                    "volume_lot": shares_to_lots(row[6]),
                 }
                 for period in (5, 10, 20, 60):
                     window = closes[idx - period + 1 : idx + 1]
@@ -2346,7 +4575,7 @@ def stock_detail(stock_id: str, days: int) -> dict[str, object]:
         branch_daily: list[dict[str, object]] = []
         if brokers:
             broker_placeholders = ",".join("?" for _ in brokers)
-            daily_dates = recent_dates(conn, 10)
+            daily_dates = recent_dates(conn, days)
             date_placeholders = ",".join("?" for _ in daily_dates)
             raw = conn.execute(
                 f"""
@@ -2374,7 +4603,7 @@ def stock_detail(stock_id: str, days: int) -> dict[str, object]:
             ]
         daily_status_raw = []
         if brokers:
-            daily_dates = recent_dates(conn, 10)
+            daily_dates = recent_dates(conn, days)
             date_placeholders = ",".join("?" for _ in daily_dates)
             daily_status_raw = conn.execute(
                 f"""
@@ -2443,6 +4672,11 @@ def stock_detail(stock_id: str, days: int) -> dict[str, object]:
             for row in revenue_raw
         ]
         news = load_cached_news(conn, stock_id)
+    selection = {}
+    for row in read_csv(REPORTS_DIR / f"scan_all_{days}d.csv"):
+        if row.get("stock_id") == stock_id:
+            selection = normalize_scan_row(row, days)
+            break
     return {
         "stock": {
             "stock_id": stock_row[0],
@@ -2454,9 +4688,18 @@ def stock_detail(stock_id: str, days: int) -> dict[str, object]:
             "foreign_net_lot": shares_to_lots(foreign_net),
             "trust_net_lot": shares_to_lots(trust_net),
             "volume_lot": shares_to_lots(volume),
+            "latest_volume_lot": shares_to_lots(latest_volume),
+            "volume_avg_lot": shares_to_lots(volume_avg),
+            "volume_5d_avg_lot": shares_to_lots(volume_5d_avg),
+            "volume_ratio_1d": round(volume_ratio_1d, 2) if volume_ratio_1d is not None else None,
+            "volume_ratio_5d": round(volume_ratio_5d, 2) if volume_ratio_5d is not None else None,
+            "margin_balance_change_lot": margin_balance_change,
+            "short_balance_change_lot": short_balance_change,
             "in_watchlist": stock_row[0] in current_watchlist_ids(),
         },
+        "selection": selection,
         "daily": daily,
+        "margin": margin,
         "chart": chart,
         "branch_top": branch_top,
         "branch_top_status": branch_top_status,
@@ -2477,7 +4720,7 @@ def stock_detail(stock_id: str, days: int) -> dict[str, object]:
 
 
 def json_response(handler: BaseHTTPRequestHandler, payload: object, status: int = 200) -> None:
-    body = json.dumps(payload, ensure_ascii=False).encode("utf-8")
+    body = json.dumps(payload, ensure_ascii=False, default=str).encode("utf-8")
     handler.send_response(status)
     handler.send_header("Content-Type", "application/json; charset=utf-8")
     handler.send_header("Content-Length", str(len(body)))
@@ -2515,13 +4758,19 @@ class GUIHandler(BaseHTTPRequestHandler):
             if parsed.path == "/api/ranking":
                 days = int(params.get("days", ["20"])[0])
                 ranking = params.get("ranking", ["total_score"])[0]
+                if ranking == "foreign_5d_revenue_growth":
+                    days = 5
                 market = params.get("market", [""])[0]
                 q = params.get("q", [""])[0]
                 limit = int(params.get("limit", ["50"])[0])
+                min_volume = float(params.get("min_volume", ["0"])[0] or 0)
                 rows = [normalize_scan_row(row, days) for row in ranking_source_rows(days, ranking, q)]
                 json_response(
                     self,
-                    {"title": f"{days} 日排行：{ranking}", "rows": filtered_rows(rows, market, q, limit)},
+                    {
+                        "title": f"{days} 日排行：{RANKING_LABELS.get(ranking, ranking)}",
+                        "rows": filtered_rows(rows, market, q, limit, min_volume),
+                    },
                 )
                 return
             if parsed.path == "/api/watchlist":
@@ -2529,15 +4778,20 @@ class GUIHandler(BaseHTTPRequestHandler):
                 market = params.get("market", [""])[0]
                 q = params.get("q", [""])[0]
                 limit = int(params.get("limit", ["50"])[0])
+                min_volume = float(params.get("min_volume", ["0"])[0] or 0)
                 watchlist = current_watchlist_ids()
                 watch_order = {stock_id: idx for idx, stock_id in enumerate(watchlist)}
                 source_rows = read_csv(REPORTS_DIR / f"scan_all_{days}d.csv") or read_csv(ranking_path(days, "total_score"))
                 rows = [normalize_scan_row(row, days) for row in source_rows if row.get("stock_id") in watch_order]
                 rows.sort(key=lambda row: watch_order.get(str(row.get("stock_id")), 9999))
-                json_response(self, {"rows": filtered_rows(rows, market, q, limit)})
+                json_response(self, {"rows": filtered_rows(rows, market, q, limit, min_volume)})
                 return
             if parsed.path == "/api/watchlist-items":
                 json_response(self, {"rows": watchlist_items()})
+                return
+            if parsed.path == "/api/stock/resolve":
+                query = params.get("query", [""])[0]
+                json_response(self, resolve_local_stock(query))
                 return
             if parsed.path == "/api/stock":
                 days = int(params.get("days", ["20"])[0])
@@ -2549,6 +4803,41 @@ class GUIHandler(BaseHTTPRequestHandler):
                 limit = min(max(int(params.get("limit", ["20"])[0]), 1), 50)
                 with connect_db(DB_PATH) as conn:
                     json_response(self, {"stock_id": stock_id, "rows": load_cached_news(conn, stock_id, limit=limit)})
+                return
+            if parsed.path == "/api/us-news":
+                symbols = [
+                    item.strip().upper()
+                    for item in params.get("symbols", [""])[0].split(",")
+                    if item.strip()
+                ]
+                industry = params.get("industry", [""])[0].strip()
+                limit = min(max(int(params.get("limit", ["80"])[0]), 1), 200)
+                with connect_db(DB_PATH) as conn:
+                    json_response(
+                        self,
+                        {
+                            "symbols": symbols,
+                            "industry": industry,
+                            "rows": load_cached_us_news(conn, symbols=symbols, industry=industry, limit=limit),
+                        },
+                    )
+                return
+            if parsed.path == "/api/ci-us-news":
+                industry = params.get("industry", [""])[0].strip()
+                source = params.get("source", [""])[0].strip()
+                query = params.get("q", [""])[0].strip()
+                limit = min(max(int(params.get("limit", ["200"])[0]), 1), 500)
+                json_response(self, load_ci_us_news_preview(industry=industry, source=source, query=query, limit=limit))
+                return
+            if parsed.path == "/api/ci-us-news-live":
+                industry = params.get("industry", [""])[0].strip()
+                source = params.get("source", [""])[0].strip()
+                query = params.get("q", [""])[0].strip()
+                limit = min(max(int(params.get("limit", ["200"])[0]), 1), 500)
+                json_response(self, load_ci_us_news_live(industry=industry, source=source, query=query, limit=limit))
+                return
+            if parsed.path == "/api/obsidian/status":
+                json_response(self, obsidian_vault_status())
                 return
             if parsed.path == "/api/coverage":
                 days = int(params.get("days", ["20"])[0])
@@ -2586,11 +4875,43 @@ class GUIHandler(BaseHTTPRequestHandler):
                 job = start_update_task(task_id, days)
                 json_response(self, {"job": job})
                 return
+            if parsed.path == "/api/update/cancel":
+                json_response(self, cancel_running_update())
+                return
             if parsed.path == "/api/news/refresh":
                 payload = self.read_json_body()
                 stock_id = str(payload.get("stock_id") or "")
                 limit = min(max(int(payload.get("limit") or 8), 1), 15)
                 json_response(self, refresh_stock_news(DB_PATH, stock_id, limit=limit))
+                return
+            if parsed.path == "/api/us-news/refresh":
+                payload = self.read_json_body()
+                raw_symbols = payload.get("symbols") or []
+                if isinstance(raw_symbols, str):
+                    symbols = [item.strip() for item in raw_symbols.split(",") if item.strip()]
+                elif isinstance(raw_symbols, list):
+                    symbols = [str(item).strip() for item in raw_symbols if str(item).strip()]
+                else:
+                    symbols = []
+                limit = min(max(int(payload.get("limit") or 5), 1), 25)
+                use_ollama = bool(payload.get("use_ollama", True))
+                include_symbol_news = bool(payload.get("include_symbol_news", True))
+                model = str(payload.get("model") or "gemma4:e4b")
+                json_response(
+                    self,
+                    refresh_us_news(
+                        DB_PATH,
+                        symbols=symbols,
+                        limit=limit,
+                        use_ollama=use_ollama,
+                        model=model,
+                        include_symbol_news=include_symbol_news,
+                    ),
+                )
+                return
+            if parsed.path == "/api/obsidian/export":
+                result = export_obsidian_vault(DB_PATH)
+                json_response(self, {"result": result, "status": obsidian_vault_status()})
                 return
             if parsed.path == "/api/stock/refresh-section":
                 payload = self.read_json_body()

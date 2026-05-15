@@ -20,6 +20,7 @@ from stock_chip.scan import DEFAULT_WATCHLIST, parse_watchlist, recent_dates
 HISTOCK_BRANCH_URL = "https://histock.tw/stock/branch.aspx"
 HISTOCK_BROKER_TRACE_URL = "https://histock.tw/stock/brokertrace.aspx"
 DEFAULT_RETRY_SLEEPS = (5.0, 15.0, 30.0)
+REQUEST_TIMEOUT_SECONDS = 12
 BROKER_ID_OVERRIDES = {
     "摩根大通": "8440",
     "美林": "1440",
@@ -130,7 +131,7 @@ def fetch_histock_branch(
         "User-Agent": "Mozilla/5.0 stock-chip-branch/0.1",
         "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
     }
-    resp = requests.get(HISTOCK_BRANCH_URL, params=params, headers=headers, timeout=30)
+    resp = requests.get(HISTOCK_BRANCH_URL, params=params, headers=headers, timeout=REQUEST_TIMEOUT_SECONDS)
     resp.raise_for_status()
     source_url = resp.url
     soup = BeautifulSoup(resp.text, "html.parser")
@@ -222,7 +223,7 @@ def fetch_histock_broker_trace(
         "User-Agent": "Mozilla/5.0 stock-chip-branch/0.1",
         "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
     }
-    resp = requests.get(HISTOCK_BROKER_TRACE_URL, params=params, headers=headers, timeout=30)
+    resp = requests.get(HISTOCK_BROKER_TRACE_URL, params=params, headers=headers, timeout=REQUEST_TIMEOUT_SECONDS)
     resp.raise_for_status()
     soup = BeautifulSoup(resp.text, "html.parser")
     rows: list[BranchRow] = []
@@ -360,7 +361,7 @@ def select_stock_ids(
 
 
 def existing_branch_stock_ids(conn: sqlite3.Connection, as_of_date: str, days: int) -> set[str]:
-    rows = conn.execute(
+    branch_rows = conn.execute(
         """
         SELECT DISTINCT stock_id
         FROM broker_branch_topn
@@ -370,7 +371,18 @@ def existing_branch_stock_ids(conn: sqlite3.Connection, as_of_date: str, days: i
         """,
         (as_of_date, days),
     ).fetchall()
-    return {row[0] for row in rows}
+    status_rows = conn.execute(
+        """
+        SELECT DISTINCT stock_id
+        FROM branch_fetch_status
+        WHERE trade_date = ?
+          AND window_days = ?
+          AND source = 'histock'
+          AND status IN ('success', 'empty')
+        """,
+        (as_of_date, days),
+    ).fetchall()
+    return {row[0] for row in branch_rows} | {row[0] for row in status_rows}
 
 
 def branch_coverage(conn: sqlite3.Connection, as_of_date: str, days: int) -> list[dict[str, Any]]:
@@ -654,10 +666,10 @@ def run_branch(
             )
             all_rows.extend(rows)
             statuses.append(status)
+            upsert_branch_rows(conn, rows)
+            upsert_fetch_statuses(conn, [status])
             if status.status != "success":
                 failures.append({"stock_id": stock_id, "error": status.error or status.status})
-        upsert_branch_rows(conn, all_rows)
-        upsert_fetch_statuses(conn, statuses)
 
     suffix = f"_all_offset{offset}_limit{limit}" if all_stocks and limit is not None else ""
     csv_path, md_path = export_rows(output_dir, all_rows, days, suffix=suffix)
@@ -666,8 +678,8 @@ def run_branch(
         "requested_stock_count": len(stock_ids),
         "row_count": len(all_rows),
         "failures": failures,
-        "csv": csv_path,
-        "report": md_path,
+        "csv": str(csv_path),
+        "report": str(md_path),
     }
 
 

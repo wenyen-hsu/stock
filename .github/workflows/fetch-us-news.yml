@@ -8,7 +8,7 @@ on:
         required: false
         default: "15"
       max_rows:
-        description: "docs/data/us_news.json 最多保留幾則"
+        description: "docs/data/ci_us_news.json 最多保留幾則"
         required: false
         default: "1000"
       market_only:
@@ -53,7 +53,7 @@ jobs:
           MARKET_ONLY: ${{ github.event.inputs.market_only || 'true' }}
           SYMBOLS: ${{ github.event.inputs.symbols || 'AAPL,MSFT,NVDA,TSLA' }}
         run: |
-          args=(--out docs/data/us_news.json --limit "$LIMIT" --max-rows "$MAX_ROWS" --symbols "$SYMBOLS")
+          args=(--out docs/data/ci_us_news.json --limit "$LIMIT" --max-rows "$MAX_ROWS" --symbols "$SYMBOLS")
           if [ "$MARKET_ONLY" = "true" ]; then
             args+=(--market-only)
           fi
@@ -61,12 +61,12 @@ jobs:
 
       - name: Commit updated news
         run: |
-          if git diff --quiet -- docs/data/us_news.json; then
+          if git diff --quiet -- docs/data/ci_us_news.json; then
             echo "No US news changes to commit."
             exit 0
           fi
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add docs/data/us_news.json
+          git add docs/data/ci_us_news.json
           git commit -m "Update US news cache"
           git push

@@ -21,13 +21,21 @@ from stock_chip.gui import (
     stock_detail,
 )
 from stock_chip.scan import recent_dates
+from stock_chip.us_news import load_cached_us_news
 
 
 RANKINGS = [
     "total_score",
     "chip_score",
     "branch_score",
+    "confluence_score",
+    "selection_score",
     "foreign_buy",
+    "foreign_5d_revenue_growth",
+    "inst_buy_volume",
+    "volume_expansion",
+    "revenue_volume_breakout",
+    "margin_down_foreign_buy",
     "trust_buy",
     "inst_buy",
     "near_avg_with_inst_buy",
@@ -72,6 +80,13 @@ def market_counts(rows: list[dict[str, object]]) -> dict[str, int]:
 
 def export_static(out_dir: Path, days_values: list[int], include_all_details: bool) -> dict[str, object]:
     data_dir = out_dir / "data"
+    ci_news_payload: dict[str, object] | None = None
+    ci_news_path = data_dir / "ci_us_news.json"
+    if ci_news_path.exists():
+        try:
+            ci_news_payload = json.loads(ci_news_path.read_text(encoding="utf-8"))
+        except json.JSONDecodeError:
+            ci_news_payload = None
     if data_dir.exists():
         shutil.rmtree(data_dir)
     data_dir.mkdir(parents=True, exist_ok=True)
@@ -96,6 +111,10 @@ def export_static(out_dir: Path, days_values: list[int], include_all_details: bo
                 "rows": coverage,
             }
             write_json(data_dir / f"coverage_{days}d.json", {"coverage": coverage})
+        write_json(data_dir / "us_news.json", {"rows": load_cached_us_news(conn, limit=200)})
+        if ci_news_payload is None:
+            ci_news_payload = {"rows": load_cached_us_news(conn, limit=200)}
+        write_json(data_dir / "ci_us_news.json", ci_news_payload)
 
     for days in days_values:
         ranking_dir = data_dir / "rankings" / f"{days}d"

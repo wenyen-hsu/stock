@@ -38,13 +38,20 @@ def load_window(conn: sqlite3.Connection, dates: list[str]) -> list[dict[str, An
             p.avg_price,
             COALESCE(i.foreign_net, 0) AS foreign_net,
             COALESCE(i.trust_net, 0) AS trust_net,
-            COALESCE(i.dealer_net, 0) AS dealer_net
+            COALESCE(i.dealer_net, 0) AS dealer_net,
+            m.margin_prev_balance,
+            m.margin_balance,
+            m.short_prev_balance,
+            m.short_balance
         FROM daily_prices p
         JOIN stocks s
             ON s.stock_id = p.stock_id
         LEFT JOIN institutional_trades i
             ON i.date = p.date
            AND i.stock_id = p.stock_id
+        LEFT JOIN margin_trades m
+            ON m.date = p.date
+           AND m.stock_id = p.stock_id
         WHERE p.date IN ({placeholders})
         ORDER BY p.stock_id, p.date
         """,
@@ -62,6 +69,10 @@ def load_window(conn: sqlite3.Connection, dates: list[str]) -> list[dict[str, An
         "foreign_net",
         "trust_net",
         "dealer_net",
+        "margin_prev_balance",
+        "margin_balance",
+        "short_prev_balance",
+        "short_balance",
     ]
     return [dict(zip(columns, row, strict=True)) for row in rows]
 
@@ -111,6 +122,27 @@ def load_branch_leaders(
         stock[f"{prefix}_avg_price"] = row["avg_price"]
         stock["branch_source"] = row["source"]
     return leaders
+
+
+def load_revenue_momentum(conn: sqlite3.Connection) -> dict[str, dict[str, Any]]:
+    rows = conn.execute(
+        """
+        SELECT stock_id, revenue_month, mom_pct, yoy_pct, cumulative_yoy_pct
+        FROM monthly_revenues
+        ORDER BY stock_id, revenue_month DESC
+        """
+    ).fetchall()
+    output: dict[str, dict[str, Any]] = {}
+    for stock_id, revenue_month, mom_pct, yoy_pct, cumulative_yoy_pct in rows:
+        if stock_id in output:
+            continue
+        output[stock_id] = {
+            "revenue_month": revenue_month,
+            "revenue_mom_pct": mom_pct,
+            "revenue_yoy_pct": yoy_pct,
+            "revenue_cumulative_yoy_pct": cumulative_yoy_pct,
+        }
+    return output
 
 
 def consecutive_count(rows: list[dict[str, Any]], key: str, direction: int) -> int:
@@ -192,13 +224,224 @@ def branch_score_row(row: dict[str, Any]) -> float:
     return round(score, 2)
 
 
+def revenue_momentum_score(row: dict[str, Any]) -> float:
+    yoy = row.get("revenue_yoy_pct")
+    mom = row.get("revenue_mom_pct")
+    cumulative = row.get("revenue_cumulative_yoy_pct")
+    if yoy is None and mom is None and cumulative is None:
+        return 0.0
+    score = 0.0
+    if yoy is not None:
+        score += bounded(yoy, -30, 60) * 0.18
+    if mom is not None:
+        score += bounded(mom, -25, 40) * 0.12
+    if cumulative is not None:
+        score += bounded(cumulative, -30, 60) * 0.16
+    return round(bounded(score, -10, 24), 2)
+
+
+def margin_score_row(row: dict[str, Any]) -> float:
+    margin_change = row.get("margin_balance_change_lot")
+    short_change = row.get("short_balance_change_lot")
+    volume_lot = (row.get(f"{row['days']}d_volume") or 0) / 1000
+    close_vs_avg_pct = row.get("close_vs_avg_pct")
+    if volume_lot <= 0:
+        return 0.0
+
+    score = 0.0
+    if margin_change is not None:
+        margin_ratio = margin_change / volume_lot * 100
+        if margin_change < 0:
+            score += bounded(abs(margin_ratio), 0, 8) * 1.0
+        else:
+            score -= bounded(margin_ratio, 0, 8) * 0.8
+    if short_change is not None:
+        short_ratio = short_change / volume_lot * 100
+        if short_change > 0 and close_vs_avg_pct is not None and close_vs_avg_pct >= 0:
+            score += bounded(short_ratio, 0, 5) * 0.6
+        elif short_change < 0:
+            score -= bounded(abs(short_ratio), 0, 5) * 0.3
+    return round(bounded(score, -10, 10), 2)
+
+
+def volume_signal_row(row: dict[str, Any]) -> str:
+    ratio_1d = row.get("volume_ratio_1d")
+    ratio_5d = row.get("volume_ratio_5d")
+    if ratio_1d is None and ratio_5d is None:
+        return "無量能資料"
+    if (ratio_1d or 0) >= 2.0:
+        return "強放量"
+    if (ratio_1d or 0) >= 1.5 or (ratio_5d or 0) >= 1.3:
+        return "放量"
+    if (ratio_1d or 0) <= 0.6 and (ratio_5d or 1) <= 0.8:
+        return "量縮"
+    return "正常"
+
+
+def volume_score_row(row: dict[str, Any]) -> float:
+    if row["observed_days"] < max(5, min(row["days"], 5)):
+        return 0.0
+    ratio_1d = row.get("volume_ratio_1d")
+    ratio_5d = row.get("volume_ratio_5d")
+    if ratio_1d is None and ratio_5d is None:
+        return 0.0
+    score = 0.0
+    if ratio_1d is not None:
+        score += bounded((ratio_1d - 1.0) * 12.0, -8.0, 18.0)
+    if ratio_5d is not None:
+        score += bounded((ratio_5d - 1.0) * 16.0, -8.0, 18.0)
+    if row.get(f"{row['days']}d_inst_net", 0) > 0 and ratio_1d is not None and ratio_1d >= 1.2:
+        score += 3.0
+    return round(bounded(score, -12.0, 30.0), 2)
+
+
+def branch_status(row: dict[str, Any]) -> str:
+    if row.get("top_buy_branch_name"):
+        return "已取得"
+    return "未取得"
+
+
+def base_reason(row: dict[str, Any]) -> str:
+    parts: list[str] = []
+    if row.get(f"{row['days']}d_foreign_net", 0) > 0:
+        parts.append("外資買超")
+    if row.get(f"{row['days']}d_trust_net", 0) > 0:
+        parts.append("投信買超")
+    if row.get("margin_balance_change_lot") is not None:
+        if row["margin_balance_change_lot"] < 0:
+            parts.append("融資下降")
+        elif row["margin_balance_change_lot"] > 0:
+            parts.append("融資增加")
+    signal = row.get("volume_signal")
+    if signal in {"強放量", "放量"}:
+        parts.append(signal)
+    rev = revenue_reason(row)
+    if rev:
+        parts.append(rev)
+    return "；".join(parts)
+
+
+def confluence_breakdown(row: dict[str, Any]) -> dict[str, Any]:
+    """Explain cases where institutional flow and top branch buying point the same way."""
+    empty = {
+        "confluence_score": 0.0,
+        "confluence_inst_score": 0.0,
+        "confluence_branch_score": 0.0,
+        "confluence_price_score": 0.0,
+        "confluence_streak_score": 0.0,
+        "confluence_direction_score": 0.0,
+        "revenue_momentum_score": row.get("revenue_momentum_score", 0.0),
+        "selection_score": row.get("base_score", 0.0),
+        "complete_chip_score": row.get("base_score", 0.0),
+        "inst_net_volume_pct": None,
+        "top_buy_branch_volume_pct": None,
+        "close_vs_top_buy_avg_pct": None,
+        "selection_reason": "資料不足或法人與分點未同向",
+    }
+    if row["observed_days"] < row["days"]:
+        empty["selection_reason"] = revenue_reason(row) or empty["selection_reason"]
+        return empty
+    volume = row[f"{row['days']}d_volume"] or 0
+    volume_lot = volume / 1000
+    inst_net = row[f"{row['days']}d_inst_net"] or 0
+    foreign_net = row[f"{row['days']}d_foreign_net"] or 0
+    trust_net = row[f"{row['days']}d_trust_net"] or 0
+    buy_net_lot = row.get("top_buy_branch_net_lot") or 0
+    close_vs_avg_pct = row.get("close_vs_avg_pct")
+    close = row.get("close")
+    buy_avg = row.get("top_buy_branch_avg_price")
+
+    if volume <= 0 or inst_net <= 0 or buy_net_lot <= 0:
+        empty["selection_reason"] = revenue_reason(row) or empty["selection_reason"]
+        return empty
+
+    inst_ratio = inst_net / volume * 100
+    branch_ratio = buy_net_lot / volume_lot * 100 if volume_lot else 0
+    close_vs_branch_avg = (close - buy_avg) / buy_avg * 100 if close is not None and buy_avg else None
+    inst_score = bounded(inst_ratio, 0, 15) * 1.5
+    branch_score = bounded(branch_ratio, 0, 20) * 1.2
+    direction_score = 0.0
+    if foreign_net > 0:
+        direction_score += 6.0
+    if trust_net > 0:
+        direction_score += 8.0
+    streak_score = min(row["foreign_buy_streak"], 5) * 1.2
+    streak_score += min(row["trust_buy_streak"], 5) * 1.6
+    price_score = 0.0
+    if close_vs_avg_pct is not None:
+        if -3 <= close_vs_avg_pct <= 5:
+            price_score += 6.0
+        elif close_vs_avg_pct > 12:
+            price_score -= 5.0
+    if close_vs_branch_avg is not None:
+        if -3 <= close_vs_branch_avg <= 5:
+            price_score += 8.0
+        elif close_vs_branch_avg > 12:
+            price_score -= 6.0
+
+    reasons: list[str] = []
+    if foreign_net > 0 and trust_net > 0:
+        reasons.append("外資與投信同買")
+    elif foreign_net > 0:
+        reasons.append("外資主導買超")
+    elif trust_net > 0:
+        reasons.append("投信主導買超")
+    reasons.append(f"前大買超分點約占成交 {round(branch_ratio, 2)}%")
+    if close_vs_avg_pct is not None:
+        reasons.append(f"收盤距區間均價 {round(close_vs_avg_pct, 2)}%")
+    if close_vs_branch_avg is not None:
+        reasons.append(f"收盤距分點均價 {round(close_vs_branch_avg, 2)}%")
+    if row["foreign_buy_streak"] or row["trust_buy_streak"]:
+        reasons.append(f"連買：外{row['foreign_buy_streak']} / 投{row['trust_buy_streak']}")
+    rev_reason = revenue_reason(row)
+    if rev_reason:
+        reasons.append(rev_reason)
+
+    score = inst_score + branch_score + direction_score + streak_score + price_score
+    revenue_score = row.get("revenue_momentum_score", 0.0) or 0.0
+    return {
+        "confluence_score": round(score, 2),
+        "confluence_inst_score": round(inst_score, 2),
+        "confluence_branch_score": round(branch_score, 2),
+        "confluence_price_score": round(price_score, 2),
+        "confluence_streak_score": round(streak_score, 2),
+        "confluence_direction_score": round(direction_score, 2),
+        "revenue_momentum_score": round(revenue_score, 2),
+        "selection_score": row.get("base_score", 0.0),
+        "complete_chip_score": round((row.get("base_score", 0.0) or 0.0) + score, 2),
+        "inst_net_volume_pct": round(inst_ratio, 2),
+        "top_buy_branch_volume_pct": round(branch_ratio, 2),
+        "close_vs_top_buy_avg_pct": round(close_vs_branch_avg, 2) if close_vs_branch_avg is not None else None,
+        "selection_reason": "；".join(reasons),
+    }
+
+
+def revenue_reason(row: dict[str, Any]) -> str:
+    if not row.get("revenue_month"):
+        return ""
+    parts = [f"營收 {row['revenue_month']}"]
+    if row.get("revenue_mom_pct") is not None:
+        parts.append(f"月增 {round(row['revenue_mom_pct'], 2)}%")
+    if row.get("revenue_yoy_pct") is not None:
+        parts.append(f"年增 {round(row['revenue_yoy_pct'], 2)}%")
+    if row.get("revenue_cumulative_yoy_pct") is not None:
+        parts.append(f"累計年增 {round(row['revenue_cumulative_yoy_pct'], 2)}%")
+    return "，".join(parts)
+
+
+def confluence_score_row(row: dict[str, Any]) -> float:
+    return float(confluence_breakdown(row)["confluence_score"])
+
+
 def aggregate(
     rows: list[dict[str, Any]],
     days: int,
     latest_date: str,
     branch_leaders: dict[str, dict[str, Any]] | None = None,
+    revenue_momentum: dict[str, dict[str, Any]] | None = None,
 ) -> list[dict[str, Any]]:
     branch_leaders = branch_leaders or {}
+    revenue_momentum = revenue_momentum or {}
     grouped: dict[str, list[dict[str, Any]]] = {}
     for row in rows:
         grouped.setdefault(row["stock_id"], []).append(row)
@@ -210,6 +453,16 @@ def aggregate(
         if latest["date"] != latest_date:
             continue
         volume = sum(row["volume"] or 0 for row in stock_rows)
+        latest_volume = latest["volume"] or 0
+        avg_volume = volume / len(stock_rows) if stock_rows else 0
+        recent5_rows = stock_rows[-min(5, len(stock_rows)) :]
+        volume_5d_avg = (
+            sum(row["volume"] or 0 for row in recent5_rows) / len(recent5_rows)
+            if recent5_rows
+            else 0
+        )
+        volume_ratio_1d = latest_volume / avg_volume if avg_volume else None
+        volume_ratio_5d = volume_5d_avg / avg_volume if avg_volume else None
         turnover = sum(row["turnover"] or 0 for row in stock_rows)
         avg_price = turnover / volume if volume else None
         close = latest["close"]
@@ -231,6 +484,11 @@ def aggregate(
             f"{days}d_avg_price": avg_price,
             "close_vs_avg_pct": close_vs_avg_pct,
             f"{days}d_volume": volume,
+            "latest_volume": latest_volume,
+            "volume_avg": avg_volume,
+            "volume_5d_avg": volume_5d_avg,
+            "volume_ratio_1d": volume_ratio_1d,
+            "volume_ratio_5d": volume_ratio_5d,
             f"{days}d_foreign_net": foreign_net,
             f"{days}d_trust_net": trust_net,
             f"{days}d_dealer_net": dealer_net,
@@ -243,9 +501,30 @@ def aggregate(
             "trust_sell_streak": consecutive_count(stock_rows, "trust_net", -1),
         }
         item.update(branch_leaders.get(stock_id, {}))
+        item.update(revenue_momentum.get(stock_id, {}))
+        margin_values = [row for row in stock_rows if row.get("margin_balance") is not None]
+        margin_balance_change = None
+        short_balance_change = None
+        if margin_values:
+            latest_margin = margin_values[-1]
+            oldest_margin = margin_values[0]
+            if latest_margin.get("margin_balance") is not None and oldest_margin.get("margin_prev_balance") is not None:
+                margin_balance_change = latest_margin["margin_balance"] - oldest_margin["margin_prev_balance"]
+            if latest_margin.get("short_balance") is not None and oldest_margin.get("short_prev_balance") is not None:
+                short_balance_change = latest_margin["short_balance"] - oldest_margin["short_prev_balance"]
+        item["margin_balance_change_lot"] = margin_balance_change
+        item["short_balance_change_lot"] = short_balance_change
+        item["revenue_momentum_score"] = revenue_momentum_score(item)
         item["branch_score"] = branch_score_row(item)
         item["chip_score"] = score_row(item)
-        item["total_score"] = round(item["chip_score"] + item["branch_score"], 2)
+        item["margin_score"] = margin_score_row(item)
+        item["volume_score"] = volume_score_row(item)
+        item["volume_signal"] = volume_signal_row(item)
+        item["base_score"] = round(item["chip_score"] + item["margin_score"] + item["revenue_momentum_score"], 2)
+        item["branch_status"] = branch_status(item)
+        item["base_reason"] = base_reason(item)
+        item.update(confluence_breakdown(item))
+        item["total_score"] = item["base_score"]
         output.append(item)
     return output
 
@@ -267,6 +546,13 @@ def to_export_row(row: dict[str, Any], days: int) -> dict[str, Any]:
         f"{days}d_avg_price": round(avg_price, 4) if avg_price is not None else None,
         "close_vs_avg_pct": round(close_vs_avg_pct, 2) if close_vs_avg_pct is not None else None,
         f"{days}d_volume_lot": shares_to_lots(volume),
+        "latest_volume_lot": shares_to_lots(row.get("latest_volume")),
+        "volume_avg_lot": shares_to_lots(row.get("volume_avg")),
+        "volume_5d_avg_lot": shares_to_lots(row.get("volume_5d_avg")),
+        "volume_ratio_1d": round(row["volume_ratio_1d"], 2) if row.get("volume_ratio_1d") is not None else None,
+        "volume_ratio_5d": round(row["volume_ratio_5d"], 2) if row.get("volume_ratio_5d") is not None else None,
+        "volume_score": row.get("volume_score", 0.0),
+        "volume_signal": row.get("volume_signal", ""),
         f"{days}d_foreign_net_lot": shares_to_lots(foreign_net),
         f"{days}d_trust_net_lot": shares_to_lots(trust_net),
         f"{days}d_inst_net_lot": shares_to_lots(inst_net),
@@ -286,6 +572,29 @@ def to_export_row(row: dict[str, Any], days: int) -> dict[str, Any]:
         "top_sell_branch_avg_price": row.get("top_sell_branch_avg_price"),
         "branch_score": row.get("branch_score", 0.0),
         "chip_score": row["chip_score"],
+        "margin_balance_change_lot": row.get("margin_balance_change_lot"),
+        "short_balance_change_lot": row.get("short_balance_change_lot"),
+        "margin_score": row.get("margin_score", 0.0),
+        "base_score": row.get("base_score", row["chip_score"]),
+        "branch_status": row.get("branch_status", ""),
+        "confluence_score": row.get("confluence_score", 0.0),
+        "complete_chip_score": row.get("complete_chip_score", row.get("base_score", row["chip_score"])),
+        "confluence_inst_score": row.get("confluence_inst_score", 0.0),
+        "confluence_branch_score": row.get("confluence_branch_score", 0.0),
+        "confluence_price_score": row.get("confluence_price_score", 0.0),
+        "confluence_streak_score": row.get("confluence_streak_score", 0.0),
+        "confluence_direction_score": row.get("confluence_direction_score", 0.0),
+        "revenue_momentum_score": row.get("revenue_momentum_score", 0.0),
+        "selection_score": row.get("selection_score", row.get("confluence_score", 0.0)),
+        "revenue_month": row.get("revenue_month"),
+        "revenue_mom_pct": row.get("revenue_mom_pct"),
+        "revenue_yoy_pct": row.get("revenue_yoy_pct"),
+        "revenue_cumulative_yoy_pct": row.get("revenue_cumulative_yoy_pct"),
+        "inst_net_volume_pct": row.get("inst_net_volume_pct"),
+        "top_buy_branch_volume_pct": row.get("top_buy_branch_volume_pct"),
+        "close_vs_top_buy_avg_pct": row.get("close_vs_top_buy_avg_pct"),
+        "selection_reason": row.get("selection_reason", ""),
+        "base_reason": row.get("base_reason", ""),
         "total_score": row.get("total_score", row["chip_score"]),
     }
 
@@ -310,6 +619,16 @@ def export_rankings(output_dir: Path, rows: list[dict[str, Any]], days: int, lim
             key=lambda row: row.get("branch_score", 0.0),
             reverse=True,
         ),
+        "confluence_score": sorted(
+            [row for row in rows if row.get("confluence_score", 0.0) > 0],
+            key=lambda row: row.get("confluence_score", 0.0),
+            reverse=True,
+        ),
+        "selection_score": sorted(
+            rows,
+            key=lambda row: row.get("selection_score", 0.0),
+            reverse=True,
+        ),
         "foreign_buy": sorted(rows, key=lambda row: row[f"{days}d_foreign_net"], reverse=True),
         "trust_buy": sorted(rows, key=lambda row: row[f"{days}d_trust_net"], reverse=True),
         "inst_buy": sorted(rows, key=lambda row: row[f"{days}d_inst_net"], reverse=True),
@@ -331,6 +650,64 @@ def export_rankings(output_dir: Path, rows: list[dict[str, Any]], days: int, lim
                 and -3 <= row["close_vs_avg_pct"] <= 3
             ],
             key=lambda row: row.get("total_score", row["chip_score"]),
+            reverse=True,
+        ),
+        "foreign_5d_revenue_growth": sorted(
+            [
+                row
+                for row in rows
+                if row["days"] == 5
+                and row[f"{days}d_foreign_net"] > 0
+                and (row.get("revenue_yoy_pct") or 0) > 0
+                and (row.get("revenue_mom_pct") or 0) > 0
+            ],
+            key=lambda row: (row.get("total_score", row["chip_score"]), row[f"{days}d_foreign_net"]),
+            reverse=True,
+        ),
+        "inst_buy_volume": sorted(
+            [
+                row
+                for row in rows
+                if row[f"{days}d_inst_net"] > 0
+                and (row.get(f"{days}d_volume") or 0) > 0
+                and (row[f"{days}d_foreign_net"] / row[f"{days}d_volume"] * 100) > 0.5
+            ],
+            key=lambda row: (row[f"{days}d_foreign_net"] / (row.get(f"{days}d_volume") or 1) * 100, row[f"{days}d_inst_net"]),
+            reverse=True,
+        ),
+        "volume_expansion": sorted(
+            [
+                row
+                for row in rows
+                if (row.get("volume_score") or 0) > 0
+                and (row.get("volume_ratio_1d") is not None or row.get("volume_ratio_5d") is not None)
+            ],
+            key=lambda row: (
+                row.get("volume_score") or 0,
+                row.get("volume_ratio_1d") or 0,
+                row.get(f"{days}d_volume") or 0,
+            ),
+            reverse=True,
+        ),
+        "revenue_volume_breakout": sorted(
+            [
+                row
+                for row in rows
+                if (row.get("revenue_yoy_pct") or 0) > 0
+                and (row.get("revenue_mom_pct") or 0) > 0
+                and (row.get("volume_score") or 0) > 0
+            ],
+            key=lambda row: ((row.get("revenue_momentum_score") or 0), row.get("volume_score") or 0),
+            reverse=True,
+        ),
+        "margin_down_foreign_buy": sorted(
+            [
+                row
+                for row in rows
+                if row[f"{days}d_foreign_net"] > 0
+                and (row.get("margin_balance_change_lot") or 0) < 0
+            ],
+            key=lambda row: (row[f"{days}d_foreign_net"], -(row.get("margin_balance_change_lot") or 0)),
             reverse=True,
         ),
     }
@@ -391,7 +768,7 @@ def write_markdown_report(
         "",
         "## 自選股",
         "",
-        f"| 股票 | 市場 | 收盤價 | {days}日均價 | 外資(張) | 投信(張) | 買超分點 | 分點均價 | 總分 |",
+        f"| 股票 | 市場 | 收盤價 | {days}日均價 | 外資(張) | 投信(張) | 買超分點 | 分點均價 | 基礎分 |",
         "| --- | --- | ---: | ---: | ---: | ---: | --- | ---: | ---: |",
     ]
     for row in watchlist_rows:
@@ -406,9 +783,9 @@ def write_markdown_report(
     lines.extend(
         [
             "",
-            "## 總分前 10",
+            "## 基礎分前 10",
             "",
-            f"| 股票 | 市場 | 收盤價 | 外資(張) | 投信(張) | 連買 | 總分 |",
+            f"| 股票 | 市場 | 收盤價 | 外資(張) | 投信(張) | 連買 | 基礎分 |",
             "| --- | --- | ---: | ---: | ---: | ---: | ---: |",
         ]
     )
@@ -451,9 +828,10 @@ def run_scan(
         dates = recent_dates(conn, days)
         raw_rows = load_window(conn, dates)
         branch_leaders = load_branch_leaders(conn, dates[-1], days) if dates else {}
+        revenue_momentum = load_revenue_momentum(conn)
     if len(dates) < days:
         raise RuntimeError(f"資料庫只有 {len(dates)} 個交易日，少於要求的 {days} 日。")
-    rows = aggregate(raw_rows, days, dates[-1], branch_leaders)
+    rows = aggregate(raw_rows, days, dates[-1], branch_leaders, revenue_momentum)
     output_dir.mkdir(parents=True, exist_ok=True)
 
     all_path = output_dir / f"scan_all_{days}d.csv"

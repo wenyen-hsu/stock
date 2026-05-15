@@ -120,8 +120,8 @@ def export_us_news_static(
 
 
 def parse_args() -> argparse.Namespace:
-    parser = argparse.ArgumentParser(description="Fetch US news and merge it into docs/data/us_news.json.")
-    parser.add_argument("--out", default="docs/data/us_news.json")
+    parser = argparse.ArgumentParser(description="Fetch US news and merge it into docs/data/ci_us_news.json.")
+    parser.add_argument("--out", default="docs/data/ci_us_news.json")
     parser.add_argument("--symbols", default="AAPL,MSFT,NVDA,TSLA")
     parser.add_argument("--limit", type=int, default=25)
     parser.add_argument("--max-rows", type=int, default=500)

@@ -66,7 +66,7 @@ def stock_lookup(conn: sqlite3.Connection, stock_ids: list[str]) -> dict[str, di
     return {row[0]: {"name": row[1], "market": row[2]} for row in rows}
 
 
-def fetch_finmind_revenue(stock_id: str, start_date: str) -> list[dict[str, Any]]:
+def fetch_finmind_revenue(stock_id: str, start_date: str, timeout_seconds: float = 20) -> list[dict[str, Any]]:
     resp = requests.get(
         FINMIND_URL,
         params={
@@ -74,7 +74,7 @@ def fetch_finmind_revenue(stock_id: str, start_date: str) -> list[dict[str, Any]
             "data_id": stock_id,
             "start_date": start_date,
         },
-        timeout=30,
+        timeout=timeout_seconds,
     )
     resp.raise_for_status()
     payload = resp.json()
@@ -181,9 +181,11 @@ def run_revenue(
     stock_ids: list[str],
     months: int,
     sleep_seconds: float,
+    retries: int = 2,
+    timeout_seconds: float = 20,
 ) -> dict[str, Any]:
     start = add_months(month_start(dt.date.today()), -(months + 14)).isoformat()
-    all_rows: list[RevenueRow] = []
+    row_count = 0
     failures: list[dict[str, str]] = []
     with connect_db(db_path) as conn:
         lookup = stock_lookup(conn, stock_ids)
@@ -191,23 +193,40 @@ def run_revenue(
             if idx:
                 time.sleep(sleep_seconds)
             meta = lookup.get(stock_id, {"name": stock_id, "market": ""})
+            last_error: Exception | None = None
             try:
-                raw = fetch_finmind_revenue(stock_id, start)
-                all_rows.extend(
-                    normalize_finmind_rows(
-                        raw,
-                        stock_id=stock_id,
-                        name=meta["name"],
-                        market=meta["market"],
-                        months=months,
-                    )
+                raw: list[dict[str, Any]] = []
+                for attempt in range(retries + 1):
+                    try:
+                        raw = fetch_finmind_revenue(stock_id, start, timeout_seconds=timeout_seconds)
+                        break
+                    except Exception as exc:
+                        last_error = exc
+                        if attempt >= retries:
+                            raise
+                        delay = min(2 + attempt * 3, 8)
+                        print(
+                            f"[{idx + 1}/{len(stock_ids)}] {stock_id} retry {attempt + 1}/{retries}: {exc}",
+                            flush=True,
+                        )
+                        time.sleep(delay)
+                rows = normalize_finmind_rows(
+                    raw,
+                    stock_id=stock_id,
+                    name=meta["name"],
+                    market=meta["market"],
+                    months=months,
                 )
+                upsert_revenues(conn, rows)
+                row_count += len(rows)
+                print(f"[{idx + 1}/{len(stock_ids)}] {stock_id} revenue rows: {len(rows)}", flush=True)
             except Exception as exc:
-                failures.append({"stock_id": stock_id, "error": str(exc)})
-        upsert_revenues(conn, all_rows)
+                error = str(last_error or exc)
+                failures.append({"stock_id": stock_id, "error": error})
+                print(f"[{idx + 1}/{len(stock_ids)}] {stock_id} failed: {error}", flush=True)
     return {
         "requested_stock_count": len(stock_ids),
-        "row_count": len(all_rows),
+        "row_count": row_count,
         "failures": failures,
         "start_date": start,
     }
@@ -219,6 +238,8 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--months", type=int, default=24)
     parser.add_argument("--watchlist", default=",".join(DEFAULT_WATCHLIST))
     parser.add_argument("--sleep", type=float, default=0.2)
+    parser.add_argument("--retries", type=int, default=2)
+    parser.add_argument("--timeout", type=float, default=20)
     return parser.parse_args()
 
 
@@ -229,6 +250,8 @@ def main() -> None:
         stock_ids=parse_watchlist(args.watchlist),
         months=args.months,
         sleep_seconds=args.sleep,
+        retries=args.retries,
+        timeout_seconds=args.timeout,
     )
     print(f"requested stocks: {result['requested_stock_count']}")
     print(f"revenue rows: {result['row_count']}")

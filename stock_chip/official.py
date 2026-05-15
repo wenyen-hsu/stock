@@ -26,6 +26,8 @@ from stock_chip.probe import (
 STOCK_ID_RE = re.compile(r"^[1-9]\d{3}$")
 TPEX_PRICE_URL = "https://www.tpex.org.tw/www/zh-tw/afterTrading/otc"
 TPEX_INST_URL = "https://www.tpex.org.tw/web/stock/3insti/daily_trade/3itrade_hedge_result.php"
+TWSE_MARGIN_URL = "https://www.twse.com.tw/rwd/zh/marginTrading/MI_MARGN"
+TPEX_MARGIN_URL = "https://www.tpex.org.tw/web/stock/margin_trading/margin_balance/margin_bal_result.php"
 TPEX_ESB_LATEST_URL = "https://www.tpex.org.tw/openapi/v1/tpex_esb_latest_statistics"
 MIN_COMBINED_PRICE_COUNT = 1800
 
@@ -59,6 +61,28 @@ class InstitutionalRow:
     trust_sell: int | None
     trust_net: int | None
     dealer_net: int | None
+
+
+@dataclass
+class MarginRow:
+    date: str
+    stock_id: str
+    name: str
+    market: str
+    margin_buy: int | None
+    margin_sell: int | None
+    margin_cash_repay: int | None
+    margin_prev_balance: int | None
+    margin_balance: int | None
+    margin_limit: int | None
+    short_buy: int | None
+    short_sell: int | None
+    short_stock_repay: int | None
+    short_prev_balance: int | None
+    short_balance: int | None
+    short_limit: int | None
+    offset: int | None
+    note: str | None
 
 
 def is_stock_id(stock_id: str) -> bool:
@@ -245,6 +269,95 @@ def fetch_tpex_institutional_all(date: dt.date, stock_only: bool = True) -> list
     return rows
 
 
+def fetch_twse_margin_all(date: dt.date, stock_only: bool = True) -> list[MarginRow]:
+    data = get_json(
+        TWSE_MARGIN_URL,
+        {"date": twse_date(date), "response": "json", "selectType": "ALL"},
+    )
+    if data.get("stat") != "OK":
+        raise ProbeError(f"TWSE margin response is not OK: {data.get('stat')}")
+
+    rows: list[MarginRow] = []
+    for table in data.get("tables", []):
+        fields = table.get("fields") or []
+        if not fields or fields[0] != "代號":
+            continue
+        for row in table.get("data", []):
+            stock_id = str(row[0]).strip()
+            if stock_only and not is_stock_id(stock_id):
+                continue
+            rows.append(
+                MarginRow(
+                    date=date.isoformat(),
+                    stock_id=stock_id,
+                    name=str(row[1]).strip(),
+                    market="TWSE",
+                    margin_buy=clean_number(row[2]),
+                    margin_sell=clean_number(row[3]),
+                    margin_cash_repay=clean_number(row[4]),
+                    margin_prev_balance=clean_number(row[5]),
+                    margin_balance=clean_number(row[6]),
+                    margin_limit=clean_number(row[7]),
+                    short_buy=clean_number(row[8]),
+                    short_sell=clean_number(row[9]),
+                    short_stock_repay=clean_number(row[10]),
+                    short_prev_balance=clean_number(row[11]),
+                    short_balance=clean_number(row[12]),
+                    short_limit=clean_number(row[13]),
+                    offset=clean_number(row[14]),
+                    note=str(row[15]).strip() if len(row) > 15 else "",
+                )
+            )
+    return rows
+
+
+def fetch_tpex_margin_all(date: dt.date, stock_only: bool = True) -> list[MarginRow]:
+    data = get_json(
+        TPEX_MARGIN_URL,
+        {"l": "zh-tw", "o": "json", "d": tpex_date(date)},
+    )
+    response_date = str(data.get("date") or "")
+    if response_date and response_date != date.strftime("%Y%m%d"):
+        raise ProbeError(
+            f"TPEX margin response date mismatch: requested {date.isoformat()}, got {response_date}"
+        )
+
+    rows: list[MarginRow] = []
+    for table in data.get("tables", []):
+        fields = table.get("fields") or []
+        field_index = field_indexes(fields)
+        required = {"代號", "名稱", "資買", "資賣", "資餘額", "券賣", "券買", "券餘額"}
+        if not required.issubset(field_index):
+            continue
+        for row in table.get("data", []):
+            stock_id = str(row[field_index["代號"]]).strip()
+            if stock_only and not is_stock_id(stock_id):
+                continue
+            rows.append(
+                MarginRow(
+                    date=date.isoformat(),
+                    stock_id=stock_id,
+                    name=str(row[field_index["名稱"]]).strip(),
+                    market="TPEX",
+                    margin_buy=clean_number(row[field_index["資買"]]),
+                    margin_sell=clean_number(row[field_index["資賣"]]),
+                    margin_cash_repay=clean_number(row[field_index["現償"]]),
+                    margin_prev_balance=clean_number(row[field_index["前資餘額(張)"]]),
+                    margin_balance=clean_number(row[field_index["資餘額"]]),
+                    margin_limit=clean_number(row[field_index["資限額"]]),
+                    short_buy=clean_number(row[field_index["券買"]]),
+                    short_sell=clean_number(row[field_index["券賣"]]),
+                    short_stock_repay=clean_number(row[field_index["券償"]]),
+                    short_prev_balance=clean_number(row[field_index["前券餘額(張)"]]),
+                    short_balance=clean_number(row[field_index["券餘額"]]),
+                    short_limit=clean_number(row[field_index["券限額"]]),
+                    offset=clean_number(row[field_index["資券相抵(張)"]]),
+                    note=str(row[field_index["備註"]]).strip() if "備註" in field_index else "",
+                )
+            )
+    return rows
+
+
 def fetch_esb_latest_prices(date: dt.date, stock_only: bool = True) -> list[PriceRow]:
     data = get_json(TPEX_ESB_LATEST_URL, {})
     rows: list[PriceRow] = []
@@ -301,6 +414,7 @@ def init_schema(conn: sqlite3.Connection) -> None:
             market TEXT NOT NULL DEFAULT 'TWSE',
             price_count INTEGER NOT NULL,
             institutional_count INTEGER NOT NULL,
+            margin_count INTEGER NOT NULL DEFAULT 0,
             updated_at TEXT NOT NULL
         );
 
@@ -331,6 +445,29 @@ def init_schema(conn: sqlite3.Connection) -> None:
             trust_sell INTEGER,
             trust_net INTEGER,
             dealer_net INTEGER,
+            updated_at TEXT NOT NULL,
+            PRIMARY KEY (date, stock_id)
+        );
+
+        CREATE TABLE IF NOT EXISTS margin_trades (
+            date TEXT NOT NULL,
+            stock_id TEXT NOT NULL,
+            name TEXT NOT NULL,
+            market TEXT NOT NULL,
+            margin_buy INTEGER,
+            margin_sell INTEGER,
+            margin_cash_repay INTEGER,
+            margin_prev_balance INTEGER,
+            margin_balance INTEGER,
+            margin_limit INTEGER,
+            short_buy INTEGER,
+            short_sell INTEGER,
+            short_stock_repay INTEGER,
+            short_prev_balance INTEGER,
+            short_balance INTEGER,
+            short_limit INTEGER,
+            offset INTEGER,
+            note TEXT,
             updated_at TEXT NOT NULL,
             PRIMARY KEY (date, stock_id)
         );
@@ -411,6 +548,8 @@ def init_schema(conn: sqlite3.Connection) -> None:
             ON daily_prices(stock_id, date);
         CREATE INDEX IF NOT EXISTS idx_institutional_stock_date
             ON institutional_trades(stock_id, date);
+        CREATE INDEX IF NOT EXISTS idx_margin_trades_stock_date
+            ON margin_trades(stock_id, date);
         CREATE INDEX IF NOT EXISTS idx_broker_branch_stock_window
             ON broker_branch_topn(stock_id, as_of_date, window_days);
         CREATE INDEX IF NOT EXISTS idx_broker_branch_daily_stock_date
@@ -421,6 +560,7 @@ def init_schema(conn: sqlite3.Connection) -> None:
             ON monthly_revenues(stock_id, revenue_month);
         """
     )
+    ensure_column(conn, "trading_days", "margin_count", "INTEGER NOT NULL DEFAULT 0")
     ensure_column(conn, "broker_branch_topn", "broker_id", "TEXT")
     ensure_column(conn, "broker_branch_daily", "broker_id", "TEXT")
     conn.commit()
@@ -506,24 +646,65 @@ def upsert_institutional(conn: sqlite3.Connection, rows: list[InstitutionalRow])
     )
 
 
+def upsert_margin(conn: sqlite3.Connection, rows: list[MarginRow]) -> None:
+    now = dt.datetime.now().isoformat(timespec="seconds")
+    conn.executemany(
+        """
+        INSERT INTO margin_trades (
+            date, stock_id, name, market, margin_buy, margin_sell,
+            margin_cash_repay, margin_prev_balance, margin_balance, margin_limit,
+            short_buy, short_sell, short_stock_repay, short_prev_balance,
+            short_balance, short_limit, offset, note, updated_at
+        )
+        VALUES (
+            :date, :stock_id, :name, :market, :margin_buy, :margin_sell,
+            :margin_cash_repay, :margin_prev_balance, :margin_balance, :margin_limit,
+            :short_buy, :short_sell, :short_stock_repay, :short_prev_balance,
+            :short_balance, :short_limit, :offset, :note, :updated_at
+        )
+        ON CONFLICT(date, stock_id) DO UPDATE SET
+            name = excluded.name,
+            market = excluded.market,
+            margin_buy = excluded.margin_buy,
+            margin_sell = excluded.margin_sell,
+            margin_cash_repay = excluded.margin_cash_repay,
+            margin_prev_balance = excluded.margin_prev_balance,
+            margin_balance = excluded.margin_balance,
+            margin_limit = excluded.margin_limit,
+            short_buy = excluded.short_buy,
+            short_sell = excluded.short_sell,
+            short_stock_repay = excluded.short_stock_repay,
+            short_prev_balance = excluded.short_prev_balance,
+            short_balance = excluded.short_balance,
+            short_limit = excluded.short_limit,
+            offset = excluded.offset,
+            note = excluded.note,
+            updated_at = excluded.updated_at
+        """,
+        [{**row.__dict__, "updated_at": now} for row in rows],
+    )
+
+
 def mark_trading_day(
     conn: sqlite3.Connection,
     date: dt.date,
     price_count: int,
     institutional_count: int,
+    margin_count: int = 0,
 ) -> None:
     now = dt.datetime.now().isoformat(timespec="seconds")
     conn.execute(
         """
-        INSERT INTO trading_days (date, market, price_count, institutional_count, updated_at)
-        VALUES (?, 'ALL', ?, ?, ?)
+        INSERT INTO trading_days (date, market, price_count, institutional_count, margin_count, updated_at)
+        VALUES (?, 'ALL', ?, ?, ?, ?)
         ON CONFLICT(date) DO UPDATE SET
             market = excluded.market,
             price_count = excluded.price_count,
             institutional_count = excluded.institutional_count,
+            margin_count = excluded.margin_count,
             updated_at = excluded.updated_at
         """,
-        (date.isoformat(), price_count, institutional_count, now),
+        (date.isoformat(), price_count, institutional_count, margin_count, now),
     )
 
 
@@ -532,7 +713,7 @@ def update_day(
     date: dt.date,
     stock_only: bool = True,
     include_esb: bool = True,
-) -> tuple[int, int]:
+) -> tuple[int, int, int]:
     prices = [
         *fetch_twse_prices_all(date, stock_only=stock_only),
         *fetch_tpex_prices_all(date, stock_only=stock_only),
@@ -543,13 +724,18 @@ def update_day(
         *fetch_twse_institutional_all(date, stock_only=stock_only),
         *fetch_tpex_institutional_all(date, stock_only=stock_only),
     ]
+    margin = [
+        *fetch_twse_margin_all(date, stock_only=stock_only),
+        *fetch_tpex_margin_all(date, stock_only=stock_only),
+    ]
     if not prices or not institutional:
         raise ProbeError(f"{date.isoformat()} has no usable official data")
     upsert_prices(conn, prices)
     upsert_institutional(conn, institutional)
-    mark_trading_day(conn, date, len(prices), len(institutional))
+    upsert_margin(conn, margin)
+    mark_trading_day(conn, date, len(prices), len(institutional), len(margin))
     conn.commit()
-    return len(prices), len(institutional)
+    return len(prices), len(institutional), len(margin)
 
 
 def update_recent(
@@ -566,7 +752,7 @@ def update_recent(
         min_price_count = MIN_COMBINED_PRICE_COUNT if stock_only else 1
         cached = conn.execute(
             """
-            SELECT price_count, institutional_count
+            SELECT price_count, institutional_count, margin_count
             FROM trading_days
             WHERE date = ?
             """,
@@ -577,19 +763,21 @@ def update_recent(
             and cached
             and cached[0] >= min_price_count
             and cached[1] > 0
+            and cached[2] > 0
         ):
             updated.append(
                 {
                     "date": cursor.isoformat(),
                     "price_count": int(cached[0]),
                     "institutional_count": int(cached[1]),
+                    "margin_count": int(cached[2]),
                     "status": "cached",
                 }
             )
             cursor -= dt.timedelta(days=1)
             continue
         try:
-            price_count, institutional_count = update_day(
+            price_count, institutional_count, margin_count = update_day(
                 conn,
                 cursor,
                 stock_only=stock_only,
@@ -597,8 +785,8 @@ def update_recent(
             )
             status = "updated"
         except Exception as exc:
-            if cached and cached[0] >= min_price_count and cached[1] > 0:
-                price_count, institutional_count = int(cached[0]), int(cached[1])
+            if cached and cached[0] >= min_price_count and cached[1] > 0 and cached[2] > 0:
+                price_count, institutional_count, margin_count = int(cached[0]), int(cached[1]), int(cached[2])
                 status = "cached"
             else:
                 cursor -= dt.timedelta(days=1)
@@ -608,6 +796,7 @@ def update_recent(
                 "date": cursor.isoformat(),
                 "price_count": price_count,
                 "institutional_count": institutional_count,
+                "margin_count": margin_count,
                 "status": status,
             }
         )
@@ -724,7 +913,7 @@ def print_update_result(updated: list[dict[str, Any]]) -> None:
     for row in updated:
         print(
             f"- {row['date']} ({row.get('status', 'updated')}): prices={row['price_count']}, "
-            f"institutional={row['institutional_count']}"
+            f"institutional={row['institutional_count']}, margin={row.get('margin_count', 0)}"
         )
 
 
