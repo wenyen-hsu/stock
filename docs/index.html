@@ -455,6 +455,69 @@
       background: #fbfdff;
     }
     .news-item:nth-child(even) { background: #f7fafc; }
+    .event-alert {
+      display: grid;
+      gap: 10px;
+    }
+    .event-alert-summary {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      flex-wrap: wrap;
+      color: var(--muted);
+      font-size: 13px;
+    }
+    .event-item {
+      padding: 12px 14px;
+      border: 1px solid #dce5ec;
+      border-radius: 8px;
+      background: #fbfdff;
+    }
+    .event-item.important {
+      border-color: #f2c9c5;
+      background: #fff8f7;
+    }
+    .event-line {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      align-items: flex-start;
+      flex-wrap: wrap;
+    }
+    .event-title {
+      color: var(--ink);
+      font-size: 15px;
+      font-weight: 850;
+      line-height: 1.45;
+    }
+    .event-meta {
+      margin-top: 6px;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.5;
+    }
+    .event-text {
+      margin-top: 8px;
+      color: #344054;
+      font-size: 13px;
+      line-height: 1.55;
+    }
+    .event-tag {
+      display: inline-flex;
+      align-items: center;
+      min-height: 24px;
+      padding: 2px 8px;
+      border-radius: 999px;
+      border: 1px solid #cfdbe5;
+      background: #f7fafc;
+      color: #344054;
+      font-size: 12px;
+      font-weight: 850;
+      white-space: nowrap;
+    }
+    .event-tag.hot { border-color: #f5b7b1; background: #fff1f0; color: var(--danger); }
+    .event-tag.good { border-color: #abefc6; background: #ecfdf3; color: var(--good); }
+    .event-open { color: var(--accent-dark); font-size: 13px; font-weight: 850; text-decoration: none; }
     .calendar-grid {
       display: grid;
       grid-template-columns: repeat(7, minmax(110px, 1fr));
@@ -775,6 +838,16 @@
           </div>
         </div>
         <div id="selection-assist"></div>
+      </section>
+      <section class="panel">
+        <div class="panel-head">
+          <div>
+            <div class="panel-title">近期重大事件</div>
+            <div class="muted" id="stock-events-note">顯示 MOPS 已公告事件；日期為公告發布日，非一定是實際事件日。</div>
+          </div>
+          <button class="secondary" id="open-mops-for-stock">查看事件頁</button>
+        </div>
+        <div class="panel-body" id="stock-events-list"></div>
       </section>
       <section class="panel">
         <div class="panel-head">
@@ -2098,6 +2171,57 @@
       renderMarketView(data);
       await loadMarketSentiment();
     }
+    function stockEventTag(row) {
+      const text = `${row?.event_tag || ""} ${row?.title || ""} ${row?.detail || ""}`;
+      if (/股東常會|股東會|股東臨時會|停止過戶/.test(text)) return "股東會";
+      if (/營收|合併營收|自結營收/.test(text)) return "營收";
+      if (/財務報告|財報|每股盈餘|損益|會計師/.test(text)) return "財報";
+      if (/除權|除息|配息|配股|股利/.test(text)) return "除權息";
+      if (/法說會|法人說明會|業績發表會/.test(text)) return "法說會";
+      if (/董事會|審計委員會/.test(text)) return "董事會";
+      if (/重大訊息|重大訊息說明/.test(text)) return "重大訊息";
+      return row?.event_tag || "其他";
+    }
+    function renderStockEvents() {
+      const target = document.querySelector("#stock-events-list");
+      const note = document.querySelector("#stock-events-note");
+      if (!target || !note) return;
+      const rows = state.detail?.mops_events || [];
+      const stock = state.detail?.stock?.stock_id || document.querySelector("#detail-stock")?.value.trim() || "";
+      if (!rows.length) {
+        note.textContent = "近 30 日無已抓取 MOPS 公告；這不代表未來沒有實際事件，只代表目前快取沒有該股公告。";
+        target.innerHTML = `<div class="empty">近 30 日無已抓取重大事件。</div>`;
+        return;
+      }
+      const tags = Array.from(new Set(rows.map(stockEventTag)));
+      const latest = rows.map(row => row.fetched_at).filter(Boolean).sort().at(-1) || "";
+      note.textContent = `${STATIC_MODE ? "靜態快取" : "本機快取"} ${rows.length} 件，分類：${tags.join("、")}；最後抓取 ${latest || "-"}`;
+      target.innerHTML = `
+        <div class="event-alert">
+          <div class="event-alert-summary">
+            <span class="status-pill ${rows.length ? "warn" : ""}">${esc(rows.length)} 件公告</span>
+            <span>日期為公告發布日；後續可再解析內文中的實際事件日。</span>
+          </div>
+          ${rows.slice(0, 8).map(row => {
+            const tag = stockEventTag(row);
+            const important = ["股東會", "除權息", "財報", "重大訊息"].includes(tag);
+            const text = (row.detail || "").replace(/\s+/g, " ").slice(0, 150);
+            return `<article class="event-item ${important ? "important" : ""}">
+              <div class="event-line">
+                <div>
+                  <span class="event-tag ${tag === "營收" ? "good" : important ? "hot" : ""}">${esc(tag)}</span>
+                  <span class="event-meta">${esc(row.event_date || "")} ${esc(row.event_time || "")}</span>
+                </div>
+                <a class="event-open" href="${esc(row.source_url || "https://mopsov.twse.com.tw/mops/web/t05st02")}" target="_blank" rel="noreferrer">開啟 MOPS</a>
+              </div>
+              <div class="event-title">${esc(row.title || "未命名事件")}</div>
+              <div class="event-meta">${esc(row.category || "MOPS")} · ${esc(row.company_name || stock)}</div>
+              ${text ? `<div class="event-text">${esc(text)}${(row.detail || "").length > 150 ? "..." : ""}</div>` : ""}
+            </article>`;
+          }).join("")}
+          ${rows.length > 8 ? `<div class="muted">尚有 ${esc(fmt(rows.length - 8))} 件，請到重大事件頁查看完整列表。</div>` : ""}
+        </div>`;
+    }
     function renderNews() {
       const target = document.querySelector("#news-list");
       const note = document.querySelector("#news-note");
@@ -2327,14 +2451,11 @@
         return;
       }
       state.mopsCalendarStart = localDateString(windowStart);
-      const nextStart = addLocalMonths(windowStart, 1);
-      const canPrev = windowStart > start;
-      const canNext = nextStart <= end;
       target.innerHTML = `
         <div class="calendar-window-bar">
-          <button class="secondary calendar-nav" data-mops-calendar-step="-1" title="上個月" aria-label="上個月" ${canPrev ? "" : "disabled"}>&lsaquo;</button>
+          <button class="secondary calendar-nav" data-mops-calendar-step="-1" title="上個月" aria-label="上個月">&lsaquo;</button>
           <span class="window-label">月曆顯示 ${esc(localDateString(windowStart))} ~ ${esc(localDateString(windowEnd))}；查詢區間 ${esc(rangeStartText)} ~ ${esc(rangeEndText)}</span>
-          <button class="secondary calendar-nav" data-mops-calendar-step="1" title="下個月" aria-label="下個月" ${canNext ? "" : "disabled"}>&rsaquo;</button>
+          <button class="secondary calendar-nav" data-mops-calendar-step="1" title="下個月" aria-label="下個月">&rsaquo;</button>
         </div>
         <div class="calendar-grid">${days.map(date => {
         const items = byDate.get(date) || [];
@@ -3056,6 +3177,7 @@
       renderPriceChart();
       renderRevenueChart();
       renderMarginChart();
+      renderStockEvents();
       renderNews();
       renderTable(document.querySelector("#daily-table"), data.daily, [
         {key:"date", label:"日期"},
@@ -3208,6 +3330,14 @@
     document.querySelector("#back-detail").addEventListener("click", goBackFromDetail);
     document.querySelector("#load-detail").addEventListener("click", loadDetail);
     document.querySelector("#watchlist-toggle").addEventListener("click", toggleWatchlist);
+    document.querySelector("#open-mops-for-stock").addEventListener("click", async () => {
+      const stock = state.detail?.stock?.stock_id || document.querySelector("#detail-stock").value.trim();
+      document.querySelector("#mops-stock").value = stock || "";
+      state.mopsSelectedDate = "";
+      state.mopsQuickFilter = "";
+      state.mopsVisibleCount = 50;
+      await setTab("mops-events");
+    });
     document.querySelector("#refresh-news").addEventListener("click", refreshNews);
     document.querySelector("#refresh-market-view").addEventListener("click", loadMarket);
     ["market-index-code","market-product","market-range"].forEach(id => document.querySelector("#" + id).addEventListener("change", loadMarket));
@@ -3228,15 +3358,23 @@
     document.querySelector("#mops-events-view").addEventListener("click", event => {
       const step = event.target.closest("[data-mops-calendar-step]");
       if (step) {
-        const current = parseLocalDate(state.mopsCalendarStart || document.querySelector("#mops-start")?.value || isoDate(0));
+        const startInput = document.querySelector("#mops-start");
+        const endInput = document.querySelector("#mops-end");
+        const currentStart = parseLocalDate(startInput?.value || state.mopsCalendarStart || isoDate(0));
+        const currentEnd = parseLocalDate(endInput?.value || startInput?.value || isoDate(0));
         const direction = Number(step.dataset.mopsCalendarStep || 0);
-        if (current && direction) {
-          state.mopsCalendarStart = localDateString(addLocalMonths(current, direction));
+        if (currentStart && currentEnd && direction) {
+          const nextStart = addLocalMonths(currentStart, direction);
+          const nextEnd = addLocalMonths(currentEnd, direction);
+          if (startInput) startInput.value = localDateString(nextStart);
+          if (endInput) endInput.value = localDateString(nextEnd);
+          state.mopsDateMode = "custom";
+          state.mopsDateInitialized = true;
+          state.mopsCalendarStart = localDateString(nextStart);
           state.mopsSelectedDate = "";
           state.mopsVisibleCount = 50;
           state.mopsQuickFilter = "";
-          renderMopsCalendar(state.mopsEvents || []);
-          renderMopsEventList();
+          loadMopsEvents();
         }
         return;
       }

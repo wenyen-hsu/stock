@@ -1055,6 +1055,36 @@
       "short_stock_repay_lot": 0
     }
   ],
+  "mops_events": [
+    {
+      "category": "公告",
+      "company_name": "巨騰-DR",
+      "detail": "",
+      "event_date": "2026-05-04",
+      "event_id": "255a02aa506763445b",
+      "event_tag": "公告",
+      "event_time": "16:47:40",
+      "fetched_at": "2026-05-17 12:36:09",
+      "source": "MOPS 公開資訊觀測站",
+      "source_url": "https://mopsov.twse.com.tw/mops/web/t05st02",
+      "stock_id": "9136",
+      "title": "股份發行人及根據<<上市規則>>第十九B章上市的香港預託證券發行人的證券變動月報表-截至2026年4月30日"
+    },
+    {
+      "category": "公告",
+      "company_name": "巨騰-DR",
+      "detail": "",
+      "event_date": "2026-04-23",
+      "event_id": "467f1a2595e74b29d2",
+      "event_tag": "公告",
+      "event_time": "09:10:18",
+      "fetched_at": "2026-05-17 12:34:58",
+      "source": "MOPS 公開資訊觀測站",
+      "source_url": "https://mopsov.twse.com.tw/mops/web/t05st02",
+      "stock_id": "9136",
+      "title": "短暫停牌"
+    }
+  ],
   "news": [],
   "revenues": [],
   "selection": {

@@ -419,10 +419,12 @@ def branch_coverage(conn: sqlite3.Connection, as_of_date: str, days: int) -> lis
             "market": row[0],
             "total_stocks": row[1],
             "stocks_with_branch": row[2],
-            "remaining": row[1] - row[2],
+            "no_branch": row[1] - row[2],
             "attempted": row[3],
             "empty_count": row[4],
             "failed_count": row[5],
+            "not_attempted": row[1] - row[3],
+            "remaining": row[1] - row[2],
         }
         for row in rows
     ]

@@ -20,6 +20,8 @@ from urllib.parse import parse_qs, urlparse
 from urllib.request import Request, urlopen
 
 from stock_chip.branch import branch_coverage, run_branch, run_branch_daily
+from stock_chip.market import PRODUCTS as FUTURES_PRODUCTS
+from stock_chip.mops import load_mops_events, refresh_mops_events
 from stock_chip.news import ensure_news_tables, load_cached_news, refresh_stock_news
 from stock_chip.obsidian_news import export_obsidian_vault, obsidian_vault_status
 from stock_chip.us_news import ensure_us_news_tables, import_static_us_news, load_cached_us_news, refresh_us_news
@@ -161,6 +163,41 @@ INDEX_HTML = """<!doctype html>
     }
     .metric .label { color: var(--muted); font-size: 13px; }
     .metric .value { font-size: 24px; font-weight: 850; margin-top: 4px; }
+    .sentiment-strip {
+      display: grid;
+      grid-template-columns: minmax(180px, 0.8fr) minmax(260px, 1.2fr) minmax(260px, 1.5fr);
+      gap: 12px;
+      padding: 14px;
+      border-bottom: 1px solid var(--line);
+      background: #f8fafc;
+    }
+    .sentiment-score {
+      font-size: 36px;
+      font-weight: 900;
+      line-height: 1;
+      margin: 6px 0;
+    }
+    .sentiment-label { font-weight: 850; }
+    .sentiment-detail {
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.55;
+      margin-top: 6px;
+    }
+    .sentiment-parts {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
+      gap: 8px;
+    }
+    .sentiment-part {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 8px;
+      background: white;
+      cursor: help;
+    }
+    .sentiment-part .part-label { color: var(--muted); font-size: 12px; font-weight: 750; }
+    .sentiment-part .part-value { font-size: 18px; font-weight: 900; margin-top: 2px; }
     .assist-grid {
       display: grid;
       grid-template-columns: repeat(5, minmax(120px, 1fr));
@@ -325,7 +362,8 @@ INDEX_HTML = """<!doctype html>
       font-weight: 800;
     }
     .price-chart-wrap,
-    .revenue-chart-wrap {
+    .revenue-chart-wrap,
+    .market-chart-wrap {
       height: 330px;
       min-height: 260px;
       position: relative;
@@ -334,10 +372,13 @@ INDEX_HTML = """<!doctype html>
     }
     .revenue-chart-wrap { height: 300px; }
     .margin-chart-wrap { height: 300px; }
+    .market-chart-wrap { height: 320px; }
     .price-chart-wrap canvas { cursor: zoom-in; }
     #price-chart,
     #revenue-chart,
-    #margin-chart {
+    #margin-chart,
+    #market-index-chart,
+    #market-futures-chart {
       width: 100% !important;
       height: 100% !important;
       max-width: 100%;
@@ -469,6 +510,170 @@ INDEX_HTML = """<!doctype html>
       background: #fbfdff;
     }
     .news-item:nth-child(even) { background: #f7fafc; }
+    .event-alert {
+      display: grid;
+      gap: 10px;
+    }
+    .event-alert-summary {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      flex-wrap: wrap;
+      color: var(--muted);
+      font-size: 13px;
+    }
+    .event-item {
+      padding: 12px 14px;
+      border: 1px solid #dce5ec;
+      border-radius: 8px;
+      background: #fbfdff;
+    }
+    .event-item.important {
+      border-color: #f2c9c5;
+      background: #fff8f7;
+    }
+    .event-line {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      align-items: flex-start;
+      flex-wrap: wrap;
+    }
+    .event-title {
+      color: var(--ink);
+      font-size: 15px;
+      font-weight: 850;
+      line-height: 1.45;
+    }
+    .event-meta {
+      margin-top: 6px;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.5;
+    }
+    .event-text {
+      margin-top: 8px;
+      color: #344054;
+      font-size: 13px;
+      line-height: 1.55;
+    }
+    .event-tag {
+      display: inline-flex;
+      align-items: center;
+      min-height: 24px;
+      padding: 2px 8px;
+      border-radius: 999px;
+      border: 1px solid #cfdbe5;
+      background: #f7fafc;
+      color: #344054;
+      font-size: 12px;
+      font-weight: 850;
+      white-space: nowrap;
+    }
+    .event-tag.hot { border-color: #f5b7b1; background: #fff1f0; color: var(--danger); }
+    .event-tag.good { border-color: #abefc6; background: #ecfdf3; color: var(--good); }
+    .event-open { color: var(--accent-dark); font-size: 13px; font-weight: 850; text-decoration: none; }
+    .calendar-grid {
+      display: grid;
+      grid-template-columns: repeat(7, minmax(110px, 1fr));
+      gap: 8px;
+      margin-bottom: 14px;
+    }
+    .calendar-day {
+      min-height: 102px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #fbfdff;
+      padding: 8px;
+      cursor: pointer;
+    }
+    .calendar-day:hover { border-color: #9fcfc8; background: #f1faf8; }
+    .calendar-day.selected { border-color: var(--accent); background: #eaf8f5; box-shadow: inset 0 0 0 1px var(--accent); }
+    .calendar-day.empty-day {
+      background: #f3f6f8;
+      color: #8b9bab;
+    }
+    .calendar-date {
+      display: flex;
+      justify-content: space-between;
+      gap: 8px;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 850;
+      margin-bottom: 6px;
+    }
+    .calendar-count {
+      font-size: 22px;
+      font-weight: 900;
+      color: var(--accent-dark);
+    }
+    .calendar-hint { color: var(--muted); font-size: 12px; line-height: 1.45; }
+    .calendar-window-bar {
+      display: flex;
+      justify-content: space-between;
+      gap: 8px;
+      align-items: center;
+      margin: 8px 0 12px;
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 800;
+    }
+    .calendar-window-bar .window-label { color: var(--ink); }
+    .calendar-nav {
+      width: 38px;
+      min-width: 38px;
+      padding: 0;
+      font-size: 20px;
+      line-height: 1;
+    }
+    .mops-summary {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+    .mops-summary-card {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #fbfdff;
+      padding: 10px;
+    }
+    .mops-summary-card .label { color: var(--muted); font-size: 12px; font-weight: 800; }
+    .mops-summary-card .value { margin-top: 4px; font-size: 20px; font-weight: 900; }
+    .quick-filter-bar {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin: 8px 0 12px;
+    }
+    .quick-filter {
+      height: 30px;
+      padding: 0 10px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: #fff;
+      color: var(--ink);
+      font-weight: 800;
+      cursor: pointer;
+    }
+    .quick-filter.active { background: var(--accent); color: #fff; border-color: var(--accent); }
+    .event-card {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #fbfdff;
+      padding: 12px;
+      margin-bottom: 10px;
+      cursor: pointer;
+    }
+    .event-card:hover { border-color: #9fcfc8; background: #f1faf8; }
+    .event-title { font-size: 15px; font-weight: 900; line-height: 1.45; }
+    .event-meta { color: var(--muted); font-size: 12px; margin-top: 6px; }
+    .event-detail-text {
+      white-space: pre-wrap;
+      color: #26384d;
+      font-size: 14px;
+      line-height: 1.7;
+    }
     .news-title {
       display: block;
       color: var(--ink);
@@ -528,10 +733,46 @@ INDEX_HTML = """<!doctype html>
     .sources strong { color: #344054; }
     .sources a { color: var(--accent-dark); text-decoration: none; font-weight: 700; }
     .sources a:hover { text-decoration: underline; }
+    .source-audit {
+      margin-bottom: 16px;
+      padding: 16px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #f8fafb;
+    }
+    .source-audit h3 {
+      margin: 0 0 10px;
+      font-size: 18px;
+    }
+    .source-audit-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+    }
+    .source-audit-card {
+      padding: 12px;
+      border: 1px solid #d6e0e8;
+      border-radius: 8px;
+      background: #fff;
+    }
+    .source-audit-card strong {
+      display: block;
+      margin-bottom: 6px;
+      color: #1d2939;
+    }
+    .source-audit-card ul {
+      margin: 0;
+      padding-left: 18px;
+      color: #475467;
+      font-size: 13px;
+      line-height: 1.65;
+    }
+    .source-audit-card a { color: var(--accent-dark); font-weight: 800; text-decoration: none; }
+    .source-audit-card a:hover { text-decoration: underline; }
     @media (max-width: 1000px) {
       main { padding: 14px; }
       .toolbar { grid-template-columns: repeat(2, minmax(140px, 1fr)); }
-      .metrics, .layout-2, .update-grid, .assist-grid, .status-grid { grid-template-columns: 1fr; }
+      .metrics, .layout-2, .update-grid, .assist-grid, .status-grid, .source-audit-grid { grid-template-columns: 1fr; }
     }
   </style>
 </head>
@@ -596,6 +837,8 @@ INDEX_HTML = """<!doctype html>
       <button class="tab active" data-tab="ranking">排行</button>
       <button class="tab" data-tab="watchlist">自選股</button>
       <button class="tab" data-tab="detail">個股</button>
+      <button class="tab" data-tab="market">大盤指數</button>
+      <button class="tab" data-tab="mops-events">重大事件</button>
       <button class="tab" data-tab="us-news">美股新聞</button>
       <button class="tab" data-tab="ci-us-news">GitHub 新聞預覽</button>
       <button class="tab" data-tab="coverage">資料狀態</button>
@@ -608,6 +851,7 @@ INDEX_HTML = """<!doctype html>
         <div class="panel-title" id="ranking-title">排行</div>
         <div class="muted" id="ranking-note"></div>
       </div>
+      <div id="ranking-sentiment"></div>
       <div class="column-controls" id="ranking-columns"></div>
       <div class="table-wrap" id="ranking-table"></div>
     </section>
@@ -649,6 +893,16 @@ INDEX_HTML = """<!doctype html>
           </div>
         </div>
         <div id="selection-assist"></div>
+      </section>
+      <section class="panel">
+        <div class="panel-head">
+          <div>
+            <div class="panel-title">近期重大事件</div>
+            <div class="muted" id="stock-events-note">顯示 MOPS 已公告事件；日期為公告發布日，非一定是實際事件日。</div>
+          </div>
+          <button class="secondary" id="open-mops-for-stock">查看事件頁</button>
+        </div>
+        <div class="panel-body" id="stock-events-list"></div>
       </section>
       <section class="panel">
         <div class="panel-head">
@@ -736,6 +990,126 @@ INDEX_HTML = """<!doctype html>
           </div>
         </div>
         <div class="table-wrap" id="broker-daily-table"></div>
+      </section>
+    </section>
+
+    <section id="market-view" style="display:none;">
+      <section class="panel">
+        <div class="panel-head">
+          <div>
+            <div class="panel-title">大盤指數與三大法人期貨多空</div>
+            <div class="muted" id="market-note">加權指數取自 TWSE；大台、小台、微台三大法人未平倉多空取自 TAIFEX。</div>
+          </div>
+          <button class="secondary" id="refresh-market-view">重新讀取</button>
+        </div>
+        <div class="panel-body">
+          <section class="controls" style="padding:0; margin-bottom:12px;">
+            <div>
+              <label for="market-index-code">指數</label>
+              <select id="market-index-code">
+                <option value="TAIEX" selected>加權指數</option>
+              </select>
+            </div>
+            <div>
+              <label for="market-product">期貨商品</label>
+              <select id="market-product">
+                <option value="TXF" selected>大台 TXF</option>
+                <option value="MXF">小台 MXF</option>
+                <option value="TMF">微台 TMF</option>
+              </select>
+            </div>
+            <div>
+              <label for="market-range">顯示天數</label>
+              <select id="market-range">
+                <option value="60">60日</option>
+                <option value="120" selected>120日</option>
+                <option value="240">240日</option>
+                <option value="all">全部</option>
+              </select>
+            </div>
+          </section>
+          <section class="metrics" id="market-metrics"></section>
+        </div>
+      </section>
+      <section class="panel">
+        <div class="panel-head">
+          <div>
+            <div class="panel-title">大盤多空分</div>
+            <div class="muted">用加權指數趨勢、期貨三大法人與全市場融資融券估算目前市場風險。</div>
+          </div>
+        </div>
+        <div id="market-sentiment"></div>
+      </section>
+      <section class="panel">
+        <div class="panel-head">
+          <div class="panel-title">加權指數走勢</div>
+          <div class="muted" id="market-index-note"></div>
+        </div>
+        <div class="panel-body">
+          <div class="market-chart-wrap"><canvas id="market-index-chart"></canvas></div>
+          <div class="legend" id="market-index-legend"></div>
+        </div>
+      </section>
+      <section class="panel">
+        <div class="panel-head">
+          <div class="panel-title">三大法人期貨未平倉多空淨額</div>
+          <div class="muted" id="market-futures-note"></div>
+        </div>
+        <div class="panel-body">
+          <div class="market-chart-wrap"><canvas id="market-futures-chart"></canvas></div>
+          <div class="legend" id="market-futures-legend"></div>
+        </div>
+        <div class="table-wrap" id="market-futures-table"></div>
+      </section>
+    </section>
+
+    <section id="mops-events-view" style="display:none;">
+      <section class="panel">
+        <div class="panel-head">
+          <div>
+            <div class="panel-title">MOPS 重大事件月曆</div>
+            <div class="muted" id="mops-note">來源：MOPS 公開資訊觀測站；抓取近期重大訊息與公告，點事件可看內文。</div>
+          </div>
+          <button class="secondary" id="refresh-mops-events">抓取 MOPS 事件</button>
+        </div>
+        <div class="panel-body">
+          <section class="controls" style="padding:0; margin-bottom:12px;">
+            <div>
+              <label for="mops-start">開始日</label>
+              <input id="mops-start" type="date" />
+            </div>
+            <div>
+              <label for="mops-end">結束日</label>
+              <input id="mops-end" type="date" />
+            </div>
+            <div>
+              <label for="mops-stock">股票代號</label>
+              <input id="mops-stock" placeholder="選填，例如 2330" />
+            </div>
+            <div>
+              <label for="mops-query">關鍵字</label>
+              <input id="mops-query" placeholder="主旨、公司、內文" />
+            </div>
+            <button id="reload-mops-events" style="align-self:end;">重新整理</button>
+          </section>
+          <div id="mops-calendar"></div>
+          <div class="mops-summary" id="mops-summary"></div>
+          <div class="news-section-title" id="mops-list-title">事件列表</div>
+          <div class="quick-filter-bar" id="mops-quick-filters"></div>
+          <div id="mops-event-list"></div>
+        </div>
+      </section>
+      <section class="panel" id="mops-event-detail-panel" style="display:none;">
+        <div class="panel-head">
+          <div>
+            <div class="panel-title" id="mops-detail-title">事件明細</div>
+            <div class="muted" id="mops-detail-meta"></div>
+          </div>
+          <a class="secondary" id="mops-source-link" href="https://mopsov.twse.com.tw/mops/web/t05st02" target="_blank" rel="noreferrer">開啟 MOPS</a>
+        </div>
+        <div class="panel-body">
+          <div class="event-detail-text" id="mops-detail-text"></div>
+        </div>
       </section>
     </section>
 
@@ -871,6 +1245,37 @@ INDEX_HTML = """<!doctype html>
         <div class="muted">背景執行固定任務；分點任務會刻意放慢</div>
       </div>
       <div class="panel-body">
+        <div class="source-audit">
+          <h3>資料來源速查</h3>
+          <div class="source-audit-grid">
+            <div class="source-audit-card">
+              <strong>目前已接入</strong>
+              <ul>
+                <li><a href="https://www.twse.com.tw/" target="_blank" rel="noreferrer">TWSE</a> / <a href="https://www.tpex.org.tw/" target="_blank" rel="noreferrer">TPEx</a>：行情、成交量、三大法人、融資融券、上市上櫃清單。</li>
+                <li><a href="https://www.taifex.com.tw/" target="_blank" rel="noreferrer">TAIFEX</a>：大台、小台、微台三大法人期貨多空與未平倉。</li>
+                <li><a href="https://finmindtrade.com/" target="_blank" rel="noreferrer">FinMind</a>：目前用於月營收；分點資料尚未正式接入。</li>
+                <li><a href="https://histock.tw/" target="_blank" rel="noreferrer">HiStock</a>：目前分點排行來源，但全市場覆蓋不完整。</li>
+                <li>Yahoo 股市、Yahoo Finance、CNBC、MarketWatch：台股與美股新聞標題、連結、摘要。</li>
+              </ul>
+            </div>
+            <div class="source-audit-card">
+              <strong>已確認但未接入</strong>
+              <ul>
+                <li>Stooq：適合全球指數與海外股價歷史備援；對台股法人、分點、營收幫助有限。</li>
+                <li>MOPS 公開資訊觀測站：可補重大訊息、法說會、財報公告與官方月營收追溯。</li>
+                <li>Goodinfo / CMoney / Wantgoo：資料豐富但偏網頁或商業服務，穩定性與授權風險較高。</li>
+              </ul>
+            </div>
+            <div class="source-audit-card">
+              <strong>下一步建議</strong>
+              <ul>
+                <li>優先測試 FinMind TaiwanStockTradingDailyReport，評估能否取代 HiStock 分點資料。</li>
+                <li>若 FinMind 分點可用，改成本機儲存每日分點明細，再自行計算 5 / 20 日排行與均價。</li>
+                <li>保留 HiStock 當 fallback，並在覆蓋狀態清楚區分「來源空回應」與「尚未嘗試」。</li>
+              </ul>
+            </div>
+          </div>
+        </div>
         <div class="update-grid" id="update-tasks"></div>
         <div class="publish-box" id="static-publish-box">
           <div class="job-meta">
@@ -889,7 +1294,7 @@ INDEX_HTML = """<!doctype html>
         <div class="layout-2">
           <div>
             <div class="panel-title" style="margin-bottom:8px;">分點資料覆蓋狀態</div>
-            <div class="muted" style="margin-bottom:8px;">目前只補自選股與排名候選股，分點資料不參與全市場基礎排行；未有分點排行不代表行情、法人或營收缺資料。</div>
+            <div class="muted" style="margin-bottom:8px;">分點排行狀態分成已抓排行、未嘗試、空回應與失敗；空回應代表來源沒有可解析排行，不代表行情、法人或營收缺資料。</div>
             <div id="coverage-table"></div>
           </div>
           <div>
@@ -912,6 +1317,9 @@ INDEX_HTML = """<!doctype html>
       <a href="https://www.twse.com.tw/" target="_blank" rel="noreferrer">TWSE 臺灣證券交易所</a>
       與 <a href="https://www.tpex.org.tw/" target="_blank" rel="noreferrer">TPEx 櫃買中心</a>
       公開資料；融資融券取自 TWSE / TPEx 信用交易公開資料；區間外資、投信、均價、排行分數由本機 SQLite 依最近交易日重新彙總。
+      大盤加權指數取自 TWSE 指數歷史資料；大台、小台、微台三大法人期貨交易與未平倉多空取自
+      <a href="https://www.taifex.com.tw/" target="_blank" rel="noreferrer">TAIFEX 臺灣期貨交易所</a>
+      三大法人查詢公開頁。
       月營收 24 個月歷史目前使用
       <a href="https://finmindtrade.com/" target="_blank" rel="noreferrer">FinMind</a>
       免費 API，月增率與年增率由本機依月營收與去年同期計算。
@@ -933,7 +1341,7 @@ INDEX_HTML = """<!doctype html>
     window.STOCK_CHIP_STATIC = false;
   </script>
   <script>
-    const state = { tab: "ranking", previousTab: "ranking", detail: null, broker: "", lastDataUpdatedAt: "", chartRange: 20, rankingRows: [], rankingSort: null, usNewsRows: [], ciUsNewsRows: [], ciUsNewsMeta: {}, columnGroup: "core" };
+    const state = { tab: "ranking", previousTab: "ranking", detail: null, broker: "", lastDataUpdatedAt: "", chartRange: 20, rankingRows: [], rankingSort: null, usNewsRows: [], ciUsNewsRows: [], ciUsNewsMeta: {}, mopsEvents: [], mopsSelectedDate: "", mopsVisibleCount: 50, mopsQuickFilter: "", mopsDateInitialized: false, mopsDateMode: "future30", mopsCalendarStart: "", columnGroup: "core", market: null, marketSentiment: null };
     const STATIC_MODE = window.STOCK_CHIP_STATIC === true;
     const staticCache = {};
     const chartColors = {
@@ -948,7 +1356,11 @@ INDEX_HTML = """<!doctype html>
       revenueLastYear: "#94a3b8",
       revenueYoy: "#b42318",
       margin: "#175cd3",
-      short: "#f59e0b"
+      short: "#f59e0b",
+      index: "#0f766e",
+      foreignOi: "#b42318",
+      trustOi: "#175cd3",
+      dealerOi: "#f59e0b"
     };
     const fmt = (v) => {
       if (v === null || v === undefined || v === "") return "";
@@ -1040,6 +1452,25 @@ INDEX_HTML = """<!doctype html>
         data.stock.in_watchlist = staticWatchlistIds().includes(String(data.stock.stock_id));
         return data;
       }
+      if (parsed.pathname === "/api/market") {
+        const product = (parsed.searchParams.get("product") || "TXF").toUpperCase();
+        try {
+          return await staticData(`data/market_${product}.json`);
+        } catch (_err) {
+          try {
+            return await staticData("data/market.json");
+          } catch (__err) {
+            return {summary:{}, index_rows:[], futures_rows:[], updated_at:""};
+          }
+        }
+      }
+      if (parsed.pathname === "/api/market-sentiment") {
+        try {
+          return await staticData("data/market_sentiment.json");
+        } catch (_err) {
+          return {score: 50, label: "尚無資料", risk_multiplier: 0.95, parts: {}, reasons: ["靜態資料未包含大盤多空分"]};
+        }
+      }
       if (parsed.pathname === "/api/coverage") {
         return staticData(`data/coverage_${days}d.json`);
       }
@@ -1083,6 +1514,30 @@ INDEX_HTML = """<!doctype html>
           source_mode: parsed.pathname === "/api/ci-us-news-live" ? "github_pages" : "local",
           source_url: parsed.pathname === "/api/ci-us-news-live" ? "https://wenyen-hsu.github.io/stock/data/ci_us_news.json" : "data/ci_us_news.json",
         };
+      }
+      if (parsed.pathname === "/api/mops-events") {
+        let data;
+        try {
+          data = await staticData("data/mops_events.json");
+        } catch (_err) {
+          data = {rows: []};
+        }
+        const start = parsed.searchParams.get("start") || "";
+        const end = parsed.searchParams.get("end") || "";
+        const stock = parsed.searchParams.get("stock_id") || "";
+        const q = String(parsed.searchParams.get("q") || "").trim().toLowerCase();
+        const limit = Number(parsed.searchParams.get("limit") || 500);
+        const rows = (data.rows || []).filter(row => {
+          if (start && row.event_date < start) return false;
+          if (end && row.event_date > end) return false;
+          if (stock && row.stock_id !== stock) return false;
+          if (q) {
+            const text = [row.title, row.detail, row.company_name, row.stock_id, row.category].join(" ").toLowerCase();
+            if (!text.includes(q)) return false;
+          }
+          return true;
+        }).slice(0, limit);
+        return {rows, row_count: rows.length};
       }
       throw new Error(`靜態版不支援：${parsed.pathname}`);
     }
@@ -1549,6 +2004,279 @@ INDEX_HTML = """<!doctype html>
       const latest = rows[rows.length - 1];
       legend.innerHTML = series.map(s => `<span class="legend-item"><span class="legend-swatch" style="background:${s.color}"></span>${esc(s.label)} ${esc(fmt(latest?.[s.key]))}</span>`).join("");
     }
+    function drawLineChart(canvas, legend, rows, series, options = {}) {
+      if (!canvas || !legend) return;
+      const wrap = canvas.parentElement;
+      const dpr = window.devicePixelRatio || 1;
+      canvas.style.width = `${wrap.clientWidth}px`;
+      canvas.style.height = `${wrap.clientHeight}px`;
+      canvas.width = Math.floor(wrap.clientWidth * dpr);
+      canvas.height = Math.floor(wrap.clientHeight * dpr);
+      const ctx = canvas.getContext("2d");
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      ctx.clearRect(0, 0, wrap.clientWidth, wrap.clientHeight);
+      if (!rows.length) {
+        legend.innerHTML = `<span class="muted">${esc(options.empty || "沒有資料。")}</span>`;
+        return;
+      }
+      const values = [];
+      rows.forEach(row => series.forEach(s => {
+        const n = Number(row[s.key]);
+        if (Number.isFinite(n)) values.push(n);
+      }));
+      if (!values.length) {
+        legend.innerHTML = `<span class="muted">${esc(options.empty || "沒有可繪製資料。")}</span>`;
+        return;
+      }
+      const w = wrap.clientWidth;
+      const h = wrap.clientHeight;
+      const pad = { top: 14, right: 28, bottom: 42, left: 72 };
+      let min = Math.min(...values);
+      let max = Math.max(...values);
+      if (options.zeroLine) {
+        min = Math.min(min, 0);
+        max = Math.max(max, 0);
+      }
+      const span = max - min || Math.max(Math.abs(max), 1);
+      min -= span * 0.12;
+      max += span * 0.12;
+      const x = idx => pad.left + (rows.length <= 1 ? 0 : idx * (w - pad.left - pad.right) / (rows.length - 1));
+      const y = value => pad.top + (max - value) * (h - pad.top - pad.bottom) / (max - min);
+      ctx.font = "12px -apple-system, BlinkMacSystemFont, Segoe UI, sans-serif";
+      ctx.lineWidth = 1;
+      ctx.strokeStyle = "#edf1f4";
+      ctx.fillStyle = "#607080";
+      ctx.textAlign = "right";
+      ctx.textBaseline = "middle";
+      for (let i = 0; i <= 4; i++) {
+        const gy = pad.top + i * (h - pad.top - pad.bottom) / 4;
+        const value = max - i * (max - min) / 4;
+        ctx.beginPath();
+        ctx.moveTo(pad.left, gy);
+        ctx.lineTo(w - pad.right, gy);
+        ctx.stroke();
+        ctx.fillText(fmt(value), pad.left - 8, gy);
+      }
+      if (options.zeroLine && min < 0 && max > 0) {
+        const zy = y(0);
+        ctx.strokeStyle = "#b8c4cc";
+        ctx.setLineDash([4, 4]);
+        ctx.beginPath();
+        ctx.moveTo(pad.left, zy);
+        ctx.lineTo(w - pad.right, zy);
+        ctx.stroke();
+        ctx.setLineDash([]);
+      }
+      ctx.textAlign = "center";
+      ctx.textBaseline = "top";
+      const tickStep = Math.max(1, Math.ceil(rows.length / 6));
+      rows.forEach((row, idx) => {
+        if (idx % tickStep !== 0 && idx !== rows.length - 1) return;
+        ctx.fillText(String(row.date || "").slice(5), x(idx), h - pad.bottom + 10);
+      });
+      series.forEach(s => {
+        ctx.beginPath();
+        ctx.strokeStyle = s.color;
+        ctx.lineWidth = 2;
+        let started = false;
+        rows.forEach((row, idx) => {
+          const n = Number(row[s.key]);
+          if (!Number.isFinite(n)) {
+            started = false;
+            return;
+          }
+          if (!started) {
+            ctx.moveTo(x(idx), y(n));
+            started = true;
+          } else {
+            ctx.lineTo(x(idx), y(n));
+          }
+        });
+        ctx.stroke();
+      });
+      const latest = rows[rows.length - 1] || {};
+      legend.innerHTML = series.map(s => `<span class="legend-item"><span class="legend-swatch" style="background:${s.color}"></span>${esc(s.label)} ${esc(fmt(latest?.[s.key]))}</span>`).join("");
+    }
+    function marketRowsInRange(rows) {
+      const range = document.querySelector("#market-range")?.value || "120";
+      if (range === "all") return rows || [];
+      const count = Math.max(10, Number(range || 120));
+      return (rows || []).slice(-count);
+    }
+    function sentimentClass(score) {
+      const n = Number(score);
+      if (n >= 55) return "pos";
+      if (n < 45) return "neg";
+      return "";
+    }
+    function renderSentiment(target, data, compact = false) {
+      if (!target) return;
+      if (!data) {
+        target.innerHTML = `<div class="empty">讀取大盤多空分中...</div>`;
+        return;
+      }
+      const parts = data.parts || {};
+      const partItems = [
+        ["指數趨勢", parts.index_trend, "加權指數相對 MA5、MA20、MA60 的位置。分數越高代表大盤技術趨勢越偏多，跌破均線會扣分。"],
+        ["外資期貨", parts.foreign_futures, "外資在大台、小台、微台的未平倉多空淨額，依商品大小加權。正分代表外資期貨部位偏多，負分代表偏空。"],
+        ["期貨交易", parts.futures_trade, "外資近 5 日期貨交易淨額的方向。正分代表近期偏買多或回補空單，負分代表近期偏放空或減多。"],
+        ["投信期貨", parts.trust_futures, "投信在台指期的未平倉多空淨額。此項權重較小，用來觀察投信是否與市場方向一致。"],
+        ["融資融券", parts.market_margin, "全市場融資與融券變化。指數上漲但融資快速增加會扣分；融資下降或融券增加且指數不弱，通常加分。"],
+        ["自營避險", parts.dealer_hedge, "自營商期貨未平倉多空淨額，主要視為避險壓力。負分偏向避險空單較重，可能代表市場風險升高。"],
+      ];
+      const reasons = (data.reasons || []).slice(0, compact ? 3 : 6).map(esc).join("；");
+      target.innerHTML = `
+        <div class="sentiment-strip">
+          <div>
+            <div class="muted tooltip-anchor" data-tip="用加權指數趨勢、外資/投信/自營商期貨部位與全市場融資融券估算市場多空環境。50 附近為中性，高於 55 偏多，低於 45 偏空。" title="用加權指數趨勢、期貨三大法人與全市場融資融券估算市場多空環境。">大盤多空分</div>
+            <div class="sentiment-score ${sentimentClass(data.score)}">${esc(fmt(data.score))}</div>
+            <div class="sentiment-label ${sentimentClass(data.score)}">${esc(data.label || "")}</div>
+          </div>
+          <div>
+            <div class="muted tooltip-anchor" data-tip="用大盤多空分換算成排名調整係數。偏多時不扣分或小幅加分；偏空時降低風險調整分。原始基礎分不會被改寫。" title="用大盤多空分換算成排名調整係數。">風險調整</div>
+            <div class="sentiment-score">${esc(fmt((Number(data.risk_multiplier || 1) * 100)))}%</div>
+            <div class="sentiment-detail">排行表的「風險調整分」= 基礎分 × 此係數；原始基礎分不改。</div>
+          </div>
+          <div>
+            <div class="sentiment-parts">
+              ${partItems.map(([label, value, tip]) => `
+                <div class="sentiment-part tooltip-anchor" data-tip="${esc(tip)}" title="${esc(tip)}">
+                  <div class="part-label">${esc(label)}</div>
+                  <div class="part-value ${cls(value)}">${esc(fmt(value))}</div>
+                </div>
+              `).join("")}
+            </div>
+            <div class="sentiment-detail">${reasons || "尚無足夠資料"}</div>
+          </div>
+        </div>`;
+    }
+    async function loadMarketSentiment() {
+      const data = await getJSON("/api/market-sentiment");
+      state.marketSentiment = data;
+      renderSentiment(document.querySelector("#ranking-sentiment"), data, true);
+      renderSentiment(document.querySelector("#market-sentiment"), data, false);
+      if (state.rankingRows?.length) {
+        applyRiskAdjustedScores();
+        renderRankingTable();
+      }
+      return data;
+    }
+    function applyRiskAdjustedScores() {
+      const sentiment = state.marketSentiment || {};
+      const multiplier = Number(sentiment.risk_multiplier || 1);
+      const score = Number(sentiment.score);
+      state.rankingRows = (state.rankingRows || []).map(row => ({
+        ...row,
+        market_sentiment_score: Number.isFinite(score) ? score : null,
+        risk_adjusted_score: Number.isFinite(Number(row.total_score))
+          ? Math.round(Number(row.total_score) * multiplier * 100) / 100
+          : null,
+      }));
+    }
+    function renderMarketView(data) {
+      state.market = data || {};
+      const indexRows = marketRowsInRange(data?.index_rows || []);
+      const futuresRows = marketRowsInRange(data?.futures_rows || []);
+      const summary = data?.summary || {};
+      renderMetrics(document.querySelector("#market-metrics"), [
+        ["指數最新日", summary.latest_index_date || ""],
+        ["收盤", fmt(summary.latest_index_close)],
+        ["商品", summary.product_label || ""],
+        ["外資未平倉淨額", fmt(summary.foreign_oi_net), cls(summary.foreign_oi_net)]
+      ]);
+      document.querySelector("#market-note").textContent = data?.updated_at
+        ? `本機資料最後更新 ${data.updated_at}；期貨商品可切換大台、小台、微台。`
+        : "尚無大盤資料，請到資料狀態執行「大盤指數與期貨多空」。";
+      document.querySelector("#market-index-note").textContent = indexRows.length ? `顯示 ${indexRows.length} 筆` : "尚無指數資料";
+      document.querySelector("#market-futures-note").textContent = futuresRows.length ? `顯示 ${futuresRows.length} 筆，單位：口` : "尚無期貨多空資料";
+      drawLineChart(
+        document.querySelector("#market-index-chart"),
+        document.querySelector("#market-index-legend"),
+        indexRows,
+        [{ key: "close", label: "收盤指數", color: chartColors.index }],
+        { empty: "沒有加權指數資料。" }
+      );
+      drawLineChart(
+        document.querySelector("#market-futures-chart"),
+        document.querySelector("#market-futures-legend"),
+        futuresRows,
+        [
+          { key: "foreign_oi_net", label: "外資未平倉淨額", color: chartColors.foreignOi },
+          { key: "trust_oi_net", label: "投信未平倉淨額", color: chartColors.trustOi },
+          { key: "dealer_oi_net", label: "自營商未平倉淨額", color: chartColors.dealerOi }
+        ],
+        { empty: "沒有期貨多空資料。", zeroLine: true }
+      );
+      renderTable(document.querySelector("#market-futures-table"), [...futuresRows].reverse(), [
+        {key:"date", label:"日期"},
+        {key:"foreign_trade_net", label:"外資交易淨額", signed:true},
+        {key:"foreign_oi_net", label:"外資未平倉淨額", signed:true},
+        {key:"trust_trade_net", label:"投信交易淨額", signed:true},
+        {key:"trust_oi_net", label:"投信未平倉淨額", signed:true},
+        {key:"dealer_trade_net", label:"自營商交易淨額", signed:true},
+        {key:"dealer_oi_net", label:"自營商未平倉淨額", signed:true}
+      ]);
+    }
+    async function loadMarket() {
+      const indexCode = document.querySelector("#market-index-code")?.value || "TAIEX";
+      const product = document.querySelector("#market-product")?.value || "TXF";
+      const range = document.querySelector("#market-range")?.value || "120";
+      const limit = range === "all" ? 5000 : Math.max(120, Number(range || 120));
+      const data = await getJSON(`/api/market?index=${encodeURIComponent(indexCode)}&product=${encodeURIComponent(product)}&limit=${limit}`);
+      renderMarketView(data);
+      await loadMarketSentiment();
+    }
+    function stockEventTag(row) {
+      const text = `${row?.event_tag || ""} ${row?.title || ""} ${row?.detail || ""}`;
+      if (/股東常會|股東會|股東臨時會|停止過戶/.test(text)) return "股東會";
+      if (/營收|合併營收|自結營收/.test(text)) return "營收";
+      if (/財務報告|財報|每股盈餘|損益|會計師/.test(text)) return "財報";
+      if (/除權|除息|配息|配股|股利/.test(text)) return "除權息";
+      if (/法說會|法人說明會|業績發表會/.test(text)) return "法說會";
+      if (/董事會|審計委員會/.test(text)) return "董事會";
+      if (/重大訊息|重大訊息說明/.test(text)) return "重大訊息";
+      return row?.event_tag || "其他";
+    }
+    function renderStockEvents() {
+      const target = document.querySelector("#stock-events-list");
+      const note = document.querySelector("#stock-events-note");
+      if (!target || !note) return;
+      const rows = state.detail?.mops_events || [];
+      const stock = state.detail?.stock?.stock_id || document.querySelector("#detail-stock")?.value.trim() || "";
+      if (!rows.length) {
+        note.textContent = "近 30 日無已抓取 MOPS 公告；這不代表未來沒有實際事件，只代表目前快取沒有該股公告。";
+        target.innerHTML = `<div class="empty">近 30 日無已抓取重大事件。</div>`;
+        return;
+      }
+      const tags = Array.from(new Set(rows.map(stockEventTag)));
+      const latest = rows.map(row => row.fetched_at).filter(Boolean).sort().at(-1) || "";
+      note.textContent = `${STATIC_MODE ? "靜態快取" : "本機快取"} ${rows.length} 件，分類：${tags.join("、")}；最後抓取 ${latest || "-"}`;
+      target.innerHTML = `
+        <div class="event-alert">
+          <div class="event-alert-summary">
+            <span class="status-pill ${rows.length ? "warn" : ""}">${esc(rows.length)} 件公告</span>
+            <span>日期為公告發布日；後續可再解析內文中的實際事件日。</span>
+          </div>
+          ${rows.slice(0, 8).map(row => {
+            const tag = stockEventTag(row);
+            const important = ["股東會", "除權息", "財報", "重大訊息"].includes(tag);
+            const text = (row.detail || "").replace(/\\s+/g, " ").slice(0, 150);
+            return `<article class="event-item ${important ? "important" : ""}">
+              <div class="event-line">
+                <div>
+                  <span class="event-tag ${tag === "營收" ? "good" : important ? "hot" : ""}">${esc(tag)}</span>
+                  <span class="event-meta">${esc(row.event_date || "")} ${esc(row.event_time || "")}</span>
+                </div>
+                <a class="event-open" href="${esc(row.source_url || "https://mopsov.twse.com.tw/mops/web/t05st02")}" target="_blank" rel="noreferrer">開啟 MOPS</a>
+              </div>
+              <div class="event-title">${esc(row.title || "未命名事件")}</div>
+              <div class="event-meta">${esc(row.category || "MOPS")} · ${esc(row.company_name || stock)}</div>
+              ${text ? `<div class="event-text">${esc(text)}${(row.detail || "").length > 150 ? "..." : ""}</div>` : ""}
+            </article>`;
+          }).join("")}
+          ${rows.length > 8 ? `<div class="muted">尚有 ${esc(fmt(rows.length - 8))} 件，請到重大事件頁查看完整列表。</div>` : ""}
+        </div>`;
+    }
     function renderNews() {
       const target = document.querySelector("#news-list");
       const note = document.querySelector("#news-note");
@@ -1679,6 +2407,233 @@ INDEX_HTML = """<!doctype html>
       const data = await getJSON(`${endpoint}?industry=${encodeURIComponent(industry)}&source=${encodeURIComponent(source)}&q=${encodeURIComponent(q)}&limit=200`);
       renderCIUSNews(data);
     }
+    function isoDate(offset = 0) {
+      const day = new Date();
+      day.setDate(day.getDate() + offset);
+      return localDateString(day);
+    }
+    function localDateString(day) {
+      const year = day.getFullYear();
+      const month = String(day.getMonth() + 1).padStart(2, "0");
+      const date = String(day.getDate()).padStart(2, "0");
+      return `${year}-${month}-${date}`;
+    }
+    function parseLocalDate(value) {
+      if (!value) return null;
+      const [year, month, day] = value.split("-").map(Number);
+      if (!year || !month || !day) return null;
+      return new Date(year, month - 1, day);
+    }
+    function addLocalDays(day, offset) {
+      const next = new Date(day);
+      next.setDate(next.getDate() + offset);
+      return next;
+    }
+    function addLocalMonths(day, offset) {
+      const next = new Date(day);
+      next.setMonth(next.getMonth() + offset);
+      return next;
+    }
+    function setMopsRange(mode, shouldLoad = true) {
+      const start = document.querySelector("#mops-start");
+      const end = document.querySelector("#mops-end");
+      state.mopsDateMode = mode;
+      state.mopsDateInitialized = true;
+      if (mode === "future30") {
+        if (start) start.value = isoDate(0);
+        if (end) end.value = isoDate(30);
+      } else if (mode === "recent30") {
+        if (start) start.value = isoDate(-30);
+        if (end) end.value = isoDate(0);
+      } else if (mode === "all") {
+        if (start) start.value = "";
+        if (end) end.value = "";
+      }
+      state.mopsSelectedDate = "";
+      state.mopsVisibleCount = 50;
+      state.mopsQuickFilter = "";
+      state.mopsCalendarStart = start?.value || "";
+      if (shouldLoad) loadMopsEvents();
+    }
+    function initMopsDates() {
+      if (!state.mopsDateInitialized) setMopsRange("future30", false);
+    }
+    function renderMopsEventDetail(row) {
+      const panel = document.querySelector("#mops-event-detail-panel");
+      if (!panel || !row) return;
+      panel.style.display = "";
+      document.querySelector("#mops-detail-title").textContent = row.title || "事件明細";
+      document.querySelector("#mops-detail-meta").textContent =
+        `${row.event_date || ""} ${row.event_time || ""} · ${row.stock_id || ""} ${row.company_name || ""} · ${row.category || ""}`;
+      document.querySelector("#mops-detail-text").textContent = row.detail || "此事件未解析到內文，請開啟 MOPS 原頁確認。";
+      const link = document.querySelector("#mops-source-link");
+      if (link) link.href = row.source_url || "https://mopsov.twse.com.tw/mops/web/t05st02";
+      panel.scrollIntoView({behavior: "smooth", block: "nearest"});
+    }
+    function renderMopsCalendar(rows) {
+      const target = document.querySelector("#mops-calendar");
+      if (!target) return;
+      const startValue = document.querySelector("#mops-start")?.value || "";
+      const endValue = document.querySelector("#mops-end")?.value || "";
+      const byDate = new Map();
+      rows.forEach(row => {
+        if (!byDate.has(row.event_date)) byDate.set(row.event_date, []);
+        byDate.get(row.event_date).push(row);
+      });
+      const dates = [...byDate.keys()].sort();
+      const fallbackEnd = dates.at(-1) || isoDate(0);
+      const fallbackStart = dates.length ? dates[0] : fallbackEnd;
+      const rangeStartText = startValue || fallbackStart;
+      const rangeEndText = endValue || fallbackEnd;
+      let start = parseLocalDate(rangeStartText);
+      let end = parseLocalDate(rangeEndText);
+      if (!start || !end || start > end) {
+        target.innerHTML = `<div class="empty">請選擇有效日期區間。</div>`;
+        return;
+      }
+      let windowStart = parseLocalDate(state.mopsCalendarStart || rangeStartText) || start;
+      if (windowStart < start) windowStart = start;
+      if (windowStart > end) windowStart = start;
+      let windowEnd = addLocalDays(windowStart, 29);
+      if (windowEnd > end) windowEnd = end;
+      const days = [];
+      for (let d = new Date(windowStart); d <= windowEnd && days.length < 30; d.setDate(d.getDate() + 1)) {
+        days.push(localDateString(d));
+      }
+      const maxCount = Math.max(1, ...days.map(date => (byDate.get(date) || []).length));
+      if (!days.length) {
+        target.innerHTML = `<div class="empty">請選擇有效日期區間。</div>`;
+        return;
+      }
+      state.mopsCalendarStart = localDateString(windowStart);
+      target.innerHTML = `
+        <div class="calendar-window-bar">
+          <button class="secondary calendar-nav" data-mops-calendar-step="-1" title="上個月" aria-label="上個月">&lsaquo;</button>
+          <span class="window-label">月曆顯示 ${esc(localDateString(windowStart))} ~ ${esc(localDateString(windowEnd))}；查詢區間 ${esc(rangeStartText)} ~ ${esc(rangeEndText)}</span>
+          <button class="secondary calendar-nav" data-mops-calendar-step="1" title="下個月" aria-label="下個月">&rsaquo;</button>
+        </div>
+        <div class="calendar-grid">${days.map(date => {
+        const items = byDate.get(date) || [];
+        const heat = items.length ? 0.12 + Math.min(0.72, items.length / maxCount * 0.58) : 0;
+        const style = items.length ? `style="background: rgba(15, 118, 110, ${heat});"` : "";
+        const selected = state.mopsSelectedDate === date ? "selected" : "";
+        return `<div class="calendar-day ${items.length ? "" : "empty-day"} ${selected}" data-date="${esc(date)}" ${style}>
+          <div class="calendar-date"><span>${esc(date.slice(5))}</span><span>${esc(fmt(items.length))} 件</span></div>
+          <div class="calendar-count">${esc(fmt(items.length))}</div>
+          <div class="calendar-hint">${items.length ? "點日期查看列表" : "無事件"}</div>
+        </div>`;
+      }).join("")}</div>`;
+    }
+    function mopsRowsForSelectedDate() {
+      let rows = state.mopsEvents || [];
+      if (state.mopsSelectedDate) rows = rows.filter(row => row.event_date === state.mopsSelectedDate);
+      if (state.mopsQuickFilter) {
+        const q = state.mopsQuickFilter;
+        rows = rows.filter(row => [row.title, row.detail, row.company_name, row.category].join(" ").includes(q));
+      }
+      return rows;
+    }
+    function renderMopsSummary(rows) {
+      const target = document.querySelector("#mops-summary");
+      if (!target) return;
+      const categories = {};
+      const companies = {};
+      rows.forEach(row => {
+        categories[row.category || "未分類"] = (categories[row.category || "未分類"] || 0) + 1;
+        const name = `${row.stock_id || ""} ${row.company_name || ""}`.trim() || "未知公司";
+        companies[name] = (companies[name] || 0) + 1;
+      });
+      const topCompany = Object.entries(companies).sort((a, b) => b[1] - a[1])[0];
+      target.innerHTML = `
+        <div class="mops-summary-card"><div class="label">目前日期</div><div class="value">${esc(state.mopsSelectedDate || "全部")}</div></div>
+        <div class="mops-summary-card"><div class="label">符合事件</div><div class="value">${esc(fmt(rows.length))}</div></div>
+        <div class="mops-summary-card"><div class="label">重大訊息</div><div class="value">${esc(fmt(categories["重大訊息"] || 0))}</div></div>
+        <div class="mops-summary-card"><div class="label">公告</div><div class="value">${esc(fmt(categories["公告"] || 0))}</div></div>
+        <div class="mops-summary-card"><div class="label">最多事件公司</div><div class="value">${esc(topCompany ? `${topCompany[0]} ${topCompany[1]}件` : "-")}</div></div>
+      `;
+    }
+    function renderMopsQuickFilters(rows) {
+      const target = document.querySelector("#mops-quick-filters");
+      if (!target) return;
+      const filters = ["董事會", "股東會", "營收", "法說", "取得", "處分", "除權", "除息", "停牌", "復牌"];
+      target.innerHTML = `<button class="quick-filter ${state.mopsQuickFilter ? "" : "active"}" data-filter="">全部</button>` +
+        filters.map(filter => {
+          const count = rows.filter(row => [row.title, row.detail].join(" ").includes(filter)).length;
+          return `<button class="quick-filter ${state.mopsQuickFilter === filter ? "active" : ""}" data-filter="${esc(filter)}">${esc(filter)} ${esc(fmt(count))}</button>`;
+        }).join("");
+    }
+    function renderMopsEventList() {
+      const list = document.querySelector("#mops-event-list");
+      const title = document.querySelector("#mops-list-title");
+      if (!list) return;
+      const rows = mopsRowsForSelectedDate();
+      renderMopsSummary(rows);
+      renderMopsQuickFilters(state.mopsSelectedDate ? (state.mopsEvents || []).filter(row => row.event_date === state.mopsSelectedDate) : state.mopsEvents || []);
+      if (title) title.textContent = state.mopsSelectedDate ? `${state.mopsSelectedDate} 事件列表` : "全部日期事件列表";
+      if (!rows.length) {
+        list.innerHTML = `<div class="empty">目前查無事件。可調整日期、股票代號或關鍵字。</div>`;
+        return;
+      }
+      const visible = rows.slice(0, state.mopsVisibleCount || 50);
+      list.innerHTML = visible.map(row => `<article class="event-card" data-event-id="${esc(row.event_id)}">
+        <div class="event-title">${esc(row.title || "")}</div>
+        <div class="event-meta">${esc(row.event_date || "")} ${esc(row.event_time || "")} · ${esc(row.stock_id || "")} ${esc(row.company_name || "")} · ${esc(row.category || "")}</div>
+        <div class="news-text">${esc(row.detail || "").slice(0, 160)}${(row.detail || "").length > 160 ? "..." : ""}</div>
+      </article>`).join("") + (rows.length > visible.length
+        ? `<button class="secondary" id="mops-load-more" style="margin-top:8px;">載入更多（${esc(fmt(visible.length))} / ${esc(fmt(rows.length))}）</button>`
+        : "");
+    }
+    function renderMopsEvents(rows) {
+      state.mopsEvents = rows || [];
+      state.mopsVisibleCount = 50;
+      const note = document.querySelector("#mops-note");
+      const latestFetch = state.mopsEvents.map(row => row.fetched_at).filter(Boolean).sort().at(-1);
+      const start = document.querySelector("#mops-start")?.value || "";
+      const end = document.querySelector("#mops-end")?.value || "";
+      const rangeText = start || end ? `，目前區間 ${start || "最早"} ~ ${end || "最新"}` : "，目前顯示全部快取";
+      if (note) note.textContent = latestFetch
+        ? `${STATIC_MODE ? "靜態快取" : "本機快取"} ${fmt(state.mopsEvents.length)} 件${rangeText}，最後抓取 ${latestFetch}`
+        : "尚無 MOPS 事件快取；按「抓取 MOPS 事件」取得近期重大訊息。";
+      renderMopsCalendar(state.mopsEvents);
+      renderMopsEventList();
+    }
+    async function loadMopsEvents() {
+      initMopsDates();
+      state.mopsSelectedDate = "";
+      state.mopsVisibleCount = 50;
+      state.mopsQuickFilter = "";
+      const start = document.querySelector("#mops-start")?.value || "";
+      const end = document.querySelector("#mops-end")?.value || "";
+      const stock = document.querySelector("#mops-stock")?.value.trim() || "";
+      const q = document.querySelector("#mops-query")?.value.trim() || "";
+      const data = await getJSON(`/api/mops-events?start=${encodeURIComponent(start)}&end=${encodeURIComponent(end)}&stock_id=${encodeURIComponent(stock)}&q=${encodeURIComponent(q)}&limit=5000`);
+      renderMopsEvents(data.rows || []);
+    }
+    async function refreshMopsEvents() {
+      const btn = document.querySelector("#refresh-mops-events");
+      if (!btn) return;
+      const original = btn.textContent;
+      btn.disabled = true;
+      btn.textContent = "抓取中";
+      const startDate = document.querySelector("#mops-start")?.value || "";
+      const endDate = document.querySelector("#mops-end")?.value || "";
+      try {
+        const result = await postJSON("/api/mops-events/refresh", {start_date: startDate, end_date: endDate});
+        const note = document.querySelector("#mops-note");
+        if (note) note.textContent = `MOPS 抓取完成：${fmt(result.row_count || 0)} 件，更新 ${fmt(result.changed || 0)} 筆，清除 ${fmt(result.pruned || 0)} 筆半年前資料，失敗 ${fmt((result.failed || []).length)} 日`;
+        state.mopsSelectedDate = "";
+        state.mopsVisibleCount = 50;
+        state.mopsQuickFilter = "";
+        state.mopsCalendarStart = startDate || "";
+        await loadMopsEvents();
+      } catch (err) {
+        const note = document.querySelector("#mops-note");
+        if (note) note.textContent = `MOPS 抓取失敗：${err.message}`;
+      } finally {
+        btn.disabled = false;
+        btn.textContent = original;
+      }
+    }
     function renderObsidianStatus(data) {
       const note = document.querySelector("#obsidian-note");
       if (!note) return;
@@ -1769,6 +2724,8 @@ INDEX_HTML = """<!doctype html>
       {key:"close", label:"收盤", groups:["core","chip","foreign","revenue","margin","volume"]},
       {key:"observed_days", label:"資料日", groups:["core"]},
       {key:"total_score", label:"基礎分", signed:true, groups:["core"]},
+      {key:"market_sentiment_score", label:"大盤分", signed:true, groups:["core"]},
+      {key:"risk_adjusted_score", label:"風險調整分", signed:true, groups:["core"]},
       {key:"chip_score", label:"法人分", signed:true, groups:["core","chip"]},
       {key:"revenue_momentum_score", label:"營收分", signed:true, groups:["core","revenue"]},
       {key:"margin_score", label:"融資分", signed:true, groups:["core","margin"]},
@@ -1841,6 +2798,10 @@ INDEX_HTML = """<!doctype html>
     async function loadRanking(watchlist = false) {
       const data = await getJSON((watchlist ? "/api/watchlist?" : "/api/ranking?") + params().toString());
       state.rankingRows = data.rows;
+      if (!state.marketSentiment) {
+        try { await loadMarketSentiment(); } catch (_err) {}
+      }
+      applyRiskAdjustedScores();
       document.querySelector("#ranking-title").textContent = watchlist ? "自選股摘要" : data.title;
       const q = document.querySelector("#query").value.trim();
       const note = document.querySelector("#ranking-note");
@@ -2054,10 +3015,11 @@ INDEX_HTML = """<!doctype html>
         {key:"market", label:"市場"},
         {key:"stocks_with_branch", label:"已抓排行"},
         {key:"attempted", label:"已嘗試"},
+        {key:"not_attempted", label:"未嘗試"},
         {key:"empty_count", label:"空回應"},
         {key:"failed_count", label:"失敗"},
         {key:"total_stocks", label:"總數"},
-        {key:"remaining", label:"未有分點排行"}
+        {key:"no_branch", label:"無排行資料"}
       ]);
       await loadStaticPublishStatus();
     }
@@ -2270,6 +3232,7 @@ INDEX_HTML = """<!doctype html>
       renderPriceChart();
       renderRevenueChart();
       renderMarginChart();
+      renderStockEvents();
       renderNews();
       renderTable(document.querySelector("#daily-table"), data.daily, [
         {key:"date", label:"日期"},
@@ -2375,12 +3338,16 @@ INDEX_HTML = """<!doctype html>
       document.querySelector("#metrics").style.display = showTwStockOverview ? "" : "none";
       document.querySelector("#ranking-view").style.display = state.tab === "ranking" || state.tab === "watchlist" ? "" : "none";
       document.querySelector("#detail-view").style.display = state.tab === "detail" ? "" : "none";
+      document.querySelector("#market-view").style.display = state.tab === "market" ? "" : "none";
+      document.querySelector("#mops-events-view").style.display = state.tab === "mops-events" ? "" : "none";
       document.querySelector("#us-news-view").style.display = state.tab === "us-news" ? "" : "none";
       document.querySelector("#ci-us-news-view").style.display = state.tab === "ci-us-news" ? "" : "none";
       document.querySelector("#coverage-view").style.display = state.tab === "coverage" ? "" : "none";
       if (state.tab === "ranking") await loadRanking(false);
       if (state.tab === "watchlist") await loadRanking(true);
       if (state.tab === "detail") await loadDetail();
+      if (state.tab === "market") await loadMarket();
+      if (state.tab === "mops-events") await loadMopsEvents();
       if (state.tab === "us-news") await loadUSNews();
       if (state.tab === "ci-us-news") await loadCIUSNews();
       if (state.tab === "coverage") {
@@ -2418,7 +3385,82 @@ INDEX_HTML = """<!doctype html>
     document.querySelector("#back-detail").addEventListener("click", goBackFromDetail);
     document.querySelector("#load-detail").addEventListener("click", loadDetail);
     document.querySelector("#watchlist-toggle").addEventListener("click", toggleWatchlist);
+    document.querySelector("#open-mops-for-stock").addEventListener("click", async () => {
+      const stock = state.detail?.stock?.stock_id || document.querySelector("#detail-stock").value.trim();
+      document.querySelector("#mops-stock").value = stock || "";
+      state.mopsSelectedDate = "";
+      state.mopsQuickFilter = "";
+      state.mopsVisibleCount = 50;
+      await setTab("mops-events");
+    });
     document.querySelector("#refresh-news").addEventListener("click", refreshNews);
+    document.querySelector("#refresh-market-view").addEventListener("click", loadMarket);
+    ["market-index-code","market-product","market-range"].forEach(id => document.querySelector("#" + id).addEventListener("change", loadMarket));
+    document.querySelector("#refresh-mops-events").addEventListener("click", refreshMopsEvents);
+    document.querySelector("#reload-mops-events").addEventListener("click", loadMopsEvents);
+    ["mops-start","mops-end","mops-stock","mops-query"].forEach(id => document.querySelector("#" + id).addEventListener("input", () => {
+      if (id === "mops-start" || id === "mops-end") {
+        state.mopsDateMode = "custom";
+        state.mopsDateInitialized = true;
+        state.mopsCalendarStart = document.querySelector("#mops-start")?.value || "";
+        state.mopsSelectedDate = "";
+        state.mopsVisibleCount = 50;
+        state.mopsQuickFilter = "";
+      }
+      clearTimeout(window.__mopsQ);
+      window.__mopsQ = setTimeout(loadMopsEvents, 250);
+    }));
+    document.querySelector("#mops-events-view").addEventListener("click", event => {
+      const step = event.target.closest("[data-mops-calendar-step]");
+      if (step) {
+        const startInput = document.querySelector("#mops-start");
+        const endInput = document.querySelector("#mops-end");
+        const currentStart = parseLocalDate(startInput?.value || state.mopsCalendarStart || isoDate(0));
+        const currentEnd = parseLocalDate(endInput?.value || startInput?.value || isoDate(0));
+        const direction = Number(step.dataset.mopsCalendarStep || 0);
+        if (currentStart && currentEnd && direction) {
+          const nextStart = addLocalMonths(currentStart, direction);
+          const nextEnd = addLocalMonths(currentEnd, direction);
+          if (startInput) startInput.value = localDateString(nextStart);
+          if (endInput) endInput.value = localDateString(nextEnd);
+          state.mopsDateMode = "custom";
+          state.mopsDateInitialized = true;
+          state.mopsCalendarStart = localDateString(nextStart);
+          state.mopsSelectedDate = "";
+          state.mopsVisibleCount = 50;
+          state.mopsQuickFilter = "";
+          loadMopsEvents();
+        }
+        return;
+      }
+      const more = event.target.closest("#mops-load-more");
+      if (more) {
+        state.mopsVisibleCount = (state.mopsVisibleCount || 50) + 50;
+        renderMopsEventList();
+        return;
+      }
+      const filter = event.target.closest("[data-filter]");
+      if (filter) {
+        state.mopsQuickFilter = filter.dataset.filter || "";
+        state.mopsVisibleCount = 50;
+        renderMopsEventList();
+        return;
+      }
+      const item = event.target.closest("[data-event-id]");
+      if (!item) return;
+      const row = (state.mopsEvents || []).find(entry => entry.event_id === item.dataset.eventId);
+      if (row) renderMopsEventDetail(row);
+    });
+    document.querySelector("#mops-calendar").addEventListener("click", event => {
+      const day = event.target.closest("[data-date]");
+      if (!day) return;
+      const date = day.dataset.date || "";
+      state.mopsSelectedDate = state.mopsSelectedDate === date ? "" : date;
+      state.mopsVisibleCount = 50;
+      state.mopsQuickFilter = "";
+      renderMopsCalendar(state.mopsEvents || []);
+      renderMopsEventList();
+    });
     document.querySelector("#refresh-us-news").addEventListener("click", refreshUSNews);
     document.querySelector("#us-industry").addEventListener("change", loadUSNews);
     document.querySelector("#ci-us-mode").addEventListener("change", () => {
@@ -2444,7 +3486,7 @@ INDEX_HTML = """<!doctype html>
       btn.addEventListener("click", () => refreshSingleSection(btn.dataset.section, btn));
     });
     if (STATIC_MODE) {
-      document.querySelectorAll(".single-refresh, #refresh-news, #refresh-us-news, #us-use-ollama").forEach(btn => btn.style.display = "none");
+      document.querySelectorAll(".single-refresh, #refresh-news, #refresh-us-news, #refresh-mops-events, #us-use-ollama").forEach(btn => btn.style.display = "none");
       document.querySelector("#static-publish-box").style.display = "none";
       document.querySelector("#watchlist-toggle").title = "靜態版自選股儲存在此瀏覽器";
     }
@@ -2784,12 +3826,17 @@ UPDATE_TASKS = [
     {
         "id": "all_data",
         "title": "一鍵更新全部資料",
-        "description": "增量更新：官方行情、成交量、法人買賣超、融資融券只補缺漏交易日；營收先補 24 個月歷史，之後只補最新月份；分點只補自選股與排名前 100 候選。",
+        "description": "增量更新：官方行情、成交量、法人買賣超、融資融券、大盤指數與期貨多空只補缺漏交易日；營收先補 24 個月歷史，之後只補最新月份；分點只補自選股與排名前 100 候選。",
     },
     {
         "id": "official_scan",
         "title": "官方行情與排行",
         "description": "更新上市上櫃近 20 個交易日行情、成交量、法人買賣超、融資融券，並重算 20 日與 5 日排行。",
+    },
+    {
+        "id": "market_data",
+        "title": "大盤指數與期貨多空",
+        "description": "補齊加權指數與大台 TXF、小台 MXF、微台 TMF 三大法人交易淨額與未平倉多空淨額；已下載日期會跳過，之後只補每日新資料。",
     },
     {
         "id": "candidate_revenue",
@@ -2930,6 +3977,7 @@ def all_market_stock_ids() -> list[str]:
             SELECT stock_id
             FROM stocks
             WHERE market IN ('TWSE', 'TPEX')
+              AND name NOT LIKE '%-DR'
             ORDER BY stock_id
             """
         ).fetchall()
@@ -2997,8 +4045,355 @@ def branch_coverage_summary(days: int = 20) -> dict[str, int]:
         "attempted": sum(int(row.get("attempted") or 0) for row in rows),
         "empty": sum(int(row.get("empty_count") or 0) for row in rows),
         "failed": sum(int(row.get("failed_count") or 0) for row in rows),
+        "not_attempted": sum(int(row.get("not_attempted") or 0) for row in rows),
         "total": sum(int(row.get("total_stocks") or 0) for row in rows),
-        "remaining": sum(int(row.get("remaining") or 0) for row in rows),
+        "no_branch": sum(int(row.get("no_branch") or row.get("remaining") or 0) for row in rows),
+        "remaining": sum(int(row.get("not_attempted") or 0) for row in rows),
+    }
+
+
+def market_data_status() -> dict[str, object]:
+    with connect_db(DB_PATH) as conn:
+        latest_index = conn.execute(
+            "SELECT MAX(date), MAX(updated_at), COUNT(*) FROM market_index_daily WHERE index_code = 'TAIEX'"
+        ).fetchone()
+        product_rows = conn.execute(
+            """
+            SELECT product_code, COUNT(DISTINCT date), MAX(date), MAX(updated_at)
+            FROM futures_institution_oi
+            WHERE product_code IN ('TXF', 'MXF', 'TMF')
+            GROUP BY product_code
+            """
+        ).fetchall()
+    products = {
+        str(row[0]): {
+            "date_count": int(row[1] or 0),
+            "latest_date": normalize_time(row[2])[:10],
+            "updated_at": normalize_time(row[3]),
+        }
+        for row in product_rows
+    }
+    latest_updated = max(
+        [normalize_time(latest_index[1] if latest_index else ""), *[str(item["updated_at"]) for item in products.values()]],
+        default="",
+    )
+    return {
+        "latest_index_date": normalize_time(latest_index[0] if latest_index else "")[:10],
+        "index_count": int(latest_index[2] or 0) if latest_index else 0,
+        "products": products,
+        "updated_at": latest_updated,
+    }
+
+
+def bound_float(value: float, low: float, high: float) -> float:
+    return min(max(value, low), high)
+
+
+def moving_average(values: list[float], days: int) -> float | None:
+    if len(values) < days:
+        return None
+    return sum(values[-days:]) / days
+
+
+def sentiment_label(score: float) -> str:
+    if score >= 70:
+        return "偏多"
+    if score >= 55:
+        return "中性偏多"
+    if score >= 45:
+        return "中性"
+    if score >= 30:
+        return "中性偏空"
+    return "偏空"
+
+
+def sentiment_multiplier(score: float) -> float:
+    if score >= 70:
+        return 1.05
+    if score >= 55:
+        return 1.0
+    if score >= 45:
+        return 0.95
+    if score >= 30:
+        return 0.85
+    return 0.75
+
+
+def market_sentiment_payload(limit: int = 120) -> dict[str, object]:
+    limit = min(max(int(limit or 120), 30), 5000)
+    with connect_db(DB_PATH) as conn:
+        index_rows_raw = conn.execute(
+            """
+            SELECT date, close
+            FROM market_index_daily
+            WHERE index_code = 'TAIEX'
+            ORDER BY date DESC
+            LIMIT ?
+            """,
+            (limit,),
+        ).fetchall()
+        futures_rows_raw = conn.execute(
+            """
+            SELECT date, product_code,
+                   MAX(CASE WHEN institution = 'foreign' THEN trade_net END) AS foreign_trade_net,
+                   MAX(CASE WHEN institution = 'foreign' THEN oi_net END) AS foreign_oi_net,
+                   MAX(CASE WHEN institution = 'trust' THEN trade_net END) AS trust_trade_net,
+                   MAX(CASE WHEN institution = 'trust' THEN oi_net END) AS trust_oi_net,
+                   MAX(CASE WHEN institution = 'dealer' THEN trade_net END) AS dealer_trade_net,
+                   MAX(CASE WHEN institution = 'dealer' THEN oi_net END) AS dealer_oi_net
+            FROM futures_institution_oi
+            WHERE product_code IN ('TXF', 'MXF', 'TMF')
+            GROUP BY date, product_code
+            ORDER BY date DESC
+            LIMIT ?
+            """,
+            (limit * 3,),
+        ).fetchall()
+        margin_rows_raw = conn.execute(
+            """
+            SELECT date,
+                   SUM(margin_balance) AS margin_balance,
+                   SUM(short_balance) AS short_balance,
+                   SUM(margin_balance - margin_prev_balance) AS margin_change,
+                   SUM(short_balance - short_prev_balance) AS short_change
+            FROM margin_trades
+            GROUP BY date
+            ORDER BY date DESC
+            LIMIT ?
+            """,
+            (limit,),
+        ).fetchall()
+        updated_at = conn.execute(
+            """
+            SELECT MAX(updated_at)
+            FROM (
+                SELECT updated_at FROM market_index_daily
+                UNION ALL
+                SELECT updated_at FROM futures_institution_oi
+                UNION ALL
+                SELECT updated_at FROM margin_trades
+            )
+            """
+        ).fetchone()[0]
+
+    index_rows = [{"date": row[0], "close": row[1]} for row in reversed(index_rows_raw)]
+    futures_rows = [
+        {
+            "date": row[0],
+            "product_code": row[1],
+            "foreign_trade_net": row[2] or 0,
+            "foreign_oi_net": row[3] or 0,
+            "trust_trade_net": row[4] or 0,
+            "trust_oi_net": row[5] or 0,
+            "dealer_trade_net": row[6] or 0,
+            "dealer_oi_net": row[7] or 0,
+        }
+        for row in reversed(futures_rows_raw)
+    ]
+    margin_rows = [
+        {
+            "date": row[0],
+            "margin_balance": row[1] or 0,
+            "short_balance": row[2] or 0,
+            "margin_change": row[3] or 0,
+            "short_change": row[4] or 0,
+        }
+        for row in reversed(margin_rows_raw)
+    ]
+
+    reasons: list[str] = []
+    parts = {
+        "index_trend": 0.0,
+        "foreign_futures": 0.0,
+        "futures_trade": 0.0,
+        "trust_futures": 0.0,
+        "market_margin": 0.0,
+        "dealer_hedge": 0.0,
+    }
+    latest_index = index_rows[-1] if index_rows else {}
+    closes = [float(row["close"]) for row in index_rows if row.get("close") is not None]
+    ma5 = moving_average(closes, 5)
+    ma20 = moving_average(closes, 20)
+    ma60 = moving_average(closes, 60)
+    close = float(latest_index.get("close") or 0)
+    if close and ma20:
+        if close >= ma20:
+            parts["index_trend"] += 5
+            reasons.append("指數站上 MA20")
+        else:
+            parts["index_trend"] -= 6
+            reasons.append("指數跌破 MA20")
+    if close and ma20 and ma60:
+        if close >= ma20 >= ma60:
+            parts["index_trend"] += 7
+            reasons.append("中期趨勢偏多")
+        elif close < ma20 < ma60:
+            parts["index_trend"] -= 6
+            reasons.append("中期趨勢偏空")
+    elif close and ma5 and ma20:
+        if close >= ma5 >= ma20:
+            parts["index_trend"] += 4
+        elif close < ma5 < ma20:
+            parts["index_trend"] -= 4
+    parts["index_trend"] = round(bound_float(parts["index_trend"], -12, 12), 2)
+
+    by_product: dict[str, list[dict[str, object]]] = {code: [] for code in FUTURES_PRODUCTS}
+    for row in futures_rows:
+        by_product.setdefault(str(row["product_code"]), []).append(row)
+    weights = {"TXF": 1.0, "MXF": 0.25, "TMF": 0.08}
+    weighted_foreign = 0.0
+    weighted_foreign_abs = 0.0
+    weighted_foreign_trade_5d = 0.0
+    weighted_trade_abs = 0.0
+    weighted_trust = 0.0
+    weighted_trust_abs = 0.0
+    weighted_dealer = 0.0
+    weighted_dealer_abs = 0.0
+    for code, rows in by_product.items():
+        if not rows:
+            continue
+        weight = weights.get(code, 0.1)
+        latest = rows[-1]
+        foreign_values = [abs(float(item.get("foreign_oi_net") or 0)) for item in rows]
+        trade_values = [abs(float(item.get("foreign_trade_net") or 0)) for item in rows]
+        trust_values = [abs(float(item.get("trust_oi_net") or 0)) for item in rows]
+        dealer_values = [abs(float(item.get("dealer_oi_net") or 0)) for item in rows]
+        weighted_foreign += float(latest.get("foreign_oi_net") or 0) * weight
+        weighted_foreign_abs += (max(foreign_values) or 1) * weight
+        weighted_foreign_trade_5d += sum(float(item.get("foreign_trade_net") or 0) for item in rows[-5:]) * weight
+        weighted_trade_abs += max(sum(trade_values[-5:]), 1) * weight
+        weighted_trust += float(latest.get("trust_oi_net") or 0) * weight
+        weighted_trust_abs += (max(trust_values) or 1) * weight
+        weighted_dealer += float(latest.get("dealer_oi_net") or 0) * weight
+        weighted_dealer_abs += (max(dealer_values) or 1) * weight
+
+    if weighted_foreign_abs:
+        parts["foreign_futures"] = round(bound_float(weighted_foreign / weighted_foreign_abs * 20, -20, 20), 2)
+        reasons.append("外資期貨淨部位偏多" if parts["foreign_futures"] > 3 else "外資期貨淨部位偏空" if parts["foreign_futures"] < -3 else "外資期貨接近中性")
+    if weighted_trade_abs:
+        parts["futures_trade"] = round(bound_float(weighted_foreign_trade_5d / weighted_trade_abs * 10, -10, 10), 2)
+        if parts["futures_trade"] < -3:
+            reasons.append("外資近 5 日期貨交易偏空")
+        elif parts["futures_trade"] > 3:
+            reasons.append("外資近 5 日期貨交易偏多")
+    if weighted_trust_abs:
+        parts["trust_futures"] = round(bound_float(weighted_trust / weighted_trust_abs * 6, -6, 6), 2)
+    if weighted_dealer_abs:
+        dealer_raw = weighted_dealer / weighted_dealer_abs
+        parts["dealer_hedge"] = round(bound_float(dealer_raw * 5, -5, 5), 2)
+        if parts["dealer_hedge"] < -3:
+            reasons.append("自營商避險空單偏重")
+
+    if margin_rows:
+        latest_margin = margin_rows[-1]
+        recent_margin_change = sum(float(row.get("margin_change") or 0) for row in margin_rows[-5:])
+        recent_short_change = sum(float(row.get("short_change") or 0) for row in margin_rows[-5:])
+        latest_margin_balance = max(abs(float(latest_margin.get("margin_balance") or 0)), 1)
+        margin_ratio = recent_margin_change / latest_margin_balance * 100
+        market_margin_score = 0.0
+        if close and len(closes) >= 5 and closes[-1] >= closes[-5] and recent_margin_change > 0:
+            market_margin_score -= bound_float(margin_ratio * 2.5, 0, 8)
+            reasons.append("指數上漲但融資增加，追價風險上升")
+        elif recent_margin_change < 0:
+            market_margin_score += bound_float(abs(margin_ratio) * 2.5, 0, 6)
+            reasons.append("融資下降，籌碼較乾淨")
+        if recent_short_change > 0 and close and len(closes) >= 5 and closes[-1] >= closes[-5]:
+            market_margin_score += 2
+            reasons.append("融券增加但指數未弱，短線有軋空壓力")
+        parts["market_margin"] = round(bound_float(market_margin_score, -10, 10), 2)
+
+    raw_score = 50 + sum(float(value or 0) for value in parts.values())
+    score = round(bound_float(raw_score, 0, 100), 2)
+    return {
+        "score": score,
+        "label": sentiment_label(score),
+        "risk_multiplier": sentiment_multiplier(score),
+        "parts": parts,
+        "reasons": reasons[:8],
+        "latest_date": latest_index.get("date") or "",
+        "latest_close": latest_index.get("close"),
+        "ma5": round(ma5, 2) if ma5 else None,
+        "ma20": round(ma20, 2) if ma20 else None,
+        "ma60": round(ma60, 2) if ma60 else None,
+        "updated_at": normalize_time(updated_at),
+    }
+
+
+def market_payload(index_code: str = "TAIEX", product_code: str = "TXF", limit: int = 240) -> dict[str, object]:
+    product_code = product_code.upper()
+    if product_code not in FUTURES_PRODUCTS:
+        product_code = "TXF"
+    limit = min(max(int(limit or 240), 30), 5000)
+    with connect_db(DB_PATH) as conn:
+        index_rows = conn.execute(
+            """
+            SELECT date, open, high, low, close
+            FROM market_index_daily
+            WHERE index_code = ?
+            ORDER BY date DESC
+            LIMIT ?
+            """,
+            (index_code, limit),
+        ).fetchall()
+        futures_rows = conn.execute(
+            """
+            SELECT date,
+                   MAX(CASE WHEN institution = 'foreign' THEN trade_net END) AS foreign_trade_net,
+                   MAX(CASE WHEN institution = 'foreign' THEN oi_net END) AS foreign_oi_net,
+                   MAX(CASE WHEN institution = 'trust' THEN trade_net END) AS trust_trade_net,
+                   MAX(CASE WHEN institution = 'trust' THEN oi_net END) AS trust_oi_net,
+                   MAX(CASE WHEN institution = 'dealer' THEN trade_net END) AS dealer_trade_net,
+                   MAX(CASE WHEN institution = 'dealer' THEN oi_net END) AS dealer_oi_net
+            FROM futures_institution_oi
+            WHERE product_code = ?
+            GROUP BY date
+            ORDER BY date DESC
+            LIMIT ?
+            """,
+            (product_code, limit),
+        ).fetchall()
+        updated_at = conn.execute(
+            """
+            SELECT MAX(updated_at)
+            FROM (
+                SELECT updated_at FROM market_index_daily WHERE index_code = ?
+                UNION ALL
+                SELECT updated_at FROM futures_institution_oi WHERE product_code = ?
+            )
+            """,
+            (index_code, product_code),
+        ).fetchone()[0]
+    index_output = [
+        {"date": row[0], "open": row[1], "high": row[2], "low": row[3], "close": row[4]}
+        for row in reversed(index_rows)
+    ]
+    futures_output = [
+        {
+            "date": row[0],
+            "foreign_trade_net": row[1],
+            "foreign_oi_net": row[2],
+            "trust_trade_net": row[3],
+            "trust_oi_net": row[4],
+            "dealer_trade_net": row[5],
+            "dealer_oi_net": row[6],
+        }
+        for row in reversed(futures_rows)
+    ]
+    latest_index = index_output[-1] if index_output else {}
+    latest_futures = futures_output[-1] if futures_output else {}
+    return {
+        "summary": {
+            "latest_index_date": latest_index.get("date", ""),
+            "latest_index_close": latest_index.get("close"),
+            "product_code": product_code,
+            "product_label": f"{FUTURES_PRODUCTS.get(product_code, product_code)} {product_code}",
+            "foreign_oi_net": latest_futures.get("foreign_oi_net"),
+            "trust_oi_net": latest_futures.get("trust_oi_net"),
+            "dealer_oi_net": latest_futures.get("dealer_oi_net"),
+        },
+        "index_rows": index_output,
+        "futures_rows": futures_output,
+        "updated_at": normalize_time(updated_at),
     }
 
 
@@ -3050,10 +4445,15 @@ def data_update_times() -> dict[str, str]:
               AND source = 'histock'
             """
         ).fetchone()[0]
+        market_data = max(
+            str(conn.execute("SELECT MAX(updated_at) FROM market_index_daily").fetchone()[0] or ""),
+            str(conn.execute("SELECT MAX(updated_at) FROM futures_institution_oi").fetchone()[0] or ""),
+        )
     times = {
         "official_scan": normalize_time(official),
-            "candidate_revenue": normalize_time(max(str(candidate_revenue or ""), str(watchlist_revenue or ""))),
-            "all_market_revenue": normalize_time(all_market_revenue),
+        "market_data": normalize_time(market_data),
+        "candidate_revenue": normalize_time(max(str(candidate_revenue or ""), str(watchlist_revenue or ""))),
+        "all_market_revenue": normalize_time(all_market_revenue),
         "quality_check": normalize_time(max(str(official or ""), str(all_market_revenue or ""))),
         "watchlist_branch_daily": normalize_time(branch_daily),
         "watchlist_branch_top": normalize_time(watchlist_branch_top),
@@ -3240,6 +4640,16 @@ def update_task_state() -> dict[str, object]:
         if str(task["id"]) in {"watchlist_news", "us_news_obsidian", "sync_ci_us_news"}:
             task_item["warn_hours"] = 12
             task_item["bad_hours"] = 36
+        if str(task["id"]) == "market_data":
+            market_status = market_data_status()
+            product_parts = []
+            for code, label in FUTURES_PRODUCTS.items():
+                item = (market_status.get("products") or {}).get(code) or {}
+                product_parts.append(f"{label} {item.get('date_count', 0)} 日")
+            task_item["extra_status"] = (
+                f"加權指數 {market_status.get('index_count', 0)} 日"
+                + ("；" + "、".join(product_parts) if product_parts else "")
+            )
         if str(task["id"]) in {"candidate_revenue", "all_market_revenue"}:
             revenue_status = revenue_coverage_status(300)
             if str(task["id"]) == "candidate_revenue":
@@ -3263,7 +4673,12 @@ def update_task_state() -> dict[str, object]:
             parts = []
             for key in ("price", "institutional", "margin", "revenue"):
                 item = coverage.get(key) or {}
-                parts.append(f"{item.get('label', key)} {item.get('covered', 0)} / {quality.get('total', 0)}")
+                text = f"{item.get('label', key)} {item.get('covered', 0)} / {quality.get('total', 0)}"
+                if key == "margin" and item.get("missing"):
+                    text += f"（未列信用交易 {item.get('missing', 0)}）"
+                elif item.get("missing"):
+                    text += f"（缺 {item.get('missing', 0)}）"
+                parts.append(text)
             task_item["extra_status"] = "；".join(parts)
         if active_job:
             progress = all_data_progress.get(str(task["id"]))
@@ -3277,8 +4692,10 @@ def update_task_state() -> dict[str, object]:
             task_item["extra_status"] = (
                 f"已抓排行 {summary['covered']} / {summary['total']} 檔"
                 f"，已嘗試 {summary['attempted']} 檔"
+                f"，未嘗試 {summary['not_attempted']} 檔"
                 f"，空回應 {summary['empty']} 檔"
-                f"，未有分點排行 {summary['remaining']} 檔"
+                f"，失敗 {summary['failed']} 檔"
+                f"，無排行資料 {summary['no_branch']} 檔"
             )
         if str(task["id"]) in {"top100_branch", "all_market_branch_top"} and active_health:
             task_item["extra_status"] = "；".join(
@@ -3310,6 +4727,7 @@ def all_data_task_progress(active_job: dict[str, object] | None) -> dict[str, di
     current = str(active_job.get("current_step") or "")
     ranges = [
         ("official_scan", "官方行情與排行", ["更新官方行情與 20 日排行", "重算 5 日排行"]),
+        ("market_data", "大盤指數與期貨多空", ["補齊大盤指數與期貨三大法人多空"]),
         ("all_market_revenue", "全市場營收補齊", ["補齊全市場缺漏營收", "補最新月份營收", "全市場營收已補齊", "最新月份營收已補齊", "重算營收策略排行"]),
         ("watchlist_news", "自選股新聞標題", ["更新 Yahoo 股市 RSS 標題"]),
         ("sync_ci_us_news", "同步 GitHub 新聞到本機", ["匯入 docs/data/ci_us_news.json 並同步 Obsidian"]),
@@ -3366,13 +4784,13 @@ def update_steps(task_id: str, days: int) -> tuple[str, list[tuple[str, list[str
     watchlist = ",".join(current_watchlist_ids())
     if task_id == "all_data":
         steps: list[tuple[str, list[str]]] = []
-        for child_task in ("official_scan", "all_market_revenue", "watchlist_news", "sync_ci_us_news", "us_news_obsidian", "watchlist_branch_daily", "watchlist_branch_top", "top100_branch"):
+        for child_task in ("official_scan", "market_data", "all_market_revenue", "watchlist_news", "sync_ci_us_news", "us_news_obsidian", "watchlist_branch_daily", "watchlist_branch_top", "top100_branch"):
             _title, child_steps = update_steps(child_task, days)
             steps.extend(child_steps)
         steps.append(
             (
                 "檢查基礎分資料完整性",
-                [py, "-m", "stock_chip.quality", "--days", "20", "--strict"],
+                [py, "-m", "stock_chip.quality", "--days", "20"],
             )
         )
         steps.append(
@@ -3394,6 +4812,16 @@ def update_steps(task_id: str, days: int) -> tuple[str, list[tuple[str, list[str
                     "重算 5 日排行",
                     [py, "-m", "stock_chip.scan", "--days", "5", "--limit", "100", "--watchlist", watchlist],
                 ),
+            ],
+        )
+    if task_id == "market_data":
+        return (
+            "大盤指數與期貨多空",
+            [
+                (
+                    "補齊大盤指數與期貨三大法人多空",
+                    [py, "-m", "stock_chip.market", "--years", "3", "--products", "TXF,MXF,TMF", "--sleep", "0.25"],
+                )
             ],
         )
     if task_id == "candidate_revenue":
@@ -3526,7 +4954,7 @@ def update_steps(task_id: str, days: int) -> tuple[str, list[tuple[str, list[str
             [
                 (
                     "檢查基礎分資料完整性",
-                    [py, "-m", "stock_chip.quality", "--days", "20", "--strict"],
+                    [py, "-m", "stock_chip.quality", "--days", "20"],
                 )
             ],
         )
@@ -3697,7 +5125,7 @@ def update_steps(task_id: str, days: int) -> tuple[str, list[tuple[str, list[str
         )
     if task_id == "all_market_branch_top":
         total = len(all_market_stock_ids())
-        batch_size = 80
+        batch_size = 5
         steps: list[tuple[str, list[str]]] = []
         for offset in range(0, total, batch_size):
             end = min(total, offset + batch_size)
@@ -4367,11 +5795,43 @@ def ensure_stock_data(query: str, days: int) -> dict[str, object]:
     }
 
 
+def classify_mops_event(title: str | None, detail: str | None, category: str | None = None) -> str:
+    text = f"{category or ''} {title or ''} {detail or ''}"
+    rules = [
+        ("股東會", ("股東常會", "股東會", "股東臨時會", "停止過戶")),
+        ("營收", ("營收", "合併營收", "自結營收")),
+        ("財報", ("財務報告", "財報", "每股盈餘", "損益", "會計師")),
+        ("除權息", ("除權", "除息", "配息", "配股", "股利")),
+        ("法說會", ("法說會", "法人說明會", "業績發表會")),
+        ("董事會", ("董事會", "審計委員會")),
+        ("重大訊息", ("重大訊息", "重大訊息說明")),
+    ]
+    for label, keywords in rules:
+        if any(keyword in text for keyword in keywords):
+            return label
+    return category or "其他"
+
+
+def load_stock_mops_events(conn: sqlite3.Connection, stock_id: str, days: int = 30, limit: int = 30) -> list[dict[str, object]]:
+    cutoff = (dt.date.today() - dt.timedelta(days=max(1, days))).isoformat()
+    payload = load_mops_events(conn, start_date=cutoff, stock_id=stock_id, limit=limit)
+    rows: list[dict[str, object]] = []
+    for row in payload.get("rows", []):
+        item = dict(row)
+        item["event_tag"] = classify_mops_event(
+            str(item.get("title") or ""),
+            str(item.get("detail") or ""),
+            str(item.get("category") or ""),
+        )
+        rows.append(item)
+    return rows
+
+
 def stock_detail(stock_id: str, days: int) -> dict[str, object]:
     with connect_db(DB_PATH) as conn:
         dates = recent_dates(conn, days)
         if not dates:
-            return {"stock": {"stock_id": stock_id, "name": stock_id}, "daily": [], "margin": [], "chart": [], "branch_top": [], "branch_daily": [], "revenues": []}
+            return {"stock": {"stock_id": stock_id, "name": stock_id}, "daily": [], "margin": [], "chart": [], "branch_top": [], "branch_daily": [], "revenues": [], "mops_events": []}
         latest_date = dates[-1]
         placeholders = ",".join("?" for _ in dates)
         stock_row = conn.execute(
@@ -4672,6 +6132,7 @@ def stock_detail(stock_id: str, days: int) -> dict[str, object]:
             for row in revenue_raw
         ]
         news = load_cached_news(conn, stock_id)
+        mops_events = load_stock_mops_events(conn, stock_id)
     selection = {}
     for row in read_csv(REPORTS_DIR / f"scan_all_{days}d.csv"):
         if row.get("stock_id") == stock_id:
@@ -4716,6 +6177,7 @@ def stock_detail(stock_id: str, days: int) -> dict[str, object]:
         ],
         "revenues": revenues,
         "news": news,
+        "mops_events": mops_events,
     }
 
 
@@ -4798,6 +6260,16 @@ class GUIHandler(BaseHTTPRequestHandler):
                 stock_id = params.get("stock_id", ["2376"])[0]
                 json_response(self, stock_detail(stock_id, days))
                 return
+            if parsed.path == "/api/market":
+                index_code = params.get("index", ["TAIEX"])[0]
+                product_code = params.get("product", ["TXF"])[0]
+                limit = int(params.get("limit", ["240"])[0])
+                json_response(self, market_payload(index_code=index_code, product_code=product_code, limit=limit))
+                return
+            if parsed.path == "/api/market-sentiment":
+                limit = int(params.get("limit", ["120"])[0])
+                json_response(self, market_sentiment_payload(limit=limit))
+                return
             if parsed.path == "/api/news":
                 stock_id = params.get("stock_id", [""])[0].strip()
                 limit = min(max(int(params.get("limit", ["20"])[0]), 1), 50)
@@ -4835,6 +6307,25 @@ class GUIHandler(BaseHTTPRequestHandler):
                 query = params.get("q", [""])[0].strip()
                 limit = min(max(int(params.get("limit", ["200"])[0]), 1), 500)
                 json_response(self, load_ci_us_news_live(industry=industry, source=source, query=query, limit=limit))
+                return
+            if parsed.path == "/api/mops-events":
+                start_date = params.get("start", [""])[0].strip()
+                end_date = params.get("end", [""])[0].strip()
+                stock_id = params.get("stock_id", [""])[0].strip()
+                query = params.get("q", [""])[0].strip()
+                limit = min(max(int(params.get("limit", ["500"])[0]), 1), 10000)
+                with connect_db(DB_PATH) as conn:
+                    json_response(
+                        self,
+                        load_mops_events(
+                            conn,
+                            start_date=start_date,
+                            end_date=end_date,
+                            stock_id=stock_id,
+                            query=query,
+                            limit=limit,
+                        ),
+                    )
                 return
             if parsed.path == "/api/obsidian/status":
                 json_response(self, obsidian_vault_status())
@@ -4908,6 +6399,14 @@ class GUIHandler(BaseHTTPRequestHandler):
                         include_symbol_news=include_symbol_news,
                     ),
                 )
+                return
+            if parsed.path == "/api/mops-events/refresh":
+                payload = self.read_json_body()
+                start_date_text = str(payload.get("start_date") or "").strip()
+                end_date_text = str(payload.get("end_date") or "").strip()
+                start_date = dt.date.fromisoformat(start_date_text) if start_date_text else None
+                end_date = dt.date.fromisoformat(end_date_text) if end_date_text else None
+                json_response(self, refresh_mops_events(DB_PATH, start_date=start_date, end_date=end_date))
                 return
             if parsed.path == "/api/obsidian/export":
                 result = export_obsidian_vault(DB_PATH)

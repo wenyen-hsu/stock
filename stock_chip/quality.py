@@ -92,6 +92,10 @@ def score_input_coverage(db_path: Path, days: int) -> dict[str, object]:
             "missing": len(missing),
             "missing_ids": missing[:30],
         }
+        if key == "margin":
+            listed_elsewhere = [stock_id for stock_id in missing if stock_id in price_ids or stock_id in institutional_ids]
+            coverage[key]["likely_unavailable"] = len(listed_elsewhere)
+            coverage[key]["reason"] = "未列入信用交易資料，通常是不可融資券、暫停融資融券或來源未提供"
     ok = all(item["missing"] == 0 for item in coverage.values())
     message = "分數資料完整" if ok else "分數資料仍有缺漏"
     return {
@@ -116,8 +120,9 @@ def format_report(result: dict[str, object]) -> str:
         item = coverage.get(key) or {}
         missing_ids = item.get("missing_ids") or []
         suffix = f"，例：{', '.join(missing_ids)}" if missing_ids else ""
+        reason = f"，{item.get('reason')}" if item.get("reason") and item.get("missing", 0) else ""
         lines.append(
-            f"- {item.get('label', key)}：{item.get('covered', 0)} / {result['total']}，缺 {item.get('missing', 0)}{suffix}"
+            f"- {item.get('label', key)}：{item.get('covered', 0)} / {result['total']}，缺 {item.get('missing', 0)}{reason}{suffix}"
         )
     return "\n".join(lines)
 

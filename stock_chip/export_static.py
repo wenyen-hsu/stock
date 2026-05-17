@@ -14,6 +14,8 @@ from stock_chip.gui import (
     connect_db,
     current_watchlist_ids,
     db_meta,
+    market_payload,
+    market_sentiment_payload,
     normalize_scan_row,
     now_text,
     ranking_path,
@@ -21,6 +23,7 @@ from stock_chip.gui import (
     stock_detail,
 )
 from stock_chip.scan import recent_dates
+from stock_chip.mops import load_mops_events
 from stock_chip.us_news import load_cached_us_news
 
 
@@ -112,9 +115,16 @@ def export_static(out_dir: Path, days_values: list[int], include_all_details: bo
             }
             write_json(data_dir / f"coverage_{days}d.json", {"coverage": coverage})
         write_json(data_dir / "us_news.json", {"rows": load_cached_us_news(conn, limit=200)})
+        write_json(data_dir / "mops_events.json", load_mops_events(conn, limit=10000))
         if ci_news_payload is None:
             ci_news_payload = {"rows": load_cached_us_news(conn, limit=200)}
         write_json(data_dir / "ci_us_news.json", ci_news_payload)
+    for product_code in ("TXF", "MXF", "TMF"):
+        payload = market_payload(index_code="TAIEX", product_code=product_code, limit=5000)
+        write_json(data_dir / f"market_{product_code}.json", payload)
+        if product_code == "TXF":
+            write_json(data_dir / "market.json", payload)
+    write_json(data_dir / "market_sentiment.json", market_sentiment_payload(limit=5000))
 
     for days in days_values:
         ranking_dir = data_dir / "rankings" / f"{days}d"

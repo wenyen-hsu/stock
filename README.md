@@ -10,6 +10,7 @@
 - 自選股摘要與每日明細
 - 個股 24 個月月營收、去年同期、月增率、年增率
 - 區間買超前十分點與已抓取分點的最近 10 日買賣超
+- MOPS 公開資訊觀測站重大事件月曆、事件列表與內文明細
 
 興櫃目前只接 TPEx OpenAPI 的「興櫃股票當日行情表」，可從每天執行開始累積價格資料；免費公開端點尚未接到興櫃歷史日行情與三大法人買賣超。分點逐價均價尚未接入。TWSE 買賣日報表公開頁面目前要求驗證碼，不適合作為穩定自動化來源；FinMind 分點資料已保留測試接口，但需要 token 且可能需要 sponsor 權限。
 
@@ -83,6 +84,14 @@ python3 -m stock_chip.news --watchlist 2376,2382,2324,6196 --limit 5
 
 預設只抓 Yahoo 股市 RSS 標題、連結與摘要。若要同時抓文章內文摘錄，可加上 `--content`；批次更新中心預設不抓內文。
 
+抓取 MOPS 重大事件：
+
+```bash
+python3 -m stock_chip.mops --days 14
+```
+
+MOPS 目前用來補「重大事件」頁：抓公開資訊觀測站近期重大訊息與公告，存入 SQLite 後可用月曆、股票代號、關鍵字查詢，並點事件查看內文明細。每次抓取 MOPS 時會自動刪除距離目前日期半年以前的事件，避免資料庫長期膨脹。MOPS 公開頁可能受 DNS 或憑證鏈影響；程式會先走 `mopsov.twse.com.tw`，失敗時改用已驗證過的同站 IP fallback。
+
 分批更新上市/上櫃全市場分點 Top N：
 
 ```bash
@@ -125,6 +134,8 @@ GUI 目前包含：
 - 點選分點查看最近 10 日買賣超
 - 個股 24 個月營收與去年同期比較
 - 分點覆蓋率與批次抓取指令
+- MOPS 重大事件熱度月曆、單日事件列表與事件明細
+- 資料來源速查與未接入來源備忘
 
 ## GitHub Pages 靜態版
 
@@ -189,6 +200,23 @@ python3 -m stock_chip.import_us_news_static --json docs/data/us_news.json --db d
 - `reports/ranking_near_avg_with_inst_buy_20d.csv`：接近均價且法人買超排行
 - `reports/branch_report_20d.md`：自選股分點 Top N 摘要
 - `reports/branch_topn_20d.csv`：自選股分點 Top N 明細
+
+## 資料來源備忘
+
+目前已接入：
+
+- TWSE / TPEx：行情、成交量、三大法人買賣超、融資融券、上市上櫃清單。
+- TAIFEX：大台、小台、微台三大法人期貨多空與未平倉。
+- FinMind：目前用於月營收；分點資料保留評估方向，正式使用前需確認 token / sponsor 條件。
+- HiStock：目前用於分點排行與分點日明細，但全市場覆蓋不完整，適合當 fallback。
+- MOPS 公開資訊觀測站：重大訊息與公告，已接入事件月曆；之後可再擴到法說會、財報公告與官方月營收追溯。
+- Yahoo 股市、Yahoo Finance、CNBC、MarketWatch：台股與美股新聞標題、連結、摘要。
+
+已確認、之後可評估：
+
+- Stooq：適合美股、全球指數、匯率、商品等 OHLCV 歷史資料備援；不適合補台股法人、分點、融資融券。
+- Goodinfo / CMoney / Wantgoo：資料豐富但偏網頁或商業服務，需先確認授權與穩定性，不建議直接作為核心免費來源。
+- TWSE 買賣日報表：公開頁面目前有驗證碼，不適合穩定自動化；若未來有官方 API 或下載檔再重新評估。
 
 ## 資料源驗證
 

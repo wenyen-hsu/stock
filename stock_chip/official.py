@@ -544,6 +544,35 @@ def init_schema(conn: sqlite3.Connection) -> None:
             PRIMARY KEY (revenue_month, stock_id, source)
         );
 
+        CREATE TABLE IF NOT EXISTS market_index_daily (
+            date TEXT NOT NULL,
+            index_code TEXT NOT NULL,
+            index_name TEXT NOT NULL,
+            open REAL,
+            high REAL,
+            low REAL,
+            close REAL,
+            source TEXT NOT NULL,
+            updated_at TEXT NOT NULL,
+            PRIMARY KEY (date, index_code, source)
+        );
+
+        CREATE TABLE IF NOT EXISTS futures_institution_oi (
+            date TEXT NOT NULL,
+            product_code TEXT NOT NULL,
+            product_name TEXT NOT NULL,
+            institution TEXT NOT NULL,
+            trade_long INTEGER,
+            trade_short INTEGER,
+            trade_net INTEGER,
+            oi_long INTEGER,
+            oi_short INTEGER,
+            oi_net INTEGER,
+            source TEXT NOT NULL,
+            updated_at TEXT NOT NULL,
+            PRIMARY KEY (date, product_code, institution, source)
+        );
+
         CREATE INDEX IF NOT EXISTS idx_daily_prices_stock_date
             ON daily_prices(stock_id, date);
         CREATE INDEX IF NOT EXISTS idx_institutional_stock_date
@@ -558,6 +587,10 @@ def init_schema(conn: sqlite3.Connection) -> None:
             ON branch_fetch_status(stock_id, trade_date, window_days);
         CREATE INDEX IF NOT EXISTS idx_monthly_revenues_stock_month
             ON monthly_revenues(stock_id, revenue_month);
+        CREATE INDEX IF NOT EXISTS idx_market_index_daily_code_date
+            ON market_index_daily(index_code, date);
+        CREATE INDEX IF NOT EXISTS idx_futures_institution_product_date
+            ON futures_institution_oi(product_code, date);
         """
     )
     ensure_column(conn, "trading_days", "margin_count", "INTEGER NOT NULL DEFAULT 0")
