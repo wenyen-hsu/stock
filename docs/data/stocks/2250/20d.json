@@ -1,13 +1,235 @@
 {
   "branch_daily": [],
-  "branch_daily_status": [],
-  "branch_top": [],
+  "branch_daily_status": [
+    {
+      "attempts": 0,
+      "error": null,
+      "row_count": 0,
+      "status": "missing",
+      "trade_date": "2026-05-15"
+    },
+    {
+      "attempts": 0,
+      "error": null,
+      "row_count": 0,
+      "status": "missing",
+      "trade_date": "2026-05-14"
+    },
+    {
+      "attempts": 0,
+      "error": null,
+      "row_count": 0,
+      "status": "missing",
+      "trade_date": "2026-05-13"
+    },
+    {
+      "attempts": 0,
+      "error": null,
+      "row_count": 0,
+      "status": "missing",
+      "trade_date": "2026-05-12"
+    },
+    {
+      "attempts": 0,
+      "error": null,
+      "row_count": 0,
+      "status": "missing",
+      "trade_date": "2026-05-11"
+    },
+    {
+      "attempts": 0,
+      "error": null,
+      "row_count": 0,
+      "status": "missing",
+      "trade_date": "2026-05-08"
+    },
+    {
+      "attempts": 0,
+      "error": null,
+      "row_count": 0,
+      "status": "missing",
+      "trade_date": "2026-05-07"
+    },
+    {
+      "attempts": 0,
+      "error": null,
+      "row_count": 0,
+      "status": "missing",
+      "trade_date": "2026-05-06"
+    },
+    {
+      "attempts": 0,
+      "error": null,
+      "row_count": 0,
+      "status": "missing",
+      "trade_date": "2026-05-05"
+    },
+    {
+      "attempts": 0,
+      "error": null,
+      "row_count": 0,
+      "status": "missing",
+      "trade_date": "2026-05-04"
+    },
+    {
+      "attempts": 0,
+      "error": null,
+      "row_count": 0,
+      "status": "missing",
+      "trade_date": "2026-04-30"
+    },
+    {
+      "attempts": 0,
+      "error": null,
+      "row_count": 0,
+      "status": "missing",
+      "trade_date": "2026-04-29"
+    },
+    {
+      "attempts": 0,
+      "error": null,
+      "row_count": 0,
+      "status": "missing",
+      "trade_date": "2026-04-28"
+    },
+    {
+      "attempts": 0,
+      "error": null,
+      "row_count": 0,
+      "status": "missing",
+      "trade_date": "2026-04-27"
+    },
+    {
+      "attempts": 0,
+      "error": null,
+      "row_count": 0,
+      "status": "missing",
+      "trade_date": "2026-04-24"
+    },
+    {
+      "attempts": 0,
+      "error": null,
+      "row_count": 0,
+      "status": "missing",
+      "trade_date": "2026-04-23"
+    },
+    {
+      "attempts": 0,
+      "error": null,
+      "row_count": 0,
+      "status": "missing",
+      "trade_date": "2026-04-22"
+    },
+    {
+      "attempts": 0,
+      "error": null,
+      "row_count": 0,
+      "status": "missing",
+      "trade_date": "2026-04-21"
+    },
+    {
+      "attempts": 0,
+      "error": null,
+      "row_count": 0,
+      "status": "missing",
+      "trade_date": "2026-04-20"
+    },
+    {
+      "attempts": 0,
+      "error": null,
+      "row_count": 0,
+      "status": "missing",
+      "trade_date": "2026-04-17"
+    }
+  ],
+  "branch_top": [
+    {
+      "avg_price": 64.17,
+      "broker_name": "美商高盛",
+      "buy_lot": 154.0,
+      "net_lot": 72.0,
+      "rank_no": 1,
+      "sell_lot": 82.0
+    },
+    {
+      "avg_price": 61.75,
+      "broker_name": "兆豐-天母",
+      "buy_lot": 51.0,
+      "net_lot": 51.0,
+      "rank_no": 2,
+      "sell_lot": null
+    },
+    {
+      "avg_price": 64.11,
+      "broker_name": "摩根大通",
+      "buy_lot": 85.0,
+      "net_lot": 40.0,
+      "rank_no": 3,
+      "sell_lot": 45.0
+    },
+    {
+      "avg_price": 63.71,
+      "broker_name": "新光",
+      "buy_lot": 49.0,
+      "net_lot": 30.0,
+      "rank_no": 4,
+      "sell_lot": 19.0
+    },
+    {
+      "avg_price": 62.1,
+      "broker_name": "玉山-雙和",
+      "buy_lot": 29.0,
+      "net_lot": 29.0,
+      "rank_no": 5,
+      "sell_lot": null
+    },
+    {
+      "avg_price": 63.42,
+      "broker_name": "台灣摩根士丹利",
+      "buy_lot": 64.0,
+      "net_lot": 27.0,
+      "rank_no": 6,
+      "sell_lot": 36.0
+    },
+    {
+      "avg_price": 63.52,
+      "broker_name": "華南永昌-鶯歌",
+      "buy_lot": 23.0,
+      "net_lot": 23.0,
+      "rank_no": 7,
+      "sell_lot": null
+    },
+    {
+      "avg_price": 64.15,
+      "broker_name": "兆豐-台中港",
+      "buy_lot": 20.0,
+      "net_lot": 20.0,
+      "rank_no": 8,
+      "sell_lot": null
+    },
+    {
+      "avg_price": 64.4,
+      "broker_name": "新加坡商瑞銀",
+      "buy_lot": 47.0,
+      "net_lot": 18.0,
+      "rank_no": 9,
+      "sell_lot": 29.0
+    },
+    {
+      "avg_price": 67.25,
+      "broker_name": "元大-歸仁",
+      "buy_lot": 19.0,
+      "net_lot": 16.0,
+      "rank_no": 10,
+      "sell_lot": 3.0
+    }
+  ],
   "branch_top_status": {
-    "attempts": 0,
+    "attempts": 1,
     "error": null,
-    "row_count": 0,
-    "status": "missing",
-    "updated_at": ""
+    "row_count": 20,
+    "status": "success",
+    "updated_at": "2026-05-16 08:38:49"
   },
   "chart": [
     {
@@ -490,9 +712,75 @@
       "ma60": null,
       "open": 64.0,
       "volume_lot": 109.52
+    },
+    {
+      "avg_price": 62.28348504551366,
+      "close": 62.1,
+      "date": "2026-05-13",
+      "high": 63.1,
+      "low": 62.1,
+      "ma10": 63.92,
+      "ma20": 63.69,
+      "ma5": 63.42,
+      "ma60": null,
+      "open": 63.1,
+      "volume_lot": 65.36
+    },
+    {
+      "avg_price": 62.218942479878784,
+      "close": 62.5,
+      "date": "2026-05-14",
+      "high": 62.5,
+      "low": 62.0,
+      "ma10": 63.84,
+      "ma20": 63.615,
+      "ma5": 63.02,
+      "ma60": null,
+      "open": 62.1,
+      "volume_lot": 50.82
+    },
+    {
+      "avg_price": 62.53192188141458,
+      "close": 62.0,
+      "date": "2026-05-15",
+      "high": 63.7,
+      "low": 62.0,
+      "ma10": 63.74,
+      "ma20": 63.525,
+      "ma5": 62.72,
+      "ma60": null,
+      "open": 62.6,
+      "volume_lot": 85.25
     }
   ],
   "daily": [
+    {
+      "avg_price": 62.53192188141458,
+      "close": 62.0,
+      "date": "2026-05-15",
+      "dealer_net_lot": 0.01,
+      "foreign_net_lot": -26.0,
+      "trust_net_lot": 0.0,
+      "volume_lot": 85.25
+    },
+    {
+      "avg_price": 62.218942479878784,
+      "close": 62.5,
+      "date": "2026-05-14",
+      "dealer_net_lot": 0.0,
+      "foreign_net_lot": -6.47,
+      "trust_net_lot": 0.0,
+      "volume_lot": 50.82
+    },
+    {
+      "avg_price": 62.28348504551366,
+      "close": 62.1,
+      "date": "2026-05-13",
+      "dealer_net_lot": -0.27,
+      "foreign_net_lot": 2.0,
+      "trust_net_lot": 0.0,
+      "volume_lot": 65.36
+    },
     {
       "avg_price": 63.37326406325612,
       "close": 63.1,
@@ -645,36 +933,60 @@
       "foreign_net_lot": 1.08,
       "trust_net_lot": 0.0,
       "volume_lot": 55.68
-    },
-    {
-      "avg_price": 63.89612718144872,
-      "close": 63.8,
-      "date": "2026-04-16",
-      "dealer_net_lot": -0.11,
-      "foreign_net_lot": 10.0,
-      "trust_net_lot": 0.0,
-      "volume_lot": 41.83
-    },
-    {
-      "avg_price": 63.97813715045392,
-      "close": 64.0,
-      "date": "2026-04-15",
-      "dealer_net_lot": 0.0,
-      "foreign_net_lot": 14.0,
-      "trust_net_lot": 0.0,
-      "volume_lot": 109.82
-    },
-    {
-      "avg_price": 62.15921917808219,
-      "close": 62.1,
-      "date": "2026-04-14",
-      "dealer_net_lot": 0.98,
-      "foreign_net_lot": 30.0,
-      "trust_net_lot": 0.0,
-      "volume_lot": 73.0
     }
   ],
   "margin": [
+    {
+      "date": "2026-05-15",
+      "margin_balance_lot": 1294,
+      "margin_buy_lot": 8,
+      "margin_cash_repay_lot": 0,
+      "margin_change_lot": 2,
+      "margin_prev_balance_lot": 1292,
+      "margin_sell_lot": 6,
+      "note": "",
+      "offset_lot": 0,
+      "short_balance_lot": 0,
+      "short_buy_lot": 0,
+      "short_change_lot": 0,
+      "short_prev_balance_lot": 0,
+      "short_sell_lot": 0,
+      "short_stock_repay_lot": 0
+    },
+    {
+      "date": "2026-05-14",
+      "margin_balance_lot": 1292,
+      "margin_buy_lot": 3,
+      "margin_cash_repay_lot": 0,
+      "margin_change_lot": 3,
+      "margin_prev_balance_lot": 1289,
+      "margin_sell_lot": 0,
+      "note": "",
+      "offset_lot": 0,
+      "short_balance_lot": 0,
+      "short_buy_lot": 0,
+      "short_change_lot": 0,
+      "short_prev_balance_lot": 0,
+      "short_sell_lot": 0,
+      "short_stock_repay_lot": 0
+    },
+    {
+      "date": "2026-05-13",
+      "margin_balance_lot": 1289,
+      "margin_buy_lot": 5,
+      "margin_cash_repay_lot": 0,
+      "margin_change_lot": 3,
+      "margin_prev_balance_lot": 1286,
+      "margin_sell_lot": 2,
+      "note": "",
+      "offset_lot": 0,
+      "short_balance_lot": 0,
+      "short_buy_lot": 0,
+      "short_change_lot": 0,
+      "short_prev_balance_lot": 0,
+      "short_sell_lot": 0,
+      "short_stock_repay_lot": 0
+    },
     {
       "date": "2026-05-12",
       "margin_balance_lot": 1286,
@@ -956,57 +1268,6 @@
       "margin_prev_balance_lot": 1320,
       "margin_sell_lot": 2,
       "note": "X",
-      "offset_lot": 0,
-      "short_balance_lot": 0,
-      "short_buy_lot": 0,
-      "short_change_lot": 0,
-      "short_prev_balance_lot": 0,
-      "short_sell_lot": 0,
-      "short_stock_repay_lot": 0
-    },
-    {
-      "date": "2026-04-16",
-      "margin_balance_lot": 1320,
-      "margin_buy_lot": 3,
-      "margin_cash_repay_lot": 0,
-      "margin_change_lot": 2,
-      "margin_prev_balance_lot": 1318,
-      "margin_sell_lot": 1,
-      "note": "",
-      "offset_lot": 0,
-      "short_balance_lot": 0,
-      "short_buy_lot": 0,
-      "short_change_lot": 0,
-      "short_prev_balance_lot": 0,
-      "short_sell_lot": 0,
-      "short_stock_repay_lot": 0
-    },
-    {
-      "date": "2026-04-15",
-      "margin_balance_lot": 1318,
-      "margin_buy_lot": 27,
-      "margin_cash_repay_lot": 0,
-      "margin_change_lot": 22,
-      "margin_prev_balance_lot": 1296,
-      "margin_sell_lot": 5,
-      "note": "",
-      "offset_lot": 1,
-      "short_balance_lot": 0,
-      "short_buy_lot": 0,
-      "short_change_lot": 0,
-      "short_prev_balance_lot": 0,
-      "short_sell_lot": 0,
-      "short_stock_repay_lot": 0
-    },
-    {
-      "date": "2026-04-14",
-      "margin_balance_lot": 1296,
-      "margin_buy_lot": 3,
-      "margin_cash_repay_lot": 0,
-      "margin_change_lot": -2,
-      "margin_prev_balance_lot": 1298,
-      "margin_sell_lot": 5,
-      "note": "",
       "offset_lot": 0,
       "short_balance_lot": 0,
       "short_buy_lot": 0,
@@ -1308,31 +1569,31 @@
     }
   ],
   "selection": {
-    "avg_price": 63.9855,
+    "avg_price": 63.8832,
     "base_reason": "外資買超；融資下降；營收 2026-04，月增 1.7%，年增 -8.54%，累計年增 -7.85%",
-    "base_score": 41.6,
-    "branch_score": 0.0,
-    "branch_status": "未取得",
-    "chip_score": 43.54,
-    "close": 63.1,
-    "close_vs_top_buy_avg_pct": 0.0,
-    "complete_chip_score": 41.6,
-    "confluence_branch_score": 0.0,
-    "confluence_direction_score": 0.0,
-    "confluence_inst_score": 0.0,
-    "confluence_price_score": 0.0,
-    "confluence_score": 0.0,
+    "base_score": 21.71,
+    "branch_score": 5.66,
+    "branch_status": "已取得",
+    "chip_score": 22.88,
+    "close": 62.0,
+    "close_vs_top_buy_avg_pct": -3.38,
+    "complete_chip_score": 49.62,
+    "confluence_branch_score": 4.72,
+    "confluence_direction_score": 6.0,
+    "confluence_inst_score": 11.18,
+    "confluence_price_score": 6.0,
+    "confluence_score": 27.91,
     "confluence_streak_score": 0.0,
-    "foreign_buy_streak": 4.0,
-    "foreign_net_lot": 220.88,
-    "foreign_net_volume_pct": 11.92,
-    "foreign_sell_streak": 0.0,
-    "inst_net_lot": 220.88,
-    "inst_net_volume_pct": 0.0,
-    "latest_date": "2026-05-12",
-    "latest_volume_lot": 109.52,
-    "margin_balance_change_lot": -12.0,
-    "margin_score": 0.65,
+    "foreign_buy_streak": 0.0,
+    "foreign_net_lot": 136.41,
+    "foreign_net_volume_pct": 7.46,
+    "foreign_sell_streak": 2.0,
+    "inst_net_lot": 136.41,
+    "inst_net_volume_pct": 7.46,
+    "latest_date": "2026-05-15",
+    "latest_volume_lot": 85.25,
+    "margin_balance_change_lot": -26.0,
+    "margin_score": 1.42,
     "market": "TWSE",
     "name": "IKKA-KY",
     "observed_days": 20,
@@ -1341,47 +1602,47 @@
     "revenue_momentum_score": -2.59,
     "revenue_month": "2026-04",
     "revenue_yoy_pct": -8.54,
-    "selection_reason": "營收 2026-04，月增 1.7%，年增 -8.54%，累計年增 -7.85%",
-    "selection_score": 41.6,
+    "selection_reason": "外資主導買超；前大買超分點約占成交 3.94%；收盤距區間均價 -2.95%；收盤距分點均價 -3.38%；營收 2026-04，月增 1.7%，年增 -8.54%，累計年增 -7.85%",
+    "selection_score": 21.71,
     "short_balance_change_lot": 0.0,
     "stock_id": "2250",
-    "top_buy_branch_avg_price": 0.0,
-    "top_buy_branch_name": "",
-    "top_buy_branch_net_lot": 0.0,
-    "top_buy_branch_volume_pct": 0.0,
-    "top_sell_branch_avg_price": 0.0,
-    "top_sell_branch_name": "",
-    "top_sell_branch_net_lot": 0.0,
-    "total_score": 41.6,
+    "top_buy_branch_avg_price": 64.17,
+    "top_buy_branch_name": "美商高盛",
+    "top_buy_branch_net_lot": 72.0,
+    "top_buy_branch_volume_pct": 3.94,
+    "top_sell_branch_avg_price": 61.85,
+    "top_sell_branch_name": "凱基-南崁",
+    "top_sell_branch_net_lot": -112.0,
+    "total_score": 21.71,
     "trust_buy_streak": 0.0,
     "trust_net_lot": 0.0,
     "trust_net_volume_pct": 0.0,
     "trust_sell_streak": 0.0,
-    "volume_5d_avg_lot": 79.11,
-    "volume_avg_lot": 92.64,
-    "volume_lot": 1852.89,
-    "volume_ratio_1d": 1.18,
-    "volume_ratio_5d": 0.85,
-    "volume_score": -0.15,
+    "volume_5d_avg_lot": 72.8,
+    "volume_avg_lot": 91.48,
+    "volume_lot": 1829.68,
+    "volume_ratio_1d": 0.93,
+    "volume_ratio_5d": 0.8,
+    "volume_score": -4.09,
     "volume_signal": "正常"
   },
   "stock": {
-    "avg_price": 63.9855,
-    "close": 63.1,
-    "foreign_net_lot": 220.88,
+    "avg_price": 63.8832,
+    "close": 62.0,
+    "foreign_net_lot": 136.41,
     "in_watchlist": false,
-    "latest_date": "2026-05-12",
-    "latest_volume_lot": 109.52,
-    "margin_balance_change_lot": -12,
+    "latest_date": "2026-05-15",
+    "latest_volume_lot": 85.25,
+    "margin_balance_change_lot": -26,
     "market": "TWSE",
     "name": "IKKA-KY",
     "short_balance_change_lot": 0,
     "stock_id": "2250",
     "trust_net_lot": 0.0,
-    "volume_5d_avg_lot": 79.11,
-    "volume_avg_lot": 92.64,
-    "volume_lot": 1852.89,
-    "volume_ratio_1d": 1.18,
-    "volume_ratio_5d": 0.85
+    "volume_5d_avg_lot": 72.8,
+    "volume_avg_lot": 91.48,
+    "volume_lot": 1829.68,
+    "volume_ratio_1d": 0.93,
+    "volume_ratio_5d": 0.8
   }
 }

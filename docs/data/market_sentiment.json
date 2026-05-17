@@ -1,0 +1,25 @@
+{
+  "label": "中性偏多",
+  "latest_close": 41172.36,
+  "latest_date": "2026-05-15",
+  "ma20": 39869.99,
+  "ma5": 41597.4,
+  "ma60": 35848.63,
+  "parts": {
+    "dealer_hedge": -0.73,
+    "foreign_futures": -15.02,
+    "futures_trade": 7.18,
+    "index_trend": 12.0,
+    "market_margin": 0.0,
+    "trust_futures": 4.81
+  },
+  "reasons": [
+    "指數站上 MA20",
+    "中期趨勢偏多",
+    "外資期貨淨部位偏空",
+    "外資近 5 日期貨交易偏多"
+  ],
+  "risk_multiplier": 1.0,
+  "score": 58.24,
+  "updated_at": "2026-05-16 22:59:39"
+}
