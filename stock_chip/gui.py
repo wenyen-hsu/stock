@@ -1242,7 +1242,7 @@ INDEX_HTML = """<!doctype html>
     <section id="coverage-view" class="panel" style="display:none;">
       <div class="panel-head">
         <div class="panel-title">更新中心</div>
-        <div class="muted">背景執行固定任務；分點任務會刻意放慢</div>
+        <div class="muted">背景執行固定任務；分點資料改在個股頁單檔更新</div>
       </div>
       <div class="panel-body">
         <div class="source-audit">
@@ -2718,11 +2718,14 @@ INDEX_HTML = """<!doctype html>
       btn.textContent = original;
     }
     const rankingCols = [
-      {key:"stock_id", label:"代號", sortType:"text", format: v => v, groups:["core","chip","foreign","revenue","margin","volume","branch"]},
-      {key:"name", label:"名稱", sortType:"text", groups:["core","chip","foreign","revenue","margin","volume","branch"]},
-      {key:"market", label:"市場", sortType:"text", groups:["core"]},
-      {key:"close", label:"收盤", groups:["core","chip","foreign","revenue","margin","volume"]},
+      {key:"stock_id", label:"代號", sortType:"text", format: v => v, groups:["core","chip","foreign","revenue","margin","volume","valuation"]},
+      {key:"name", label:"名稱", sortType:"text", groups:["core","chip","foreign","revenue","margin","volume","valuation"]},
+      {key:"market", label:"市場", sortType:"text", groups:["core","valuation"]},
+      {key:"close", label:"收盤", groups:["core","chip","foreign","revenue","margin","volume","valuation"]},
       {key:"observed_days", label:"資料日", groups:["core"]},
+      {key:"pe_ratio", label:"本益比", groups:["core","valuation"]},
+      {key:"dividend_yield", label:"殖利率%", groups:["valuation"]},
+      {key:"pb_ratio", label:"股淨比", groups:["valuation"]},
       {key:"total_score", label:"基礎分", signed:true, groups:["core"]},
       {key:"market_sentiment_score", label:"大盤分", signed:true, groups:["core"]},
       {key:"risk_adjusted_score", label:"風險調整分", signed:true, groups:["core"]},
@@ -2747,9 +2750,6 @@ INDEX_HTML = """<!doctype html>
       {key:"margin_balance_change_lot", label:"融資增減", signed:true, groups:["margin"]},
       {key:"short_balance_change_lot", label:"融券增減", signed:true, groups:["margin"]},
       {key:"avg_price", label:"均價", groups:["core"]},
-      {key:"branch_status", label:"分點狀態", sortType:"text", groups:["branch"]},
-      {key:"top_buy_branch_name", label:"買超分點", sortType:"text", groups:["branch"]},
-      {key:"branch_score", label:"分點分", signed:true, groups:["branch"]},
       {key:"revenue_month", label:"營收月", sortType:"text", groups:["revenue"]},
       {key:"revenue_mom_pct", label:"月增%", signed:true, groups:["revenue"]},
       {key:"revenue_yoy_pct", label:"年增%", signed:true, groups:["revenue"]},
@@ -2762,7 +2762,7 @@ INDEX_HTML = """<!doctype html>
       {key:"revenue", label:"營收", tip:"營收：顯示最新營收月份、營收分、月增率與年增率，用來判斷基本面動能是否同步轉強。"},
       {key:"margin", label:"融資券", tip:"融資券：觀察融資餘額與融券餘額增減。融資快速增加可能代表散戶追價，融資下降且法人買超通常較乾淨。"},
       {key:"volume", label:"量能", tip:"量能：比較最新日成交量與區間平均量、5日均量與區間均量。單日量倍高代表當天成交明顯放大，5日量倍高代表最近一段時間量能持續升溫。"},
-      {key:"branch", label:"分點", tip:"分點：顯示區間買超分點、分點分與抓取狀態。這是進階資料，若狀態為缺資料或空回應，不應拿來影響全市場排行。"}
+      {key:"valuation", label:"估值", tip:"估值：使用交易所每日行情揭露的本益比、殖利率與股價淨值比。空值通常代表該來源未揭露、EPS 為負或資料不可計算；目前只顯示與排序，不納入基礎分。"}
     ];
     function visibleRankingCols() {
       return rankingCols.filter(col => (col.groups || ["core"]).includes(state.columnGroup));
@@ -2789,7 +2789,7 @@ INDEX_HTML = """<!doctype html>
         ["最新交易日", meta.latest_date || ""],
         ["股票數", fmt(meta.stock_count)],
         ["上市 / 上櫃", `${fmt(meta.twse_count)} / ${fmt(meta.tpex_count)}`],
-        ["已抓區間分點排行", `${fmt(meta.branch_covered)} 檔`]
+        ["分點資料", "個股頁單檔更新"]
       ]);
       document.querySelector("#meta").innerHTML = STATIC_MODE
         ? `<span>靜態資料：GitHub Pages</span><span>最新日：${esc(meta.latest_date || "")}</span><span>匯出：${esc(meta.exported_at || "")}</span>`
@@ -2845,10 +2845,6 @@ INDEX_HTML = """<!doctype html>
         ["量能", selection.volume_signal || "無資料", `單日 ${fmt(selection.volume_ratio_1d)} 倍 / 5日 ${fmt(selection.volume_ratio_5d)} 倍`],
         ["量能分", selection.volume_score, "獨立指標，尚未併入基礎分"],
         ["營收動能", selection.revenue_momentum_score, `${esc(selection.revenue_month || "無月份")} 年增 ${fmt(selection.revenue_yoy_pct)}%`],
-        ["分點狀態", selection.branch_status || "未取得", "分點分只作個股進階確認"],
-        ["分點分", selection.branch_score, `買超分點 ${esc(selection.top_buy_branch_name || "未取得")}`],
-        ["共振分", selection.confluence_score, `距分點均價 ${fmt(selection.close_vs_top_buy_avg_pct)}%`],
-        ["完整籌碼分", selection.complete_chip_score, "基礎選股分 + 共振分"],
       ];
       target.innerHTML = `
         <div class="assist-grid">
@@ -2929,7 +2925,7 @@ INDEX_HTML = """<!doctype html>
       if (Number(s.revenue_yoy_pct || 0) > 0 && Number(s.revenue_mom_pct || 0) > 0) notes.push("營收月增與年增同步為正");
       else if ((data.revenues || []).length) notes.push("營收動能需要再確認");
       if (Number(data.stock?.margin_balance_change_lot || 0) > 0 && Number(data.stock?.foreign_net_lot || 0) > 0) notes.push("外資買超但融資也增加，需留意追價風險");
-      if (branchStatus.status !== "success") notes.push("分點資料未完整，分點分只作參考");
+      if (branchStatus.status !== "success") notes.push("分點資料改為個股頁手動更新，不影響排行分數");
       if (!notes.length) notes.push("目前資料不足，先以基礎行情、法人與營收做初步觀察");
       judgement.textContent = `初步判斷：${notes.join("；")}。這不是買賣建議，主要用來提醒目前資料完整度與矛盾點。`;
     }
@@ -3220,6 +3216,9 @@ INDEX_HTML = """<!doctype html>
       renderMetrics(document.querySelector("#detail-metrics"), [
         ["收盤", fmt(data.stock.close)],
         [`${days}日均價`, fmt(data.stock.avg_price)],
+        ["本益比", fmt(data.stock.pe_ratio)],
+        ["殖利率", data.stock.dividend_yield != null ? `${fmt(data.stock.dividend_yield)}%` : "-"],
+        ["股淨比", fmt(data.stock.pb_ratio)],
         ["單日量倍", fmt(data.stock.volume_ratio_1d)],
         ["5日量倍", fmt(data.stock.volume_ratio_5d)],
         [`${days}日外資`, fmt(data.stock.foreign_net_lot), cls(data.stock.foreign_net_lot)],
@@ -3239,6 +3238,9 @@ INDEX_HTML = """<!doctype html>
         {key:"close", label:"收盤"},
         {key:"avg_price", label:"均價"},
         {key:"volume_lot", label:"成交量(張)"},
+        {key:"pe_ratio", label:"本益比"},
+        {key:"dividend_yield", label:"殖利率%"},
+        {key:"pb_ratio", label:"股淨比"},
         {key:"foreign_net_lot", label:"外資買賣超", signed:true},
         {key:"trust_net_lot", label:"投信買賣超", signed:true},
         {key:"dealer_net_lot", label:"自營買賣超", signed:true}
@@ -3636,6 +3638,9 @@ def normalize_scan_row(row: dict[str, str], days: int) -> dict[str, object]:
         "market": row.get("market"),
         "observed_days": int(as_float(row.get("observed_days"))),
         "close": as_float(row.get("close")),
+        "pe_ratio": as_float(row.get("pe_ratio")),
+        "dividend_yield": as_float(row.get("dividend_yield")),
+        "pb_ratio": as_float(row.get("pb_ratio")),
         "avg_price": as_float(row.get(f"{days}d_avg_price")),
         "volume_lot": as_float(row.get(f"{days}d_volume_lot")),
         "foreign_net_lot": as_float(row.get(f"{days}d_foreign_net_lot")),
@@ -3826,7 +3831,7 @@ UPDATE_TASKS = [
     {
         "id": "all_data",
         "title": "一鍵更新全部資料",
-        "description": "增量更新：官方行情、成交量、法人買賣超、融資融券、大盤指數與期貨多空只補缺漏交易日；營收先補 24 個月歷史，之後只補最新月份；分點只補自選股與排名前 100 候選。",
+        "description": "增量更新：官方行情、成交量、法人買賣超、融資融券、大盤指數與期貨多空只補缺漏交易日；營收先補 24 個月歷史，之後只補最新月份；分點改為個股頁單檔更新，不放入一鍵更新與評分。",
     },
     {
         "id": "official_scan",
@@ -3854,16 +3859,6 @@ UPDATE_TASKS = [
         "description": "檢查基礎分需要的行情成交量、法人買賣超、融資融券、月營收是否覆蓋全部上市上櫃股票。",
     },
     {
-        "id": "watchlist_branch_daily",
-        "title": "自選股近 20 日分點",
-        "description": "補自選股最近 20 個交易日的 HiStock 單日分點頁，只抓缺漏資料；5 日頁面會取其中最近 5 日。",
-    },
-    {
-        "id": "watchlist_branch_top",
-        "title": "自選股區間分點",
-        "description": "補自選股最新 20 日區間買超前十分點；同一最新交易日已成功或空回應就不重抓。",
-    },
-    {
         "id": "watchlist_news",
         "title": "自選股新聞標題",
         "description": "更新自選股 Yahoo 股市 RSS 標題與連結；文章內文保留到個股頁手動抓取。",
@@ -3877,21 +3872,6 @@ UPDATE_TASKS = [
         "id": "sync_ci_us_news",
         "title": "同步 GitHub 新聞到本機",
         "description": "讀取 docs/data/ci_us_news.json，去重匯入本機 SQLite，重新規則分類，並同步 Obsidian。",
-    },
-    {
-        "id": "top100_branch",
-        "title": "排行前 100 區間分點",
-        "description": "依目前 20 日總分排行取前 100 檔，更新區間買超前十分點，再重算排行。",
-    },
-    {
-        "id": "all_market_branch_top",
-        "title": "全市場區間分點補齊",
-        "description": "獨立重型任務：補齊全部上市上櫃 20 日區間買超前十分點；同一最新交易日已成功或空回應就跳過，只補缺漏。",
-    },
-    {
-        "id": "retry_branch_failed",
-        "title": "重試分點失敗項目",
-        "description": "只重試最近 20 日區間分點狀態為失敗或空回應的股票，避免重跑已成功項目。",
     },
 ]
 
@@ -4732,9 +4712,6 @@ def all_data_task_progress(active_job: dict[str, object] | None) -> dict[str, di
         ("watchlist_news", "自選股新聞標題", ["更新 Yahoo 股市 RSS 標題"]),
         ("sync_ci_us_news", "同步 GitHub 新聞到本機", ["匯入 docs/data/ci_us_news.json 並同步 Obsidian"]),
         ("us_news_obsidian", "本機抓取美股新聞", ["更新美股新聞並同步 Obsidian"]),
-        ("watchlist_branch_daily", "自選股近 20 日分點", ["補自選股最近 20 日分點"]),
-        ("watchlist_branch_top", "自選股區間分點", ["補自選股 20 日區間分點", "重算自選股分點排行"]),
-        ("top100_branch", "排行前 100 區間分點", ["更新前 100 檔 20 日區間分點", "重算 20 日排行", "重算 5 日排行"]),
         ("quality_check", "分數資料完整性檢查", ["檢查基礎分資料完整性"]),
         ("static_export", "匯出 GitHub Pages 靜態資料", ["匯出 GitHub Pages 靜態資料"]),
     ]
@@ -4784,7 +4761,7 @@ def update_steps(task_id: str, days: int) -> tuple[str, list[tuple[str, list[str
     watchlist = ",".join(current_watchlist_ids())
     if task_id == "all_data":
         steps: list[tuple[str, list[str]]] = []
-        for child_task in ("official_scan", "market_data", "all_market_revenue", "watchlist_news", "sync_ci_us_news", "us_news_obsidian", "watchlist_branch_daily", "watchlist_branch_top", "top100_branch"):
+        for child_task in ("official_scan", "market_data", "all_market_revenue", "watchlist_news", "sync_ci_us_news", "us_news_obsidian"):
             _title, child_steps = update_steps(child_task, days)
             steps.extend(child_steps)
         steps.append(
@@ -5836,7 +5813,7 @@ def stock_detail(stock_id: str, days: int) -> dict[str, object]:
         placeholders = ",".join("?" for _ in dates)
         stock_row = conn.execute(
             """
-            SELECT s.stock_id, s.name, s.market, p.close
+            SELECT s.stock_id, s.name, s.market, p.close, p.pe_ratio, p.dividend_yield, p.pb_ratio
             FROM stocks s
             LEFT JOIN daily_prices p
                 ON p.stock_id = s.stock_id
@@ -5850,7 +5827,7 @@ def stock_detail(stock_id: str, days: int) -> dict[str, object]:
         daily_raw = conn.execute(
             f"""
             SELECT
-                p.date, p.close, p.avg_price, p.volume,
+                p.date, p.close, p.avg_price, p.volume, p.pe_ratio, p.dividend_yield, p.pb_ratio,
                 COALESCE(i.foreign_net, 0), COALESCE(i.trust_net, 0), COALESCE(i.dealer_net, 0)
             FROM daily_prices p
             LEFT JOIN institutional_trades i
@@ -5885,17 +5862,20 @@ def stock_detail(stock_id: str, days: int) -> dict[str, object]:
         )
         volume_ratio_1d = latest_volume / volume_avg if latest_volume is not None and volume_avg else None
         volume_ratio_5d = volume_5d_avg / volume_avg if volume_5d_avg is not None and volume_avg else None
-        foreign_net = sum(row[4] or 0 for row in daily_raw)
-        trust_net = sum(row[5] or 0 for row in daily_raw)
+        foreign_net = sum(row[7] or 0 for row in daily_raw)
+        trust_net = sum(row[8] or 0 for row in daily_raw)
         daily = [
             {
                 "date": row[0],
                 "close": row[1],
                 "avg_price": row[2],
                 "volume_lot": shares_to_lots(row[3]),
-                "foreign_net_lot": shares_to_lots(row[4]),
-                "trust_net_lot": shares_to_lots(row[5]),
-                "dealer_net_lot": shares_to_lots(row[6]),
+                "pe_ratio": row[4],
+                "dividend_yield": row[5],
+                "pb_ratio": row[6],
+                "foreign_net_lot": shares_to_lots(row[7]),
+                "trust_net_lot": shares_to_lots(row[8]),
+                "dealer_net_lot": shares_to_lots(row[9]),
             }
             for row in daily_raw
         ]
@@ -6145,6 +6125,9 @@ def stock_detail(stock_id: str, days: int) -> dict[str, object]:
             "market": stock_row[2],
             "latest_date": latest_date,
             "close": stock_row[3],
+            "pe_ratio": stock_row[4],
+            "dividend_yield": stock_row[5],
+            "pb_ratio": stock_row[6],
             "avg_price": round(avg_price, 4) if avg_price is not None else None,
             "foreign_net_lot": shares_to_lots(foreign_net),
             "trust_net_lot": shares_to_lots(trust_net),

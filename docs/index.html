@@ -1190,7 +1190,7 @@
     <section id="coverage-view" class="panel" style="display:none;">
       <div class="panel-head">
         <div class="panel-title">更新中心</div>
-        <div class="muted">背景執行固定任務；分點任務會刻意放慢</div>
+        <div class="muted">背景執行固定任務；分點資料改在個股頁單檔更新</div>
       </div>
       <div class="panel-body">
         <div class="source-audit">
@@ -2666,13 +2666,15 @@
       btn.textContent = original;
     }
     const rankingCols = [
-      {key:"stock_id", label:"代號", sortType:"text", format: v => v, groups:["core","chip","foreign","revenue","margin","volume","branch"]},
-      {key:"name", label:"名稱", sortType:"text", groups:["core","chip","foreign","revenue","margin","volume","branch"]},
-      {key:"market", label:"市場", sortType:"text", groups:["core"]},
-      {key:"close", label:"收盤", groups:["core","chip","foreign","revenue","margin","volume"]},
+      {key:"stock_id", label:"代號", sortType:"text", format: v => v, groups:["core","chip","foreign","revenue","margin","volume","valuation"]},
+      {key:"name", label:"名稱", sortType:"text", groups:["core","chip","foreign","revenue","margin","volume","valuation"]},
+      {key:"market", label:"市場", sortType:"text", groups:["core","valuation"]},
+      {key:"close", label:"收盤", groups:["core","chip","foreign","revenue","margin","volume","valuation"]},
+      {key:"observed_days", label:"資料日", groups:["core"]},
       {key:"pe_ratio", label:"本益比", groups:["core","valuation"]},
       {key:"eps_ttm", label:"近四季EPS", groups:["valuation"]},
-      {key:"observed_days", label:"資料日", groups:["core"]},
+      {key:"dividend_yield", label:"殖利率%", groups:["valuation"]},
+      {key:"pb_ratio", label:"股淨比", groups:["valuation"]},
       {key:"total_score", label:"基礎分", signed:true, groups:["core"]},
       {key:"market_sentiment_score", label:"大盤分", signed:true, groups:["core"]},
       {key:"risk_adjusted_score", label:"風險調整分", signed:true, groups:["core"]},
@@ -2697,9 +2699,6 @@
       {key:"margin_balance_change_lot", label:"融資增減", signed:true, groups:["margin"]},
       {key:"short_balance_change_lot", label:"融券增減", signed:true, groups:["margin"]},
       {key:"avg_price", label:"均價", groups:["core"]},
-      {key:"branch_status", label:"分點狀態", sortType:"text", groups:["branch"]},
-      {key:"top_buy_branch_name", label:"買超分點", sortType:"text", groups:["branch"]},
-      {key:"branch_score", label:"分點分", signed:true, groups:["branch"]},
       {key:"revenue_month", label:"營收月", sortType:"text", groups:["revenue"]},
       {key:"revenue_mom_pct", label:"月增%", signed:true, groups:["revenue"]},
       {key:"revenue_yoy_pct", label:"年增%", signed:true, groups:["revenue"]},
@@ -2714,7 +2713,7 @@
       {key:"valuation", label:"估值", tip:"估值：用本機最新收盤價除以 FinMind 財報近四季 EPS 計算本益比；EPS 不足四季或為負時不顯示本益比。"},
       {key:"margin", label:"融資券", tip:"融資券：觀察融資餘額與融券餘額增減。融資快速增加可能代表散戶追價，融資下降且法人買超通常較乾淨。"},
       {key:"volume", label:"量能", tip:"量能：比較最新日成交量與區間平均量、5日均量與區間均量。單日量倍高代表當天成交明顯放大，5日量倍高代表最近一段時間量能持續升溫。"},
-      {key:"branch", label:"分點", tip:"分點：顯示區間買超分點、分點分與抓取狀態。這是進階資料，若狀態為缺資料或空回應，不應拿來影響全市場排行。"}
+      {key:"valuation", label:"估值", tip:"估值：使用交易所每日行情揭露的本益比、殖利率與股價淨值比。空值通常代表該來源未揭露、EPS 為負或資料不可計算；目前只顯示與排序，不納入基礎分。"}
     ];
     function visibleRankingCols() {
       return rankingCols.filter(col => (col.groups || ["core"]).includes(state.columnGroup));
@@ -2741,7 +2740,7 @@
         ["最新交易日", meta.latest_date || ""],
         ["股票數", fmt(meta.stock_count)],
         ["上市 / 上櫃", `${fmt(meta.twse_count)} / ${fmt(meta.tpex_count)}`],
-        ["已抓區間分點排行", `${fmt(meta.branch_covered)} 檔`]
+        ["分點資料", "個股頁單檔更新"]
       ]);
       document.querySelector("#meta").innerHTML = STATIC_MODE
         ? `<span>靜態資料：GitHub Pages</span><span>最新日：${esc(meta.latest_date || "")}</span><span>匯出：${esc(meta.exported_at || "")}</span>`
@@ -2798,10 +2797,6 @@
         ["量能分", selection.volume_score, "獨立指標，尚未併入基礎分"],
         ["營收動能", selection.revenue_momentum_score, `${esc(selection.revenue_month || "無月份")} 年增 ${fmt(selection.revenue_yoy_pct)}%`],
         ["本益比", selection.pe_ratio ?? "無資料", `近四季 EPS ${fmt(selection.eps_ttm)}`],
-        ["分點狀態", selection.branch_status || "未取得", "分點分只作個股進階確認"],
-        ["分點分", selection.branch_score, `買超分點 ${esc(selection.top_buy_branch_name || "未取得")}`],
-        ["共振分", selection.confluence_score, `距分點均價 ${fmt(selection.close_vs_top_buy_avg_pct)}%`],
-        ["完整籌碼分", selection.complete_chip_score, "基礎選股分 + 共振分"],
       ];
       target.innerHTML = `
         <div class="assist-grid">
@@ -2882,7 +2877,7 @@
       if (Number(s.revenue_yoy_pct || 0) > 0 && Number(s.revenue_mom_pct || 0) > 0) notes.push("營收月增與年增同步為正");
       else if ((data.revenues || []).length) notes.push("營收動能需要再確認");
       if (Number(data.stock?.margin_balance_change_lot || 0) > 0 && Number(data.stock?.foreign_net_lot || 0) > 0) notes.push("外資買超但融資也增加，需留意追價風險");
-      if (branchStatus.status !== "success") notes.push("分點資料未完整，分點分只作參考");
+      if (branchStatus.status !== "success") notes.push("分點資料改為個股頁手動更新，不影響排行分數");
       if (!notes.length) notes.push("目前資料不足，先以基礎行情、法人與營收做初步觀察");
       judgement.textContent = `初步判斷：${notes.join("；")}。這不是買賣建議，主要用來提醒目前資料完整度與矛盾點。`;
     }
@@ -3176,6 +3171,9 @@
         ["本益比", fmt(data.stock.pe_ratio)],
         ["近四季EPS", fmt(data.stock.eps_ttm)],
         [`${days}日均價`, fmt(data.stock.avg_price)],
+        ["本益比", fmt(data.stock.pe_ratio)],
+        ["殖利率", data.stock.dividend_yield != null ? `${fmt(data.stock.dividend_yield)}%` : "-"],
+        ["股淨比", fmt(data.stock.pb_ratio)],
         ["單日量倍", fmt(data.stock.volume_ratio_1d)],
         ["5日量倍", fmt(data.stock.volume_ratio_5d)],
         [`${days}日外資`, fmt(data.stock.foreign_net_lot), cls(data.stock.foreign_net_lot)],
@@ -3195,6 +3193,9 @@
         {key:"close", label:"收盤"},
         {key:"avg_price", label:"均價"},
         {key:"volume_lot", label:"成交量(張)"},
+        {key:"pe_ratio", label:"本益比"},
+        {key:"dividend_yield", label:"殖利率%"},
+        {key:"pb_ratio", label:"股淨比"},
         {key:"foreign_net_lot", label:"外資買賣超", signed:true},
         {key:"trust_net_lot", label:"投信買賣超", signed:true},
         {key:"dealer_net_lot", label:"自營買賣超", signed:true}

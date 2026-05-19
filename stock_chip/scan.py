@@ -36,6 +36,9 @@ def load_window(conn: sqlite3.Connection, dates: list[str]) -> list[dict[str, An
             p.volume,
             p.turnover,
             p.avg_price,
+            p.pe_ratio,
+            p.dividend_yield,
+            p.pb_ratio,
             COALESCE(i.foreign_net, 0) AS foreign_net,
             COALESCE(i.trust_net, 0) AS trust_net,
             COALESCE(i.dealer_net, 0) AS dealer_net,
@@ -66,6 +69,9 @@ def load_window(conn: sqlite3.Connection, dates: list[str]) -> list[dict[str, An
         "volume",
         "turnover",
         "avg_price",
+        "pe_ratio",
+        "dividend_yield",
+        "pb_ratio",
         "foreign_net",
         "trust_net",
         "dealer_net",
@@ -481,6 +487,9 @@ def aggregate(
             "name": latest["name"],
             "market": latest["market"],
             "close": close,
+            "pe_ratio": latest.get("pe_ratio"),
+            "dividend_yield": latest.get("dividend_yield"),
+            "pb_ratio": latest.get("pb_ratio"),
             f"{days}d_avg_price": avg_price,
             "close_vs_avg_pct": close_vs_avg_pct,
             f"{days}d_volume": volume,
@@ -543,6 +552,9 @@ def to_export_row(row: dict[str, Any], days: int) -> dict[str, Any]:
         "market": row["market"],
         "observed_days": row["observed_days"],
         "close": row["close"],
+        "pe_ratio": row.get("pe_ratio"),
+        "dividend_yield": row.get("dividend_yield"),
+        "pb_ratio": row.get("pb_ratio"),
         f"{days}d_avg_price": round(avg_price, 4) if avg_price is not None else None,
         "close_vs_avg_pct": round(close_vs_avg_pct, 2) if close_vs_avg_pct is not None else None,
         f"{days}d_volume_lot": shares_to_lots(volume),
@@ -614,16 +626,6 @@ def export_rankings(output_dir: Path, rows: list[dict[str, Any]], days: int, lim
     rankings = {
         "total_score": sorted(rows, key=lambda row: row.get("total_score", row["chip_score"]), reverse=True),
         "chip_score": sorted(rows, key=lambda row: row["chip_score"], reverse=True),
-        "branch_score": sorted(
-            [row for row in rows if row.get("top_buy_branch_name")],
-            key=lambda row: row.get("branch_score", 0.0),
-            reverse=True,
-        ),
-        "confluence_score": sorted(
-            [row for row in rows if row.get("confluence_score", 0.0) > 0],
-            key=lambda row: row.get("confluence_score", 0.0),
-            reverse=True,
-        ),
         "selection_score": sorted(
             rows,
             key=lambda row: row.get("selection_score", 0.0),
@@ -827,7 +829,7 @@ def run_scan(
     with connect_db(db_path) as conn:
         dates = recent_dates(conn, days)
         raw_rows = load_window(conn, dates)
-        branch_leaders = load_branch_leaders(conn, dates[-1], days) if dates else {}
+        branch_leaders: dict[str, dict[str, Any]] = {}
         revenue_momentum = load_revenue_momentum(conn)
     if len(dates) < days:
         raise RuntimeError(f"資料庫只有 {len(dates)} 個交易日，少於要求的 {days} 日。")
