@@ -27,7 +27,9 @@ STOCK_ID_RE = re.compile(r"^[1-9]\d{3}$")
 TPEX_PRICE_URL = "https://www.tpex.org.tw/www/zh-tw/afterTrading/otc"
 TPEX_INST_URL = "https://www.tpex.org.tw/web/stock/3insti/daily_trade/3itrade_hedge_result.php"
 TWSE_MARGIN_URL = "https://www.twse.com.tw/rwd/zh/marginTrading/MI_MARGN"
+TWSE_VALUATION_URL = "https://www.twse.com.tw/exchangeReport/BWIBBU_d"
 TPEX_MARGIN_URL = "https://www.tpex.org.tw/web/stock/margin_trading/margin_balance/margin_bal_result.php"
+TPEX_VALUATION_URL = "https://www.tpex.org.tw/web/stock/aftertrading/peratio_analysis/pera_result.php"
 TPEX_ESB_LATEST_URL = "https://www.tpex.org.tw/openapi/v1/tpex_esb_latest_statistics"
 MIN_COMBINED_PRICE_COUNT = 1800
 
@@ -46,6 +48,9 @@ class PriceRow:
     turnover: int | None
     transaction_count: int | None
     avg_price: float | None
+    pe_ratio: float | None = None
+    dividend_yield: float | None = None
+    pb_ratio: float | None = None
 
 
 @dataclass
@@ -97,6 +102,7 @@ def fetch_twse_prices_all(date: dt.date, stock_only: bool = True) -> list[PriceR
     if data.get("stat") not in (None, "OK") and not data.get("tables"):
         raise ProbeError(f"TWSE price response is not OK: {data.get('stat')}")
 
+    valuations = fetch_twse_valuations_all(date)
     rows: list[PriceRow] = []
     for table in data.get("tables", []):
         fields = table.get("fields") or []
@@ -111,6 +117,7 @@ def fetch_twse_prices_all(date: dt.date, stock_only: bool = True) -> list[PriceR
             volume = clean_number(row[field_index["成交股數"]])
             turnover = clean_number(row[field_index["成交金額"]])
             avg_price = turnover / volume if turnover and volume else None
+            valuation = valuations.get(stock_id)
             rows.append(
                 PriceRow(
                     date=date.isoformat(),
@@ -125,9 +132,40 @@ def fetch_twse_prices_all(date: dt.date, stock_only: bool = True) -> list[PriceR
                     turnover=turnover,
                     transaction_count=clean_number(row[field_index["成交筆數"]]),
                     avg_price=avg_price,
+                    pe_ratio=valuation.get("pe_ratio") if valuation is not None else field_float(row, field_index, "本益比"),
+                    dividend_yield=valuation.get("dividend_yield") if valuation is not None else None,
+                    pb_ratio=valuation.get("pb_ratio") if valuation is not None else None,
                 )
             )
     return rows
+
+
+def fetch_twse_valuations_all(date: dt.date) -> dict[str, dict[str, float | None]]:
+    try:
+        data = get_json(
+            TWSE_VALUATION_URL,
+            {"date": twse_date(date), "response": "json"},
+        )
+    except Exception:
+        return {}
+    if data.get("stat") not in (None, "OK"):
+        return {}
+    fields = data.get("fields") or []
+    field_index = field_indexes(fields)
+    required = {"證券代號", "本益比", "殖利率(%)", "股價淨值比"}
+    if not required.issubset(field_index):
+        return {}
+    valuations: dict[str, dict[str, float | None]] = {}
+    for row in data.get("data", []):
+        stock_id = str(row[field_index["證券代號"]]).strip()
+        if not is_stock_id(stock_id):
+            continue
+        valuations[stock_id] = {
+            "pe_ratio": clean_float(row[field_index["本益比"]]),
+            "dividend_yield": clean_float(row[field_index["殖利率(%)"]]),
+            "pb_ratio": clean_float(row[field_index["股價淨值比"]]),
+        }
+    return valuations
 
 
 def fetch_twse_institutional_all(date: dt.date, stock_only: bool = True) -> list[InstitutionalRow]:
@@ -197,6 +235,14 @@ def field_indexes(fields: list[str]) -> dict[str, int]:
     return {str(name).strip(): idx for idx, name in enumerate(fields)}
 
 
+def field_float(row: list[Any], field_index: dict[str, int], *names: str) -> float | None:
+    for name in names:
+        idx = field_index.get(name)
+        if idx is not None and idx < len(row):
+            return clean_float(row[idx])
+    return None
+
+
 def fetch_tpex_prices_all(date: dt.date, stock_only: bool = True) -> list[PriceRow]:
     data = post_json(
         TPEX_PRICE_URL,
@@ -207,6 +253,7 @@ def fetch_tpex_prices_all(date: dt.date, stock_only: bool = True) -> list[PriceR
         raise ProbeError(
             f"TPEX price response date mismatch: requested {date.isoformat()}, got {response_date or 'empty'}"
         )
+    valuations = fetch_tpex_valuations_all(date)
     rows: list[PriceRow] = []
     for table in data.get("tables", []):
         fields = table.get("fields") or []
@@ -221,6 +268,7 @@ def fetch_tpex_prices_all(date: dt.date, stock_only: bool = True) -> list[PriceR
             volume = clean_number(row[field_index["成交股數"]])
             turnover = clean_number(row[field_index["成交金額(元)"]])
             avg_price = turnover / volume if turnover and volume else None
+            valuation = valuations.get(stock_id)
             rows.append(
                 PriceRow(
                     date=date.isoformat(),
@@ -235,9 +283,39 @@ def fetch_tpex_prices_all(date: dt.date, stock_only: bool = True) -> list[PriceR
                     turnover=turnover,
                     transaction_count=clean_number(row[field_index["成交筆數"]]),
                     avg_price=avg_price,
+                    pe_ratio=valuation.get("pe_ratio") if valuation is not None else field_float(row, field_index, "本益比"),
+                    dividend_yield=valuation.get("dividend_yield") if valuation is not None else None,
+                    pb_ratio=valuation.get("pb_ratio") if valuation is not None else None,
                 )
             )
     return rows
+
+
+def fetch_tpex_valuations_all(date: dt.date) -> dict[str, dict[str, float | None]]:
+    try:
+        data = get_json(
+            TPEX_VALUATION_URL,
+            {"l": "zh-tw", "o": "json", "d": tpex_date(date), "c": "", "s": "0,asc"},
+        )
+    except Exception:
+        return {}
+    valuations: dict[str, dict[str, float | None]] = {}
+    for table in data.get("tables", []):
+        fields = table.get("fields") or []
+        field_index = field_indexes(fields)
+        required = {"股票代號", "本益比", "殖利率(%)", "股價淨值比"}
+        if not required.issubset(field_index):
+            continue
+        for row in table.get("data", []):
+            stock_id = str(row[field_index["股票代號"]]).strip()
+            if not is_stock_id(stock_id):
+                continue
+            valuations[stock_id] = {
+                "pe_ratio": clean_float(row[field_index["本益比"]]),
+                "dividend_yield": clean_float(row[field_index["殖利率(%)"]]),
+                "pb_ratio": clean_float(row[field_index["股價淨值比"]]),
+            }
+    return valuations
 
 
 def fetch_tpex_institutional_all(date: dt.date, stock_only: bool = True) -> list[InstitutionalRow]:
@@ -430,6 +508,9 @@ def init_schema(conn: sqlite3.Connection) -> None:
             turnover INTEGER,
             transaction_count INTEGER,
             avg_price REAL,
+            pe_ratio REAL,
+            dividend_yield REAL,
+            pb_ratio REAL,
             updated_at TEXT NOT NULL,
             PRIMARY KEY (date, stock_id)
         );
@@ -594,6 +675,9 @@ def init_schema(conn: sqlite3.Connection) -> None:
         """
     )
     ensure_column(conn, "trading_days", "margin_count", "INTEGER NOT NULL DEFAULT 0")
+    ensure_column(conn, "daily_prices", "pe_ratio", "REAL")
+    ensure_column(conn, "daily_prices", "dividend_yield", "REAL")
+    ensure_column(conn, "daily_prices", "pb_ratio", "REAL")
     ensure_column(conn, "broker_branch_topn", "broker_id", "TEXT")
     ensure_column(conn, "broker_branch_daily", "broker_id", "TEXT")
     conn.commit()
@@ -611,11 +695,11 @@ def upsert_prices(conn: sqlite3.Connection, rows: list[PriceRow]) -> None:
         """
         INSERT INTO daily_prices (
             date, stock_id, name, open, high, low, close, volume, turnover,
-            transaction_count, avg_price, updated_at
+            transaction_count, avg_price, pe_ratio, dividend_yield, pb_ratio, updated_at
         )
         VALUES (
             :date, :stock_id, :name, :open, :high, :low, :close, :volume,
-            :turnover, :transaction_count, :avg_price, :updated_at
+            :turnover, :transaction_count, :avg_price, :pe_ratio, :dividend_yield, :pb_ratio, :updated_at
         )
         ON CONFLICT(date, stock_id) DO UPDATE SET
             name = excluded.name,
@@ -627,6 +711,9 @@ def upsert_prices(conn: sqlite3.Connection, rows: list[PriceRow]) -> None:
             turnover = excluded.turnover,
             transaction_count = excluded.transaction_count,
             avg_price = excluded.avg_price,
+            pe_ratio = excluded.pe_ratio,
+            dividend_yield = excluded.dividend_yield,
+            pb_ratio = excluded.pb_ratio,
             updated_at = excluded.updated_at
         """,
         [{**row.__dict__, "updated_at": now} for row in rows],

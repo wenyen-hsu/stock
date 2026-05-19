@@ -30,8 +30,6 @@ from stock_chip.us_news import load_cached_us_news
 RANKINGS = [
     "total_score",
     "chip_score",
-    "branch_score",
-    "confluence_score",
     "selection_score",
     "foreign_buy",
     "foreign_5d_revenue_growth",
