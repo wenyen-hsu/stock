@@ -922,7 +922,10 @@
       <section class="panel">
         <div class="panel-head">
           <div><div class="panel-title">區間合計買超前十分點</div><div class="muted" id="branch-top-note">點分點看每日明細</div></div>
-          <div class="panel-actions"><button class="secondary single-refresh" data-section="branch_top">更新分點排行</button></div>
+          <div class="panel-actions">
+            <button class="single-refresh" data-section="branch_all">更新分點資訊</button>
+            <button class="secondary single-refresh" data-section="branch_top">只更新排行</button>
+          </div>
         </div>
         <div class="table-wrap" id="branch-top-table"></div>
       </section>
@@ -931,7 +934,7 @@
           <div class="panel-title" id="broker-title">分點每日明細</div>
           <div class="panel-actions">
             <div class="broker-list" id="broker-list"></div>
-            <button class="secondary single-refresh" data-section="branch_daily">更新每日明細</button>
+            <button class="secondary single-refresh" data-section="branch_daily">只更新每日明細</button>
           </div>
         </div>
         <div class="table-wrap" id="broker-daily-table"></div>
@@ -1238,9 +1241,10 @@
         </div>
         <div class="layout-2">
           <div>
-            <div class="panel-title" style="margin-bottom:8px;">分點資料覆蓋狀態</div>
-            <div class="muted" style="margin-bottom:8px;">分點排行狀態分成已抓排行、未嘗試、空回應與失敗；空回應代表來源沒有可解析排行，不代表行情、法人或營收缺資料。</div>
-            <div id="coverage-table"></div>
+            <div class="panel-title" style="margin-bottom:8px;">分點更新方式</div>
+            <div class="empty">
+              全市場分點已從一鍵更新移除。需要分點資料時，請進入個股頁按「更新分點資訊」；分點資料只作個股進階確認，不參與排行分數。
+            </div>
           </div>
           <div>
             <div class="job-meta">
@@ -2654,7 +2658,7 @@
         await loadDetail();
       } catch (err) {
         btn.textContent = "更新失敗";
-        const target = section === "daily" ? "#daily-table" : section === "revenue" ? "#revenue-table" : section === "branch_top" ? "#branch-top-table" : "#broker-daily-table";
+        const target = section === "daily" ? "#daily-table" : section === "revenue" ? "#revenue-table" : section === "branch_top" || section === "branch_all" ? "#branch-top-table" : "#broker-daily-table";
         document.querySelector(target).innerHTML = `<div class="empty">單檔更新失敗：${esc(err.message)}</div>`;
         setTimeout(() => { btn.textContent = original; btn.disabled = false; }, 1800);
         return;
@@ -2952,16 +2956,6 @@
       state.lastDataUpdatedAt = updateState.latest_data_updated_at || "";
       renderUpdateTasks(updateState.tasks, updateState.running);
       renderJob(updateState.latest_job);
-      renderTable(document.querySelector("#coverage-table"), data.coverage, [
-        {key:"market", label:"市場"},
-        {key:"stocks_with_branch", label:"已抓排行"},
-        {key:"attempted", label:"已嘗試"},
-        {key:"not_attempted", label:"未嘗試"},
-        {key:"empty_count", label:"空回應"},
-        {key:"failed_count", label:"失敗"},
-        {key:"total_stocks", label:"總數"},
-        {key:"no_branch", label:"無排行資料"}
-      ]);
       await loadStaticPublishStatus();
     }
     function renderUpdateTasks(tasks, running) {
