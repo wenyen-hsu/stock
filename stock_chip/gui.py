@@ -977,7 +977,10 @@ INDEX_HTML = """<!doctype html>
       <section class="panel">
         <div class="panel-head">
           <div><div class="panel-title">區間合計買超前十分點</div><div class="muted" id="branch-top-note">點分點看每日明細</div></div>
-          <div class="panel-actions"><button class="secondary single-refresh" data-section="branch_top">更新分點排行</button></div>
+          <div class="panel-actions">
+            <button class="single-refresh" data-section="branch_all">更新分點資訊</button>
+            <button class="secondary single-refresh" data-section="branch_top">只更新排行</button>
+          </div>
         </div>
         <div class="table-wrap" id="branch-top-table"></div>
       </section>
@@ -986,7 +989,7 @@ INDEX_HTML = """<!doctype html>
           <div class="panel-title" id="broker-title">分點每日明細</div>
           <div class="panel-actions">
             <div class="broker-list" id="broker-list"></div>
-            <button class="secondary single-refresh" data-section="branch_daily">更新每日明細</button>
+            <button class="secondary single-refresh" data-section="branch_daily">只更新每日明細</button>
           </div>
         </div>
         <div class="table-wrap" id="broker-daily-table"></div>
@@ -1293,9 +1296,10 @@ INDEX_HTML = """<!doctype html>
         </div>
         <div class="layout-2">
           <div>
-            <div class="panel-title" style="margin-bottom:8px;">分點資料覆蓋狀態</div>
-            <div class="muted" style="margin-bottom:8px;">分點排行狀態分成已抓排行、未嘗試、空回應與失敗；空回應代表來源沒有可解析排行，不代表行情、法人或營收缺資料。</div>
-            <div id="coverage-table"></div>
+            <div class="panel-title" style="margin-bottom:8px;">分點更新方式</div>
+            <div class="empty">
+              全市場分點已從一鍵更新移除。需要分點資料時，請進入個股頁按「更新分點資訊」；分點資料只作個股進階確認，不參與排行分數。
+            </div>
           </div>
           <div>
             <div class="job-meta">
@@ -2709,7 +2713,7 @@ INDEX_HTML = """<!doctype html>
         await loadDetail();
       } catch (err) {
         btn.textContent = "更新失敗";
-        const target = section === "daily" ? "#daily-table" : section === "revenue" ? "#revenue-table" : section === "branch_top" ? "#branch-top-table" : "#broker-daily-table";
+        const target = section === "daily" ? "#daily-table" : section === "revenue" ? "#revenue-table" : section === "branch_top" || section === "branch_all" ? "#branch-top-table" : "#broker-daily-table";
         document.querySelector(target).innerHTML = `<div class="empty">單檔更新失敗：${esc(err.message)}</div>`;
         setTimeout(() => { btn.textContent = original; btn.disabled = false; }, 1800);
         return;
@@ -3007,16 +3011,6 @@ INDEX_HTML = """<!doctype html>
       state.lastDataUpdatedAt = updateState.latest_data_updated_at || "";
       renderUpdateTasks(updateState.tasks, updateState.running);
       renderJob(updateState.latest_job);
-      renderTable(document.querySelector("#coverage-table"), data.coverage, [
-        {key:"market", label:"市場"},
-        {key:"stocks_with_branch", label:"已抓排行"},
-        {key:"attempted", label:"已嘗試"},
-        {key:"not_attempted", label:"未嘗試"},
-        {key:"empty_count", label:"空回應"},
-        {key:"failed_count", label:"失敗"},
-        {key:"total_stocks", label:"總數"},
-        {key:"no_branch", label:"無排行資料"}
-      ]);
       await loadStaticPublishStatus();
     }
     function renderUpdateTasks(tasks, running) {
@@ -4390,26 +4384,14 @@ def data_update_times() -> dict[str, str]:
             candidate_ids,
         ).fetchone()[0]
         all_market_revenue = conn.execute("SELECT MAX(updated_at) FROM monthly_revenues").fetchone()[0]
+        candidate_revenue_job = conn.execute(
+            "SELECT MAX(updated_at) FROM update_job_history WHERE task_id = 'candidate_revenue' AND status = 'done'"
+        ).fetchone()[0]
+        all_market_revenue_job = conn.execute(
+            "SELECT MAX(updated_at) FROM update_job_history WHERE task_id = 'all_market_revenue' AND status = 'done'"
+        ).fetchone()[0]
         watchlist_revenue = conn.execute(
             f"SELECT MAX(updated_at) FROM monthly_revenues WHERE stock_id IN ({placeholders})",
-            watchlist,
-        ).fetchone()[0]
-        branch_daily = conn.execute(
-            f"""
-            SELECT MAX(updated_at)
-            FROM branch_fetch_status
-            WHERE stock_id IN ({placeholders})
-              AND window_days = 1
-            """,
-            watchlist,
-        ).fetchone()[0]
-        watchlist_branch_top = conn.execute(
-            f"""
-            SELECT MAX(updated_at)
-            FROM branch_fetch_status
-            WHERE stock_id IN ({placeholders})
-              AND window_days = 20
-            """,
             watchlist,
         ).fetchone()[0]
         news = conn.execute(
@@ -4417,31 +4399,35 @@ def data_update_times() -> dict[str, str]:
             watchlist,
         ).fetchone()[0]
         us_news = conn.execute("SELECT MAX(fetched_at) FROM us_stock_news").fetchone()[0]
-        top100_branch = conn.execute(
-            """
-            SELECT MAX(updated_at)
-            FROM broker_branch_topn
-            WHERE window_days = 20
-              AND source = 'histock'
-            """
-        ).fetchone()[0]
         market_data = max(
             str(conn.execute("SELECT MAX(updated_at) FROM market_index_daily").fetchone()[0] or ""),
             str(conn.execute("SELECT MAX(updated_at) FROM futures_institution_oi").fetchone()[0] or ""),
         )
+    expected_revenue_month = expected_latest_revenue_month()
+    candidate_revenue_time = max(str(candidate_revenue or ""), str(watchlist_revenue or ""))
+    if (
+        candidate_ids
+        and not revenue_missing_stock_ids(candidate_ids)
+        and not revenue_missing_month_stock_ids(candidate_ids, expected_revenue_month)
+    ):
+        candidate_revenue_time = max(candidate_revenue_time, str(candidate_revenue_job or ""))
+    market_ids = all_market_stock_ids()
+    all_market_revenue_time = str(all_market_revenue or "")
+    if (
+        market_ids
+        and not revenue_missing_stock_ids(market_ids)
+        and not revenue_missing_month_stock_ids(market_ids, expected_revenue_month)
+    ):
+        all_market_revenue_time = max(all_market_revenue_time, str(all_market_revenue_job or ""))
     times = {
         "official_scan": normalize_time(official),
         "market_data": normalize_time(market_data),
-        "candidate_revenue": normalize_time(max(str(candidate_revenue or ""), str(watchlist_revenue or ""))),
-        "all_market_revenue": normalize_time(all_market_revenue),
-        "quality_check": normalize_time(max(str(official or ""), str(all_market_revenue or ""))),
-        "watchlist_branch_daily": normalize_time(branch_daily),
-        "watchlist_branch_top": normalize_time(watchlist_branch_top),
+        "candidate_revenue": normalize_time(candidate_revenue_time),
+        "all_market_revenue": normalize_time(all_market_revenue_time),
+        "quality_check": normalize_time(max(str(official or ""), str(all_market_revenue_time or ""))),
         "watchlist_news": normalize_time(news),
         "us_news_obsidian": normalize_time(us_news),
         "sync_ci_us_news": normalize_time(ci_us_news_status().get("generated_at", "")),
-        "top100_branch": normalize_time(top100_branch),
-        "retry_branch_failed": normalize_time(top100_branch),
     }
     times["all_data"] = max((value for value in times.values() if value), default="")
     return times
@@ -4634,9 +4620,12 @@ def update_task_state() -> dict[str, object]:
             revenue_status = revenue_coverage_status(300)
             if str(task["id"]) == "candidate_revenue":
                 missing_count = max(0, int(revenue_status["candidate_total"]) - int(revenue_status["candidate_count"]))
+                expected_month = expected_latest_revenue_month()
+                latest_missing = len(revenue_missing_month_stock_ids(candidate_revenue_ids(300), expected_month))
                 task_item["extra_status"] = (
                     f"候選股已補 {revenue_status['candidate_count']} / {revenue_status['candidate_total']} 檔"
                     + (f"，待補 {missing_count} 檔" if missing_count else "")
+                    + f"；{expected_month} 缺 {latest_missing} 檔"
                 )
             else:
                 missing_count = max(0, int(revenue_status["market_total"]) - int(revenue_status["market_count"]))
@@ -4667,30 +4656,6 @@ def update_task_state() -> dict[str, object]:
             elif str(active_job.get("task_id") or "") == str(task["id"]):
                 task_item["run_state"] = "running"
                 task_item["run_label"] = "執行中"
-        if str(task["id"]) == "all_market_branch_top":
-            summary = branch_coverage_summary(20)
-            task_item["extra_status"] = (
-                f"已抓排行 {summary['covered']} / {summary['total']} 檔"
-                f"，已嘗試 {summary['attempted']} 檔"
-                f"，未嘗試 {summary['not_attempted']} 檔"
-                f"，空回應 {summary['empty']} 檔"
-                f"，失敗 {summary['failed']} 檔"
-                f"，無排行資料 {summary['no_branch']} 檔"
-            )
-        if str(task["id"]) in {"top100_branch", "all_market_branch_top"} and active_health:
-            task_item["extra_status"] = "；".join(
-                str(part)
-                for part in [
-                    f"最後寫入 {active_health.get('last_write_at') or '-'}",
-                    f"停滯 {active_health.get('stale_minutes')} 分鐘" if active_health.get("stale_minutes") is not None else "",
-                    str(active_health.get("status_summary") or ""),
-                    "可能卡住" if active_health.get("possibly_stuck") else "",
-                ]
-                if part
-            )
-        if str(task["id"]) == "retry_branch_failed":
-            failed_ids = failed_branch_ids(20, 100)
-            task_item["extra_status"] = f"目前可重試 {len(failed_ids)} 檔" + (f"：{', '.join(failed_ids[:8])}" if failed_ids else "")
         tasks.append(task_item)
     return {
         "tasks": tasks,
@@ -4803,13 +4768,19 @@ def update_steps(task_id: str, days: int) -> tuple[str, list[tuple[str, list[str
         )
     if task_id == "candidate_revenue":
         all_candidate_ids = candidate_revenue_ids(300)
-        missing_ids = revenue_missing_stock_ids(all_candidate_ids)
+        expected_month = expected_latest_revenue_month()
+        missing_ids = list(
+            dict.fromkeys(
+                revenue_missing_stock_ids(all_candidate_ids)
+                + revenue_missing_month_stock_ids(all_candidate_ids, expected_month)
+            )
+        )
         candidate_ids = ",".join(missing_ids)
         steps: list[tuple[str, list[str]]] = []
         if candidate_ids:
             steps.append(
                 (
-                    f"補候選股缺漏營收 {len(missing_ids)} 檔",
+                    f"補候選股缺漏營收或最新月份 {len(missing_ids)} 檔",
                     [
                         py,
                         "-m",
@@ -4830,7 +4801,7 @@ def update_steps(task_id: str, days: int) -> tuple[str, list[tuple[str, list[str
         else:
             steps.append(
                 (
-                    "候選股營收已補齊，略過抓取",
+                    f"候選股營收與最新月份 {expected_month} 已補齊，略過抓取",
                     [py, "-c", "print('candidate revenue already covered')"],
                 )
             )
@@ -4935,61 +4906,6 @@ def update_steps(task_id: str, days: int) -> tuple[str, list[tuple[str, list[str
                 )
             ],
         )
-    if task_id == "watchlist_branch_daily":
-        return (
-            "自選股近 20 日分點",
-            [
-                (
-                    "補自選股最近 20 日分點",
-                    [
-                        py,
-                        "-m",
-                        "stock_chip.branch",
-                        "--days",
-                        "20",
-                        "--top",
-                        "80",
-                        "--daily",
-                        "--only-missing",
-                        "--watchlist",
-                        watchlist,
-                        "--sleep",
-                        "1.2",
-                        "--retry-sleeps",
-                        "8,20,45",
-                    ],
-                )
-            ],
-        )
-    if task_id == "watchlist_branch_top":
-        return (
-            "自選股區間分點",
-            [
-                (
-                    "補自選股 20 日區間分點",
-                    [
-                        py,
-                        "-m",
-                        "stock_chip.branch",
-                        "--days",
-                        "20",
-                        "--top",
-                        "10",
-                        "--watchlist",
-                        watchlist,
-                        "--skip-existing",
-                        "--sleep",
-                        "0.8",
-                        "--retry-sleeps",
-                        "2,5",
-                    ],
-                ),
-                (
-                    "重算自選股分點排行",
-                    [py, "-m", "stock_chip.scan", "--days", "20", "--limit", "100", "--watchlist", watchlist],
-                ),
-            ],
-        )
     if task_id == "watchlist_news":
         return (
             "自選股新聞標題",
@@ -5061,124 +4977,6 @@ def update_steps(task_id: str, days: int) -> tuple[str, list[tuple[str, list[str
                         str(DB_PATH),
                     ],
                 )
-            ],
-        )
-    if task_id == "top100_branch":
-        ids = top_stock_ids_from_report(20, 100)
-        if not ids:
-            ids = current_watchlist_ids()
-        branch_watchlist = ",".join(ids)
-        return (
-            "排行前 100 區間分點",
-            [
-                (
-                    "更新前 100 檔 20 日區間分點",
-                    [
-                        py,
-                        "-m",
-                        "stock_chip.branch",
-                        "--days",
-                        "20",
-                        "--top",
-                        "10",
-                        "--watchlist",
-                        branch_watchlist,
-                        "--skip-existing",
-                        "--sleep",
-                        "0.8",
-                        "--retry-sleeps",
-                        "2,5",
-                    ],
-                ),
-                (
-                    "重算 20 日排行",
-                    [py, "-m", "stock_chip.scan", "--days", "20", "--limit", "100", "--watchlist", watchlist],
-                ),
-                (
-                    "重算 5 日排行",
-                    [py, "-m", "stock_chip.scan", "--days", "5", "--limit", "100", "--watchlist", watchlist],
-                ),
-            ],
-        )
-    if task_id == "all_market_branch_top":
-        total = len(all_market_stock_ids())
-        batch_size = 5
-        steps: list[tuple[str, list[str]]] = []
-        for offset in range(0, total, batch_size):
-            end = min(total, offset + batch_size)
-            steps.append(
-                (
-                    f"全市場 20 日區間分點 batch {offset // batch_size + 1}（{offset + 1}-{end} / {total}）",
-                    [
-                        py,
-                        "-m",
-                        "stock_chip.branch",
-                        "--days",
-                        "20",
-                        "--top",
-                        "10",
-                        "--all",
-                        "--markets",
-                        "TWSE,TPEX",
-                        "--limit",
-                        str(batch_size),
-                        "--offset",
-                        str(offset),
-                        "--skip-existing",
-                        "--sleep",
-                        "0.8",
-                        "--retry-sleeps",
-                        "2,5",
-                    ],
-                )
-            )
-        steps.extend(
-            [
-                (
-                    "重算 20 日排行",
-                    [py, "-m", "stock_chip.scan", "--days", "20", "--limit", "100"],
-                ),
-                (
-                    "重算 5 日排行",
-                    [py, "-m", "stock_chip.scan", "--days", "5", "--limit", "100"],
-                ),
-            ]
-        )
-        return ("全市場區間分點補齊", steps)
-    if task_id == "retry_branch_failed":
-        ids = failed_branch_ids(20, 100)
-        if not ids:
-            ids = current_watchlist_ids()
-        branch_watchlist = ",".join(ids)
-        return (
-            "重試分點失敗項目",
-            [
-                (
-                    "重試最近 20 日區間分點失敗項目",
-                    [
-                        py,
-                        "-m",
-                        "stock_chip.branch",
-                        "--days",
-                        "20",
-                        "--top",
-                        "10",
-                        "--watchlist",
-                        branch_watchlist,
-                        "--sleep",
-                        "1.2",
-                        "--retry-sleeps",
-                        "5,15,30",
-                    ],
-                ),
-                (
-                    "重算 20 日排行",
-                    [py, "-m", "stock_chip.scan", "--days", "20", "--limit", "100", "--watchlist", watchlist],
-                ),
-                (
-                    "重算 5 日排行",
-                    [py, "-m", "stock_chip.scan", "--days", "5", "--limit", "100", "--watchlist", watchlist],
-                ),
             ],
         )
     raise ValueError(f"未知更新任務：{task_id}")
@@ -5663,6 +5461,32 @@ def refresh_stock_section(stock_id: str, section: str, days: int) -> dict[str, o
             retry_sleeps=(2, 5),
         )
         return {"section": section, "stock_id": stock_id, **result}
+
+    if section == "branch_all":
+        top_result = run_branch(
+            db_path=DB_PATH,
+            output_dir=REPORTS_DIR,
+            days=days,
+            top_n=10,
+            watchlist=[stock_id],
+            sleep_seconds=0,
+            retry_sleeps=(2, 5),
+        )
+        daily_result = run_branch_daily(
+            db_path=DB_PATH,
+            days=days,
+            top_n=80,
+            stock_ids=[stock_id],
+            sleep_seconds=0.8,
+            retry_sleeps=(2, 5),
+            only_missing=False,
+        )
+        return {
+            "section": section,
+            "stock_id": stock_id,
+            "branch_top": top_result,
+            "branch_daily": daily_result,
+        }
 
     if section == "branch_daily":
         result = run_branch_daily(
