@@ -1,5 +1,13 @@
 # 台股籌碼觀察
 
+這個專案分成三個層次：
+
+1. **本機 GUI / SQLite**：主要操作環境。台股行情、法人買賣超、融資融券、營收、MOPS 事件、個股分點與同步後的新聞都寫入本機 `data/stock_chip.sqlite`。
+2. **GitHub Actions 新聞快取**：GitHub 上只定時抓美股 RSS 新聞，輸出成 `docs/data/us_news.json`。它不會更新你的本機 SQLite，也不會抓台股籌碼資料。
+3. **GitHub Pages 靜態頁**：只讀 `docs/data/*.json` 的靜態快照，給別人看已匯出的排行、個股快取、新聞快取與頁面功能；沒有 Python 後端，也不能直接替使用者更新資料庫。
+
+因此，clone 這個 repo 的人可以看到程式碼與目前提交的靜態快照，但完整可操作資料仍需要在自己的電腦執行更新流程產生。`data/stock_chip.sqlite` 是本機資料庫，不作為共用資料來源。
+
 目前支援 TWSE 上市股票、TPEx 上櫃股票，以及興櫃當日行情的官方資料：
 
 - 日成交、成交金額、收盤價、成交均價
@@ -112,13 +120,13 @@ python3 -m stock_chip.branch --days 20 --coverage
 啟動本機網頁介面：
 
 ```bash
-python3 -m stock_chip.gui --host 127.0.0.1 --port 8501
+python3 -m stock_chip.gui --host 127.0.0.1 --port 8502
 ```
 
 然後打開：
 
 ```text
-http://127.0.0.1:8501
+http://127.0.0.1:8502
 ```
 
 GUI 目前包含：
@@ -136,6 +144,14 @@ GUI 目前包含：
 - 分點覆蓋率與批次抓取指令
 - MOPS 重大事件熱度月曆、單日事件列表與事件明細
 - 資料來源速查與未接入來源備忘
+
+### 本機資料更新原則
+
+- 一鍵更新適合日常更新官方行情、法人買賣超、融資融券、營收增量、新聞同步、MOPS 與排行重算。
+- 全市場分點不放在一鍵更新；分點來源較慢且覆蓋不穩，現在改成個股頁需要時單獨更新，用來輔助判斷，不參與全市場基礎排名。
+- 全市場營收第一次需要補 24 個月歷史；之後只補最新已公告月份附近資料，避免每次重抓完整歷史。
+- 大盤指數、期貨多空與融資融券採「先補歷史、之後只補缺漏交易日」的方式，避免重複下載已入庫資料。
+- 若 clone 專案到新電腦，請先跑本機 GUI 或 CLI 的更新項目建立自己的 SQLite；GitHub Pages 上的快照不是本機資料庫。
 
 ## GitHub Pages 靜態版
 
@@ -182,6 +198,26 @@ Repo 內有 GitHub Actions workflow：`.github/workflows/fetch-us-news.yml`。
 ```bash
 python3 -m stock_chip.import_us_news_static --json docs/data/us_news.json --db data/stock_chip.sqlite
 ```
+
+同步後新聞會進入本機 SQLite，再由本機規則重新分類並輸出 Obsidian vault。這一步是本機行為，不會由 GitHub Actions 自動寫回你的電腦。
+
+## 新環境啟動建議
+
+```bash
+python3 -m venv .venv
+source .venv/bin/activate
+pip install -r requirements.txt
+python3 -m stock_chip.gui --host 127.0.0.1 --port 8502
+```
+
+第一次使用建議在 GUI 的「資料狀態」依序完成：
+
+1. 更新官方行情與排行。
+2. 補齊全市場營收。
+3. 更新融資融券。
+4. 更新大盤指數與期貨多空。
+5. 抓取或同步美股新聞。
+6. 需要分點時，到個股頁單獨按「更新分點資訊」。
 
 ## 主要輸出
 
