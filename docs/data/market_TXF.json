@@ -1,33 +1,6 @@
 {
   "futures_rows": [
     {
-      "date": "2023-05-16",
-      "dealer_oi_net": -1954,
-      "dealer_trade_net": -3674,
-      "foreign_oi_net": 25228,
-      "foreign_trade_net": 11860,
-      "trust_oi_net": -6830,
-      "trust_trade_net": 77
-    },
-    {
-      "date": "2023-05-17",
-      "dealer_oi_net": -10276,
-      "dealer_trade_net": -2146,
-      "foreign_oi_net": 32289,
-      "foreign_trade_net": 6299,
-      "trust_oi_net": -6545,
-      "trust_trade_net": 270
-    },
-    {
-      "date": "2023-05-18",
-      "dealer_oi_net": -10752,
-      "dealer_trade_net": -501,
-      "foreign_oi_net": 32218,
-      "foreign_trade_net": -71,
-      "trust_oi_net": -6514,
-      "trust_trade_net": 31
-    },
-    {
       "date": "2023-05-19",
       "dealer_oi_net": -11829,
       "dealer_trade_net": -1118,
@@ -3194,15 +3167,6 @@
       "foreign_trade_net": -1205,
       "trust_oi_net": 22300,
       "trust_trade_net": -103
-    },
-    {
-      "date": "2024-10-29",
-      "dealer_oi_net": 741,
-      "dealer_trade_net": 968,
-      "foreign_oi_net": -40874,
-      "foreign_trade_net": -754,
-      "trust_oi_net": 22655,
-      "trust_trade_net": 355
     },
     {
       "date": "2024-10-30",
@@ -6551,6 +6515,15 @@
       "foreign_trade_net": 158,
       "trust_oi_net": 41738,
       "trust_trade_net": -1378
+    },
+    {
+      "date": "2026-05-18",
+      "dealer_oi_net": 1550,
+      "dealer_trade_net": 809,
+      "foreign_oi_net": -44996,
+      "foreign_trade_net": 5996,
+      "trust_oi_net": 39723,
+      "trust_trade_net": -2015
     }
   ],
   "index_rows": [
@@ -11838,16 +11811,23 @@
       "high": 42408.66,
       "low": 41016.73,
       "open": 41830.42
+    },
+    {
+      "close": 40891.82,
+      "date": "2026-05-18",
+      "high": 41095.82,
+      "low": 40170.17,
+      "open": 41095.82
     }
   ],
   "summary": {
-    "dealer_oi_net": 734,
-    "foreign_oi_net": -50963,
-    "latest_index_close": 41172.36,
-    "latest_index_date": "2026-05-15",
+    "dealer_oi_net": 1550,
+    "foreign_oi_net": -44996,
+    "latest_index_close": 40891.82,
+    "latest_index_date": "2026-05-18",
     "product_code": "TXF",
     "product_label": "大台 TXF",
-    "trust_oi_net": 41738
+    "trust_oi_net": 39723
   },
-  "updated_at": "2026-05-16 22:59:39"
+  "updated_at": "2026-05-19 00:26:07"
 }

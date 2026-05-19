@@ -1,17 +1,17 @@
 {
   "label": "中性偏多",
-  "latest_close": 41172.36,
-  "latest_date": "2026-05-15",
-  "ma20": 39869.99,
-  "ma5": 41597.4,
-  "ma60": 35848.63,
+  "latest_close": 40891.82,
+  "latest_date": "2026-05-18",
+  "ma20": 40074.36,
+  "ma5": 41417.75,
+  "ma60": 36000.45,
   "parts": {
-    "dealer_hedge": -0.73,
-    "foreign_futures": -15.02,
-    "futures_trade": 7.18,
+    "dealer_hedge": -0.65,
+    "foreign_futures": -13.17,
+    "futures_trade": 8.92,
     "index_trend": 12.0,
     "market_margin": 0.0,
-    "trust_futures": 4.81
+    "trust_futures": 4.58
   },
   "reasons": [
     "指數站上 MA20",
@@ -20,6 +20,6 @@
     "外資近 5 日期貨交易偏多"
   ],
   "risk_multiplier": 1.0,
-  "score": 58.24,
-  "updated_at": "2026-05-16 22:59:39"
+  "score": 61.68,
+  "updated_at": "2026-05-19 01:01:12"
 }

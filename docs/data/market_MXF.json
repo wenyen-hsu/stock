@@ -1,33 +1,6 @@
 {
   "futures_rows": [
     {
-      "date": "2023-05-16",
-      "dealer_oi_net": 9749,
-      "dealer_trade_net": 3381,
-      "foreign_oi_net": 6124,
-      "foreign_trade_net": 11095,
-      "trust_oi_net": 68,
-      "trust_trade_net": 1
-    },
-    {
-      "date": "2023-05-17",
-      "dealer_oi_net": 4842,
-      "dealer_trade_net": 2900,
-      "foreign_oi_net": 10710,
-      "foreign_trade_net": 11688,
-      "trust_oi_net": 69,
-      "trust_trade_net": 1
-    },
-    {
-      "date": "2023-05-18",
-      "dealer_oi_net": 5266,
-      "dealer_trade_net": 524,
-      "foreign_oi_net": 5414,
-      "foreign_trade_net": -5296,
-      "trust_oi_net": 66,
-      "trust_trade_net": -3
-    },
-    {
       "date": "2023-05-19",
       "dealer_oi_net": 4423,
       "dealer_trade_net": -679,
@@ -6551,6 +6524,15 @@
       "foreign_trade_net": 595,
       "trust_oi_net": 67,
       "trust_trade_net": -4
+    },
+    {
+      "date": "2026-05-18",
+      "dealer_oi_net": -6148,
+      "dealer_trade_net": -524,
+      "foreign_oi_net": 4123,
+      "foreign_trade_net": -176,
+      "trust_oi_net": 55,
+      "trust_trade_net": -12
     }
   ],
   "index_rows": [
@@ -11838,16 +11820,23 @@
       "high": 42408.66,
       "low": 41016.73,
       "open": 41830.42
+    },
+    {
+      "close": 40891.82,
+      "date": "2026-05-18",
+      "high": 41095.82,
+      "low": 40170.17,
+      "open": 41095.82
     }
   ],
   "summary": {
-    "dealer_oi_net": -5638,
-    "foreign_oi_net": 4206,
-    "latest_index_close": 41172.36,
-    "latest_index_date": "2026-05-15",
+    "dealer_oi_net": -6148,
+    "foreign_oi_net": 4123,
+    "latest_index_close": 40891.82,
+    "latest_index_date": "2026-05-18",
     "product_code": "MXF",
     "product_label": "小台 MXF",
-    "trust_oi_net": 67
+    "trust_oi_net": 55
   },
-  "updated_at": "2026-05-16 22:59:39"
+  "updated_at": "2026-05-19 00:48:19"
 }
