@@ -896,10 +896,7 @@
         <div class="panel">
           <div class="panel-head">
             <div><div class="panel-title">24 個月營收</div><div class="muted" id="revenue-note"></div></div>
-            <div class="panel-actions">
-              <button class="secondary single-refresh" data-section="revenue">更新營收</button>
-              <button class="secondary single-refresh" data-section="valuation">更新本益比</button>
-            </div>
+            <div class="panel-actions"><button class="secondary single-refresh" data-section="revenue">更新營收</button></div>
           </div>
           <div class="panel-body">
             <div class="revenue-chart-wrap"><canvas id="revenue-chart"></canvas></div>
@@ -2661,7 +2658,7 @@
         await loadDetail();
       } catch (err) {
         btn.textContent = "更新失敗";
-        const target = section === "daily" ? "#daily-table" : section === "revenue" || section === "valuation" ? "#revenue-table" : section === "branch_top" || section === "branch_all" ? "#branch-top-table" : "#broker-daily-table";
+        const target = section === "daily" ? "#daily-table" : section === "revenue" ? "#revenue-table" : section === "branch_top" || section === "branch_all" ? "#branch-top-table" : "#broker-daily-table";
         document.querySelector(target).innerHTML = `<div class="empty">單檔更新失敗：${esc(err.message)}</div>`;
         setTimeout(() => { btn.textContent = original; btn.disabled = false; }, 1800);
         return;
@@ -2676,7 +2673,6 @@
       {key:"close", label:"收盤", groups:["core","chip","foreign","revenue","margin","volume","valuation"]},
       {key:"observed_days", label:"資料日", groups:["core"]},
       {key:"pe_ratio", label:"本益比", groups:["core","valuation"]},
-      {key:"eps_ttm", label:"近四季EPS", groups:["valuation"]},
       {key:"dividend_yield", label:"殖利率%", groups:["valuation"]},
       {key:"pb_ratio", label:"股淨比", groups:["valuation"]},
       {key:"total_score", label:"基礎分", signed:true, groups:["core"]},
@@ -2706,7 +2702,6 @@
       {key:"revenue_month", label:"營收月", sortType:"text", groups:["revenue"]},
       {key:"revenue_mom_pct", label:"月增%", signed:true, groups:["revenue"]},
       {key:"revenue_yoy_pct", label:"年增%", signed:true, groups:["revenue"]},
-      {key:"valuation_price_date", label:"估值日", sortType:"text", groups:["valuation"]},
       {key:"base_reason", label:"理由", sortType:"text", groups:["core"]}
     ];
     const columnGroups = [
@@ -2714,7 +2709,6 @@
       {key:"chip", label:"法人籌碼", tip:"法人籌碼：觀察外資、投信買賣超與外資占成交量比例。占量越高，代表法人買賣超相對當期成交量越集中。"},
       {key:"foreign", label:"外資籌碼", tip:"外資籌碼：只看外資相關資料，包含區間外資買賣超、外資占成交量比例、最近一日外資、外資連買與連賣。適合判斷外資是否持續偏多或短線轉向。"},
       {key:"revenue", label:"營收", tip:"營收：顯示最新營收月份、營收分、月增率與年增率，用來判斷基本面動能是否同步轉強。"},
-      {key:"valuation", label:"估值", tip:"估值：用本機最新收盤價除以 FinMind 財報近四季 EPS 計算本益比；EPS 不足四季或為負時不顯示本益比。"},
       {key:"margin", label:"融資券", tip:"融資券：觀察融資餘額與融券餘額增減。融資快速增加可能代表散戶追價，融資下降且法人買超通常較乾淨。"},
       {key:"volume", label:"量能", tip:"量能：比較最新日成交量與區間平均量、5日均量與區間均量。單日量倍高代表當天成交明顯放大，5日量倍高代表最近一段時間量能持續升溫。"},
       {key:"valuation", label:"估值", tip:"估值：使用交易所每日行情揭露的本益比、殖利率與股價淨值比。空值通常代表該來源未揭露、EPS 為負或資料不可計算；目前只顯示與排序，不納入基礎分。"}
@@ -2800,7 +2794,6 @@
         ["量能", selection.volume_signal || "無資料", `單日 ${fmt(selection.volume_ratio_1d)} 倍 / 5日 ${fmt(selection.volume_ratio_5d)} 倍`],
         ["量能分", selection.volume_score, "獨立指標，尚未併入基礎分"],
         ["營收動能", selection.revenue_momentum_score, `${esc(selection.revenue_month || "無月份")} 年增 ${fmt(selection.revenue_yoy_pct)}%`],
-        ["本益比", selection.pe_ratio ?? "無資料", `近四季 EPS ${fmt(selection.eps_ttm)}`],
       ];
       target.innerHTML = `
         <div class="assist-grid">
@@ -2981,7 +2974,6 @@
             ? (runLabel || "等待中")
             : task.id === "all_data" ? "一鍵更新"
               : task.id === "all_market_revenue" ? "補齊全市場"
-              : task.id === "all_market_valuation" ? "補齊估值"
               : "開始更新";
           const extra = task.extra_status ? `<div class="job-extra">${esc(task.extra_status)}</div>` : "";
           return `<div class="job-card ${task.id === "all_data" ? "primary-job" : ""} ${staleClass}">
@@ -3162,8 +3154,6 @@
       updateWatchlistButton();
       renderMetrics(document.querySelector("#detail-metrics"), [
         ["收盤", fmt(data.stock.close)],
-        ["本益比", fmt(data.stock.pe_ratio)],
-        ["近四季EPS", fmt(data.stock.eps_ttm)],
         [`${days}日均價`, fmt(data.stock.avg_price)],
         ["本益比", fmt(data.stock.pe_ratio)],
         ["殖利率", data.stock.dividend_yield != null ? `${fmt(data.stock.dividend_yield)}%` : "-"],

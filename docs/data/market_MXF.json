@@ -1,6 +1,33 @@
 {
   "futures_rows": [
     {
+      "date": "2023-05-16",
+      "dealer_oi_net": 9749,
+      "dealer_trade_net": 3381,
+      "foreign_oi_net": 6124,
+      "foreign_trade_net": 11095,
+      "trust_oi_net": 68,
+      "trust_trade_net": 1
+    },
+    {
+      "date": "2023-05-17",
+      "dealer_oi_net": 4842,
+      "dealer_trade_net": 2900,
+      "foreign_oi_net": 10710,
+      "foreign_trade_net": 11688,
+      "trust_oi_net": 69,
+      "trust_trade_net": 1
+    },
+    {
+      "date": "2023-05-18",
+      "dealer_oi_net": 5266,
+      "dealer_trade_net": 524,
+      "foreign_oi_net": 5414,
+      "foreign_trade_net": -5296,
+      "trust_oi_net": 66,
+      "trust_trade_net": -3
+    },
+    {
       "date": "2023-05-19",
       "dealer_oi_net": 4423,
       "dealer_trade_net": -679,
@@ -11838,5 +11865,5 @@
     "product_label": "小台 MXF",
     "trust_oi_net": 55
   },
-  "updated_at": "2026-05-19 00:48:19"
+  "updated_at": "2026-05-19 12:39:03"
 }
