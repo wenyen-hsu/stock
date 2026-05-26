@@ -1,26 +1,26 @@
 {
-  "label": "中性偏多",
-  "latest_close": 40891.82,
-  "latest_date": "2026-05-18",
-  "ma20": 40074.36,
-  "ma5": 41417.75,
-  "ma60": 36000.45,
+  "label": "中性",
+  "latest_close": 42267.97,
+  "latest_date": "2026-05-22",
+  "ma20": 40758.16,
+  "ma5": 40944.88,
+  "ma60": 36516.71,
   "parts": {
-    "dealer_hedge": -0.65,
-    "foreign_futures": -13.17,
-    "futures_trade": 8.92,
+    "dealer_hedge": -0.36,
+    "foreign_futures": -13.59,
+    "futures_trade": 2.05,
     "index_trend": 12.0,
-    "market_margin": 4.29,
-    "trust_futures": 4.58
+    "market_margin": -4.02,
+    "trust_futures": 4.85
   },
   "reasons": [
     "指數站上 MA20",
     "中期趨勢偏多",
     "外資期貨淨部位偏空",
-    "外資近 5 日期貨交易偏多",
-    "融資下降，籌碼較乾淨"
+    "指數上漲但融資增加，追價風險上升",
+    "融券增加但指數未弱，短線有軋空壓力"
   ],
-  "risk_multiplier": 1.0,
-  "score": 65.97,
-  "updated_at": "2026-05-19 23:17:29"
+  "risk_multiplier": 0.95,
+  "score": 50.93,
+  "updated_at": "2026-05-27 00:36:54"
 }

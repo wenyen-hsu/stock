@@ -3923,6 +3923,42 @@
       "foreign_trade_net": 2598,
       "trust_oi_net": 0,
       "trust_trade_net": 0
+    },
+    {
+      "date": "2026-05-19",
+      "dealer_oi_net": -52062,
+      "dealer_trade_net": -12692,
+      "foreign_oi_net": 2207,
+      "foreign_trade_net": -3252,
+      "trust_oi_net": 0,
+      "trust_trade_net": 0
+    },
+    {
+      "date": "2026-05-20",
+      "dealer_oi_net": -29451,
+      "dealer_trade_net": 5327,
+      "foreign_oi_net": -172,
+      "foreign_trade_net": 2031,
+      "trust_oi_net": 0,
+      "trust_trade_net": 0
+    },
+    {
+      "date": "2026-05-21",
+      "dealer_oi_net": -10433,
+      "dealer_trade_net": 18983,
+      "foreign_oi_net": 6877,
+      "foreign_trade_net": 7644,
+      "trust_oi_net": 0,
+      "trust_trade_net": 0
+    },
+    {
+      "date": "2026-05-22",
+      "dealer_oi_net": -11046,
+      "dealer_trade_net": -613,
+      "foreign_oi_net": 8504,
+      "foreign_trade_net": 3077,
+      "trust_oi_net": 0,
+      "trust_trade_net": 0
     }
   ],
   "index_rows": [
@@ -9217,16 +9253,44 @@
       "high": 41095.82,
       "low": 40170.17,
       "open": 41095.82
+    },
+    {
+      "close": 40175.56,
+      "date": "2026-05-19",
+      "high": 40951.56,
+      "low": 40168.51,
+      "open": 40883.42
+    },
+    {
+      "close": 40020.82,
+      "date": "2026-05-20",
+      "high": 40439.04,
+      "low": 39967.08,
+      "open": 40204.16
+    },
+    {
+      "close": 41368.21,
+      "date": "2026-05-21",
+      "high": 41606.91,
+      "low": 40263.18,
+      "open": 40263.18
+    },
+    {
+      "close": 42267.97,
+      "date": "2026-05-22",
+      "high": 42357.6,
+      "low": 41447.92,
+      "open": 41447.92
     }
   ],
   "summary": {
-    "dealer_oi_net": -37855,
-    "foreign_oi_net": 3429,
-    "latest_index_close": 40891.82,
-    "latest_index_date": "2026-05-18",
+    "dealer_oi_net": -11046,
+    "foreign_oi_net": 8504,
+    "latest_index_close": 42267.97,
+    "latest_index_date": "2026-05-22",
     "product_code": "TMF",
     "product_label": "微台 TMF",
     "trust_oi_net": 0
   },
-  "updated_at": "2026-05-19 12:39:03"
+  "updated_at": "2026-05-27 00:36:54"
 }

@@ -3054,7 +3054,7 @@
       if (!status || !note || !log) return;
       const dirty = Number(data?.docs_changed || 0) + Number(data?.reports_changed || 0);
       status.className = `status-pill ${dirty ? "running" : "done"}`;
-      status.textContent = dirty ? "有未發布變更" : "已同步";
+      status.textContent = dirty ? "已匯出，待發布" : "已同步";
       note.innerHTML = [
         data?.pages_url ? `<a href="${esc(data.pages_url)}" target="_blank" rel="noreferrer">${esc(data.pages_url)}</a>` : "",
         data?.exported_at ? `靜態資料匯出：${esc(data.exported_at)}` : "",

@@ -6560,6 +6560,42 @@
       "foreign_trade_net": -176,
       "trust_oi_net": 55,
       "trust_trade_net": -12
+    },
+    {
+      "date": "2026-05-19",
+      "dealer_oi_net": -8453,
+      "dealer_trade_net": -1952,
+      "foreign_oi_net": 2725,
+      "foreign_trade_net": -1004,
+      "trust_oi_net": 2,
+      "trust_trade_net": -53
+    },
+    {
+      "date": "2026-05-20",
+      "dealer_oi_net": -8602,
+      "dealer_trade_net": 825,
+      "foreign_oi_net": -38,
+      "foreign_trade_net": 2406,
+      "trust_oi_net": 0,
+      "trust_trade_net": -2
+    },
+    {
+      "date": "2026-05-21",
+      "dealer_oi_net": -7415,
+      "dealer_trade_net": 1250,
+      "foreign_oi_net": 3434,
+      "foreign_trade_net": 3413,
+      "trust_oi_net": 5,
+      "trust_trade_net": 5
+    },
+    {
+      "date": "2026-05-22",
+      "dealer_oi_net": -6930,
+      "dealer_trade_net": 577,
+      "foreign_oi_net": 2792,
+      "foreign_trade_net": -812,
+      "trust_oi_net": 9,
+      "trust_trade_net": 4
     }
   ],
   "index_rows": [
@@ -11854,16 +11890,44 @@
       "high": 41095.82,
       "low": 40170.17,
       "open": 41095.82
+    },
+    {
+      "close": 40175.56,
+      "date": "2026-05-19",
+      "high": 40951.56,
+      "low": 40168.51,
+      "open": 40883.42
+    },
+    {
+      "close": 40020.82,
+      "date": "2026-05-20",
+      "high": 40439.04,
+      "low": 39967.08,
+      "open": 40204.16
+    },
+    {
+      "close": 41368.21,
+      "date": "2026-05-21",
+      "high": 41606.91,
+      "low": 40263.18,
+      "open": 40263.18
+    },
+    {
+      "close": 42267.97,
+      "date": "2026-05-22",
+      "high": 42357.6,
+      "low": 41447.92,
+      "open": 41447.92
     }
   ],
   "summary": {
-    "dealer_oi_net": -6148,
-    "foreign_oi_net": 4123,
-    "latest_index_close": 40891.82,
-    "latest_index_date": "2026-05-18",
+    "dealer_oi_net": -6930,
+    "foreign_oi_net": 2792,
+    "latest_index_close": 42267.97,
+    "latest_index_date": "2026-05-22",
     "product_code": "MXF",
     "product_label": "小台 MXF",
-    "trust_oi_net": 55
+    "trust_oi_net": 9
   },
-  "updated_at": "2026-05-19 12:39:03"
+  "updated_at": "2026-05-27 00:36:54"
 }

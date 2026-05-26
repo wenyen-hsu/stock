@@ -3109,7 +3109,7 @@ INDEX_HTML = """<!doctype html>
       if (!status || !note || !log) return;
       const dirty = Number(data?.docs_changed || 0) + Number(data?.reports_changed || 0);
       status.className = `status-pill ${dirty ? "running" : "done"}`;
-      status.textContent = dirty ? "有未發布變更" : "已同步";
+      status.textContent = dirty ? "已匯出，待發布" : "已同步";
       note.innerHTML = [
         data?.pages_url ? `<a href="${esc(data.pages_url)}" target="_blank" rel="noreferrer">${esc(data.pages_url)}</a>` : "",
         data?.exported_at ? `靜態資料匯出：${esc(data.exported_at)}` : "",
@@ -5384,8 +5384,9 @@ def export_static_pages() -> dict[str, object]:
     if proc.returncode != 0:
         detail = (proc.stderr or proc.stdout or "").strip()
         raise RuntimeError(detail or "匯出靜態頁失敗")
+    export_message = proc.stdout.strip() or "已匯出 docs/ 靜態資料。"
     return {
-        "message": proc.stdout.strip() or "已匯出 docs/ 靜態資料。",
+        "message": f"匯出成功；目前只有本機 docs/ 已更新，尚未發布到 GitHub Pages。\n{export_message}",
         "status": static_publish_status(),
     }
 

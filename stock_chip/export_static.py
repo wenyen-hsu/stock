@@ -3,6 +3,7 @@ from __future__ import annotations
 import argparse
 import json
 import shutil
+import time
 from pathlib import Path
 
 from stock_chip.branch import branch_coverage
@@ -51,6 +52,21 @@ def write_json(path: Path, payload: object) -> None:
     )
 
 
+def remove_tree(path: Path) -> None:
+    if not path.exists():
+        return
+    last_error: Exception | None = None
+    for _ in range(5):
+        try:
+            shutil.rmtree(path)
+            return
+        except OSError as exc:
+            last_error = exc
+            time.sleep(0.2)
+    if path.exists():
+        raise last_error or RuntimeError(f"failed to remove {path}")
+
+
 def rows_for_ranking(days: int, ranking: str) -> list[dict[str, object]]:
     return [normalize_scan_row(row, days) for row in read_csv(ranking_path(days, ranking))]
 
@@ -88,8 +104,7 @@ def export_static(out_dir: Path, days_values: list[int], include_all_details: bo
             ci_news_payload = json.loads(ci_news_path.read_text(encoding="utf-8"))
         except json.JSONDecodeError:
             ci_news_payload = None
-    if data_dir.exists():
-        shutil.rmtree(data_dir)
+    remove_tree(data_dir)
     data_dir.mkdir(parents=True, exist_ok=True)
 
     html = INDEX_HTML.replace("window.STOCK_CHIP_STATIC = false;", "window.STOCK_CHIP_STATIC = true;")
