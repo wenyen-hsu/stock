@@ -1,0 +1,81 @@
+name: Update Taiwan Stock Data
+
+on:
+  workflow_dispatch:
+    inputs:
+      days:
+        description: "更新與掃描的交易日數"
+        required: false
+        default: "20"
+  schedule:
+    # GitHub Actions 用 UTC。14:30 UTC = 台北 22:30，
+    # 此時當日行情、三大法人與融資融券資料皆已公布。
+    - cron: "30 14 * * 1-5"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: update-taiwan-data
+  cancel-in-progress: false
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: 更新官方行情、三大法人與融資融券
+        env:
+          DAYS: ${{ github.event.inputs.days || '20' }}
+        run: python -m stock_chip.official --days "$DAYS"
+
+      - name: 更新自選股月營收
+        continue-on-error: true
+        run: python -m stock_chip.revenue --months 24
+
+      - name: 更新大盤指數與期貨多空
+        continue-on-error: true
+        run: python -m stock_chip.market --days 180
+
+      - name: 抓取 MOPS 重大事件
+        continue-on-error: true
+        run: python -m stock_chip.mops --days 14
+
+      - name: 掃描 20 日與 5 日排行
+        env:
+          DAYS: ${{ github.event.inputs.days || '20' }}
+        run: |
+          python -m stock_chip.scan --days "$DAYS" --limit 50
+          python -m stock_chip.scan --days 5 --limit 50
+
+      - name: 匯出靜態網站資料
+        run: python -m stock_chip.export_static --out docs
+
+      - name: Commit updated data
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add docs reports
+          if git diff --cached --quiet; then
+            echo "No data changes to commit."
+            exit 0
+          fi
+          git commit -m "Update Taiwan stock data and rankings"
+          for attempt in 1 2 3; do
+            if git push; then
+              exit 0
+            fi
+            git pull --rebase origin main
+          done
+          git push

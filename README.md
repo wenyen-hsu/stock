@@ -3,7 +3,7 @@
 這個專案分成三個層次：
 
 1. **本機 GUI / SQLite**：主要操作環境。台股行情、法人買賣超、融資融券、營收、MOPS 事件、個股分點與同步後的新聞都寫入本機 `data/stock_chip.sqlite`。
-2. **GitHub Actions 新聞快取**：GitHub 上只定時抓美股 RSS 新聞，輸出成 `docs/data/us_news.json`。它不會更新你的本機 SQLite，也不會抓台股籌碼資料。
+2. **GitHub Actions 自動快取**：GitHub 上定時抓美股 RSS 新聞（輸出 `docs/data/us_news.json`），並於台股交易日晚間自動抓官方台股資料、重算排行並更新 `docs/data/`（workflow：`update-taiwan-data.yml`）。它不會更新你的本機 SQLite。
 3. **GitHub Pages 靜態頁**：只讀 `docs/data/*.json` 的靜態快照，給別人看已匯出的排行、個股快取、新聞快取與頁面功能；沒有 Python 後端，也不能直接替使用者更新資料庫。
 
 因此，clone 這個 repo 的人可以看到程式碼與目前提交的靜態快照，但完整可操作資料仍需要在自己的電腦執行更新流程產生。`data/stock_chip.sqlite` 是本機資料庫，不作為共用資料來源。
@@ -187,6 +187,15 @@ python3 -m stock_chip.export_static --out docs --include-all-details
 ```
 
 靜態版自選股只存於使用者自己的瀏覽器 `localStorage`。更新每日、營收、分點、新聞等按鈕會隱藏；需要重新抓資料時，請回本機 GUI 或 CLI 更新後重新匯出並 push。
+
+### 台股資料自動更新
+
+Repo 內有 GitHub Actions workflow：`.github/workflows/update-taiwan-data.yml`。
+
+- 定時：台股交易日（週一至週五）22:30 台北時間自動執行；也可在 Actions 頁手動觸發 `Update Taiwan Stock Data` 並指定天數。
+- 內容：抓官方行情、三大法人、融資融券（20 個交易日），更新自選股月營收、大盤指數與期貨多空、MOPS 重大事件，重算 5 日與 20 日排行（含動能、風險、估值與多因子分數），最後執行 `export_static` 更新 `docs/`。
+- 輸出：更新 `docs/data/*.json` 與 `reports/*.csv`，GitHub Pages 會自動重新部署；不依賴也不會修改你本機的 `data/stock_chip.sqlite`。
+- 營收、大盤與 MOPS 三步設為 `continue-on-error`，個別來源暫時失效不會中斷整體更新。
 
 ### 美股新聞自動更新
 
