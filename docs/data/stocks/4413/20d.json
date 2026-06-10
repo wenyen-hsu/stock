@@ -11,6 +11,19 @@
   },
   "chart": [
     {
+      "avg_price": null,
+      "close": null,
+      "date": "2026-05-13",
+      "high": null,
+      "low": null,
+      "ma10": null,
+      "ma20": null,
+      "ma5": null,
+      "ma60": null,
+      "open": null,
+      "volume_lot": 0.0
+    },
+    {
       "avg_price": 18.15,
       "close": 18.1,
       "date": "2026-05-14",
@@ -76,19 +89,6 @@
       "volume_lot": 11.0
     },
     {
-      "avg_price": null,
-      "close": null,
-      "date": "2026-05-21",
-      "high": null,
-      "low": null,
-      "ma10": null,
-      "ma20": null,
-      "ma5": null,
-      "ma60": null,
-      "open": null,
-      "volume_lot": 0.0
-    },
-    {
       "avg_price": 17.584375,
       "close": 17.7,
       "date": "2026-05-22",
@@ -135,7 +135,7 @@
       "low": 16.9,
       "ma10": null,
       "ma20": null,
-      "ma5": null,
+      "ma5": 17.36,
       "ma60": null,
       "open": 17.15,
       "volume_lot": 5.0
@@ -441,18 +441,6 @@
       "volume_lot": 16.0
     },
     {
-      "avg_price": null,
-      "close": null,
-      "date": "2026-05-21",
-      "dealer_net_lot": 0.0,
-      "dividend_yield": 1.67,
-      "foreign_net_lot": 0.0,
-      "pb_ratio": 1.59,
-      "pe_ratio": 19.35,
-      "trust_net_lot": 0.0,
-      "volume_lot": 0.0
-    },
-    {
       "avg_price": 17.745454545454546,
       "close": 18.0,
       "date": "2026-05-20",
@@ -511,6 +499,18 @@
       "pe_ratio": 34.15,
       "trust_net_lot": 0.0,
       "volume_lot": 4.0
+    },
+    {
+      "avg_price": null,
+      "close": null,
+      "date": "2026-05-13",
+      "dealer_net_lot": 0.0,
+      "dividend_yield": 1.6,
+      "foreign_net_lot": 0.0,
+      "pb_ratio": 1.68,
+      "pe_ratio": 35.28,
+      "trust_net_lot": 0.0,
+      "volume_lot": 0.0
     }
   ],
   "margin": [
@@ -753,23 +753,6 @@
       "short_stock_repay_lot": 0
     },
     {
-      "date": "2026-05-21",
-      "margin_balance_lot": 375,
-      "margin_buy_lot": 0,
-      "margin_cash_repay_lot": 0,
-      "margin_change_lot": 0,
-      "margin_prev_balance_lot": 375,
-      "margin_sell_lot": 0,
-      "note": "",
-      "offset_lot": 0,
-      "short_balance_lot": 0,
-      "short_buy_lot": 0,
-      "short_change_lot": 0,
-      "short_prev_balance_lot": 0,
-      "short_sell_lot": 0,
-      "short_stock_repay_lot": 0
-    },
-    {
       "date": "2026-05-20",
       "margin_balance_lot": 375,
       "margin_buy_lot": 0,
@@ -853,6 +836,23 @@
       "short_prev_balance_lot": 0,
       "short_sell_lot": 0,
       "short_stock_repay_lot": 0
+    },
+    {
+      "date": "2026-05-13",
+      "margin_balance_lot": 375,
+      "margin_buy_lot": 0,
+      "margin_cash_repay_lot": 0,
+      "margin_change_lot": 0,
+      "margin_prev_balance_lot": 375,
+      "margin_sell_lot": 0,
+      "note": "",
+      "offset_lot": 0,
+      "short_balance_lot": 0,
+      "short_buy_lot": 0,
+      "short_change_lot": 0,
+      "short_prev_balance_lot": 0,
+      "short_sell_lot": 0,
+      "short_stock_repay_lot": 0
     }
   ],
   "mops_events": [
@@ -864,7 +864,7 @@
       "event_id": "550471f24250f840b8",
       "event_tag": "股東會",
       "event_time": "14:26:57",
-      "fetched_at": "2026-06-10 14:11:34",
+      "fetched_at": "2026-06-10 16:06:16",
       "source": "MOPS 公開資訊觀測站",
       "source_url": "https://mopsov.twse.com.tw/mops/web/t05st02",
       "stock_id": "4413",

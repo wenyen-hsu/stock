@@ -11,6 +11,19 @@
   },
   "chart": [
     {
+      "avg_price": null,
+      "close": null,
+      "date": "2026-05-13",
+      "high": null,
+      "low": null,
+      "ma10": null,
+      "ma20": null,
+      "ma5": null,
+      "ma60": null,
+      "open": null,
+      "volume_lot": 0.0
+    },
+    {
       "avg_price": 18.15,
       "close": 18.1,
       "date": "2026-05-14",
@@ -76,19 +89,6 @@
       "volume_lot": 11.0
     },
     {
-      "avg_price": null,
-      "close": null,
-      "date": "2026-05-21",
-      "high": null,
-      "low": null,
-      "ma10": null,
-      "ma20": null,
-      "ma5": null,
-      "ma60": null,
-      "open": null,
-      "volume_lot": 0.0
-    },
-    {
       "avg_price": 17.584375,
       "close": 17.7,
       "date": "2026-05-22",
@@ -135,7 +135,7 @@
       "low": 16.9,
       "ma10": null,
       "ma20": null,
-      "ma5": null,
+      "ma5": 17.36,
       "ma60": null,
       "open": 17.15,
       "volume_lot": 5.0
@@ -429,7 +429,7 @@
       "event_id": "550471f24250f840b8",
       "event_tag": "股東會",
       "event_time": "14:26:57",
-      "fetched_at": "2026-06-10 14:11:34",
+      "fetched_at": "2026-06-10 16:06:16",
       "source": "MOPS 公開資訊觀測站",
       "source_url": "https://mopsov.twse.com.tw/mops/web/t05st02",
       "stock_id": "4413",

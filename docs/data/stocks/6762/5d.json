@@ -11,6 +11,19 @@
   },
   "chart": [
     {
+      "avg_price": 156.5,
+      "close": 156.5,
+      "date": "2026-05-13",
+      "high": 156.5,
+      "low": 156.5,
+      "ma10": null,
+      "ma20": null,
+      "ma5": null,
+      "ma60": null,
+      "open": 156.5,
+      "volume_lot": 1.0
+    },
+    {
       "avg_price": 168.58333333333334,
       "close": 168.0,
       "date": "2026-05-14",
@@ -76,19 +89,6 @@
       "volume_lot": 3.0
     },
     {
-      "avg_price": 189.5,
-      "close": 188.0,
-      "date": "2026-05-21",
-      "high": 194.0,
-      "low": 188.0,
-      "ma10": null,
-      "ma20": null,
-      "ma5": null,
-      "ma60": null,
-      "open": 194.0,
-      "volume_lot": 4.0
-    },
-    {
       "avg_price": 188.28571428571428,
       "close": 188.0,
       "date": "2026-05-22",
@@ -122,7 +122,7 @@
       "low": 180.0,
       "ma10": null,
       "ma20": null,
-      "ma5": 186.8,
+      "ma5": null,
       "ma60": null,
       "open": 189.0,
       "volume_lot": 7.0
@@ -135,7 +135,7 @@
       "low": 172.0,
       "ma10": null,
       "ma20": null,
-      "ma5": 183.2,
+      "ma5": 183.6,
       "ma60": null,
       "open": 180.0,
       "volume_lot": 12.0

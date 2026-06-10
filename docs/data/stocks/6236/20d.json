@@ -13,6 +13,19 @@
     {
       "avg_price": null,
       "close": null,
+      "date": "2026-05-13",
+      "high": null,
+      "low": null,
+      "ma10": null,
+      "ma20": null,
+      "ma5": null,
+      "ma60": null,
+      "open": null,
+      "volume_lot": 0.0
+    },
+    {
+      "avg_price": null,
+      "close": null,
       "date": "2026-05-14",
       "high": null,
       "low": null,
@@ -74,19 +87,6 @@
       "ma60": null,
       "open": null,
       "volume_lot": 0.0
-    },
-    {
-      "avg_price": 20.0,
-      "close": 20.0,
-      "date": "2026-05-21",
-      "high": 20.0,
-      "low": 20.0,
-      "ma10": null,
-      "ma20": null,
-      "ma5": null,
-      "ma60": null,
-      "open": 20.0,
-      "volume_lot": 1.0
     },
     {
       "avg_price": null,
@@ -441,18 +441,6 @@
       "volume_lot": 0.0
     },
     {
-      "avg_price": 20.0,
-      "close": 20.0,
-      "date": "2026-05-21",
-      "dealer_net_lot": 0.0,
-      "dividend_yield": 0.0,
-      "foreign_net_lot": 0.0,
-      "pb_ratio": 5.35,
-      "pe_ratio": 2000.0,
-      "trust_net_lot": 0.0,
-      "volume_lot": 1.0
-    },
-    {
       "avg_price": null,
       "close": null,
       "date": "2026-05-20",
@@ -511,6 +499,18 @@
       "pe_ratio": 1905.0,
       "trust_net_lot": 0.0,
       "volume_lot": 0.0
+    },
+    {
+      "avg_price": null,
+      "close": null,
+      "date": "2026-05-13",
+      "dealer_net_lot": 0.0,
+      "dividend_yield": 0.0,
+      "foreign_net_lot": 0.0,
+      "pb_ratio": 5.09,
+      "pe_ratio": 1905.0,
+      "trust_net_lot": 0.0,
+      "volume_lot": 0.0
     }
   ],
   "margin": [],
@@ -518,15 +518,15 @@
   "news": [],
   "revenues": [],
   "selection": {
-    "avg_price": 19.1333,
+    "avg_price": 18.7,
     "avg_turnover_100m": 0.0,
-    "base_reason": "強放量",
+    "base_reason": "強放量；接近區間高點",
     "base_score": 0.0,
     "branch_score": 0.0,
     "branch_status": "未取得",
     "chip_score": 0.0,
     "close": 19.0,
-    "close_vs_high_pct": -5.0,
+    "close_vs_high_pct": 0.0,
     "close_vs_low_pct": 3.26,
     "close_vs_top_buy_avg_pct": 0.0,
     "complete_chip_score": 0.0,
@@ -548,13 +548,13 @@
     "margin_balance_change_lot": 0.0,
     "margin_score": 0.0,
     "market": "TPEX",
-    "momentum_score": -3.0,
-    "multifactor_score": 6.66,
+    "momentum_score": 6.96,
+    "multifactor_score": 19.96,
     "name": "中湛",
     "observed_days": 20,
     "pb_ratio": 5.08,
     "pe_ratio": 1900.0,
-    "period_return_pct": -5.0,
+    "period_return_pct": 3.26,
     "revenue_cumulative_yoy_pct": 0.0,
     "revenue_mom_pct": 0.0,
     "revenue_momentum_score": 0.0,
@@ -580,15 +580,15 @@
     "valuation_score": -2.0,
     "volatility_pct": 0.0,
     "volume_5d_avg_lot": 0.2,
-    "volume_avg_lot": 0.15,
-    "volume_lot": 3.0,
-    "volume_ratio_1d": 6.67,
-    "volume_ratio_5d": 1.33,
-    "volume_score": 23.33,
+    "volume_avg_lot": 0.1,
+    "volume_lot": 2.0,
+    "volume_ratio_1d": 10.0,
+    "volume_ratio_5d": 2.0,
+    "volume_score": 30.0,
     "volume_signal": "強放量"
   },
   "stock": {
-    "avg_price": 19.1333,
+    "avg_price": 18.7,
     "close": 19.0,
     "dividend_yield": 0.0,
     "foreign_net_lot": 0.0,
@@ -604,9 +604,9 @@
     "stock_id": "6236",
     "trust_net_lot": 0.0,
     "volume_5d_avg_lot": 0.2,
-    "volume_avg_lot": 0.15,
-    "volume_lot": 3.0,
-    "volume_ratio_1d": 6.67,
-    "volume_ratio_5d": 1.33
+    "volume_avg_lot": 0.1,
+    "volume_lot": 2.0,
+    "volume_ratio_1d": 10.0,
+    "volume_ratio_5d": 2.0
   }
 }
