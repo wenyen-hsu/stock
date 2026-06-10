@@ -30,6 +30,9 @@ from stock_chip.us_news import load_cached_us_news
 
 RANKINGS = [
     "total_score",
+    "multifactor_score",
+    "momentum_inst_buy",
+    "value_dividend",
     "chip_score",
     "selection_score",
     "foreign_buy",

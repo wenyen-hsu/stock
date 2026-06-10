@@ -33,6 +33,8 @@ def load_window(conn: sqlite3.Connection, dates: list[str]) -> list[dict[str, An
             s.name,
             s.market,
             p.close,
+            p.high,
+            p.low,
             p.volume,
             p.turnover,
             p.avg_price,
@@ -66,6 +68,8 @@ def load_window(conn: sqlite3.Connection, dates: list[str]) -> list[dict[str, An
         "name",
         "market",
         "close",
+        "high",
+        "low",
         "volume",
         "turnover",
         "avg_price",
@@ -166,6 +170,101 @@ def consecutive_count(rows: list[dict[str, Any]], key: str, direction: int) -> i
 
 def bounded(value: float, low: float, high: float) -> float:
     return min(max(value, low), high)
+
+
+def compute_rsi(closes: list[float], period: int = 14) -> float | None:
+    """Cutler RSI over the most recent `period` price changes."""
+    if len(closes) < period + 1:
+        return None
+    window = closes[-(period + 1) :]
+    gains = 0.0
+    losses = 0.0
+    for prev, cur in zip(window, window[1:], strict=False):
+        change = cur - prev
+        if change > 0:
+            gains += change
+        else:
+            losses -= change
+    if gains + losses == 0:
+        return 50.0
+    avg_gain = gains / period
+    avg_loss = losses / period
+    if avg_loss == 0:
+        return 100.0
+    rs = avg_gain / avg_loss
+    return round(100 - 100 / (1 + rs), 2)
+
+
+def compute_annualized_volatility_pct(closes: list[float]) -> float | None:
+    """Annualized standard deviation of daily returns, in percent."""
+    if len(closes) < 6:
+        return None
+    returns = [
+        (cur - prev) / prev
+        for prev, cur in zip(closes, closes[1:], strict=False)
+        if prev
+    ]
+    if len(returns) < 5:
+        return None
+    mean = sum(returns) / len(returns)
+    variance = sum((r - mean) ** 2 for r in returns) / (len(returns) - 1)
+    return round((variance**0.5) * (252**0.5) * 100, 2)
+
+
+def momentum_score_row(row: dict[str, Any]) -> float:
+    """Trend-following score: period return, RSI zone, distance to period high, volatility penalty."""
+    period_return = row.get("period_return_pct")
+    rsi = row.get("rsi14")
+    vs_high = row.get("close_vs_high_pct")
+    volatility = row.get("volatility_pct")
+    if period_return is None and rsi is None and vs_high is None:
+        return 0.0
+    score = 0.0
+    if period_return is not None:
+        score += bounded(period_return, -10, 15) * 0.6
+    if rsi is not None:
+        if rsi >= 75:
+            score -= 4.0
+        elif rsi >= 55:
+            score += 4.0
+        elif rsi < 30:
+            score += 1.5
+    if vs_high is not None:
+        if vs_high >= -2:
+            score += 5.0
+        elif vs_high <= -15:
+            score -= 3.0
+    if volatility is not None and volatility > 65:
+        score -= 3.0
+    return round(bounded(score, -15.0, 20.0), 2)
+
+
+def valuation_score_row(row: dict[str, Any]) -> float:
+    """Light-weight value tilt from exchange-disclosed PE, PB and dividend yield."""
+    pe = row.get("pe_ratio")
+    pb = row.get("pb_ratio")
+    dividend_yield = row.get("dividend_yield")
+    if pe is None and pb is None and dividend_yield is None:
+        return 0.0
+    score = 0.0
+    if pe is not None and pe > 0:
+        if pe <= 12:
+            score += 3.0
+        elif pe <= 18:
+            score += 1.5
+        elif pe >= 40:
+            score -= 2.0
+    if pb is not None and pb > 0:
+        if pb <= 1.5:
+            score += 2.0
+        elif pb >= 6:
+            score -= 1.5
+    if dividend_yield is not None:
+        if dividend_yield >= 5:
+            score += 3.0
+        elif dividend_yield >= 3:
+            score += 1.5
+    return round(bounded(score, -4.0, 8.0), 2)
 
 
 def score_row(row: dict[str, Any]) -> float:
@@ -321,6 +420,15 @@ def base_reason(row: dict[str, Any]) -> str:
     signal = row.get("volume_signal")
     if signal in {"強放量", "放量"}:
         parts.append(signal)
+    vs_high = row.get("close_vs_high_pct")
+    if vs_high is not None and vs_high >= -2:
+        parts.append("接近區間高點")
+    rsi = row.get("rsi14")
+    if rsi is not None and rsi >= 75:
+        parts.append("RSI過熱")
+    volatility = row.get("volatility_pct")
+    if volatility is not None and volatility > 65:
+        parts.append("波動偏高")
     rev = revenue_reason(row)
     if rev:
         parts.append(rev)
@@ -479,6 +587,23 @@ def aggregate(
         foreign_net = sum(row["foreign_net"] or 0 for row in stock_rows)
         trust_net = sum(row["trust_net"] or 0 for row in stock_rows)
         dealer_net = sum(row["dealer_net"] or 0 for row in stock_rows)
+
+        closes = [row["close"] for row in stock_rows if row["close"] is not None]
+        period_return_pct = None
+        if len(closes) >= 2 and closes[0]:
+            period_return_pct = (closes[-1] - closes[0]) / closes[0] * 100
+        highs = [row["high"] if row["high"] is not None else row["close"] for row in stock_rows]
+        lows = [row["low"] if row["low"] is not None else row["close"] for row in stock_rows]
+        highs = [value for value in highs if value is not None]
+        lows = [value for value in lows if value is not None]
+        close_vs_high_pct = None
+        close_vs_low_pct = None
+        if close is not None and highs and max(highs):
+            close_vs_high_pct = (close - max(highs)) / max(highs) * 100
+        if close is not None and lows and min(lows):
+            close_vs_low_pct = (close - min(lows)) / min(lows) * 100
+        avg_turnover_100m = (turnover / len(stock_rows) / 1e8) if stock_rows else None
+
         item = {
             "days": days,
             "observed_days": len(stock_rows),
@@ -508,6 +633,12 @@ def aggregate(
             "foreign_sell_streak": consecutive_count(stock_rows, "foreign_net", -1),
             "trust_buy_streak": consecutive_count(stock_rows, "trust_net", 1),
             "trust_sell_streak": consecutive_count(stock_rows, "trust_net", -1),
+            "period_return_pct": round(period_return_pct, 2) if period_return_pct is not None else None,
+            "rsi14": compute_rsi(closes),
+            "volatility_pct": compute_annualized_volatility_pct(closes),
+            "close_vs_high_pct": round(close_vs_high_pct, 2) if close_vs_high_pct is not None else None,
+            "close_vs_low_pct": round(close_vs_low_pct, 2) if close_vs_low_pct is not None else None,
+            "avg_turnover_100m": round(avg_turnover_100m, 3) if avg_turnover_100m is not None else None,
         }
         item.update(branch_leaders.get(stock_id, {}))
         item.update(revenue_momentum.get(stock_id, {}))
@@ -529,7 +660,16 @@ def aggregate(
         item["margin_score"] = margin_score_row(item)
         item["volume_score"] = volume_score_row(item)
         item["volume_signal"] = volume_signal_row(item)
+        item["momentum_score"] = momentum_score_row(item)
+        item["valuation_score"] = valuation_score_row(item)
         item["base_score"] = round(item["chip_score"] + item["margin_score"] + item["revenue_momentum_score"], 2)
+        item["multifactor_score"] = round(
+            item["base_score"]
+            + item["momentum_score"]
+            + item["valuation_score"]
+            + item["volume_score"] * 0.5,
+            2,
+        )
         item["branch_status"] = branch_status(item)
         item["base_reason"] = base_reason(item)
         item.update(confluence_breakdown(item))
@@ -555,6 +695,15 @@ def to_export_row(row: dict[str, Any], days: int) -> dict[str, Any]:
         "pe_ratio": row.get("pe_ratio"),
         "dividend_yield": row.get("dividend_yield"),
         "pb_ratio": row.get("pb_ratio"),
+        "period_return_pct": row.get("period_return_pct"),
+        "rsi14": row.get("rsi14"),
+        "volatility_pct": row.get("volatility_pct"),
+        "close_vs_high_pct": row.get("close_vs_high_pct"),
+        "close_vs_low_pct": row.get("close_vs_low_pct"),
+        "avg_turnover_100m": row.get("avg_turnover_100m"),
+        "momentum_score": row.get("momentum_score", 0.0),
+        "valuation_score": row.get("valuation_score", 0.0),
+        "multifactor_score": row.get("multifactor_score", row.get("base_score", row["chip_score"])),
         f"{days}d_avg_price": round(avg_price, 4) if avg_price is not None else None,
         "close_vs_avg_pct": round(close_vs_avg_pct, 2) if close_vs_avg_pct is not None else None,
         f"{days}d_volume_lot": shares_to_lots(volume),
@@ -625,6 +774,36 @@ def write_csv(path: Path, rows: list[dict[str, Any]]) -> None:
 def export_rankings(output_dir: Path, rows: list[dict[str, Any]], days: int, limit: int) -> dict[str, Path]:
     rankings = {
         "total_score": sorted(rows, key=lambda row: row.get("total_score", row["chip_score"]), reverse=True),
+        "multifactor_score": sorted(
+            rows,
+            key=lambda row: row.get("multifactor_score", row.get("total_score", row["chip_score"])),
+            reverse=True,
+        ),
+        "momentum_inst_buy": sorted(
+            [
+                row
+                for row in rows
+                if (row.get("period_return_pct") or 0) > 0
+                and row[f"{days}d_inst_net"] > 0
+                and (row.get("momentum_score") or 0) > 0
+                and (row.get("avg_turnover_100m") or 0) >= 0.3
+            ],
+            key=lambda row: (row.get("momentum_score") or 0, row[f"{days}d_inst_net"]),
+            reverse=True,
+        ),
+        "value_dividend": sorted(
+            [
+                row
+                for row in rows
+                if (row.get("dividend_yield") or 0) >= 3
+                and (row.get("pe_ratio") or 0) > 0
+                and (row.get("pe_ratio") or 999) <= 20
+                and row[f"{days}d_inst_net"] >= 0
+                and (row.get("avg_turnover_100m") or 0) >= 0.3
+            ],
+            key=lambda row: (row.get("valuation_score") or 0, row.get("dividend_yield") or 0),
+            reverse=True,
+        ),
         "chip_score": sorted(rows, key=lambda row: row["chip_score"], reverse=True),
         "selection_score": sorted(
             rows,
