@@ -487,6 +487,18 @@ def init_schema(conn: sqlite3.Connection) -> None:
             updated_at TEXT NOT NULL
         );
 
+        CREATE TABLE IF NOT EXISTS stock_profiles (
+            stock_id TEXT PRIMARY KEY,
+            name TEXT,
+            market TEXT,
+            industry_code TEXT,
+            industry_name TEXT,
+            business TEXT,
+            chairman TEXT,
+            website TEXT,
+            updated_at TEXT NOT NULL
+        );
+
         CREATE TABLE IF NOT EXISTS trading_days (
             date TEXT PRIMARY KEY,
             market TEXT NOT NULL DEFAULT 'TWSE',

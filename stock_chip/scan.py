@@ -253,6 +253,16 @@ def long_momentum_score_row(row: dict[str, Any]) -> float:
     return round(bounded(score, -12.0, 22.0), 2)
 
 
+def load_profiles(conn: sqlite3.Connection) -> dict[str, dict[str, Any]]:
+    try:
+        rows = conn.execute(
+            "SELECT stock_id, industry_name FROM stock_profiles"
+        ).fetchall()
+    except sqlite3.OperationalError:
+        return {}
+    return {row[0]: {"industry": row[1] or ""} for row in rows}
+
+
 def load_revenue_momentum(conn: sqlite3.Connection) -> dict[str, dict[str, Any]]:
     rows = conn.execute(
         """
@@ -679,10 +689,12 @@ def aggregate(
     branch_leaders: dict[str, dict[str, Any]] | None = None,
     revenue_momentum: dict[str, dict[str, Any]] | None = None,
     history_stats: dict[str, dict[str, Any]] | None = None,
+    profiles: dict[str, dict[str, Any]] | None = None,
 ) -> list[dict[str, Any]]:
     branch_leaders = branch_leaders or {}
     revenue_momentum = revenue_momentum or {}
     history_stats = history_stats or {}
+    profiles = profiles or {}
     grouped: dict[str, list[dict[str, Any]]] = {}
     for row in rows:
         grouped.setdefault(row["stock_id"], []).append(row)
@@ -770,6 +782,8 @@ def aggregate(
         item.update(branch_leaders.get(stock_id, {}))
         item.update(revenue_momentum.get(stock_id, {}))
         item.update(history_stats.get(stock_id, {}))
+        item.update(profiles.get(stock_id, {}))
+        item.setdefault("industry", "")
         item.setdefault("long_momentum_score", 0.0)
         margin_values = [row for row in stock_rows if row.get("margin_balance") is not None]
         margin_balance_change = None
@@ -820,6 +834,7 @@ def to_export_row(row: dict[str, Any], days: int) -> dict[str, Any]:
         "stock_id": row["stock_id"],
         "name": row["name"],
         "market": row["market"],
+        "industry": row.get("industry", ""),
         "observed_days": row["observed_days"],
         "close": row["close"],
         "pe_ratio": row.get("pe_ratio"),
@@ -1163,9 +1178,10 @@ def run_scan(
         branch_leaders: dict[str, dict[str, Any]] = {}
         revenue_momentum = load_revenue_momentum(conn)
         history_stats = load_history_stats(conn, dates[-1]) if dates else {}
+        profiles = load_profiles(conn)
     if len(dates) < days:
         raise RuntimeError(f"資料庫只有 {len(dates)} 個交易日，少於要求的 {days} 日。")
-    rows = aggregate(raw_rows, days, dates[-1], branch_leaders, revenue_momentum, history_stats)
+    rows = aggregate(raw_rows, days, dates[-1], branch_leaders, revenue_momentum, history_stats, profiles)
     output_dir.mkdir(parents=True, exist_ok=True)
 
     all_path = output_dir / f"scan_all_{days}d.csv"

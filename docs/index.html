@@ -806,6 +806,12 @@
         </select>
       </div>
       <div>
+        <label for="industry">產業</label>
+        <select id="industry">
+          <option value="">全部</option>
+        </select>
+      </div>
+      <div>
         <label for="query">搜尋</label>
         <input id="query" placeholder="代號或名稱" />
       </div>
@@ -1400,13 +1406,14 @@
       staticCache[path] = await res.json();
       return staticCache[path];
     }
-    function staticFilterRows(rows, market, q, limit, minVolume = 0) {
+    function staticFilterRows(rows, market, q, limit, minVolume = 0, industry = "") {
       const text = String(q || "").trim().toLowerCase();
       const max = Number(limit || 50);
       const volumeFloor = Number(minVolume || 0);
       const output = [];
       for (const row of rows || []) {
         if (market && row.market !== market) continue;
+        if (industry && row.industry !== industry) continue;
         if (text && !String(row.stock_id || "").toLowerCase().includes(text) && !String(row.name || "").toLowerCase().includes(text)) continue;
         if (volumeFloor > 0 && Number(row.volume_lot || 0) < volumeFloor) continue;
         output.push(row);
@@ -1436,7 +1443,7 @@
         }
         return {
           title: `${days} 日排行：${ranking}`,
-          rows: staticFilterRows(source.rows || source, parsed.searchParams.get("market") || "", q, parsed.searchParams.get("limit") || 50, parsed.searchParams.get("min_volume") || 0),
+          rows: staticFilterRows(source.rows || source, parsed.searchParams.get("market") || "", q, parsed.searchParams.get("limit") || 50, parsed.searchParams.get("min_volume") || 0, parsed.searchParams.get("industry") || ""),
         };
       }
       if (parsed.pathname === "/api/watchlist") {
@@ -1445,7 +1452,12 @@
         const order = new Map(ids.map((id, idx) => [id, idx]));
         const rows = (source.rows || source).filter(row => order.has(String(row.stock_id)))
           .sort((a, b) => order.get(String(a.stock_id)) - order.get(String(b.stock_id)));
-        return {rows: staticFilterRows(rows, parsed.searchParams.get("market") || "", parsed.searchParams.get("q") || "", parsed.searchParams.get("limit") || 50, parsed.searchParams.get("min_volume") || 0)};
+        return {rows: staticFilterRows(rows, parsed.searchParams.get("market") || "", parsed.searchParams.get("q") || "", parsed.searchParams.get("limit") || 50, parsed.searchParams.get("min_volume") || 0, parsed.searchParams.get("industry") || "")};
+      }
+      if (parsed.pathname === "/api/industries") {
+        const source = await staticData(`data/rankings/${days}d/search_index.json`);
+        const industries = [...new Set((source.rows || []).map(row => String(row.industry || "").trim()).filter(Boolean))].sort();
+        return {industries};
       }
       if (parsed.pathname === "/api/stock") {
         const stockId = parsed.searchParams.get("stock_id") || "2376";
@@ -1576,6 +1588,7 @@
         days: daysSelect.value,
         ranking,
         market: document.querySelector("#market").value,
+        industry: document.querySelector("#industry")?.value || "",
         q: document.querySelector("#query").value.trim(),
         min_volume: document.querySelector("#min-volume").value.trim(),
         limit: document.querySelector("#limit").value
@@ -2763,10 +2776,11 @@
       target.querySelectorAll(".focus-item").forEach(btn => btn.addEventListener("click", () => openDetail(btn.dataset.id)));
     }
     const rankingCols = [
-      {key:"stock_id", label:"代號", sortType:"text", format: v => v, groups:["core","chip","foreign","revenue","margin","volume","valuation"]},
-      {key:"name", label:"名稱", sortType:"text", groups:["core","chip","foreign","revenue","margin","volume","valuation"]},
+      {key:"stock_id", label:"代號", sortType:"text", format: v => v, groups:["core","chip","foreign","revenue","margin","volume","valuation","momentum"]},
+      {key:"name", label:"名稱", sortType:"text", groups:["core","chip","foreign","revenue","margin","volume","valuation","momentum"]},
+      {key:"industry", label:"產業", sortType:"text", groups:["core","chip","valuation","momentum"]},
       {key:"market", label:"市場", sortType:"text", groups:["core","valuation"]},
-      {key:"close", label:"收盤", groups:["core","chip","foreign","revenue","margin","volume","valuation"]},
+      {key:"close", label:"收盤", groups:["core","chip","foreign","revenue","margin","volume","valuation","momentum"]},
       {key:"observed_days", label:"資料日", groups:["core"]},
       {key:"pe_ratio", label:"本益比", groups:["core","valuation"]},
       {key:"dividend_yield", label:"殖利率%", groups:["valuation"]},
@@ -3265,7 +3279,8 @@
       const rangeSelect = document.querySelector("#chart-range");
       state.chartRange = rangeSelect?.value === "all" ? "all" : Number(rangeSelect?.value || 20);
       document.querySelector("#detail-title").textContent = `${data.stock.stock_id} ${data.stock.name}`;
-      document.querySelector("#detail-subtitle").textContent = `${data.stock.market} · 最新日 ${data.stock.latest_date || ""}`;
+      const businessText = String(data.stock.business || "").replace(/\s+/g, " ").slice(0, 90);
+      document.querySelector("#detail-subtitle").textContent = `${data.stock.market} · ${data.stock.industry || "未分類"} · 最新日 ${data.stock.latest_date || ""}${businessText ? " · " + businessText : ""}`;
       const backBtn = document.querySelector("#back-detail");
       backBtn.style.display = state.previousTab ? "" : "none";
       backBtn.textContent = `返回${state.previousTab === "watchlist" ? "自選股" : state.previousTab === "coverage" ? "資料狀態" : "排行"}`;
@@ -3423,7 +3438,20 @@
       enforceRankingDays();
       reload();
     });
-    ["market","limit"].forEach(id => document.querySelector("#" + id).addEventListener("change", reload));
+    ["market","industry","limit"].forEach(id => document.querySelector("#" + id).addEventListener("change", reload));
+    async function loadIndustries() {
+      try {
+        const days = document.querySelector("#days").value;
+        const data = await getJSON(`/api/industries?days=${days}`);
+        const select = document.querySelector("#industry");
+        if (!select) return;
+        const current = select.value;
+        select.innerHTML = `<option value="">全部</option>` + (data.industries || []).map(item => `<option value="${esc(item)}">${esc(item)}</option>`).join("");
+        if ([...select.options].some(opt => opt.value === current)) select.value = current;
+      } catch (_err) {}
+    }
+    loadIndustries();
+    document.querySelector("#days").addEventListener("change", loadIndustries);
     document.querySelector("#min-volume").addEventListener("input", () => {
       clearTimeout(window.__vol);
       window.__vol = setTimeout(reload, 250);

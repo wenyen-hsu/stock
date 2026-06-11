@@ -861,6 +861,12 @@ INDEX_HTML = """<!doctype html>
         </select>
       </div>
       <div>
+        <label for="industry">產業</label>
+        <select id="industry">
+          <option value="">全部</option>
+        </select>
+      </div>
+      <div>
         <label for="query">搜尋</label>
         <input id="query" placeholder="代號或名稱" />
       </div>
@@ -1455,13 +1461,14 @@ INDEX_HTML = """<!doctype html>
       staticCache[path] = await res.json();
       return staticCache[path];
     }
-    function staticFilterRows(rows, market, q, limit, minVolume = 0) {
+    function staticFilterRows(rows, market, q, limit, minVolume = 0, industry = "") {
       const text = String(q || "").trim().toLowerCase();
       const max = Number(limit || 50);
       const volumeFloor = Number(minVolume || 0);
       const output = [];
       for (const row of rows || []) {
         if (market && row.market !== market) continue;
+        if (industry && row.industry !== industry) continue;
         if (text && !String(row.stock_id || "").toLowerCase().includes(text) && !String(row.name || "").toLowerCase().includes(text)) continue;
         if (volumeFloor > 0 && Number(row.volume_lot || 0) < volumeFloor) continue;
         output.push(row);
@@ -1491,7 +1498,7 @@ INDEX_HTML = """<!doctype html>
         }
         return {
           title: `${days} 日排行：${ranking}`,
-          rows: staticFilterRows(source.rows || source, parsed.searchParams.get("market") || "", q, parsed.searchParams.get("limit") || 50, parsed.searchParams.get("min_volume") || 0),
+          rows: staticFilterRows(source.rows || source, parsed.searchParams.get("market") || "", q, parsed.searchParams.get("limit") || 50, parsed.searchParams.get("min_volume") || 0, parsed.searchParams.get("industry") || ""),
         };
       }
       if (parsed.pathname === "/api/watchlist") {
@@ -1500,7 +1507,12 @@ INDEX_HTML = """<!doctype html>
         const order = new Map(ids.map((id, idx) => [id, idx]));
         const rows = (source.rows || source).filter(row => order.has(String(row.stock_id)))
           .sort((a, b) => order.get(String(a.stock_id)) - order.get(String(b.stock_id)));
-        return {rows: staticFilterRows(rows, parsed.searchParams.get("market") || "", parsed.searchParams.get("q") || "", parsed.searchParams.get("limit") || 50, parsed.searchParams.get("min_volume") || 0)};
+        return {rows: staticFilterRows(rows, parsed.searchParams.get("market") || "", parsed.searchParams.get("q") || "", parsed.searchParams.get("limit") || 50, parsed.searchParams.get("min_volume") || 0, parsed.searchParams.get("industry") || "")};
+      }
+      if (parsed.pathname === "/api/industries") {
+        const source = await staticData(`data/rankings/${days}d/search_index.json`);
+        const industries = [...new Set((source.rows || []).map(row => String(row.industry || "").trim()).filter(Boolean))].sort();
+        return {industries};
       }
       if (parsed.pathname === "/api/stock") {
         const stockId = parsed.searchParams.get("stock_id") || "2376";
@@ -1631,6 +1643,7 @@ INDEX_HTML = """<!doctype html>
         days: daysSelect.value,
         ranking,
         market: document.querySelector("#market").value,
+        industry: document.querySelector("#industry")?.value || "",
         q: document.querySelector("#query").value.trim(),
         min_volume: document.querySelector("#min-volume").value.trim(),
         limit: document.querySelector("#limit").value
@@ -2818,10 +2831,11 @@ INDEX_HTML = """<!doctype html>
       target.querySelectorAll(".focus-item").forEach(btn => btn.addEventListener("click", () => openDetail(btn.dataset.id)));
     }
     const rankingCols = [
-      {key:"stock_id", label:"代號", sortType:"text", format: v => v, groups:["core","chip","foreign","revenue","margin","volume","valuation"]},
-      {key:"name", label:"名稱", sortType:"text", groups:["core","chip","foreign","revenue","margin","volume","valuation"]},
+      {key:"stock_id", label:"代號", sortType:"text", format: v => v, groups:["core","chip","foreign","revenue","margin","volume","valuation","momentum"]},
+      {key:"name", label:"名稱", sortType:"text", groups:["core","chip","foreign","revenue","margin","volume","valuation","momentum"]},
+      {key:"industry", label:"產業", sortType:"text", groups:["core","chip","valuation","momentum"]},
       {key:"market", label:"市場", sortType:"text", groups:["core","valuation"]},
-      {key:"close", label:"收盤", groups:["core","chip","foreign","revenue","margin","volume","valuation"]},
+      {key:"close", label:"收盤", groups:["core","chip","foreign","revenue","margin","volume","valuation","momentum"]},
       {key:"observed_days", label:"資料日", groups:["core"]},
       {key:"pe_ratio", label:"本益比", groups:["core","valuation"]},
       {key:"dividend_yield", label:"殖利率%", groups:["valuation"]},
@@ -3320,7 +3334,8 @@ INDEX_HTML = """<!doctype html>
       const rangeSelect = document.querySelector("#chart-range");
       state.chartRange = rangeSelect?.value === "all" ? "all" : Number(rangeSelect?.value || 20);
       document.querySelector("#detail-title").textContent = `${data.stock.stock_id} ${data.stock.name}`;
-      document.querySelector("#detail-subtitle").textContent = `${data.stock.market} · 最新日 ${data.stock.latest_date || ""}`;
+      const businessText = String(data.stock.business || "").replace(/\\s+/g, " ").slice(0, 90);
+      document.querySelector("#detail-subtitle").textContent = `${data.stock.market} · ${data.stock.industry || "未分類"} · 最新日 ${data.stock.latest_date || ""}${businessText ? " · " + businessText : ""}`;
       const backBtn = document.querySelector("#back-detail");
       backBtn.style.display = state.previousTab ? "" : "none";
       backBtn.textContent = `返回${state.previousTab === "watchlist" ? "自選股" : state.previousTab === "coverage" ? "資料狀態" : "排行"}`;
@@ -3478,7 +3493,20 @@ INDEX_HTML = """<!doctype html>
       enforceRankingDays();
       reload();
     });
-    ["market","limit"].forEach(id => document.querySelector("#" + id).addEventListener("change", reload));
+    ["market","industry","limit"].forEach(id => document.querySelector("#" + id).addEventListener("change", reload));
+    async function loadIndustries() {
+      try {
+        const days = document.querySelector("#days").value;
+        const data = await getJSON(`/api/industries?days=${days}`);
+        const select = document.querySelector("#industry");
+        if (!select) return;
+        const current = select.value;
+        select.innerHTML = `<option value="">全部</option>` + (data.industries || []).map(item => `<option value="${esc(item)}">${esc(item)}</option>`).join("");
+        if ([...select.options].some(opt => opt.value === current)) select.value = current;
+      } catch (_err) {}
+    }
+    loadIndustries();
+    document.querySelector("#days").addEventListener("change", loadIndustries);
     document.querySelector("#min-volume").addEventListener("input", () => {
       clearTimeout(window.__vol);
       window.__vol = setTimeout(reload, 250);
@@ -3758,6 +3786,7 @@ def normalize_scan_row(row: dict[str, str], days: int) -> dict[str, object]:
         "stock_id": row.get("stock_id"),
         "name": row.get("name"),
         "market": row.get("market"),
+        "industry": row.get("industry") or "",
         "observed_days": int(as_float(row.get("observed_days"))),
         "close": as_float(row.get("close")),
         "pe_ratio": as_float_or_none(row.get("pe_ratio")),
@@ -3887,11 +3916,14 @@ def filtered_rows(
     q: str,
     limit: int,
     min_volume: float = 0.0,
+    industry: str = "",
 ) -> list[dict[str, object]]:
     text = q.lower()
     output = []
     for row in rows:
         if market and row.get("market") != market:
+            continue
+        if industry and row.get("industry") != industry:
             continue
         if text and text not in str(row.get("stock_id", "")).lower() and text not in str(row.get("name", "")).lower():
             continue
@@ -5794,11 +5826,14 @@ def stock_detail(stock_id: str, days: int) -> dict[str, object]:
         placeholders = ",".join("?" for _ in dates)
         stock_row = conn.execute(
             """
-            SELECT s.stock_id, s.name, s.market, p.close, p.pe_ratio, p.dividend_yield, p.pb_ratio
+            SELECT s.stock_id, s.name, s.market, p.close, p.pe_ratio, p.dividend_yield, p.pb_ratio,
+                   pr.industry_name, pr.business
             FROM stocks s
             LEFT JOIN daily_prices p
                 ON p.stock_id = s.stock_id
                AND p.date = ?
+            LEFT JOIN stock_profiles pr
+                ON pr.stock_id = s.stock_id
             WHERE s.stock_id = ?
             """,
             (latest_date, stock_id),
@@ -6109,6 +6144,8 @@ def stock_detail(stock_id: str, days: int) -> dict[str, object]:
             "pe_ratio": stock_row[4],
             "dividend_yield": stock_row[5],
             "pb_ratio": stock_row[6],
+            "industry": stock_row[7] or "",
+            "business": stock_row[8] or "",
             "avg_price": round(avg_price, 4) if avg_price is not None else None,
             "foreign_net_lot": shares_to_lots(foreign_net),
             "trust_net_lot": shares_to_lots(trust_net),
@@ -6190,12 +6227,13 @@ class GUIHandler(BaseHTTPRequestHandler):
                 q = params.get("q", [""])[0]
                 limit = int(params.get("limit", ["50"])[0])
                 min_volume = float(params.get("min_volume", ["0"])[0] or 0)
+                industry = params.get("industry", [""])[0]
                 rows = [normalize_scan_row(row, days) for row in ranking_source_rows(days, ranking, q)]
                 json_response(
                     self,
                     {
                         "title": f"{days} 日排行：{RANKING_LABELS.get(ranking, ranking)}",
-                        "rows": filtered_rows(rows, market, q, limit, min_volume),
+                        "rows": filtered_rows(rows, market, q, limit, min_volume, industry),
                     },
                 )
                 return
@@ -6210,7 +6248,14 @@ class GUIHandler(BaseHTTPRequestHandler):
                 source_rows = read_csv(REPORTS_DIR / f"scan_all_{days}d.csv") or read_csv(ranking_path(days, "total_score"))
                 rows = [normalize_scan_row(row, days) for row in source_rows if row.get("stock_id") in watch_order]
                 rows.sort(key=lambda row: watch_order.get(str(row.get("stock_id")), 9999))
-                json_response(self, {"rows": filtered_rows(rows, market, q, limit, min_volume)})
+                industry = params.get("industry", [""])[0]
+                json_response(self, {"rows": filtered_rows(rows, market, q, limit, min_volume, industry)})
+                return
+            if parsed.path == "/api/industries":
+                days = int(params.get("days", ["20"])[0])
+                rows = read_csv(REPORTS_DIR / f"scan_all_{days}d.csv")
+                industries = sorted({(row.get("industry") or "").strip() for row in rows} - {""})
+                json_response(self, {"industries": industries})
                 return
             if parsed.path == "/api/watchlist-items":
                 json_response(self, {"rows": watchlist_items()})
