@@ -868,7 +868,11 @@ def update_recent(
 ) -> list[dict[str, Any]]:
     updated: list[dict[str, Any]] = []
     cursor = end_date
-    while len(updated) < days and (end_date - cursor).days < 75:
+    # Walk back proportionally to the requested window so deep backfills
+    # (e.g. 240 trading days) are reachable; 75 keeps the original behaviour
+    # for the daily 20-day updates.
+    lookback_calendar_days = max(75, days * 2)
+    while len(updated) < days and (end_date - cursor).days < lookback_calendar_days:
         min_price_count = MIN_COMBINED_PRICE_COUNT if stock_only else 1
         cached = conn.execute(
             """
