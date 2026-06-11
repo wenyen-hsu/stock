@@ -8,22 +8,22 @@
           "empty_count": 0,
           "failed_count": 0,
           "market": "TPEX",
-          "no_branch": 889,
-          "not_attempted": 889,
-          "remaining": 889,
+          "no_branch": 893,
+          "not_attempted": 893,
+          "remaining": 893,
           "stocks_with_branch": 0,
-          "total_stocks": 889
+          "total_stocks": 893
         },
         {
           "attempted": 0,
           "empty_count": 0,
           "failed_count": 0,
           "market": "TWSE",
-          "no_branch": 1082,
-          "not_attempted": 1082,
-          "remaining": 1082,
+          "no_branch": 1088,
+          "not_attempted": 1088,
+          "remaining": 1088,
           "stocks_with_branch": 0,
-          "total_stocks": 1082
+          "total_stocks": 1088
         }
       ]
     },
@@ -35,22 +35,22 @@
           "empty_count": 0,
           "failed_count": 0,
           "market": "TPEX",
-          "no_branch": 889,
-          "not_attempted": 889,
-          "remaining": 889,
+          "no_branch": 893,
+          "not_attempted": 893,
+          "remaining": 893,
           "stocks_with_branch": 0,
-          "total_stocks": 889
+          "total_stocks": 893
         },
         {
           "attempted": 0,
           "empty_count": 0,
           "failed_count": 0,
           "market": "TWSE",
-          "no_branch": 1082,
-          "not_attempted": 1082,
-          "remaining": 1082,
+          "no_branch": 1088,
+          "not_attempted": 1088,
+          "remaining": 1088,
           "stocks_with_branch": 0,
-          "total_stocks": 1082
+          "total_stocks": 1088
         }
       ]
     }
@@ -60,23 +60,24 @@
     5,
     20
   ],
-  "esb_count": 0,
-  "exported_at": "2026-06-11 08:32:41",
+  "esb_count": 348,
+  "exported_at": "2026-06-11 16:38:34",
   "include_all_details": false,
-  "latest_date": "2026-06-10",
+  "latest_date": "2026-06-11",
   "missing_details": [],
   "search_market_counts": {
-    "TPEX": 887,
+    "ESB": 348,
+    "TPEX": 886,
     "TWSE": 1082
   },
   "static_search_count_by_days": {
-    "20": 416,
-    "5": 416
+    "20": 428,
+    "5": 428
   },
-  "static_stock_count": 416,
-  "stock_count": 1971,
-  "tpex_count": 889,
-  "twse_count": 1082,
+  "static_stock_count": 428,
+  "stock_count": 1981,
+  "tpex_count": 893,
+  "twse_count": 1088,
   "watchlist": [
     "2376",
     "2382",
