@@ -1,15 +1,6 @@
 {
   "futures_rows": [
     {
-      "date": "2025-12-12",
-      "dealer_oi_net": -218,
-      "dealer_trade_net": -621,
-      "foreign_oi_net": -29032,
-      "foreign_trade_net": 1889,
-      "trust_oi_net": 24236,
-      "trust_trade_net": -266
-    },
-    {
       "date": "2025-12-15",
       "dealer_oi_net": 1567,
       "dealer_trade_net": 2001,
@@ -1043,6 +1034,15 @@
       "foreign_trade_net": -81,
       "trust_oi_net": 54186,
       "trust_trade_net": -1067
+    },
+    {
+      "date": "2026-06-11",
+      "dealer_oi_net": 4155,
+      "dealer_trade_net": -706,
+      "foreign_oi_net": -63168,
+      "foreign_trade_net": -1182,
+      "trust_oi_net": 55312,
+      "trust_trade_net": 1126
     }
   ],
   "index_rows": [
@@ -1920,16 +1920,23 @@
       "high": 44676.49,
       "low": 43225.54,
       "open": 44581.45
+    },
+    {
+      "close": 43149.46,
+      "date": "2026-06-11",
+      "high": 43463.03,
+      "low": 42006.39,
+      "open": 43172.21
     }
   ],
   "summary": {
-    "dealer_oi_net": 4853,
-    "foreign_oi_net": -61949,
-    "latest_index_close": 43225.54,
-    "latest_index_date": "2026-06-10",
+    "dealer_oi_net": 4155,
+    "foreign_oi_net": -63168,
+    "latest_index_close": 43149.46,
+    "latest_index_date": "2026-06-11",
     "product_code": "TXF",
     "product_label": "大台 TXF",
-    "trust_oi_net": 54186
+    "trust_oi_net": 55312
   },
-  "updated_at": "2026-06-10 15:57:25"
+  "updated_at": "2026-06-11 07:50:31"
 }
