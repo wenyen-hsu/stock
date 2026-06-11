@@ -769,10 +769,52 @@ INDEX_HTML = """<!doctype html>
     }
     .source-audit-card a { color: var(--accent-dark); font-weight: 800; text-decoration: none; }
     .source-audit-card a:hover { text-decoration: underline; }
+    .focus-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(200px, 1fr));
+      gap: 10px;
+      padding: 12px 14px;
+      border-bottom: 1px solid var(--line);
+      background: #fbfdff;
+    }
+    .focus-card { border: 1px solid var(--line); border-radius: 8px; background: #fff; padding: 10px; }
+    .focus-title { font-weight: 850; font-size: 13px; margin-bottom: 8px; }
+    .focus-note { color: var(--muted); font-weight: 700; font-size: 11px; margin-left: 6px; }
+    .focus-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+      width: 100%;
+      height: auto;
+      padding: 6px 8px;
+      margin-bottom: 4px;
+      border: 1px solid #edf1f4;
+      border-radius: 6px;
+      background: #fbfdff;
+      color: var(--ink);
+      font-size: 13px;
+      font-weight: 750;
+      cursor: pointer;
+    }
+    .focus-item:hover { border-color: #9fcfc8; background: #f1faf8; }
+    .focus-stock { text-align: left; }
+    .focus-meta { color: var(--muted); font-size: 11px; font-weight: 700; }
+    .score-cell { display: inline-flex; align-items: center; gap: 6px; justify-content: flex-end; }
+    .score-track {
+      width: 54px;
+      height: 6px;
+      border-radius: 999px;
+      background: #e8eef2;
+      overflow: hidden;
+      display: inline-block;
+    }
+    .score-fill { display: block; height: 100%; border-radius: 999px; background: var(--accent); }
+    .score-fill.neg-fill { background: var(--danger); }
     @media (max-width: 1000px) {
       main { padding: 14px; }
       .toolbar { grid-template-columns: repeat(2, minmax(140px, 1fr)); }
-      .metrics, .layout-2, .update-grid, .assist-grid, .status-grid, .source-audit-grid { grid-template-columns: 1fr; }
+      .metrics, .layout-2, .update-grid, .assist-grid, .status-grid, .source-audit-grid, .focus-grid { grid-template-columns: 1fr; }
     }
   </style>
 </head>
@@ -854,6 +896,7 @@ INDEX_HTML = """<!doctype html>
         <div class="panel-title" id="ranking-title">排行</div>
         <div class="muted" id="ranking-note"></div>
       </div>
+      <div id="ranking-focus"></div>
       <div id="ranking-sentiment"></div>
       <div class="column-controls" id="ranking-columns"></div>
       <div class="table-wrap" id="ranking-table"></div>
@@ -1638,7 +1681,7 @@ INDEX_HTML = """<!doctype html>
           const raw = row[c.key];
           const value = c.format ? c.format(raw, row) : fmt(raw);
           const klass = c.signed ? cls(raw) : "";
-          return `<td class="${klass}">${esc(value)}</td>`;
+          return `<td class="${klass}">${c.html ? value : esc(value)}</td>`;
         }).join("")}</tr>`;
       }).join("");
       target.innerHTML = `<table><thead><tr>${head}</tr></thead><tbody>${body}</tbody></table>`;
@@ -2729,6 +2772,50 @@ INDEX_HTML = """<!doctype html>
       btn.disabled = false;
       btn.textContent = original;
     }
+    function reasonBadges(text) {
+      const parts = String(text || "").split("；").filter(Boolean);
+      if (!parts.length) return "";
+      return `<span class="tag-list">${parts.map(part => {
+        const warn = /融資增加|RSI過熱|波動偏高|賣超/.test(part);
+        const good = /買超|融資下降|放量|營收|接近區間高點|連買/.test(part);
+        return `<span class="tag ${warn ? "bad" : good ? "good" : ""}">${esc(part)}</span>`;
+      }).join("")}</span>`;
+    }
+    function scoreBarCell(value, key) {
+      const n = Number(value);
+      if (value === null || value === undefined || value === "" || !Number.isFinite(n)) return "";
+      const values = (state.rankingRows || []).map(r => Number(r[key])).filter(Number.isFinite);
+      const max = values.length ? Math.max(...values) : n;
+      const min = values.length ? Math.min(...values, 0) : 0;
+      const pct = max > min ? Math.round((n - min) / (max - min) * 100) : 0;
+      return `<span class="score-cell"><span class="score-track"><span class="score-fill ${n < 0 ? "neg-fill" : ""}" style="width:${Math.max(2, pct)}%"></span></span><span class="${cls(n)}">${esc(fmt(n))}</span></span>`;
+    }
+    function renderFocusCards() {
+      const target = document.querySelector("#ranking-focus");
+      if (!target) return;
+      const rows = state.rankingRows || [];
+      if (rows.length < 3) { target.innerHTML = ""; return; }
+      const groups = [
+        {label:"多因子最強", note:"籌碼+動能+估值", key:"multifactor_score", meta:r=>`基礎 ${fmt(r.total_score)} / 動能 ${fmt(r.momentum_score)}`, filter:r=>Number.isFinite(Number(r.multifactor_score))},
+        {label:"動能最強", note:"趨勢與量能", key:"momentum_score", meta:r=>`區間 ${fmt(r.period_return_pct)}% / RSI ${fmt(r.rsi14)}`, filter:r=>(Number(r.momentum_score)||0)>0},
+        {label:"價值優選", note:"低估值高殖利率", key:"valuation_score", meta:r=>`殖利率 ${fmt(r.dividend_yield)}% / PE ${fmt(r.pe_ratio)}`, filter:r=>(Number(r.valuation_score)||0)>0 && (Number(r.dividend_yield)||0)>=3},
+      ];
+      const cards = groups.map(group => {
+        const top = rows.filter(group.filter)
+          .sort((a, b) => Number(b[group.key] || 0) - Number(a[group.key] || 0))
+          .slice(0, 3);
+        if (!top.length) return "";
+        return `<div class="focus-card">
+          <div class="focus-title">${esc(group.label)}<span class="focus-note">${esc(group.note)}</span></div>
+          ${top.map(r => `<button class="focus-item" data-id="${esc(r.stock_id)}">
+            <span class="focus-stock">${esc(r.stock_id)} ${esc(r.name)}<br /><span class="focus-meta">${esc(group.meta(r))}</span></span>
+            <span class="focus-score ${cls(r[group.key])}">${esc(fmt(r[group.key]))}</span>
+          </button>`).join("")}
+        </div>`;
+      }).filter(Boolean);
+      target.innerHTML = cards.length ? `<div class="focus-grid">${cards.join("")}</div>` : "";
+      target.querySelectorAll(".focus-item").forEach(btn => btn.addEventListener("click", () => openDetail(btn.dataset.id)));
+    }
     const rankingCols = [
       {key:"stock_id", label:"代號", sortType:"text", format: v => v, groups:["core","chip","foreign","revenue","margin","volume","valuation"]},
       {key:"name", label:"名稱", sortType:"text", groups:["core","chip","foreign","revenue","margin","volume","valuation"]},
@@ -2739,8 +2826,8 @@ INDEX_HTML = """<!doctype html>
       {key:"dividend_yield", label:"殖利率%", groups:["valuation"]},
       {key:"pb_ratio", label:"股淨比", groups:["valuation"]},
       {key:"valuation_score", label:"估值分", signed:true, groups:["valuation"]},
-      {key:"total_score", label:"基礎分", signed:true, groups:["core"]},
-      {key:"multifactor_score", label:"多因子分", signed:true, groups:["core","momentum"]},
+      {key:"total_score", label:"基礎分", signed:true, html:true, format: v => scoreBarCell(v, "total_score"), groups:["core"]},
+      {key:"multifactor_score", label:"多因子分", signed:true, html:true, format: v => scoreBarCell(v, "multifactor_score"), groups:["core","momentum"]},
       {key:"market_sentiment_score", label:"大盤分", signed:true, groups:["core"]},
       {key:"risk_adjusted_score", label:"風險調整分", signed:true, groups:["core"]},
       {key:"momentum_score", label:"動能分", signed:true, groups:["momentum"]},
@@ -2774,7 +2861,7 @@ INDEX_HTML = """<!doctype html>
       {key:"revenue_month", label:"營收月", sortType:"text", groups:["revenue"]},
       {key:"revenue_mom_pct", label:"月增%", signed:true, groups:["revenue"]},
       {key:"revenue_yoy_pct", label:"年增%", signed:true, groups:["revenue"]},
-      {key:"base_reason", label:"理由", sortType:"text", groups:["core"]}
+      {key:"base_reason", label:"亮點", sortType:"text", html:true, format: v => reasonBadges(v), groups:["core"]}
     ];
     const columnGroups = [
       {key:"core", label:"核心", tip:"核心：用全市場較穩定可取得的資料做快速排序，包含收盤、資料日、基礎分、法人分、營收分、融資分、成交量與均價。"},
@@ -2839,6 +2926,7 @@ INDEX_HTML = """<!doctype html>
       renderRankingTable();
     }
     function renderRankingTable() {
+      renderFocusCards();
       renderColumnControls();
       const cols = visibleRankingCols();
       const rows = sortRows(state.rankingRows || [], cols, state.rankingSort);
