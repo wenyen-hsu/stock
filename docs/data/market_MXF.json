@@ -1,6 +1,1194 @@
 {
   "futures_rows": [
     {
+      "date": "2025-05-07",
+      "dealer_oi_net": -624,
+      "dealer_trade_net": 941,
+      "foreign_oi_net": 2743,
+      "foreign_trade_net": 345,
+      "trust_oi_net": 153,
+      "trust_trade_net": -1
+    },
+    {
+      "date": "2025-05-08",
+      "dealer_oi_net": 984,
+      "dealer_trade_net": 1608,
+      "foreign_oi_net": 5685,
+      "foreign_trade_net": 2762,
+      "trust_oi_net": 153,
+      "trust_trade_net": 0
+    },
+    {
+      "date": "2025-05-09",
+      "dealer_oi_net": 1968,
+      "dealer_trade_net": 1112,
+      "foreign_oi_net": 5747,
+      "foreign_trade_net": -59,
+      "trust_oi_net": 153,
+      "trust_trade_net": 0
+    },
+    {
+      "date": "2025-05-12",
+      "dealer_oi_net": 1248,
+      "dealer_trade_net": -438,
+      "foreign_oi_net": 1310,
+      "foreign_trade_net": -4351,
+      "trust_oi_net": 141,
+      "trust_trade_net": -12
+    },
+    {
+      "date": "2025-05-13",
+      "dealer_oi_net": 2529,
+      "dealer_trade_net": 1231,
+      "foreign_oi_net": 3793,
+      "foreign_trade_net": 2380,
+      "trust_oi_net": 129,
+      "trust_trade_net": -12
+    },
+    {
+      "date": "2025-05-14",
+      "dealer_oi_net": 3460,
+      "dealer_trade_net": 643,
+      "foreign_oi_net": 9109,
+      "foreign_trade_net": 5294,
+      "trust_oi_net": 132,
+      "trust_trade_net": 3
+    },
+    {
+      "date": "2025-05-15",
+      "dealer_oi_net": 3637,
+      "dealer_trade_net": 183,
+      "foreign_oi_net": 7495,
+      "foreign_trade_net": -1494,
+      "trust_oi_net": 133,
+      "trust_trade_net": 1
+    },
+    {
+      "date": "2025-05-16",
+      "dealer_oi_net": 4038,
+      "dealer_trade_net": 486,
+      "foreign_oi_net": 7337,
+      "foreign_trade_net": -410,
+      "trust_oi_net": 130,
+      "trust_trade_net": -3
+    },
+    {
+      "date": "2025-05-19",
+      "dealer_oi_net": 2794,
+      "dealer_trade_net": -1078,
+      "foreign_oi_net": 1676,
+      "foreign_trade_net": -5325,
+      "trust_oi_net": 129,
+      "trust_trade_net": -1
+    },
+    {
+      "date": "2025-05-20",
+      "dealer_oi_net": 2268,
+      "dealer_trade_net": -578,
+      "foreign_oi_net": 1909,
+      "foreign_trade_net": 129,
+      "trust_oi_net": 133,
+      "trust_trade_net": 4
+    },
+    {
+      "date": "2025-05-21",
+      "dealer_oi_net": -2646,
+      "dealer_trade_net": 846,
+      "foreign_oi_net": 6878,
+      "foreign_trade_net": 5328,
+      "trust_oi_net": 136,
+      "trust_trade_net": 3
+    },
+    {
+      "date": "2025-05-22",
+      "dealer_oi_net": -3102,
+      "dealer_trade_net": -357,
+      "foreign_oi_net": -487,
+      "foreign_trade_net": -6880,
+      "trust_oi_net": 140,
+      "trust_trade_net": 4
+    },
+    {
+      "date": "2025-05-23",
+      "dealer_oi_net": -3552,
+      "dealer_trade_net": -490,
+      "foreign_oi_net": 373,
+      "foreign_trade_net": 651,
+      "trust_oi_net": 138,
+      "trust_trade_net": -2
+    },
+    {
+      "date": "2025-05-26",
+      "dealer_oi_net": -3940,
+      "dealer_trade_net": 115,
+      "foreign_oi_net": -1505,
+      "foreign_trade_net": -2029,
+      "trust_oi_net": 136,
+      "trust_trade_net": -2
+    },
+    {
+      "date": "2025-05-27",
+      "dealer_oi_net": -4927,
+      "dealer_trade_net": -841,
+      "foreign_oi_net": -3890,
+      "foreign_trade_net": -2268,
+      "trust_oi_net": 135,
+      "trust_trade_net": -1
+    },
+    {
+      "date": "2025-05-28",
+      "dealer_oi_net": -6009,
+      "dealer_trade_net": -1031,
+      "foreign_oi_net": 1179,
+      "foreign_trade_net": 578,
+      "trust_oi_net": 134,
+      "trust_trade_net": -1
+    },
+    {
+      "date": "2025-05-29",
+      "dealer_oi_net": -6373,
+      "dealer_trade_net": -366,
+      "foreign_oi_net": -1657,
+      "foreign_trade_net": -3010,
+      "trust_oi_net": 132,
+      "trust_trade_net": -2
+    },
+    {
+      "date": "2025-07-01",
+      "dealer_oi_net": -3147,
+      "dealer_trade_net": -146,
+      "foreign_oi_net": 3329,
+      "foreign_trade_net": 1455,
+      "trust_oi_net": 363,
+      "trust_trade_net": 12
+    },
+    {
+      "date": "2025-07-02",
+      "dealer_oi_net": -2013,
+      "dealer_trade_net": 1477,
+      "foreign_oi_net": 845,
+      "foreign_trade_net": -2381,
+      "trust_oi_net": 366,
+      "trust_trade_net": 3
+    },
+    {
+      "date": "2025-07-03",
+      "dealer_oi_net": -1515,
+      "dealer_trade_net": 532,
+      "foreign_oi_net": 4045,
+      "foreign_trade_net": 7376,
+      "trust_oi_net": 368,
+      "trust_trade_net": 2
+    },
+    {
+      "date": "2025-07-04",
+      "dealer_oi_net": -3032,
+      "dealer_trade_net": -1617,
+      "foreign_oi_net": -3824,
+      "foreign_trade_net": -7364,
+      "trust_oi_net": 375,
+      "trust_trade_net": 7
+    },
+    {
+      "date": "2025-07-07",
+      "dealer_oi_net": -3598,
+      "dealer_trade_net": -630,
+      "foreign_oi_net": -2991,
+      "foreign_trade_net": 696,
+      "trust_oi_net": 375,
+      "trust_trade_net": 0
+    },
+    {
+      "date": "2025-07-08",
+      "dealer_oi_net": -4873,
+      "dealer_trade_net": -1374,
+      "foreign_oi_net": -2957,
+      "foreign_trade_net": -257,
+      "trust_oi_net": 386,
+      "trust_trade_net": 11
+    },
+    {
+      "date": "2025-07-09",
+      "dealer_oi_net": -3441,
+      "dealer_trade_net": 1013,
+      "foreign_oi_net": 835,
+      "foreign_trade_net": 123,
+      "trust_oi_net": 389,
+      "trust_trade_net": 3
+    },
+    {
+      "date": "2025-07-10",
+      "dealer_oi_net": -1905,
+      "dealer_trade_net": 1467,
+      "foreign_oi_net": 2015,
+      "foreign_trade_net": 2035,
+      "trust_oi_net": 390,
+      "trust_trade_net": 1
+    },
+    {
+      "date": "2025-07-11",
+      "dealer_oi_net": -844,
+      "dealer_trade_net": 1368,
+      "foreign_oi_net": 3568,
+      "foreign_trade_net": 1330,
+      "trust_oi_net": 398,
+      "trust_trade_net": 8
+    },
+    {
+      "date": "2025-07-14",
+      "dealer_oi_net": -2001,
+      "dealer_trade_net": -605,
+      "foreign_oi_net": -2633,
+      "foreign_trade_net": -6002,
+      "trust_oi_net": 354,
+      "trust_trade_net": -44
+    },
+    {
+      "date": "2025-07-15",
+      "dealer_oi_net": -394,
+      "dealer_trade_net": 1512,
+      "foreign_oi_net": 2247,
+      "foreign_trade_net": 4545,
+      "trust_oi_net": 319,
+      "trust_trade_net": -35
+    },
+    {
+      "date": "2025-07-16",
+      "dealer_oi_net": 2140,
+      "dealer_trade_net": 1465,
+      "foreign_oi_net": 5664,
+      "foreign_trade_net": 4826,
+      "trust_oi_net": 323,
+      "trust_trade_net": 4
+    },
+    {
+      "date": "2025-07-17",
+      "dealer_oi_net": 3068,
+      "dealer_trade_net": 998,
+      "foreign_oi_net": 2900,
+      "foreign_trade_net": -3046,
+      "trust_oi_net": 326,
+      "trust_trade_net": 3
+    },
+    {
+      "date": "2025-07-18",
+      "dealer_oi_net": 2409,
+      "dealer_trade_net": -680,
+      "foreign_oi_net": -625,
+      "foreign_trade_net": -3321,
+      "trust_oi_net": 322,
+      "trust_trade_net": -4
+    },
+    {
+      "date": "2025-07-21",
+      "dealer_oi_net": 2135,
+      "dealer_trade_net": -234,
+      "foreign_oi_net": -2333,
+      "foreign_trade_net": -1501,
+      "trust_oi_net": 318,
+      "trust_trade_net": -4
+    },
+    {
+      "date": "2025-07-22",
+      "dealer_oi_net": 594,
+      "dealer_trade_net": -1558,
+      "foreign_oi_net": -3550,
+      "foreign_trade_net": -844,
+      "trust_oi_net": 314,
+      "trust_trade_net": -4
+    },
+    {
+      "date": "2025-07-23",
+      "dealer_oi_net": 1553,
+      "dealer_trade_net": 977,
+      "foreign_oi_net": 238,
+      "foreign_trade_net": -1127,
+      "trust_oi_net": 321,
+      "trust_trade_net": 7
+    },
+    {
+      "date": "2025-07-24",
+      "dealer_oi_net": 2410,
+      "dealer_trade_net": 270,
+      "foreign_oi_net": -578,
+      "foreign_trade_net": -794,
+      "trust_oi_net": 323,
+      "trust_trade_net": 2
+    },
+    {
+      "date": "2025-07-25",
+      "dealer_oi_net": 1651,
+      "dealer_trade_net": -659,
+      "foreign_oi_net": -2821,
+      "foreign_trade_net": -2319,
+      "trust_oi_net": 316,
+      "trust_trade_net": -7
+    },
+    {
+      "date": "2025-07-28",
+      "dealer_oi_net": 2020,
+      "dealer_trade_net": 379,
+      "foreign_oi_net": -986,
+      "foreign_trade_net": 1607,
+      "trust_oi_net": 321,
+      "trust_trade_net": 5
+    },
+    {
+      "date": "2025-07-29",
+      "dealer_oi_net": 592,
+      "dealer_trade_net": -1472,
+      "foreign_oi_net": -999,
+      "foreign_trade_net": 409,
+      "trust_oi_net": 322,
+      "trust_trade_net": 1
+    },
+    {
+      "date": "2025-07-30",
+      "dealer_oi_net": 1409,
+      "dealer_trade_net": 745,
+      "foreign_oi_net": 4651,
+      "foreign_trade_net": 5318,
+      "trust_oi_net": 318,
+      "trust_trade_net": -4
+    },
+    {
+      "date": "2025-07-31",
+      "dealer_oi_net": 2353,
+      "dealer_trade_net": 1011,
+      "foreign_oi_net": 3504,
+      "foreign_trade_net": 3105,
+      "trust_oi_net": 315,
+      "trust_trade_net": -3
+    },
+    {
+      "date": "2025-08-01",
+      "dealer_oi_net": 28,
+      "dealer_trade_net": -2260,
+      "foreign_oi_net": 1542,
+      "foreign_trade_net": -10121,
+      "trust_oi_net": 338,
+      "trust_trade_net": 23
+    },
+    {
+      "date": "2025-08-04",
+      "dealer_oi_net": -326,
+      "dealer_trade_net": 131,
+      "foreign_oi_net": 2299,
+      "foreign_trade_net": 660,
+      "trust_oi_net": 336,
+      "trust_trade_net": -2
+    },
+    {
+      "date": "2025-08-05",
+      "dealer_oi_net": 1387,
+      "dealer_trade_net": 1719,
+      "foreign_oi_net": 9854,
+      "foreign_trade_net": 7074,
+      "trust_oi_net": 313,
+      "trust_trade_net": -23
+    },
+    {
+      "date": "2025-08-06",
+      "dealer_oi_net": 922,
+      "dealer_trade_net": -328,
+      "foreign_oi_net": 4155,
+      "foreign_trade_net": -5180,
+      "trust_oi_net": 311,
+      "trust_trade_net": -2
+    },
+    {
+      "date": "2025-08-07",
+      "dealer_oi_net": 3178,
+      "dealer_trade_net": 2015,
+      "foreign_oi_net": 12799,
+      "foreign_trade_net": 7984,
+      "trust_oi_net": 308,
+      "trust_trade_net": -3
+    },
+    {
+      "date": "2025-08-08",
+      "dealer_oi_net": 2922,
+      "dealer_trade_net": -177,
+      "foreign_oi_net": 4420,
+      "foreign_trade_net": -7216,
+      "trust_oi_net": 294,
+      "trust_trade_net": -14
+    },
+    {
+      "date": "2025-08-11",
+      "dealer_oi_net": 3490,
+      "dealer_trade_net": 504,
+      "foreign_oi_net": 7349,
+      "foreign_trade_net": 2569,
+      "trust_oi_net": 293,
+      "trust_trade_net": -1
+    },
+    {
+      "date": "2025-08-12",
+      "dealer_oi_net": 3492,
+      "dealer_trade_net": 52,
+      "foreign_oi_net": 6321,
+      "foreign_trade_net": -784,
+      "trust_oi_net": 293,
+      "trust_trade_net": 0
+    },
+    {
+      "date": "2025-08-13",
+      "dealer_oi_net": 3953,
+      "dealer_trade_net": 729,
+      "foreign_oi_net": 8386,
+      "foreign_trade_net": 2075,
+      "trust_oi_net": 272,
+      "trust_trade_net": -21
+    },
+    {
+      "date": "2025-08-14",
+      "dealer_oi_net": 2921,
+      "dealer_trade_net": -888,
+      "foreign_oi_net": 4190,
+      "foreign_trade_net": -3928,
+      "trust_oi_net": 272,
+      "trust_trade_net": 0
+    },
+    {
+      "date": "2025-08-15",
+      "dealer_oi_net": 2813,
+      "dealer_trade_net": 29,
+      "foreign_oi_net": 3162,
+      "foreign_trade_net": -1311,
+      "trust_oi_net": 262,
+      "trust_trade_net": -10
+    },
+    {
+      "date": "2025-08-18",
+      "dealer_oi_net": 4545,
+      "dealer_trade_net": 1670,
+      "foreign_oi_net": 7377,
+      "foreign_trade_net": 4174,
+      "trust_oi_net": 214,
+      "trust_trade_net": -48
+    },
+    {
+      "date": "2025-08-19",
+      "dealer_oi_net": 719,
+      "dealer_trade_net": -3453,
+      "foreign_oi_net": 3533,
+      "foreign_trade_net": -3845,
+      "trust_oi_net": 208,
+      "trust_trade_net": -6
+    },
+    {
+      "date": "2025-08-20",
+      "dealer_oi_net": -7089,
+      "dealer_trade_net": -4534,
+      "foreign_oi_net": -1725,
+      "foreign_trade_net": -10083,
+      "trust_oi_net": 204,
+      "trust_trade_net": -4
+    },
+    {
+      "date": "2025-08-21",
+      "dealer_oi_net": -4994,
+      "dealer_trade_net": 1570,
+      "foreign_oi_net": 6122,
+      "foreign_trade_net": 7460,
+      "trust_oi_net": 205,
+      "trust_trade_net": 1
+    },
+    {
+      "date": "2025-08-22",
+      "dealer_oi_net": -5226,
+      "dealer_trade_net": -513,
+      "foreign_oi_net": 9214,
+      "foreign_trade_net": 3211,
+      "trust_oi_net": 203,
+      "trust_trade_net": -2
+    },
+    {
+      "date": "2025-08-25",
+      "dealer_oi_net": -3325,
+      "dealer_trade_net": 1926,
+      "foreign_oi_net": 6891,
+      "foreign_trade_net": 3377,
+      "trust_oi_net": 205,
+      "trust_trade_net": 2
+    },
+    {
+      "date": "2025-08-26",
+      "dealer_oi_net": -4586,
+      "dealer_trade_net": -1265,
+      "foreign_oi_net": 3416,
+      "foreign_trade_net": -3311,
+      "trust_oi_net": 200,
+      "trust_trade_net": -5
+    },
+    {
+      "date": "2025-08-27",
+      "dealer_oi_net": -3857,
+      "dealer_trade_net": 994,
+      "foreign_oi_net": 7997,
+      "foreign_trade_net": 4398,
+      "trust_oi_net": 194,
+      "trust_trade_net": -6
+    },
+    {
+      "date": "2025-08-28",
+      "dealer_oi_net": -4775,
+      "dealer_trade_net": -911,
+      "foreign_oi_net": 3612,
+      "foreign_trade_net": -4126,
+      "trust_oi_net": 187,
+      "trust_trade_net": -7
+    },
+    {
+      "date": "2025-08-29",
+      "dealer_oi_net": -5003,
+      "dealer_trade_net": -236,
+      "foreign_oi_net": 5322,
+      "foreign_trade_net": 1568,
+      "trust_oi_net": 187,
+      "trust_trade_net": 0
+    },
+    {
+      "date": "2025-09-01",
+      "dealer_oi_net": -6202,
+      "dealer_trade_net": -1183,
+      "foreign_oi_net": 2225,
+      "foreign_trade_net": -2952,
+      "trust_oi_net": 184,
+      "trust_trade_net": -3
+    },
+    {
+      "date": "2025-09-02",
+      "dealer_oi_net": -6241,
+      "dealer_trade_net": -38,
+      "foreign_oi_net": 3472,
+      "foreign_trade_net": 1111,
+      "trust_oi_net": 183,
+      "trust_trade_net": -1
+    },
+    {
+      "date": "2025-09-03",
+      "dealer_oi_net": -5213,
+      "dealer_trade_net": 679,
+      "foreign_oi_net": 1785,
+      "foreign_trade_net": -2056,
+      "trust_oi_net": 176,
+      "trust_trade_net": -7
+    },
+    {
+      "date": "2025-09-04",
+      "dealer_oi_net": -5096,
+      "dealer_trade_net": -134,
+      "foreign_oi_net": 2742,
+      "foreign_trade_net": 1067,
+      "trust_oi_net": 179,
+      "trust_trade_net": 3
+    },
+    {
+      "date": "2025-09-05",
+      "dealer_oi_net": -3270,
+      "dealer_trade_net": 1573,
+      "foreign_oi_net": 9902,
+      "foreign_trade_net": 6791,
+      "trust_oi_net": 176,
+      "trust_trade_net": -3
+    },
+    {
+      "date": "2025-09-08",
+      "dealer_oi_net": -2609,
+      "dealer_trade_net": 274,
+      "foreign_oi_net": 9749,
+      "foreign_trade_net": -78,
+      "trust_oi_net": 180,
+      "trust_trade_net": 4
+    },
+    {
+      "date": "2025-09-09",
+      "dealer_oi_net": -1721,
+      "dealer_trade_net": 323,
+      "foreign_oi_net": 8282,
+      "foreign_trade_net": 4513,
+      "trust_oi_net": 181,
+      "trust_trade_net": 1
+    },
+    {
+      "date": "2025-09-10",
+      "dealer_oi_net": -405,
+      "dealer_trade_net": 598,
+      "foreign_oi_net": 12978,
+      "foreign_trade_net": 4591,
+      "trust_oi_net": 183,
+      "trust_trade_net": 2
+    },
+    {
+      "date": "2025-09-11",
+      "dealer_oi_net": -1487,
+      "dealer_trade_net": -1234,
+      "foreign_oi_net": 9432,
+      "foreign_trade_net": 1305,
+      "trust_oi_net": 183,
+      "trust_trade_net": 0
+    },
+    {
+      "date": "2025-09-12",
+      "dealer_oi_net": -593,
+      "dealer_trade_net": 255,
+      "foreign_oi_net": 9277,
+      "foreign_trade_net": -180,
+      "trust_oi_net": 176,
+      "trust_trade_net": -7
+    },
+    {
+      "date": "2025-09-15",
+      "dealer_oi_net": -2230,
+      "dealer_trade_net": -2038,
+      "foreign_oi_net": 6402,
+      "foreign_trade_net": -2842,
+      "trust_oi_net": 161,
+      "trust_trade_net": -15
+    },
+    {
+      "date": "2025-09-16",
+      "dealer_oi_net": -439,
+      "dealer_trade_net": 1760,
+      "foreign_oi_net": 5865,
+      "foreign_trade_net": -706,
+      "trust_oi_net": 154,
+      "trust_trade_net": -7
+    },
+    {
+      "date": "2025-09-17",
+      "dealer_oi_net": -984,
+      "dealer_trade_net": -1598,
+      "foreign_oi_net": -1740,
+      "foreign_trade_net": -5270,
+      "trust_oi_net": 148,
+      "trust_trade_net": -6
+    },
+    {
+      "date": "2025-09-18",
+      "dealer_oi_net": 1116,
+      "dealer_trade_net": 2102,
+      "foreign_oi_net": 699,
+      "foreign_trade_net": 2117,
+      "trust_oi_net": 146,
+      "trust_trade_net": -2
+    },
+    {
+      "date": "2025-09-19",
+      "dealer_oi_net": -1688,
+      "dealer_trade_net": -2672,
+      "foreign_oi_net": -139,
+      "foreign_trade_net": -667,
+      "trust_oi_net": 137,
+      "trust_trade_net": -9
+    },
+    {
+      "date": "2025-09-22",
+      "dealer_oi_net": -1088,
+      "dealer_trade_net": 596,
+      "foreign_oi_net": 1828,
+      "foreign_trade_net": 1522,
+      "trust_oi_net": 141,
+      "trust_trade_net": 4
+    },
+    {
+      "date": "2025-09-23",
+      "dealer_oi_net": -200,
+      "dealer_trade_net": 835,
+      "foreign_oi_net": 3939,
+      "foreign_trade_net": 1958,
+      "trust_oi_net": 142,
+      "trust_trade_net": 1
+    },
+    {
+      "date": "2025-09-24",
+      "dealer_oi_net": -1958,
+      "dealer_trade_net": -1715,
+      "foreign_oi_net": -2665,
+      "foreign_trade_net": -6234,
+      "trust_oi_net": 138,
+      "trust_trade_net": -4
+    },
+    {
+      "date": "2025-09-25",
+      "dealer_oi_net": -2654,
+      "dealer_trade_net": -552,
+      "foreign_oi_net": -147,
+      "foreign_trade_net": -1562,
+      "trust_oi_net": 137,
+      "trust_trade_net": -1
+    },
+    {
+      "date": "2025-09-26",
+      "dealer_oi_net": -4571,
+      "dealer_trade_net": -1622,
+      "foreign_oi_net": -5022,
+      "foreign_trade_net": -4780,
+      "trust_oi_net": 132,
+      "trust_trade_net": -5
+    },
+    {
+      "date": "2025-09-30",
+      "dealer_oi_net": -3166,
+      "dealer_trade_net": 1396,
+      "foreign_oi_net": -94,
+      "foreign_trade_net": 4615,
+      "trust_oi_net": 130,
+      "trust_trade_net": -2
+    },
+    {
+      "date": "2025-10-01",
+      "dealer_oi_net": -2854,
+      "dealer_trade_net": 199,
+      "foreign_oi_net": 787,
+      "foreign_trade_net": 817,
+      "trust_oi_net": 130,
+      "trust_trade_net": 0
+    },
+    {
+      "date": "2025-10-02",
+      "dealer_oi_net": -320,
+      "dealer_trade_net": 2614,
+      "foreign_oi_net": 3591,
+      "foreign_trade_net": 2427,
+      "trust_oi_net": 132,
+      "trust_trade_net": 2
+    },
+    {
+      "date": "2025-10-03",
+      "dealer_oi_net": 523,
+      "dealer_trade_net": 983,
+      "foreign_oi_net": 6913,
+      "foreign_trade_net": 3269,
+      "trust_oi_net": 123,
+      "trust_trade_net": -9
+    },
+    {
+      "date": "2025-10-07",
+      "dealer_oi_net": -1142,
+      "dealer_trade_net": -803,
+      "foreign_oi_net": 2794,
+      "foreign_trade_net": -3811,
+      "trust_oi_net": 128,
+      "trust_trade_net": 5
+    },
+    {
+      "date": "2025-10-08",
+      "dealer_oi_net": -2823,
+      "dealer_trade_net": -1745,
+      "foreign_oi_net": -1897,
+      "foreign_trade_net": -8018,
+      "trust_oi_net": 126,
+      "trust_trade_net": -2
+    },
+    {
+      "date": "2025-10-09",
+      "dealer_oi_net": -1032,
+      "dealer_trade_net": 1721,
+      "foreign_oi_net": 2195,
+      "foreign_trade_net": 3970,
+      "trust_oi_net": 130,
+      "trust_trade_net": 4
+    },
+    {
+      "date": "2025-10-13",
+      "dealer_oi_net": -5697,
+      "dealer_trade_net": -2825,
+      "foreign_oi_net": -1556,
+      "foreign_trade_net": -3645,
+      "trust_oi_net": 128,
+      "trust_trade_net": -2
+    },
+    {
+      "date": "2025-10-14",
+      "dealer_oi_net": -7059,
+      "dealer_trade_net": -133,
+      "foreign_oi_net": 1686,
+      "foreign_trade_net": 3265,
+      "trust_oi_net": 128,
+      "trust_trade_net": 0
+    },
+    {
+      "date": "2025-10-15",
+      "dealer_oi_net": -690,
+      "dealer_trade_net": 3939,
+      "foreign_oi_net": 4354,
+      "foreign_trade_net": 2001,
+      "trust_oi_net": 133,
+      "trust_trade_net": 5
+    },
+    {
+      "date": "2025-10-16",
+      "dealer_oi_net": -1984,
+      "dealer_trade_net": -1390,
+      "foreign_oi_net": 1788,
+      "foreign_trade_net": -2697,
+      "trust_oi_net": 134,
+      "trust_trade_net": 1
+    },
+    {
+      "date": "2025-10-17",
+      "dealer_oi_net": -4990,
+      "dealer_trade_net": -2611,
+      "foreign_oi_net": 2641,
+      "foreign_trade_net": -4597,
+      "trust_oi_net": 129,
+      "trust_trade_net": -5
+    },
+    {
+      "date": "2025-10-20",
+      "dealer_oi_net": -3890,
+      "dealer_trade_net": 1283,
+      "foreign_oi_net": 6186,
+      "foreign_trade_net": 3397,
+      "trust_oi_net": 129,
+      "trust_trade_net": 0
+    },
+    {
+      "date": "2025-10-21",
+      "dealer_oi_net": -2612,
+      "dealer_trade_net": 1343,
+      "foreign_oi_net": 7488,
+      "foreign_trade_net": 1302,
+      "trust_oi_net": 131,
+      "trust_trade_net": 2
+    },
+    {
+      "date": "2025-10-22",
+      "dealer_oi_net": -3931,
+      "dealer_trade_net": -1368,
+      "foreign_oi_net": 1423,
+      "foreign_trade_net": -5911,
+      "trust_oi_net": 130,
+      "trust_trade_net": -1
+    },
+    {
+      "date": "2025-10-23",
+      "dealer_oi_net": -4186,
+      "dealer_trade_net": -360,
+      "foreign_oi_net": 719,
+      "foreign_trade_net": -418,
+      "trust_oi_net": 128,
+      "trust_trade_net": -2
+    },
+    {
+      "date": "2025-10-27",
+      "dealer_oi_net": -2138,
+      "dealer_trade_net": 2064,
+      "foreign_oi_net": 3078,
+      "foreign_trade_net": 2015,
+      "trust_oi_net": 127,
+      "trust_trade_net": -1
+    },
+    {
+      "date": "2025-10-28",
+      "dealer_oi_net": -3357,
+      "dealer_trade_net": -1142,
+      "foreign_oi_net": -1155,
+      "foreign_trade_net": -4233,
+      "trust_oi_net": 124,
+      "trust_trade_net": -3
+    },
+    {
+      "date": "2025-10-29",
+      "dealer_oi_net": -1842,
+      "dealer_trade_net": 1363,
+      "foreign_oi_net": 4351,
+      "foreign_trade_net": 5171,
+      "trust_oi_net": 124,
+      "trust_trade_net": 0
+    },
+    {
+      "date": "2025-10-30",
+      "dealer_oi_net": -1621,
+      "dealer_trade_net": 217,
+      "foreign_oi_net": 4054,
+      "foreign_trade_net": -169,
+      "trust_oi_net": 124,
+      "trust_trade_net": 0
+    },
+    {
+      "date": "2025-10-31",
+      "dealer_oi_net": -649,
+      "dealer_trade_net": 1004,
+      "foreign_oi_net": 3030,
+      "foreign_trade_net": -1080,
+      "trust_oi_net": 122,
+      "trust_trade_net": -2
+    },
+    {
+      "date": "2025-11-03",
+      "dealer_oi_net": -1259,
+      "dealer_trade_net": -61,
+      "foreign_oi_net": 3786,
+      "foreign_trade_net": -5349,
+      "trust_oi_net": 120,
+      "trust_trade_net": -2
+    },
+    {
+      "date": "2025-11-04",
+      "dealer_oi_net": -2745,
+      "dealer_trade_net": -1331,
+      "foreign_oi_net": 5458,
+      "foreign_trade_net": 1600,
+      "trust_oi_net": 117,
+      "trust_trade_net": -3
+    },
+    {
+      "date": "2025-11-05",
+      "dealer_oi_net": -6767,
+      "dealer_trade_net": -3605,
+      "foreign_oi_net": 1815,
+      "foreign_trade_net": -2815,
+      "trust_oi_net": 117,
+      "trust_trade_net": 0
+    },
+    {
+      "date": "2025-11-06",
+      "dealer_oi_net": -7265,
+      "dealer_trade_net": -218,
+      "foreign_oi_net": 5739,
+      "foreign_trade_net": 3774,
+      "trust_oi_net": 127,
+      "trust_trade_net": 10
+    },
+    {
+      "date": "2025-11-07",
+      "dealer_oi_net": -7505,
+      "dealer_trade_net": -424,
+      "foreign_oi_net": 2221,
+      "foreign_trade_net": -3595,
+      "trust_oi_net": 126,
+      "trust_trade_net": -1
+    },
+    {
+      "date": "2025-11-10",
+      "dealer_oi_net": -7042,
+      "dealer_trade_net": 563,
+      "foreign_oi_net": 3864,
+      "foreign_trade_net": 1649,
+      "trust_oi_net": 116,
+      "trust_trade_net": -10
+    },
+    {
+      "date": "2025-11-11",
+      "dealer_oi_net": -6397,
+      "dealer_trade_net": 882,
+      "foreign_oi_net": 102,
+      "foreign_trade_net": -3686,
+      "trust_oi_net": 116,
+      "trust_trade_net": 0
+    },
+    {
+      "date": "2025-11-12",
+      "dealer_oi_net": -5958,
+      "dealer_trade_net": 721,
+      "foreign_oi_net": 4620,
+      "foreign_trade_net": 4258,
+      "trust_oi_net": 116,
+      "trust_trade_net": 0
+    },
+    {
+      "date": "2025-11-13",
+      "dealer_oi_net": -5213,
+      "dealer_trade_net": 845,
+      "foreign_oi_net": 2409,
+      "foreign_trade_net": -2211,
+      "trust_oi_net": 117,
+      "trust_trade_net": 1
+    },
+    {
+      "date": "2025-11-14",
+      "dealer_oi_net": -8762,
+      "dealer_trade_net": -2702,
+      "foreign_oi_net": 2111,
+      "foreign_trade_net": -7093,
+      "trust_oi_net": 114,
+      "trust_trade_net": -3
+    },
+    {
+      "date": "2025-11-17",
+      "dealer_oi_net": -6210,
+      "dealer_trade_net": 3092,
+      "foreign_oi_net": 6317,
+      "foreign_trade_net": 4157,
+      "trust_oi_net": 112,
+      "trust_trade_net": -2
+    },
+    {
+      "date": "2025-11-18",
+      "dealer_oi_net": -10428,
+      "dealer_trade_net": -4116,
+      "foreign_oi_net": 4430,
+      "foreign_trade_net": -1754,
+      "trust_oi_net": 114,
+      "trust_trade_net": 2
+    },
+    {
+      "date": "2025-11-19",
+      "dealer_oi_net": -13236,
+      "dealer_trade_net": 965,
+      "foreign_oi_net": -2592,
+      "foreign_trade_net": 45,
+      "trust_oi_net": 117,
+      "trust_trade_net": 3
+    },
+    {
+      "date": "2025-11-20",
+      "dealer_oi_net": -11324,
+      "dealer_trade_net": 1093,
+      "foreign_oi_net": 4409,
+      "foreign_trade_net": 11006,
+      "trust_oi_net": 111,
+      "trust_trade_net": -6
+    },
+    {
+      "date": "2025-11-21",
+      "dealer_oi_net": -15032,
+      "dealer_trade_net": -3170,
+      "foreign_oi_net": -4394,
+      "foreign_trade_net": -14348,
+      "trust_oi_net": 107,
+      "trust_trade_net": -4
+    },
+    {
+      "date": "2025-11-24",
+      "dealer_oi_net": -14750,
+      "dealer_trade_net": 255,
+      "foreign_oi_net": 448,
+      "foreign_trade_net": 4647,
+      "trust_oi_net": 108,
+      "trust_trade_net": 1
+    },
+    {
+      "date": "2025-11-25",
+      "dealer_oi_net": -12239,
+      "dealer_trade_net": 2483,
+      "foreign_oi_net": -1465,
+      "foreign_trade_net": 4130,
+      "trust_oi_net": 108,
+      "trust_trade_net": 0
+    },
+    {
+      "date": "2025-11-26",
+      "dealer_oi_net": -11896,
+      "dealer_trade_net": 420,
+      "foreign_oi_net": 2167,
+      "foreign_trade_net": 3474,
+      "trust_oi_net": 110,
+      "trust_trade_net": 2
+    },
+    {
+      "date": "2025-11-27",
+      "dealer_oi_net": -10914,
+      "dealer_trade_net": 779,
+      "foreign_oi_net": 6207,
+      "foreign_trade_net": 3882,
+      "trust_oi_net": 111,
+      "trust_trade_net": 1
+    },
+    {
+      "date": "2025-11-28",
+      "dealer_oi_net": -10612,
+      "dealer_trade_net": -18,
+      "foreign_oi_net": 6515,
+      "foreign_trade_net": 335,
+      "trust_oi_net": 113,
+      "trust_trade_net": 2
+    },
+    {
+      "date": "2025-12-01",
+      "dealer_oi_net": -11762,
+      "dealer_trade_net": -867,
+      "foreign_oi_net": 1017,
+      "foreign_trade_net": -5397,
+      "trust_oi_net": 113,
+      "trust_trade_net": 0
+    },
+    {
+      "date": "2025-12-02",
+      "dealer_oi_net": -12825,
+      "dealer_trade_net": -1081,
+      "foreign_oi_net": 2759,
+      "foreign_trade_net": 1742,
+      "trust_oi_net": 111,
+      "trust_trade_net": -2
+    },
+    {
+      "date": "2025-12-03",
+      "dealer_oi_net": -12069,
+      "dealer_trade_net": 525,
+      "foreign_oi_net": 2580,
+      "foreign_trade_net": -180,
+      "trust_oi_net": 113,
+      "trust_trade_net": 2
+    },
+    {
+      "date": "2025-12-04",
+      "dealer_oi_net": -12725,
+      "dealer_trade_net": -656,
+      "foreign_oi_net": 2675,
+      "foreign_trade_net": 95,
+      "trust_oi_net": 113,
+      "trust_trade_net": 0
+    },
+    {
+      "date": "2025-12-05",
+      "dealer_oi_net": -12496,
+      "dealer_trade_net": 250,
+      "foreign_oi_net": 7917,
+      "foreign_trade_net": 5022,
+      "trust_oi_net": 116,
+      "trust_trade_net": 3
+    },
+    {
+      "date": "2025-12-08",
+      "dealer_oi_net": -12151,
+      "dealer_trade_net": 463,
+      "foreign_oi_net": 7541,
+      "foreign_trade_net": -340,
+      "trust_oi_net": 116,
+      "trust_trade_net": 0
+    },
+    {
+      "date": "2025-12-09",
+      "dealer_oi_net": -12279,
+      "dealer_trade_net": -21,
+      "foreign_oi_net": 1024,
+      "foreign_trade_net": -6401,
+      "trust_oi_net": 116,
+      "trust_trade_net": 0
+    },
+    {
+      "date": "2025-12-10",
+      "dealer_oi_net": -12487,
+      "dealer_trade_net": -309,
+      "foreign_oi_net": 5475,
+      "foreign_trade_net": 4333,
+      "trust_oi_net": 119,
+      "trust_trade_net": 3
+    },
+    {
+      "date": "2025-12-11",
+      "dealer_oi_net": -14375,
+      "dealer_trade_net": -1982,
+      "foreign_oi_net": -770,
+      "foreign_trade_net": -6090,
+      "trust_oi_net": 119,
+      "trust_trade_net": 0
+    },
+    {
+      "date": "2025-12-12",
+      "dealer_oi_net": -14500,
+      "dealer_trade_net": -126,
+      "foreign_oi_net": 3298,
+      "foreign_trade_net": 3911,
+      "trust_oi_net": 114,
+      "trust_trade_net": -5
+    },
+    {
       "date": "2025-12-15",
       "dealer_oi_net": -17110,
       "dealer_trade_net": -3133,
@@ -1047,6 +2235,881 @@
   ],
   "index_rows": [
     {
+      "close": 20787.64,
+      "date": "2025-05-02",
+      "high": 20787.64,
+      "low": 20534.08,
+      "open": 20534.08
+    },
+    {
+      "close": 20532.99,
+      "date": "2025-05-05",
+      "high": 20885.54,
+      "low": 20320.8,
+      "open": 20839.04
+    },
+    {
+      "close": 20522.59,
+      "date": "2025-05-06",
+      "high": 20623.85,
+      "low": 20349.56,
+      "open": 20353.88
+    },
+    {
+      "close": 20546.49,
+      "date": "2025-05-07",
+      "high": 20685.28,
+      "low": 20418.03,
+      "open": 20575.15
+    },
+    {
+      "close": 20543.4,
+      "date": "2025-05-08",
+      "high": 20747.28,
+      "low": 20543.4,
+      "open": 20559.65
+    },
+    {
+      "close": 20915.04,
+      "date": "2025-05-09",
+      "high": 20915.04,
+      "low": 20643.56,
+      "open": 20690.8
+    },
+    {
+      "close": 21129.54,
+      "date": "2025-05-12",
+      "high": 21176.13,
+      "low": 20996.95,
+      "open": 20996.95
+    },
+    {
+      "close": 21330.14,
+      "date": "2025-05-13",
+      "high": 21626.28,
+      "low": 21330.14,
+      "open": 21474.02
+    },
+    {
+      "close": 21782.87,
+      "date": "2025-05-14",
+      "high": 21782.87,
+      "low": 21552.42,
+      "open": 21552.42
+    },
+    {
+      "close": 21730.25,
+      "date": "2025-05-15",
+      "high": 21821.01,
+      "low": 21674.32,
+      "open": 21776.65
+    },
+    {
+      "close": 21843.69,
+      "date": "2025-05-16",
+      "high": 21854.5,
+      "low": 21697.85,
+      "open": 21731.88
+    },
+    {
+      "close": 21523.83,
+      "date": "2025-05-19",
+      "high": 21786.33,
+      "low": 21496.69,
+      "open": 21786.33
+    },
+    {
+      "close": 21526.03,
+      "date": "2025-05-20",
+      "high": 21746.56,
+      "low": 21517.1,
+      "open": 21631.61
+    },
+    {
+      "close": 21803.91,
+      "date": "2025-05-21",
+      "high": 21879.24,
+      "low": 21603.58,
+      "open": 21603.58
+    },
+    {
+      "close": 21670.96,
+      "date": "2025-05-22",
+      "high": 21733.82,
+      "low": 21585.31,
+      "open": 21733.82
+    },
+    {
+      "close": 21652.24,
+      "date": "2025-05-23",
+      "high": 21798.88,
+      "low": 21559.78,
+      "open": 21766.24
+    },
+    {
+      "close": 21536.57,
+      "date": "2025-05-26",
+      "high": 21688.45,
+      "low": 21536.57,
+      "open": 21577.64
+    },
+    {
+      "close": 21336.54,
+      "date": "2025-05-27",
+      "high": 21558.47,
+      "low": 21310.0,
+      "open": 21491.65
+    },
+    {
+      "close": 21357.72,
+      "date": "2025-05-28",
+      "high": 21634.37,
+      "low": 21305.73,
+      "open": 21539.15
+    },
+    {
+      "close": 21347.3,
+      "date": "2025-05-29",
+      "high": 21605.26,
+      "low": 21347.3,
+      "open": 21531.29
+    },
+    {
+      "close": 22553.72,
+      "date": "2025-07-01",
+      "high": 22730.76,
+      "low": 22401.58,
+      "open": 22419.74
+    },
+    {
+      "close": 22577.74,
+      "date": "2025-07-02",
+      "high": 22577.74,
+      "low": 22396.26,
+      "open": 22463.55
+    },
+    {
+      "close": 22712.97,
+      "date": "2025-07-03",
+      "high": 22816.2,
+      "low": 22700.86,
+      "open": 22707.41
+    },
+    {
+      "close": 22547.5,
+      "date": "2025-07-04",
+      "high": 22842.75,
+      "low": 22500.97,
+      "open": 22756.55
+    },
+    {
+      "close": 22428.72,
+      "date": "2025-07-07",
+      "high": 22550.5,
+      "low": 22294.11,
+      "open": 22550.14
+    },
+    {
+      "close": 22362.27,
+      "date": "2025-07-08",
+      "high": 22375.65,
+      "low": 22190.46,
+      "open": 22375.65
+    },
+    {
+      "close": 22527.01,
+      "date": "2025-07-09",
+      "high": 22527.01,
+      "low": 22211.1,
+      "open": 22253.17
+    },
+    {
+      "close": 22693.25,
+      "date": "2025-07-10",
+      "high": 22699.29,
+      "low": 22513.35,
+      "open": 22566.51
+    },
+    {
+      "close": 22751.03,
+      "date": "2025-07-11",
+      "high": 22770.01,
+      "low": 22601.95,
+      "open": 22602.81
+    },
+    {
+      "close": 22614.97,
+      "date": "2025-07-14",
+      "high": 22735.23,
+      "low": 22525.66,
+      "open": 22679.18
+    },
+    {
+      "close": 22835.94,
+      "date": "2025-07-15",
+      "high": 22888.23,
+      "low": 22588.26,
+      "open": 22618.43
+    },
+    {
+      "close": 23042.9,
+      "date": "2025-07-16",
+      "high": 23106.43,
+      "low": 22923.12,
+      "open": 22967.51
+    },
+    {
+      "close": 23113.28,
+      "date": "2025-07-17",
+      "high": 23159.54,
+      "low": 22923.37,
+      "open": 23042.97
+    },
+    {
+      "close": 23383.13,
+      "date": "2025-07-18",
+      "high": 23468.21,
+      "low": 23276.02,
+      "open": 23345.72
+    },
+    {
+      "close": 23340.56,
+      "date": "2025-07-21",
+      "high": 23403.83,
+      "low": 23243.79,
+      "open": 23314.29
+    },
+    {
+      "close": 22987.92,
+      "date": "2025-07-22",
+      "high": 23486.08,
+      "low": 22985.9,
+      "open": 23301.66
+    },
+    {
+      "close": 23318.67,
+      "date": "2025-07-23",
+      "high": 23318.67,
+      "low": 23063.57,
+      "open": 23063.57
+    },
+    {
+      "close": 23373.73,
+      "date": "2025-07-24",
+      "high": 23455.09,
+      "low": 23295.31,
+      "open": 23373.67
+    },
+    {
+      "close": 23364.38,
+      "date": "2025-07-25",
+      "high": 23485.56,
+      "low": 23308.45,
+      "open": 23454.59
+    },
+    {
+      "close": 23412.98,
+      "date": "2025-07-28",
+      "high": 23564.44,
+      "low": 23350.73,
+      "open": 23477.1
+    },
+    {
+      "close": 23201.52,
+      "date": "2025-07-29",
+      "high": 23422.17,
+      "low": 23094.67,
+      "open": 23414.36
+    },
+    {
+      "close": 23461.72,
+      "date": "2025-07-30",
+      "high": 23461.72,
+      "low": 23264.64,
+      "open": 23288.72
+    },
+    {
+      "close": 23542.52,
+      "date": "2025-07-31",
+      "high": 23631.11,
+      "low": 23454.44,
+      "open": 23523.59
+    },
+    {
+      "close": 23434.38,
+      "date": "2025-08-01",
+      "high": 23484.21,
+      "low": 23168.27,
+      "open": 23318.37
+    },
+    {
+      "close": 23378.94,
+      "date": "2025-08-04",
+      "high": 23378.94,
+      "low": 23151.65,
+      "open": 23260.18
+    },
+    {
+      "close": 23660.59,
+      "date": "2025-08-05",
+      "high": 23671.84,
+      "low": 23498.4,
+      "open": 23498.4
+    },
+    {
+      "close": 23447.36,
+      "date": "2025-08-06",
+      "high": 23557.49,
+      "low": 23433.53,
+      "open": 23443.36
+    },
+    {
+      "close": 24003.77,
+      "date": "2025-08-07",
+      "high": 24050.54,
+      "low": 23717.35,
+      "open": 23717.35
+    },
+    {
+      "close": 24021.26,
+      "date": "2025-08-08",
+      "high": 24131.46,
+      "low": 23967.99,
+      "open": 24026.65
+    },
+    {
+      "close": 24135.5,
+      "date": "2025-08-11",
+      "high": 24249.05,
+      "low": 23887.25,
+      "open": 23980.39
+    },
+    {
+      "close": 24158.36,
+      "date": "2025-08-12",
+      "high": 24263.92,
+      "low": 24065.43,
+      "open": 24182.84
+    },
+    {
+      "close": 24370.02,
+      "date": "2025-08-13",
+      "high": 24406.94,
+      "low": 24172.19,
+      "open": 24232.04
+    },
+    {
+      "close": 24238.1,
+      "date": "2025-08-14",
+      "high": 24389.51,
+      "low": 24198.88,
+      "open": 24258.5
+    },
+    {
+      "close": 24334.48,
+      "date": "2025-08-15",
+      "high": 24385.56,
+      "low": 24164.43,
+      "open": 24266.23
+    },
+    {
+      "close": 24482.52,
+      "date": "2025-08-18",
+      "high": 24515.65,
+      "low": 24257.3,
+      "open": 24272.55
+    },
+    {
+      "close": 24353.5,
+      "date": "2025-08-19",
+      "high": 24551.42,
+      "low": 24324.29,
+      "open": 24493.92
+    },
+    {
+      "close": 23625.44,
+      "date": "2025-08-20",
+      "high": 24309.27,
+      "low": 23620.24,
+      "open": 24309.27
+    },
+    {
+      "close": 23962.13,
+      "date": "2025-08-21",
+      "high": 24011.5,
+      "low": 23739.83,
+      "open": 23739.83
+    },
+    {
+      "close": 23764.47,
+      "date": "2025-08-22",
+      "high": 24071.65,
+      "low": 23764.47,
+      "open": 24033.02
+    },
+    {
+      "close": 24277.38,
+      "date": "2025-08-25",
+      "high": 24362.02,
+      "low": 24108.75,
+      "open": 24108.81
+    },
+    {
+      "close": 24305.1,
+      "date": "2025-08-26",
+      "high": 24382.42,
+      "low": 24113.03,
+      "open": 24237.36
+    },
+    {
+      "close": 24519.9,
+      "date": "2025-08-27",
+      "high": 24539.88,
+      "low": 24410.08,
+      "open": 24449.81
+    },
+    {
+      "close": 24236.45,
+      "date": "2025-08-28",
+      "high": 24502.37,
+      "low": 24236.45,
+      "open": 24468.12
+    },
+    {
+      "close": 24233.1,
+      "date": "2025-08-29",
+      "high": 24570.15,
+      "low": 24233.1,
+      "open": 24438.03
+    },
+    {
+      "close": 24071.73,
+      "date": "2025-09-01",
+      "high": 24312.83,
+      "low": 23885.41,
+      "open": 24143.37
+    },
+    {
+      "close": 24016.78,
+      "date": "2025-09-02",
+      "high": 24295.03,
+      "low": 23890.33,
+      "open": 24113.9
+    },
+    {
+      "close": 24100.3,
+      "date": "2025-09-03",
+      "high": 24103.23,
+      "low": 23925.49,
+      "open": 24036.88
+    },
+    {
+      "close": 24179.85,
+      "date": "2025-09-04",
+      "high": 24389.35,
+      "low": 24168.16,
+      "open": 24235.27
+    },
+    {
+      "close": 24494.58,
+      "date": "2025-09-05",
+      "high": 24494.58,
+      "low": 24244.26,
+      "open": 24244.26
+    },
+    {
+      "close": 24547.38,
+      "date": "2025-09-08",
+      "high": 24729.96,
+      "low": 24547.38,
+      "open": 24610.85
+    },
+    {
+      "close": 24855.18,
+      "date": "2025-09-09",
+      "high": 24880.07,
+      "low": 24650.46,
+      "open": 24650.46
+    },
+    {
+      "close": 25192.59,
+      "date": "2025-09-10",
+      "high": 25272.23,
+      "low": 25032.88,
+      "open": 25032.88
+    },
+    {
+      "close": 25215.71,
+      "date": "2025-09-11",
+      "high": 25541.44,
+      "low": 25174.13,
+      "open": 25509.3
+    },
+    {
+      "close": 25474.64,
+      "date": "2025-09-12",
+      "high": 25492.28,
+      "low": 25349.7,
+      "open": 25349.7
+    },
+    {
+      "close": 25357.16,
+      "date": "2025-09-15",
+      "high": 25519.94,
+      "low": 25284.17,
+      "open": 25494.1
+    },
+    {
+      "close": 25629.64,
+      "date": "2025-09-16",
+      "high": 25664.81,
+      "low": 25335.46,
+      "open": 25335.46
+    },
+    {
+      "close": 25438.25,
+      "date": "2025-09-17",
+      "high": 25632.07,
+      "low": 25422.96,
+      "open": 25543.91
+    },
+    {
+      "close": 25769.36,
+      "date": "2025-09-18",
+      "high": 25769.36,
+      "low": 25475.25,
+      "open": 25543.17
+    },
+    {
+      "close": 25578.37,
+      "date": "2025-09-19",
+      "high": 25864.01,
+      "low": 25578.37,
+      "open": 25794.66
+    },
+    {
+      "close": 25880.6,
+      "date": "2025-09-22",
+      "high": 25887.69,
+      "low": 25599.6,
+      "open": 25599.6
+    },
+    {
+      "close": 26247.37,
+      "date": "2025-09-23",
+      "high": 26307.3,
+      "low": 26041.69,
+      "open": 26121.0
+    },
+    {
+      "close": 26196.73,
+      "date": "2025-09-24",
+      "high": 26394.03,
+      "low": 26045.47,
+      "open": 26389.16
+    },
+    {
+      "close": 26023.85,
+      "date": "2025-09-25",
+      "high": 26247.85,
+      "low": 26023.85,
+      "open": 26067.97
+    },
+    {
+      "close": 25580.32,
+      "date": "2025-09-26",
+      "high": 25998.28,
+      "low": 25469.04,
+      "open": 25998.28
+    },
+    {
+      "close": 25820.54,
+      "date": "2025-09-30",
+      "high": 25975.84,
+      "low": 25738.31,
+      "open": 25738.31
+    },
+    {
+      "close": 25982.91,
+      "date": "2025-10-01",
+      "high": 26325.79,
+      "low": 25982.91,
+      "open": 26078.29
+    },
+    {
+      "close": 26378.39,
+      "date": "2025-10-02",
+      "high": 26489.79,
+      "low": 26330.25,
+      "open": 26392.31
+    },
+    {
+      "close": 26761.06,
+      "date": "2025-10-03",
+      "high": 26761.06,
+      "low": 26410.03,
+      "open": 26435.1
+    },
+    {
+      "close": 27211.95,
+      "date": "2025-10-07",
+      "high": 27301.42,
+      "low": 27017.08,
+      "open": 27029.28
+    },
+    {
+      "close": 27063.68,
+      "date": "2025-10-08",
+      "high": 27110.43,
+      "low": 26883.99,
+      "open": 26999.82
+    },
+    {
+      "close": 27301.92,
+      "date": "2025-10-09",
+      "high": 27463.12,
+      "low": 27253.07,
+      "open": 27301.61
+    },
+    {
+      "close": 26923.42,
+      "date": "2025-10-13",
+      "high": 26965.72,
+      "low": 26470.44,
+      "open": 26762.6
+    },
+    {
+      "close": 26793.15,
+      "date": "2025-10-14",
+      "high": 27507.16,
+      "low": 26764.06,
+      "open": 27282.1
+    },
+    {
+      "close": 27275.71,
+      "date": "2025-10-15",
+      "high": 27275.71,
+      "low": 26773.15,
+      "open": 26911.05
+    },
+    {
+      "close": 27647.87,
+      "date": "2025-10-16",
+      "high": 27732.78,
+      "low": 27337.32,
+      "open": 27337.32
+    },
+    {
+      "close": 27302.37,
+      "date": "2025-10-17",
+      "high": 27513.09,
+      "low": 27302.37,
+      "open": 27399.91
+    },
+    {
+      "close": 27688.63,
+      "date": "2025-10-20",
+      "high": 27768.27,
+      "low": 27412.45,
+      "open": 27480.44
+    },
+    {
+      "close": 27752.41,
+      "date": "2025-10-21",
+      "high": 27969.05,
+      "low": 27742.55,
+      "open": 27742.55
+    },
+    {
+      "close": 27648.91,
+      "date": "2025-10-22",
+      "high": 27725.83,
+      "low": 27490.89,
+      "open": 27614.11
+    },
+    {
+      "close": 27532.26,
+      "date": "2025-10-23",
+      "high": 27586.85,
+      "low": 27371.67,
+      "open": 27457.07
+    },
+    {
+      "close": 27993.63,
+      "date": "2025-10-27",
+      "high": 28196.33,
+      "low": 27993.63,
+      "open": 28029.88
+    },
+    {
+      "close": 27949.11,
+      "date": "2025-10-28",
+      "high": 28087.93,
+      "low": 27885.62,
+      "open": 28041.01
+    },
+    {
+      "close": 28294.74,
+      "date": "2025-10-29",
+      "high": 28395.31,
+      "low": 28139.65,
+      "open": 28157.91
+    },
+    {
+      "close": 28287.53,
+      "date": "2025-10-30",
+      "high": 28527.68,
+      "low": 28116.6,
+      "open": 28350.24
+    },
+    {
+      "close": 28233.35,
+      "date": "2025-10-31",
+      "high": 28489.76,
+      "low": 28233.35,
+      "open": 28280.47
+    },
+    {
+      "close": 28334.59,
+      "date": "2025-11-03",
+      "high": 28494.99,
+      "low": 28150.45,
+      "open": 28253.53
+    },
+    {
+      "close": 28116.56,
+      "date": "2025-11-04",
+      "high": 28554.61,
+      "low": 28033.62,
+      "open": 28364.76
+    },
+    {
+      "close": 27717.06,
+      "date": "2025-11-05",
+      "high": 27799.09,
+      "low": 27373.05,
+      "open": 27785.91
+    },
+    {
+      "close": 27899.45,
+      "date": "2025-11-06",
+      "high": 28061.53,
+      "low": 27879.7,
+      "open": 27906.44
+    },
+    {
+      "close": 27651.41,
+      "date": "2025-11-07",
+      "high": 27818.54,
+      "low": 27621.48,
+      "open": 27818.54
+    },
+    {
+      "close": 27869.51,
+      "date": "2025-11-10",
+      "high": 27976.89,
+      "low": 27680.51,
+      "open": 27805.47
+    },
+    {
+      "close": 27784.95,
+      "date": "2025-11-11",
+      "high": 28187.7,
+      "low": 27784.95,
+      "open": 28031.54
+    },
+    {
+      "close": 27947.09,
+      "date": "2025-11-12",
+      "high": 28071.76,
+      "low": 27799.92,
+      "open": 27853.47
+    },
+    {
+      "close": 27903.56,
+      "date": "2025-11-13",
+      "high": 28038.24,
+      "low": 27811.81,
+      "open": 27867.59
+    },
+    {
+      "close": 27397.5,
+      "date": "2025-11-14",
+      "high": 27816.45,
+      "low": 27383.34,
+      "open": 27816.45
+    },
+    {
+      "close": 27447.31,
+      "date": "2025-11-17",
+      "high": 27723.77,
+      "low": 27447.31,
+      "open": 27600.74
+    },
+    {
+      "close": 26756.12,
+      "date": "2025-11-18",
+      "high": 27310.4,
+      "low": 26756.12,
+      "open": 27310.4
+    },
+    {
+      "close": 26580.12,
+      "date": "2025-11-19",
+      "high": 26902.97,
+      "low": 26580.12,
+      "open": 26708.28
+    },
+    {
+      "close": 27426.36,
+      "date": "2025-11-20",
+      "high": 27493.63,
+      "low": 27183.03,
+      "open": 27212.91
+    },
+    {
+      "close": 26434.94,
+      "date": "2025-11-21",
+      "high": 26821.97,
+      "low": 26395.98,
+      "open": 26821.97
+    },
+    {
+      "close": 26504.24,
+      "date": "2025-11-24",
+      "high": 26764.13,
+      "low": 26482.33,
+      "open": 26596.03
+    },
+    {
+      "close": 26912.17,
+      "date": "2025-11-25",
+      "high": 27118.02,
+      "low": 26793.71,
+      "open": 26995.9
+    },
+    {
+      "close": 27409.54,
+      "date": "2025-11-26",
+      "high": 27409.54,
+      "low": 27063.17,
+      "open": 27063.17
+    },
+    {
+      "close": 27554.53,
+      "date": "2025-11-27",
+      "high": 27659.06,
+      "low": 27436.59,
+      "open": 27517.24
+    },
+    {
+      "close": 27626.48,
+      "date": "2025-11-28",
+      "high": 27796.9,
+      "low": 27566.12,
+      "open": 27566.12
+    },
+    {
       "close": 27342.53,
       "date": "2025-12-01",
       "high": 27697.06,
@@ -1938,5 +4001,5 @@
     "product_label": "小台 MXF",
     "trust_oi_net": 0
   },
-  "updated_at": "2026-06-11 16:37:30"
+  "updated_at": "2026-06-11 19:47:17"
 }

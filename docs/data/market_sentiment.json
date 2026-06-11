@@ -7,11 +7,11 @@
   "ma60": 38985.23,
   "parts": {
     "dealer_hedge": -0.91,
-    "foreign_futures": -16.71,
+    "foreign_futures": -16.32,
     "futures_trade": 7.2,
     "index_trend": -6.0,
     "market_margin": 6.0,
-    "trust_futures": 6.0
+    "trust_futures": 5.81
   },
   "reasons": [
     "指數跌破 MA20",
@@ -20,6 +20,6 @@
     "融資下降，籌碼較乾淨"
   ],
   "risk_multiplier": 0.95,
-  "score": 45.58,
-  "updated_at": "2026-06-11 16:37:30"
+  "score": 45.78,
+  "updated_at": "2026-06-11 19:51:18"
 }
