@@ -35,6 +35,14 @@ jobs:
       - name: Install dependencies
         run: pip install -r requirements.txt
 
+      - name: 還原 SQLite 快取（增量更新，避免每次全量重抓觸發限速）
+        uses: actions/cache@v4
+        with:
+          path: data/stock_chip.sqlite
+          key: stock-db-${{ github.run_id }}
+          restore-keys: |
+            stock-db-
+
       - name: 更新官方行情、三大法人與融資融券
         env:
           DAYS: ${{ github.event.inputs.days || '20' }}
