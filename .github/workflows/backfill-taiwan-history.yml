@@ -40,6 +40,7 @@ jobs:
             stock-db-
 
       - name: 回補官方歷史資料（只補快取中缺漏的交易日）
+        continue-on-error: true
         env:
           DAYS: ${{ github.event.inputs.days || '60' }}
         run: python -m stock_chip.official --days "$DAYS"
