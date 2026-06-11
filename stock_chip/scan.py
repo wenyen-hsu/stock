@@ -134,6 +134,125 @@ def load_branch_leaders(
     return leaders
 
 
+HISTORY_TRADING_DAYS = 252
+
+
+def load_history_stats(conn: sqlite3.Connection, latest_date: str) -> dict[str, dict[str, Any]]:
+    """Long-horizon stats from accumulated daily history (52w high, 6m/12m returns, MA levels, RS vs TAIEX)."""
+    date_rows = conn.execute(
+        "SELECT date FROM trading_days WHERE date <= ? ORDER BY date DESC LIMIT ?",
+        (latest_date, HISTORY_TRADING_DAYS),
+    ).fetchall()
+    dates = sorted(row[0] for row in date_rows)
+    if len(dates) < 30:
+        return {}
+    date_from = dates[0]
+
+    index_rows = conn.execute(
+        """
+        SELECT date, close FROM market_index_daily
+        WHERE index_code = 'TAIEX' AND close IS NOT NULL AND date >= ? AND date <= ?
+        ORDER BY date
+        """,
+        (date_from, latest_date),
+    ).fetchall()
+    index_closes = [row[1] for row in index_rows]
+
+    def horizon_return(closes: list[float], periods: int) -> float | None:
+        if len(closes) < periods + 1 or not closes[-(periods + 1)]:
+            return None
+        return (closes[-1] - closes[-(periods + 1)]) / closes[-(periods + 1)] * 100
+
+    index_return_6m = horizon_return(index_closes, 120)
+    index_return_12m = horizon_return(index_closes, 240)
+
+    rows = conn.execute(
+        """
+        SELECT stock_id, close, high, low FROM daily_prices
+        WHERE date >= ? AND date <= ?
+        ORDER BY stock_id, date
+        """,
+        (date_from, latest_date),
+    ).fetchall()
+    series: dict[str, dict[str, list[float]]] = {}
+    for stock_id, close, high, low in rows:
+        if close is None:
+            continue
+        bucket = series.setdefault(stock_id, {"close": [], "high": [], "low": []})
+        bucket["close"].append(close)
+        bucket["high"].append(high if high is not None else close)
+        bucket["low"].append(low if low is not None else close)
+
+    output: dict[str, dict[str, Any]] = {}
+    for stock_id, bucket in series.items():
+        closes = bucket["close"]
+        history_days = len(closes)
+        close = closes[-1]
+        item: dict[str, Any] = {"history_days": history_days}
+
+        return_6m = horizon_return(closes, 120)
+        return_12m = horizon_return(closes, 240)
+        item["return_6m_pct"] = round(return_6m, 2) if return_6m is not None else None
+        item["return_12m_pct"] = round(return_12m, 2) if return_12m is not None else None
+        item["rs_6m_pct"] = (
+            round(return_6m - index_return_6m, 2)
+            if return_6m is not None and index_return_6m is not None
+            else None
+        )
+        item["rs_12m_pct"] = (
+            round(return_12m - index_return_12m, 2)
+            if return_12m is not None and index_return_12m is not None
+            else None
+        )
+
+        # Need at least half a year of history before calling it a 52-week level.
+        if history_days >= 120:
+            high_52w = max(bucket["high"])
+            low_52w = min(bucket["low"])
+            item["close_vs_52w_high_pct"] = round((close - high_52w) / high_52w * 100, 2) if high_52w else None
+            item["close_vs_52w_low_pct"] = round((close - low_52w) / low_52w * 100, 2) if low_52w else None
+        else:
+            item["close_vs_52w_high_pct"] = None
+            item["close_vs_52w_low_pct"] = None
+
+        for period, key in ((60, "close_vs_ma60_pct"), (240, "close_vs_ma240_pct")):
+            if history_days >= period:
+                ma = sum(closes[-period:]) / period
+                item[key] = round((close - ma) / ma * 100, 2) if ma else None
+            else:
+                item[key] = None
+
+        item["long_momentum_score"] = long_momentum_score_row(item)
+        output[stock_id] = item
+    return output
+
+
+def long_momentum_score_row(row: dict[str, Any]) -> float:
+    """Long-horizon trend score: 6m return, RS vs market, 52w-high proximity, MA240 regime."""
+    return_6m = row.get("return_6m_pct")
+    rs_6m = row.get("rs_6m_pct")
+    vs_52w_high = row.get("close_vs_52w_high_pct")
+    vs_ma240 = row.get("close_vs_ma240_pct")
+    if return_6m is None and vs_52w_high is None and vs_ma240 is None:
+        return 0.0
+    score = 0.0
+    if return_6m is not None:
+        score += bounded(return_6m, -30, 60) * 0.1
+    if rs_6m is not None:
+        score += bounded(rs_6m, -30, 60) * 0.12
+    if vs_52w_high is not None:
+        if vs_52w_high >= -3:
+            score += 6.0
+        elif vs_52w_high <= -30:
+            score -= 4.0
+    if vs_ma240 is not None:
+        if vs_ma240 > 0:
+            score += 4.0
+        else:
+            score -= 3.0
+    return round(bounded(score, -12.0, 22.0), 2)
+
+
 def load_revenue_momentum(conn: sqlite3.Connection) -> dict[str, dict[str, Any]]:
     rows = conn.execute(
         """
@@ -423,6 +542,12 @@ def base_reason(row: dict[str, Any]) -> str:
     vs_high = row.get("close_vs_high_pct")
     if vs_high is not None and vs_high >= -2:
         parts.append("接近區間高點")
+    vs_52w = row.get("close_vs_52w_high_pct")
+    if vs_52w is not None and vs_52w >= -2:
+        parts.append("逼近52週高點")
+    vs_ma240 = row.get("close_vs_ma240_pct")
+    if vs_ma240 is not None and vs_ma240 < 0:
+        parts.append("年線之下")
     rsi = row.get("rsi14")
     if rsi is not None and rsi >= 75:
         parts.append("RSI過熱")
@@ -553,9 +678,11 @@ def aggregate(
     latest_date: str,
     branch_leaders: dict[str, dict[str, Any]] | None = None,
     revenue_momentum: dict[str, dict[str, Any]] | None = None,
+    history_stats: dict[str, dict[str, Any]] | None = None,
 ) -> list[dict[str, Any]]:
     branch_leaders = branch_leaders or {}
     revenue_momentum = revenue_momentum or {}
+    history_stats = history_stats or {}
     grouped: dict[str, list[dict[str, Any]]] = {}
     for row in rows:
         grouped.setdefault(row["stock_id"], []).append(row)
@@ -642,6 +769,8 @@ def aggregate(
         }
         item.update(branch_leaders.get(stock_id, {}))
         item.update(revenue_momentum.get(stock_id, {}))
+        item.update(history_stats.get(stock_id, {}))
+        item.setdefault("long_momentum_score", 0.0)
         margin_values = [row for row in stock_rows if row.get("margin_balance") is not None]
         margin_balance_change = None
         short_balance_change = None
@@ -666,6 +795,7 @@ def aggregate(
         item["multifactor_score"] = round(
             item["base_score"]
             + item["momentum_score"]
+            + item["long_momentum_score"]
             + item["valuation_score"]
             + item["volume_score"] * 0.5,
             2,
@@ -702,6 +832,16 @@ def to_export_row(row: dict[str, Any], days: int) -> dict[str, Any]:
         "close_vs_low_pct": row.get("close_vs_low_pct"),
         "avg_turnover_100m": row.get("avg_turnover_100m"),
         "momentum_score": row.get("momentum_score", 0.0),
+        "history_days": row.get("history_days"),
+        "return_6m_pct": row.get("return_6m_pct"),
+        "return_12m_pct": row.get("return_12m_pct"),
+        "rs_6m_pct": row.get("rs_6m_pct"),
+        "rs_12m_pct": row.get("rs_12m_pct"),
+        "close_vs_52w_high_pct": row.get("close_vs_52w_high_pct"),
+        "close_vs_52w_low_pct": row.get("close_vs_52w_low_pct"),
+        "close_vs_ma60_pct": row.get("close_vs_ma60_pct"),
+        "close_vs_ma240_pct": row.get("close_vs_ma240_pct"),
+        "long_momentum_score": row.get("long_momentum_score", 0.0),
         "valuation_score": row.get("valuation_score", 0.0),
         "multifactor_score": row.get("multifactor_score", row.get("base_score", row["chip_score"])),
         f"{days}d_avg_price": round(avg_price, 4) if avg_price is not None else None,
@@ -802,6 +942,18 @@ def export_rankings(output_dir: Path, rows: list[dict[str, Any]], days: int, lim
                 and (row.get("avg_turnover_100m") or 0) >= 0.3
             ],
             key=lambda row: (row.get("valuation_score") or 0, row.get("dividend_yield") or 0),
+            reverse=True,
+        ),
+        "high_52w_inst_buy": sorted(
+            [
+                row
+                for row in rows
+                if (row.get("close_vs_52w_high_pct") is not None)
+                and row["close_vs_52w_high_pct"] >= -3
+                and row[f"{days}d_inst_net"] > 0
+                and (row.get("avg_turnover_100m") or 0) >= 0.3
+            ],
+            key=lambda row: (row.get("long_momentum_score") or 0, row[f"{days}d_inst_net"]),
             reverse=True,
         ),
         "chip_score": sorted(rows, key=lambda row: row["chip_score"], reverse=True),
@@ -1010,9 +1162,10 @@ def run_scan(
         raw_rows = load_window(conn, dates)
         branch_leaders: dict[str, dict[str, Any]] = {}
         revenue_momentum = load_revenue_momentum(conn)
+        history_stats = load_history_stats(conn, dates[-1]) if dates else {}
     if len(dates) < days:
         raise RuntimeError(f"資料庫只有 {len(dates)} 個交易日，少於要求的 {days} 日。")
-    rows = aggregate(raw_rows, days, dates[-1], branch_leaders, revenue_momentum)
+    rows = aggregate(raw_rows, days, dates[-1], branch_leaders, revenue_momentum, history_stats)
     output_dir.mkdir(parents=True, exist_ok=True)
 
     all_path = output_dir / f"scan_all_{days}d.csv"

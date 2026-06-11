@@ -838,6 +838,7 @@ INDEX_HTML = """<!doctype html>
           <option value="total_score">基礎選股分</option>
           <option value="multifactor_score">多因子綜合分</option>
           <option value="momentum_inst_buy">動能 + 法人買超</option>
+          <option value="high_52w_inst_buy">52週新高 + 法人買超</option>
           <option value="value_dividend">低估值 + 高殖利率</option>
           <option value="chip_score">法人籌碼分數</option>
           <option value="foreign_buy">外資買超</option>
@@ -2831,6 +2832,13 @@ INDEX_HTML = """<!doctype html>
       {key:"market_sentiment_score", label:"大盤分", signed:true, groups:["core"]},
       {key:"risk_adjusted_score", label:"風險調整分", signed:true, groups:["core"]},
       {key:"momentum_score", label:"動能分", signed:true, groups:["momentum"]},
+      {key:"long_momentum_score", label:"長線分", signed:true, groups:["core","momentum"]},
+      {key:"return_6m_pct", label:"6月%", signed:true, groups:["momentum"]},
+      {key:"return_12m_pct", label:"12月%", signed:true, groups:["momentum"]},
+      {key:"rs_6m_pct", label:"RS6月%", signed:true, groups:["momentum"]},
+      {key:"close_vs_52w_high_pct", label:"距52週高%", signed:true, groups:["momentum"]},
+      {key:"close_vs_ma60_pct", label:"季線%", signed:true, groups:["momentum"]},
+      {key:"close_vs_ma240_pct", label:"年線%", signed:true, groups:["momentum"]},
       {key:"period_return_pct", label:"區間漲跌%", signed:true, groups:["core","momentum"]},
       {key:"rsi14", label:"RSI14", groups:["momentum"]},
       {key:"volatility_pct", label:"年化波動%", groups:["momentum"]},
@@ -2870,7 +2878,7 @@ INDEX_HTML = """<!doctype html>
       {key:"revenue", label:"營收", tip:"營收：顯示最新營收月份、營收分、月增率與年增率，用來判斷基本面動能是否同步轉強。"},
       {key:"margin", label:"融資券", tip:"融資券：觀察融資餘額與融券餘額增減。融資快速增加可能代表散戶追價，融資下降且法人買超通常較乾淨。"},
       {key:"volume", label:"量能", tip:"量能：比較最新日成交量與區間平均量、5日均量與區間均量。單日量倍高代表當天成交明顯放大，5日量倍高代表最近一段時間量能持續升溫。"},
-      {key:"momentum", label:"動能風險", tip:"動能風險：區間漲跌%、RSI14、年化波動率、距區間高低點與日均成交額。專業投資人常用動能確認趨勢、用波動率與流動性控管風險；RSI 大於 75 視為過熱，年化波動率偏高代表持有風險較大，日均成交額太低代表流動性不足。"},
+      {key:"momentum", label:"動能風險", tip:"動能風險：短週期看區間漲跌%、RSI14、年化波動率與日均成交額；長週期看 6/12 個月報酬、相對大盤強弱（RS）、距 52 週高點與季線/年線位階。RS 為正代表強於大盤；距 52 週高 ≥ -3% 是典型突破訊號；年線之下代表長線趨勢轉弱。長線資料需要足夠的歷史日線，新上市股票可能空白。"},
       {key:"valuation", label:"估值", tip:"估值：使用交易所每日行情揭露的本益比、殖利率與股價淨值比。空值通常代表該來源未揭露、EPS 為負或資料不可計算；估值分會納入多因子綜合分，但不影響基礎分。"}
     ];
     function visibleRankingCols() {
@@ -2955,8 +2963,9 @@ INDEX_HTML = """<!doctype html>
         ["量能", selection.volume_signal || "無資料", `單日 ${fmt(selection.volume_ratio_1d)} 倍 / 5日 ${fmt(selection.volume_ratio_5d)} 倍`],
         ["量能分", selection.volume_score, "以 0.5 權重納入多因子分"],
         ["營收動能", selection.revenue_momentum_score, `${esc(selection.revenue_month || "無月份")} 年增 ${fmt(selection.revenue_yoy_pct)}%`],
-        ["多因子分", selection.multifactor_score, "基礎分 + 動能分 + 估值分 + 量能分的一半"],
+        ["多因子分", selection.multifactor_score, "基礎分 + 動能分 + 長線分 + 估值分 + 量能分的一半"],
         ["動能分", selection.momentum_score, `區間 ${fmt(selection.period_return_pct)}% / RSI ${fmt(selection.rsi14)} / 距高 ${fmt(selection.close_vs_high_pct)}%`],
+        ["長線分", selection.long_momentum_score, `6月 ${fmt(selection.return_6m_pct)}% / RS ${fmt(selection.rs_6m_pct)}% / 距52週高 ${fmt(selection.close_vs_52w_high_pct)}%`],
         ["估值分", selection.valuation_score, `本益比 ${fmt(selection.pe_ratio)} / 殖利率 ${fmt(selection.dividend_yield)}% / 年化波動 ${fmt(selection.volatility_pct)}%`],
       ];
       target.innerHTML = `
@@ -3761,6 +3770,16 @@ def normalize_scan_row(row: dict[str, str], days: int) -> dict[str, object]:
         "close_vs_low_pct": as_float_or_none(row.get("close_vs_low_pct")),
         "avg_turnover_100m": as_float_or_none(row.get("avg_turnover_100m")),
         "momentum_score": as_float(row.get("momentum_score")),
+        "long_momentum_score": as_float(row.get("long_momentum_score")),
+        "history_days": as_float_or_none(row.get("history_days")),
+        "return_6m_pct": as_float_or_none(row.get("return_6m_pct")),
+        "return_12m_pct": as_float_or_none(row.get("return_12m_pct")),
+        "rs_6m_pct": as_float_or_none(row.get("rs_6m_pct")),
+        "rs_12m_pct": as_float_or_none(row.get("rs_12m_pct")),
+        "close_vs_52w_high_pct": as_float_or_none(row.get("close_vs_52w_high_pct")),
+        "close_vs_52w_low_pct": as_float_or_none(row.get("close_vs_52w_low_pct")),
+        "close_vs_ma60_pct": as_float_or_none(row.get("close_vs_ma60_pct")),
+        "close_vs_ma240_pct": as_float_or_none(row.get("close_vs_ma240_pct")),
         "valuation_score": as_float(row.get("valuation_score")),
         "multifactor_score": as_float(row.get("multifactor_score")),
         "avg_price": as_float(row.get(f"{days}d_avg_price")),
@@ -3821,6 +3840,7 @@ def ranking_path(days: int, ranking: str) -> Path:
         "total_score": "ranking_total_score",
         "multifactor_score": "ranking_multifactor_score",
         "momentum_inst_buy": "ranking_momentum_inst_buy",
+        "high_52w_inst_buy": "ranking_high_52w_inst_buy",
         "value_dividend": "ranking_value_dividend",
         "chip_score": "ranking_chip_score",
         "branch_score": "ranking_branch_score",
@@ -3844,6 +3864,7 @@ RANKING_LABELS = {
     "total_score": "基礎選股分",
     "multifactor_score": "多因子綜合分",
     "momentum_inst_buy": "動能 + 法人買超",
+    "high_52w_inst_buy": "52週新高 + 法人買超",
     "value_dividend": "低估值 + 高殖利率",
     "chip_score": "法人籌碼分數",
     "selection_score": "基礎選股分",

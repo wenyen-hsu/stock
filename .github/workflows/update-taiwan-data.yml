@@ -59,7 +59,7 @@ jobs:
 
       - name: 更新大盤指數與期貨多空
         continue-on-error: true
-        run: python -m stock_chip.market --days 180
+        run: python -m stock_chip.market --days 400
 
       - name: 抓取 MOPS 重大事件
         continue-on-error: true

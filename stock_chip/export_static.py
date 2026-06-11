@@ -32,6 +32,7 @@ RANKINGS = [
     "total_score",
     "multifactor_score",
     "momentum_inst_buy",
+    "high_52w_inst_buy",
     "value_dividend",
     "chip_score",
     "selection_score",
