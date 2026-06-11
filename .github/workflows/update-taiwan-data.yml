@@ -97,6 +97,10 @@ jobs:
             if git push; then
               exit 0
             fi
-            git pull --rebase origin main
+            # 資料 commit 之間的衝突一律以本次最新匯出為準（rebase 中 theirs = 本次 commit）
+            if ! git pull --rebase -X theirs origin main; then
+              git rebase --abort || true
+              exit 1
+            fi
           done
           git push
