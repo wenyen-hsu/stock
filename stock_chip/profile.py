@@ -12,8 +12,15 @@ from stock_chip.official import connect_db
 
 
 PROFILE_SOURCES = [
-    ("TWSE", "https://openapi.twse.com.tw/v1/opendata/t187ap03_L"),
-    ("TPEX", "https://openapi.twse.com.tw/v1/opendata/t187ap03_O"),
+    ("TWSE", ["https://openapi.twse.com.tw/v1/opendata/t187ap03_L"]),
+    (
+        "TPEX",
+        [
+            "https://www.tpex.org.tw/openapi/v1/mopsfin_t187ap03_O",
+            "https://www.tpex.org.tw/openapi/v1/t187ap03_O",
+            "https://openapi.twse.com.tw/v1/opendata/t187ap03_O",
+        ],
+    ),
 ]
 
 # TWSE/TPEx 產業別代碼（公開資訊觀測站分類）
@@ -137,11 +144,19 @@ def run_profiles(db_path: Path, timeout_seconds: float = 30) -> dict[str, Any]:
     total = 0
     failures: list[str] = []
     with connect_db(db_path) as conn:
-        for market, url in PROFILE_SOURCES:
-            try:
-                rows = fetch_profiles(market, url, timeout_seconds=timeout_seconds)
-            except Exception as exc:
-                failures.append(f"{market}: {exc}")
+        for market, urls in PROFILE_SOURCES:
+            rows: list[dict[str, Any]] = []
+            errors: list[str] = []
+            for url in urls:
+                try:
+                    rows = fetch_profiles(market, url, timeout_seconds=timeout_seconds)
+                except Exception as exc:
+                    errors.append(f"{url}: {exc}")
+                    continue
+                if rows:
+                    break
+            if not rows:
+                failures.append(f"{market}: " + " | ".join(errors))
                 continue
             upsert_profiles(conn, rows)
             total += len(rows)
