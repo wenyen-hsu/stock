@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import argparse
+import csv
 import datetime as dt
 import sqlite3
 import time
@@ -237,17 +238,52 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--db", default="data/stock_chip.sqlite")
     parser.add_argument("--months", type=int, default=24)
     parser.add_argument("--watchlist", default=",".join(DEFAULT_WATCHLIST))
+    parser.add_argument(
+        "--from-scan",
+        type=int,
+        default=0,
+        metavar="N",
+        help="Also include the top N stocks by total_score from reports/scan_all_20d.csv.",
+    )
+    parser.add_argument("--scan-report", default="reports/scan_all_20d.csv")
     parser.add_argument("--sleep", type=float, default=0.2)
     parser.add_argument("--retries", type=int, default=2)
     parser.add_argument("--timeout", type=float, default=20)
     return parser.parse_args()
 
 
+def top_scan_stock_ids(report_path: Path, limit: int) -> list[str]:
+    if limit <= 0 or not report_path.exists():
+        return []
+    with report_path.open(encoding="utf-8-sig") as f:
+        rows = list(csv.DictReader(f))
+
+    def score(row: dict[str, str]) -> float:
+        try:
+            return float(row.get("total_score") or 0)
+        except ValueError:
+            return 0.0
+
+    rows.sort(key=score, reverse=True)
+    ids: list[str] = []
+    for row in rows:
+        stock_id = (row.get("stock_id") or "").strip()
+        if stock_id and stock_id not in ids:
+            ids.append(stock_id)
+        if len(ids) >= limit:
+            break
+    return ids
+
+
 def main() -> None:
     args = parse_args()
+    stock_ids = parse_watchlist(args.watchlist)
+    for stock_id in top_scan_stock_ids(Path(args.scan_report), args.from_scan):
+        if stock_id not in stock_ids:
+            stock_ids.append(stock_id)
     result = run_revenue(
         db_path=Path(args.db),
-        stock_ids=parse_watchlist(args.watchlist),
+        stock_ids=stock_ids,
         months=args.months,
         sleep_seconds=args.sleep,
         retries=args.retries,

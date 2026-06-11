@@ -3546,6 +3546,16 @@ def as_float(value: str | None) -> float:
         return 0.0
 
 
+def as_float_or_none(value: str | None) -> float | None:
+    """Keep missing statistics as null so the UI shows blank instead of a misleading 0."""
+    if value in (None, ""):
+        return None
+    try:
+        return float(value)
+    except ValueError:
+        return None
+
+
 def ensure_gui_tables(conn: sqlite3.Connection) -> None:
     ensure_news_tables(conn)
     ensure_us_news_tables(conn)
@@ -3653,15 +3663,15 @@ def normalize_scan_row(row: dict[str, str], days: int) -> dict[str, object]:
         "market": row.get("market"),
         "observed_days": int(as_float(row.get("observed_days"))),
         "close": as_float(row.get("close")),
-        "pe_ratio": as_float(row.get("pe_ratio")),
-        "dividend_yield": as_float(row.get("dividend_yield")),
-        "pb_ratio": as_float(row.get("pb_ratio")),
-        "period_return_pct": as_float(row.get("period_return_pct")),
-        "rsi14": as_float(row.get("rsi14")),
-        "volatility_pct": as_float(row.get("volatility_pct")),
-        "close_vs_high_pct": as_float(row.get("close_vs_high_pct")),
-        "close_vs_low_pct": as_float(row.get("close_vs_low_pct")),
-        "avg_turnover_100m": as_float(row.get("avg_turnover_100m")),
+        "pe_ratio": as_float_or_none(row.get("pe_ratio")),
+        "dividend_yield": as_float_or_none(row.get("dividend_yield")),
+        "pb_ratio": as_float_or_none(row.get("pb_ratio")),
+        "period_return_pct": as_float_or_none(row.get("period_return_pct")),
+        "rsi14": as_float_or_none(row.get("rsi14")),
+        "volatility_pct": as_float_or_none(row.get("volatility_pct")),
+        "close_vs_high_pct": as_float_or_none(row.get("close_vs_high_pct")),
+        "close_vs_low_pct": as_float_or_none(row.get("close_vs_low_pct")),
+        "avg_turnover_100m": as_float_or_none(row.get("avg_turnover_100m")),
         "momentum_score": as_float(row.get("momentum_score")),
         "valuation_score": as_float(row.get("valuation_score")),
         "multifactor_score": as_float(row.get("multifactor_score")),
@@ -3675,16 +3685,16 @@ def normalize_scan_row(row: dict[str, str], days: int) -> dict[str, object]:
         "latest_volume_lot": as_float(row.get("latest_volume_lot")),
         "volume_avg_lot": as_float(row.get("volume_avg_lot")),
         "volume_5d_avg_lot": as_float(row.get("volume_5d_avg_lot")),
-        "volume_ratio_1d": as_float(row.get("volume_ratio_1d")),
-        "volume_ratio_5d": as_float(row.get("volume_ratio_5d")),
+        "volume_ratio_1d": as_float_or_none(row.get("volume_ratio_1d")),
+        "volume_ratio_5d": as_float_or_none(row.get("volume_ratio_5d")),
         "volume_score": as_float(row.get("volume_score")),
         "volume_signal": row.get("volume_signal") or "",
         "top_buy_branch_name": row.get("top_buy_branch_name") or "",
-        "top_buy_branch_net_lot": as_float(row.get("top_buy_branch_net_lot")),
-        "top_buy_branch_avg_price": as_float(row.get("top_buy_branch_avg_price")),
+        "top_buy_branch_net_lot": as_float_or_none(row.get("top_buy_branch_net_lot")),
+        "top_buy_branch_avg_price": as_float_or_none(row.get("top_buy_branch_avg_price")),
         "top_sell_branch_name": row.get("top_sell_branch_name") or "",
-        "top_sell_branch_net_lot": as_float(row.get("top_sell_branch_net_lot")),
-        "top_sell_branch_avg_price": as_float(row.get("top_sell_branch_avg_price")),
+        "top_sell_branch_net_lot": as_float_or_none(row.get("top_sell_branch_net_lot")),
+        "top_sell_branch_avg_price": as_float_or_none(row.get("top_sell_branch_avg_price")),
         "branch_score": as_float(row.get("branch_score")),
         "chip_score": as_float(row.get("chip_score")),
         "margin_score": as_float(row.get("margin_score")),
@@ -3694,23 +3704,23 @@ def normalize_scan_row(row: dict[str, str], days: int) -> dict[str, object]:
         "confluence_score": as_float(row.get("confluence_score")),
         "revenue_momentum_score": as_float(row.get("revenue_momentum_score")),
         "revenue_month": row.get("revenue_month") or "",
-        "revenue_mom_pct": as_float(row.get("revenue_mom_pct")),
-        "revenue_yoy_pct": as_float(row.get("revenue_yoy_pct")),
-        "revenue_cumulative_yoy_pct": as_float(row.get("revenue_cumulative_yoy_pct")),
+        "revenue_mom_pct": as_float_or_none(row.get("revenue_mom_pct")),
+        "revenue_yoy_pct": as_float_or_none(row.get("revenue_yoy_pct")),
+        "revenue_cumulative_yoy_pct": as_float_or_none(row.get("revenue_cumulative_yoy_pct")),
         "confluence_inst_score": as_float(row.get("confluence_inst_score")),
         "confluence_branch_score": as_float(row.get("confluence_branch_score")),
         "confluence_price_score": as_float(row.get("confluence_price_score")),
         "confluence_streak_score": as_float(row.get("confluence_streak_score")),
         "confluence_direction_score": as_float(row.get("confluence_direction_score")),
-        "inst_net_volume_pct": as_float(row.get("inst_net_volume_pct")),
-        "top_buy_branch_volume_pct": as_float(row.get("top_buy_branch_volume_pct")),
-        "close_vs_top_buy_avg_pct": as_float(row.get("close_vs_top_buy_avg_pct")),
+        "inst_net_volume_pct": as_float_or_none(row.get("inst_net_volume_pct")),
+        "top_buy_branch_volume_pct": as_float_or_none(row.get("top_buy_branch_volume_pct")),
+        "close_vs_top_buy_avg_pct": as_float_or_none(row.get("close_vs_top_buy_avg_pct")),
         "foreign_buy_streak": as_float(row.get("foreign_buy_streak")),
         "foreign_sell_streak": as_float(row.get("foreign_sell_streak")),
         "trust_buy_streak": as_float(row.get("trust_buy_streak")),
         "trust_sell_streak": as_float(row.get("trust_sell_streak")),
-        "margin_balance_change_lot": as_float(row.get("margin_balance_change_lot")),
-        "short_balance_change_lot": as_float(row.get("short_balance_change_lot")),
+        "margin_balance_change_lot": as_float_or_none(row.get("margin_balance_change_lot")),
+        "short_balance_change_lot": as_float_or_none(row.get("short_balance_change_lot")),
         "branch_status": row.get("branch_status") or ("已取得" if row.get("top_buy_branch_name") else "未取得"),
         "selection_reason": row.get("selection_reason") or "",
         "base_reason": row.get("base_reason") or "",
@@ -5458,8 +5468,9 @@ def publish_static_pages() -> dict[str, object]:
         retry_note = merge_latest_remote_for_publish(branch)
         run_git(["push", "origin", branch], timeout=10 * 60)
     status = static_publish_status()
+    notes = "\n".join(part for part in (pre_sync, retry_note) if part)
     return {
-        "message": f"已發布到 GitHub Pages：{status.get('pages_url') or '-'}\n{pre_sync}{('\\n' + retry_note) if retry_note else ''}",
+        "message": f"已發布到 GitHub Pages：{status.get('pages_url') or '-'}\n{notes}",
         "status": status,
         "published": True,
     }
