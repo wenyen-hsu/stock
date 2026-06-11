@@ -1,0 +1,45 @@
+name: Backfill Taiwan History
+
+on:
+  workflow_dispatch:
+    inputs:
+      days:
+        description: "要回補的交易日數（建議分批：60 → 120 → 240）"
+        required: false
+        default: "60"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: update-taiwan-data
+  cancel-in-progress: false
+
+jobs:
+  backfill:
+    runs-on: ubuntu-latest
+    timeout-minutes: 330
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: 還原 SQLite 快取
+        uses: actions/cache@v4
+        with:
+          path: data/stock_chip.sqlite
+          key: stock-db-${{ github.run_id }}
+          restore-keys: |
+            stock-db-
+
+      - name: 回補官方歷史資料（只補快取中缺漏的交易日）
+        env:
+          DAYS: ${{ github.event.inputs.days || '60' }}
+        run: python -m stock_chip.official --days "$DAYS"
