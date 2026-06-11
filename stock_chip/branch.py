@@ -855,6 +855,14 @@ def parse_args() -> argparse.Namespace:
         default=",".join(DEFAULT_WATCHLIST),
         help="Comma-separated stock ids.",
     )
+    parser.add_argument(
+        "--from-scan",
+        type=int,
+        default=0,
+        metavar="N",
+        help="Also include the top N stocks by total_score from reports/scan_all_20d.csv.",
+    )
+    parser.add_argument("--scan-report", default="reports/scan_all_20d.csv")
     parser.add_argument("--sleep", type=float, default=1.0, help="Delay between third-party requests.")
     parser.add_argument(
         "--all",
@@ -909,6 +917,14 @@ def parse_args() -> argparse.Namespace:
 
 def main() -> None:
     args = parse_args()
+    if args.from_scan > 0:
+        from stock_chip.revenue import top_scan_stock_ids
+
+        merged = parse_watchlist(args.watchlist)
+        for stock_id in top_scan_stock_ids(Path(args.scan_report), args.from_scan):
+            if stock_id not in merged:
+                merged.append(stock_id)
+        args.watchlist = ",".join(merged)
     if args.coverage:
         with connect_db(Path(args.db)) as conn:
             dates = recent_dates(conn, args.days)

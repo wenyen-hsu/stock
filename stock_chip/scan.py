@@ -1175,7 +1175,7 @@ def run_scan(
     with connect_db(db_path) as conn:
         dates = recent_dates(conn, days)
         raw_rows = load_window(conn, dates)
-        branch_leaders: dict[str, dict[str, Any]] = {}
+        branch_leaders = load_branch_leaders(conn, dates[-1], days) if dates else {}
         revenue_momentum = load_revenue_momentum(conn)
         history_stats = load_history_stats(conn, dates[-1]) if dates else {}
         profiles = load_profiles(conn)
