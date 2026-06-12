@@ -3280,7 +3280,22 @@
       "short_stock_repay_lot": 0
     }
   ],
-  "mops_events": [],
+  "mops_events": [
+    {
+      "category": "重大訊息",
+      "company_name": "嘉澤",
+      "detail": "1.股東常會日期:115/06/12 2.重要決議事項一、盈餘分配或盈虧撥補:承認114度盈餘分派承認案 (現金股利每股35元)。 3.重要決議事項二、章程修訂:無 4.重要決議事項三、營業報告書及財務報表:承認114年度營業報告書及財務報告案 5.重要決議事項四、董監事選舉:無 6.重要決議事項五、其他事項:修正本公司「取得或處分資產處理程序」部分條文案 7.其他應敘明事項:無",
+      "event_date": "2026-06-12",
+      "event_id": "7b432fe8d1725d023b",
+      "event_tag": "股東會",
+      "event_time": "11:07:09",
+      "fetched_at": "2026-06-12 05:19:12",
+      "source": "MOPS 公開資訊觀測站",
+      "source_url": "https://mopsov.twse.com.tw/mops/web/t05st02",
+      "stock_id": "3533",
+      "title": "本公司115年股東常會重要決議"
+    }
+  ],
   "news": [],
   "revenues": [],
   "selection": {
@@ -3342,6 +3357,7 @@
     "selection_score": 13.21,
     "short_balance_change_lot": 0.0,
     "stock_id": "3533",
+    "sub_industry": "連接器",
     "top_buy_branch_avg_price": null,
     "top_buy_branch_name": "",
     "top_buy_branch_net_lot": null,
@@ -3381,6 +3397,7 @@
     "pe_ratio": 30.14,
     "short_balance_change_lot": 0,
     "stock_id": "3533",
+    "sub_industry": "連接器",
     "trust_net_lot": -545.37,
     "volume_5d_avg_lot": 1400.88,
     "volume_avg_lot": 1400.88,
