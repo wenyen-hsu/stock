@@ -14,6 +14,7 @@ on:
 
 permissions:
   contents: write
+  pages: read
 
 concurrency:
   group: update-taiwan-data
@@ -88,6 +89,8 @@ jobs:
         run: python -m stock_chip.export_static --out docs
 
       - name: 發布網站到 site 分支並提交報表
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
@@ -103,11 +106,22 @@ jobs:
             fi
             sleep 5
           done
-          # 2) 回到乾淨的 main 只提交 reports（避免 docs 髒檔阻擋 rebase）
+          # 2) 過渡期偵測：Pages 仍從 main 供應時，docs 也同步提交到 main；
+          #    使用者把 Pages 來源切到 site 分支後，這段自動停止
+          pages_branch=$(curl -s -H "Authorization: Bearer $GITHUB_TOKEN" \
+            -H "Accept: application/vnd.github+json" \
+            "https://api.github.com/repos/$GITHUB_REPOSITORY/pages" | python3 -c "import json,sys; print((json.load(sys.stdin).get('source') or {}).get('branch',''))" 2>/dev/null || echo "")
+          cp -r docs /tmp/docs-backup
           git checkout -f main
           rm -rf reports
           cp -r /tmp/reports-backup reports
           git add reports
+          if [ "$pages_branch" = "main" ]; then
+            echo "Pages 仍從 main 供應，docs 同步提交到 main（過渡期）"
+            rm -rf docs
+            cp -r /tmp/docs-backup docs
+            git add docs
+          fi
           if git diff --cached --quiet; then
             echo "No report changes to commit."
             exit 0

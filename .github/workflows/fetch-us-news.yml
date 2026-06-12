@@ -26,6 +26,7 @@ on:
 
 permissions:
   contents: write
+  pages: read
 
 concurrency:
   group: fetch-us-news
@@ -68,6 +69,14 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          pages_branch=$(curl -s -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+            -H "Accept: application/vnd.github+json" \
+            "https://api.github.com/repos/${{ github.repository }}/pages" | python3 -c "import json,sys; print((json.load(sys.stdin).get('source') or {}).get('branch',''))" 2>/dev/null || echo "")
+          if [ "$pages_branch" = "main" ] && ! git diff --quiet -- docs/data/ci_us_news.json; then
+            git add docs/data/ci_us_news.json
+            git commit -m "Update US news cache"
+            git push || { git pull --rebase origin main && git push; }
+          fi
           if ! git ls-remote --exit-code origin site >/dev/null 2>&1; then
             # site 分支尚未由每日資料 workflow 建立前，維持舊行為提交到 main
             if git diff --quiet -- docs/data/ci_us_news.json; then
