@@ -289,7 +289,7 @@ def missing_month_ids(db_path: Path, stock_ids: list[str], month: str) -> list[s
 def all_market_ids(db_path: Path) -> list[str]:
     with connect_db(db_path) as conn:
         rows = conn.execute(
-            "SELECT stock_id FROM stocks WHERE market IN ('TWSE', 'TPEX') ORDER BY stock_id"
+            "SELECT stock_id FROM stocks WHERE market IN ('TWSE', 'TPEX', 'ESB') ORDER BY stock_id"
         ).fetchall()
     return [row[0] for row in rows]
 
