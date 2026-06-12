@@ -887,7 +887,7 @@
         <div class="panel-head">
           <div>
             <div class="panel-title">族群熱力圖</div>
-            <div class="muted" id="sector-note">依平均區間漲跌排序，綠強紅弱。點族群卡看細分類與個股；統計樣本為已匯出的排行股票。</div>
+            <div class="muted" id="sector-note">依平均區間漲跌排序，綠強紅弱。點族群卡看細分類與個股；統計涵蓋全市場已入庫股票。</div>
           </div>
           <button class="secondary" id="refresh-sector">重新整理</button>
         </div>
@@ -1516,9 +1516,22 @@
       }
       if (parsed.pathname === "/api/stock") {
         const stockId = parsed.searchParams.get("stock_id") || "2376";
-        const data = await staticData(`data/stocks/${stockId}/${days}d.json`);
-        data.stock.in_watchlist = staticWatchlistIds().includes(String(data.stock.stock_id));
-        return data;
+        try {
+          const data = await staticData(`data/stocks/${stockId}/${days}d.json`);
+          data.stock.in_watchlist = staticWatchlistIds().includes(String(data.stock.stock_id));
+          return data;
+        } catch (err) {
+          const source = await staticData(`data/rankings/${days}d/search_index.json`);
+          const row = (source.rows || []).find(r => String(r.stock_id) === String(stockId));
+          if (!row) throw err;
+          return {
+            lite: true,
+            stock: {...row, in_watchlist: staticWatchlistIds().includes(String(stockId))},
+            selection: row,
+            daily: [], margin: [], chart: [], branch_top: [], branch_daily: [], revenues: [], news: [], mops_events: [],
+            branch_top_status: {status: "missing"},
+          };
+        }
       }
       if (parsed.pathname === "/api/market") {
         const product = (parsed.searchParams.get("product") || "TXF").toUpperCase();
@@ -3455,6 +3468,9 @@
         : "未分類";
       document.querySelector("#detail-subtitle").innerHTML = `${esc(data.stock.market)} · ${industryHtml} · 最新日 ${esc(data.stock.latest_date || "")}${businessText ? " · " + esc(businessText) : ""}`;
       document.querySelector("#detail-industry-link")?.addEventListener("click", () => openSector(data.stock.industry, data.stock.sub_industry || ""));
+      if (data.lite) {
+        document.querySelector("#detail-subtitle").innerHTML += ` <span class="status-pill warn">精簡資料：指標完整，K線/營收/每日明細僅排行與自選股票提供</span>`;
+      }
       const backBtn = document.querySelector("#back-detail");
       backBtn.style.display = state.previousTab ? "" : "none";
       backBtn.textContent = `返回${state.previousTab === "watchlist" ? "自選股" : state.previousTab === "coverage" ? "資料狀態" : "排行"}`;

@@ -3,7 +3,7 @@
 這個專案分成三個層次：
 
 1. **本機 GUI / SQLite**：主要操作環境。台股行情、法人買賣超、融資融券、營收、MOPS 事件、個股分點與同步後的新聞都寫入本機 `data/stock_chip.sqlite`。
-2. **GitHub Actions 自動快取**：GitHub 上定時抓美股 RSS 新聞（輸出 `docs/data/us_news.json`），並於台股交易日晚間自動抓官方台股資料、重算排行並更新 `docs/data/`（workflow：`update-taiwan-data.yml`）。它不會更新你的本機 SQLite。
+2. **GitHub Actions 自動快取**：GitHub 上定時抓美股 RSS 新聞，並於台股交易日晚間自動抓官方台股資料、重算排行。網站資料發布到 **`site` 分支**（單一 commit 歷史，避免 repo 隨每日資料膨脹）；main 分支只保留程式碼與 reports。它不會更新你的本機 SQLite。
 3. **GitHub Pages 靜態頁**：只讀 `docs/data/*.json` 的靜態快照，給別人看已匯出的排行、個股快取、新聞快取與頁面功能；沒有 Python 後端，也不能直接替使用者更新資料庫。
 
 因此，clone 這個 repo 的人可以看到程式碼與目前提交的靜態快照，但完整可操作資料仍需要在自己的電腦執行更新流程產生。`data/stock_chip.sqlite` 是本機資料庫，不作為共用資料來源。
@@ -160,7 +160,11 @@ GUI 目前包含：
 
 ## GitHub Pages 靜態版
 
-GitHub Pages 版不啟動 Python 後端，也不會即時抓資料；它只讀本機匯出的 `docs/data/*.json`，適合公開給別人看排行、排序、搜尋已匯出的股票，以及點進個股看快取資料。
+GitHub Pages 版不啟動 Python 後端，也不會即時抓資料；它只讀匯出的 `docs/data/*.json`，適合公開給別人看排行、族群熱力圖、全市場搜尋，以及點進個股看快取資料。
+
+**部署來源**：GitHub Actions 每日把 `docs/` 發布到 `site` 分支（強制覆蓋、單一 commit），Pages 設定需指向 **branch `site`、folder `/docs`**（Settings → Pages → Deploy from a branch）。main 上的 `docs/` 僅作為程式碼的一部分（介面 HTML），資料不再提交到 main。
+
+搜尋索引（search_index）涵蓋**全市場**已入庫股票；個股完整明細（K 線、營收、每日進出）僅匯出排行與自選股票，其餘股票在個股頁顯示精簡版指標。
 
 先在本機更新資料庫與報表，再匯出靜態檔：
 

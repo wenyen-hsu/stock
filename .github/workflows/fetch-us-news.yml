@@ -53,20 +53,50 @@ jobs:
           MARKET_ONLY: ${{ github.event.inputs.market_only || 'true' }}
           SYMBOLS: ${{ github.event.inputs.symbols || 'AAPL,MSFT,NVDA,TSLA' }}
         run: |
+          # 以 site 分支上的最新快取為合併基底（site 為網站發布分支）
+          if git ls-remote --exit-code origin site >/dev/null 2>&1; then
+            git fetch origin site
+            git show origin/site:docs/data/ci_us_news.json > docs/data/ci_us_news.json || true
+          fi
           args=(--out docs/data/ci_us_news.json --limit "$LIMIT" --max-rows "$MAX_ROWS" --symbols "$SYMBOLS")
           if [ "$MARKET_ONLY" = "true" ]; then
             args+=(--market-only)
           fi
           python -m stock_chip.export_us_news_static "${args[@]}"
 
-      - name: Commit updated news
+      - name: Publish news to site branch
         run: |
-          if git diff --quiet -- docs/data/ci_us_news.json; then
-            echo "No US news changes to commit."
-            exit 0
-          fi
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add docs/data/ci_us_news.json
-          git commit -m "Update US news cache"
-          git push
+          if ! git ls-remote --exit-code origin site >/dev/null 2>&1; then
+            # site 分支尚未由每日資料 workflow 建立前，維持舊行為提交到 main
+            if git diff --quiet -- docs/data/ci_us_news.json; then
+              echo "No US news changes to commit."
+              exit 0
+            fi
+            git add docs/data/ci_us_news.json
+            git commit -m "Update US news cache"
+            git push
+            exit 0
+          fi
+          for attempt in 1 2 3; do
+            git fetch origin site
+            rm -rf /tmp/site-worktree
+            git worktree remove --force /tmp/site-worktree 2>/dev/null || true
+            git worktree add /tmp/site-worktree origin/site
+            mkdir -p /tmp/site-worktree/docs/data
+            cp docs/data/ci_us_news.json /tmp/site-worktree/docs/data/ci_us_news.json
+            cd /tmp/site-worktree
+            git add docs/data/ci_us_news.json
+            if git diff --cached --quiet; then
+              echo "No US news changes to publish."
+              exit 0
+            fi
+            git commit -m "Update US news cache"
+            if git push origin HEAD:site; then
+              exit 0
+            fi
+            cd "$GITHUB_WORKSPACE"
+          done
+          echo "push failed after retries" >&2
+          exit 1

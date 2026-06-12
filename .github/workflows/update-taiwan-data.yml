@@ -76,27 +76,48 @@ jobs:
           python -m stock_chip.scan --days "$DAYS" --limit 50
           python -m stock_chip.scan --days 5 --limit 50
 
+      - name: 同步最新美股新聞快取（自 site 分支）
+        continue-on-error: true
+        run: |
+          if git ls-remote --exit-code origin site >/dev/null 2>&1; then
+            git fetch origin site
+            git show origin/site:docs/data/ci_us_news.json > docs/data/ci_us_news.json
+          fi
+
       - name: 匯出靜態網站資料
         run: python -m stock_chip.export_static --out docs
 
-      - name: Commit updated data
+      - name: Commit updated reports
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add docs reports
+          git add reports
           if git diff --cached --quiet; then
-            echo "No data changes to commit."
-            exit 0
+            echo "No report changes to commit."
+          else
+            git commit -m "Update Taiwan stock data and rankings"
+            for attempt in 1 2 3; do
+              if git push; then
+                break
+              fi
+              # 資料 commit 之間的衝突一律以本次最新匯出為準（rebase 中 theirs = 本次 commit）
+              if ! git pull --rebase -X theirs origin main; then
+                git rebase --abort || true
+                exit 1
+              fi
+            done
           fi
-          git commit -m "Update Taiwan stock data and rankings"
+
+      - name: 發布網站到 site 分支（單一 commit 歷史，避免 repo 膨脹）
+        run: |
+          git checkout --orphan site-publish
+          git reset -q
+          git add docs
+          git commit -q -m "Publish site data $(date -u +'%Y-%m-%d %H:%M UTC')"
           for attempt in 1 2 3; do
-            if git push; then
-              exit 0
+            if git push -f origin HEAD:site; then
+              break
             fi
-            # 資料 commit 之間的衝突一律以本次最新匯出為準（rebase 中 theirs = 本次 commit）
-            if ! git pull --rebase -X theirs origin main; then
-              git rebase --abort || true
-              exit 1
-            fi
+            sleep 5
           done
-          git push
+          git checkout -f main
