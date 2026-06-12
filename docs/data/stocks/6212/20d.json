@@ -3715,7 +3715,22 @@
       "short_stock_repay_lot": 0
     }
   ],
-  "mops_events": [],
+  "mops_events": [
+    {
+      "category": "重大訊息",
+      "company_name": "理銘",
+      "detail": "1.股東常會日期:115/06/12 2.重要決議事項一、盈餘分配或盈虧撥補: 通過承認一一四年度盈餘分配案。 3.重要決議事項二、章程修訂:無 4.重要決議事項三、營業報告書及財務報表: 通過承認一一四年度營業報告書及財務報表案。 5.重要決議事項四、董監事選舉:無 6.重要決議事項五、其他事項:無 7.其他應敘明事項:無",
+      "event_date": "2026-06-12",
+      "event_id": "cc3805b52b76aef46d",
+      "event_tag": "股東會",
+      "event_time": "14:33:02",
+      "fetched_at": "2026-06-12 08:29:22",
+      "source": "MOPS 公開資訊觀測站",
+      "source_url": "https://mopsov.twse.com.tw/mops/web/t05st02",
+      "stock_id": "6212",
+      "title": "公告本公司一一五年股東常會重要決議事項"
+    }
+  ],
   "news": [],
   "revenues": [],
   "selection": {

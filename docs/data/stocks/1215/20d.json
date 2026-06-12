@@ -3715,7 +3715,22 @@
       "short_stock_repay_lot": 0
     }
   ],
-  "mops_events": [],
+  "mops_events": [
+    {
+      "category": "重大訊息",
+      "company_name": "卜蜂",
+      "detail": "符合條款第四條第XX款：12 事實發生日：115/06/15 1.召開法人說明會之日期：115/06/15 2.召開法人說明會之時間：14 時 00 分 3.召開法人說明會之地點：證券交易所一樓資訊展示中心(台北市信義區信義路五段7號) 4.法人說明會擇要訊息：簡報營運狀況 5.其他應敘明事項：無 完整財務業務資訊請至公開資訊觀測站之法人說明會一覽表或法說會項目下查閱。",
+      "event_date": "2026-06-12",
+      "event_id": "66857271e9500c1d0c",
+      "event_tag": "法說會",
+      "event_time": "14:48:18",
+      "fetched_at": "2026-06-12 08:29:22",
+      "source": "MOPS 公開資訊觀測站",
+      "source_url": "https://mopsov.twse.com.tw/mops/web/t05st02",
+      "stock_id": "1215",
+      "title": "公告本公司召開法人說明會相關內容"
+    }
+  ],
   "news": [],
   "revenues": [],
   "selection": {

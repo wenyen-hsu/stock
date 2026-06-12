@@ -2420,6 +2420,15 @@
       "foreign_trade_net": -1182,
       "trust_oi_net": 55312,
       "trust_trade_net": 1126
+    },
+    {
+      "date": "2026-06-12",
+      "dealer_oi_net": 3568,
+      "dealer_trade_net": -464,
+      "foreign_oi_net": -65039,
+      "foreign_trade_net": -1900,
+      "trust_oi_net": 57111,
+      "trust_trade_net": 1799
     }
   ],
   "index_rows": [
@@ -4326,16 +4335,23 @@
       "high": 43463.03,
       "low": 42006.39,
       "open": 43172.21
+    },
+    {
+      "close": 44169.04,
+      "date": "2026-06-12",
+      "high": 44798.88,
+      "low": 43587.63,
+      "open": 43587.63
     }
   ],
   "summary": {
-    "dealer_oi_net": 4155,
-    "foreign_oi_net": -63168,
-    "latest_index_close": 43149.46,
-    "latest_index_date": "2026-06-11",
+    "dealer_oi_net": 3568,
+    "foreign_oi_net": -65039,
+    "latest_index_close": 44169.04,
+    "latest_index_date": "2026-06-12",
     "product_code": "TXF",
     "product_label": "大台 TXF",
-    "trust_oi_net": 55312
+    "trust_oi_net": 57111
   },
-  "updated_at": "2026-06-12 05:19:04"
+  "updated_at": "2026-06-12 08:29:15"
 }

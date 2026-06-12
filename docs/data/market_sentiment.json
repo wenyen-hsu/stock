@@ -1,25 +1,26 @@
 {
-  "label": "中性",
-  "latest_close": 43149.46,
-  "latest_date": "2026-06-11",
-  "ma20": 43418.88,
-  "ma5": 43930.63,
-  "ma60": 38985.23,
+  "label": "中性偏多",
+  "latest_close": 44169.04,
+  "latest_date": "2026-06-12",
+  "ma20": 43568.72,
+  "ma5": 43750.25,
+  "ma60": 39157.44,
   "parts": {
-    "dealer_hedge": -0.91,
-    "foreign_futures": -16.32,
-    "futures_trade": 7.2,
-    "index_trend": -6.0,
+    "dealer_hedge": -1.02,
+    "foreign_futures": -16.7,
+    "futures_trade": 4.88,
+    "index_trend": 12.0,
     "market_margin": 6.0,
     "trust_futures": 5.81
   },
   "reasons": [
-    "指數跌破 MA20",
+    "指數站上 MA20",
+    "中期趨勢偏多",
     "外資期貨淨部位偏空",
     "外資近 5 日期貨交易偏多",
     "融資下降，籌碼較乾淨"
   ],
-  "risk_multiplier": 0.95,
-  "score": 45.78,
-  "updated_at": "2026-06-12 05:19:04"
+  "risk_multiplier": 1.0,
+  "score": 60.97,
+  "updated_at": "2026-06-12 08:29:19"
 }
