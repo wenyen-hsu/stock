@@ -112,3 +112,10 @@
 - 細分類對照表 `stock_chip/sub_industries.json`：官方產業別之下的人工維護細分族群（被動元件、石英元件、PCB、晶圓代工、IC設計、AI伺服器、貨櫃航運等 27 組起始集），**直接編輯 JSON 加代號即可擴充**，一次維護長期生效。
 - 排行表「產業／細分類」欄與個股頁產業標籤皆可點擊，直接跳到該族群頁。
 - 公司基本資料來源修正：TPEx OpenAPI 用英文欄位名（SecuritiesCompanyCode 等），解析器同時支援中英文欄位；新增興櫃（ESB）來源。
+
+## 覆蓋率與資料發布架構（2026-06）
+
+- **方案 A（全市場列表覆蓋）**：search_index 改輸出全市場（~2,300 檔），搜尋、產業篩選、族群熱力圖涵蓋所有已入庫股票；非排行股票的個股頁顯示精簡版（指標完整，無 K 線/營收/每日明細），附狀態提示。完整明細維持「排行 ∪ 自選」（~430 檔 × 168KB）。
+- **方案 D（site 分支發布）**：每日資料改發布到 orphan `site` 分支（git checkout --orphan + force push，歷史永遠單一 commit），main 只提交程式碼與 reports；美股新聞每小時改用 worktree 提交到 site。動機：每日重寫 ~90MB JSON 進 main 歷史已使 repo 達 111MB 且持續膨脹。
+- **需要一次性手動設定**：GitHub Settings → Pages → Deploy from a branch → branch `site` / folder `/docs`。
+- 全市場完整明細（推估 388MB）不適合 git/Pages，維持不做；若未來需要可評估外部物件儲存。

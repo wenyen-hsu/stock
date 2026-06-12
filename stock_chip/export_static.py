@@ -149,7 +149,8 @@ def export_static(out_dir: Path, days_values: list[int], include_all_details: bo
             rows = rows_for_ranking(days, ranking)
             exported_ids.update(str(row["stock_id"]) for row in rows if row.get("stock_id"))
             write_json(ranking_dir / f"{ranking}.json", {"days": days, "ranking": ranking, "rows": rows})
-        searchable = [row for row in scan_all_rows(days) if str(row.get("stock_id")) in exported_ids]
+        # 全市場列表級資料：搜尋、產業篩選與族群熱力圖涵蓋所有已入庫股票
+        searchable = scan_all_rows(days)
         write_json(ranking_dir / "search_index.json", {"days": days, "rows": searchable})
         exported_by_days[str(days)] = len(searchable)
 
