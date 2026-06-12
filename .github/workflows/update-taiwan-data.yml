@@ -87,29 +87,12 @@ jobs:
       - name: 匯出靜態網站資料
         run: python -m stock_chip.export_static --out docs
 
-      - name: Commit updated reports
+      - name: 發布網站到 site 分支並提交報表
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add reports
-          if git diff --cached --quiet; then
-            echo "No report changes to commit."
-          else
-            git commit -m "Update Taiwan stock data and rankings"
-            for attempt in 1 2 3; do
-              if git push; then
-                break
-              fi
-              # 資料 commit 之間的衝突一律以本次最新匯出為準（rebase 中 theirs = 本次 commit）
-              if ! git pull --rebase -X theirs origin main; then
-                git rebase --abort || true
-                exit 1
-              fi
-            done
-          fi
-
-      - name: 發布網站到 site 分支（單一 commit 歷史，避免 repo 膨脹）
-        run: |
+          cp -r reports /tmp/reports-backup
+          # 1) docs 整包發布到 site 分支（單一 commit 歷史，避免 repo 膨脹）
           git checkout --orphan site-publish
           git reset -q
           git add docs
@@ -120,4 +103,24 @@ jobs:
             fi
             sleep 5
           done
+          # 2) 回到乾淨的 main 只提交 reports（避免 docs 髒檔阻擋 rebase）
           git checkout -f main
+          rm -rf reports
+          cp -r /tmp/reports-backup reports
+          git add reports
+          if git diff --cached --quiet; then
+            echo "No report changes to commit."
+            exit 0
+          fi
+          git commit -m "Update Taiwan stock data and rankings"
+          for attempt in 1 2 3; do
+            if git push; then
+              exit 0
+            fi
+            # 報表 commit 衝突以本次為準（rebase 中 theirs = 本次 commit）
+            if ! git pull --rebase -X theirs origin main; then
+              git rebase --abort || true
+              exit 1
+            fi
+          done
+          git push
