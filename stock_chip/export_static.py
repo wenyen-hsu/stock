@@ -161,6 +161,30 @@ def export_static(out_dir: Path, days_values: list[int], include_all_details: bo
             except Exception as exc:
                 missing_details.append({"stock_id": stock_id, "days": days, "error": str(exc)})
 
+    # 全市場精簡 K 線：未匯出完整明細的股票仍可看 240 日蠟燭圖（每檔約 12KB）
+    with connect_db(DB_PATH) as conn:
+        chart_dates = recent_dates(conn, 240)
+        if chart_dates:
+            placeholders = ",".join("?" for _ in chart_dates)
+            lite_series: dict[str, list[dict[str, object]]] = {}
+            for sid, date, open_, high, low, close in conn.execute(
+                f"SELECT stock_id, date, open, high, low, close FROM daily_prices "
+                f"WHERE date IN ({placeholders}) ORDER BY stock_id, date",
+                chart_dates,
+            ):
+                if close is None:
+                    continue
+                lite_series.setdefault(sid, []).append(
+                    {"date": date, "open": open_, "high": high, "low": low, "close": close}
+                )
+            lite_count = 0
+            for sid, chart_rows in lite_series.items():
+                if sid in exported_ids:
+                    continue
+                write_json(data_dir / "stocks" / sid / "chart_lite.json", {"stock_id": sid, "rows": chart_rows})
+                lite_count += 1
+            print(f"lite charts exported: {lite_count}")
+
     default_days = 20 if 20 in days_values else days_values[-1]
     meta = db_meta(default_days)
     search_rows = scan_all_rows(default_days)

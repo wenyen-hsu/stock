@@ -1607,11 +1607,18 @@ INDEX_HTML = """<!doctype html>
           const source = await staticData(`data/rankings/${days}d/search_index.json`);
           const row = (source.rows || []).find(r => String(r.stock_id) === String(stockId));
           if (!row) throw err;
+          let liteChart = [];
+          try {
+            const liteData = await staticData(`data/stocks/${stockId}/chart_lite.json`);
+            liteChart = liteData.rows || [];
+          } catch (_chartErr) {
+            liteChart = [];
+          }
           return {
             lite: true,
             stock: {...row, in_watchlist: staticWatchlistIds().includes(String(stockId))},
             selection: row,
-            daily: [], margin: [], chart: [], branch_top: [], branch_daily: [], revenues: [], news: [], mops_events: [],
+            daily: [], margin: [], chart: liteChart, branch_top: [], branch_daily: [], revenues: [], news: [], mops_events: [],
             branch_top_status: {status: "missing"},
           };
         }
@@ -3598,7 +3605,7 @@ INDEX_HTML = """<!doctype html>
       document.querySelector("#detail-subtitle").innerHTML = `${esc(data.stock.market)} · ${industryHtml} · 最新日 ${esc(data.stock.latest_date || "")}${businessText ? " · " + esc(businessText) : ""}`;
       document.querySelector("#detail-industry-link")?.addEventListener("click", () => openSector(data.stock.industry, data.stock.sub_industry || ""));
       if (data.lite) {
-        document.querySelector("#detail-subtitle").innerHTML += ` <span class="status-pill warn">精簡資料：指標完整，K線/營收/每日明細僅排行與自選股票提供</span>`;
+        document.querySelector("#detail-subtitle").innerHTML += ` <span class="status-pill warn">精簡資料：指標與 K 線完整，營收表/每日明細/均線僅排行與自選股票提供</span>`;
       }
       renderPeerStrip(data.stock);
       const backBtn = document.querySelector("#back-detail");
