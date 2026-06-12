@@ -741,6 +741,24 @@
       font-size: 13px;
     }
     .industry-link:hover { text-decoration: underline; background: none; }
+    .peer-strip { display: flex; flex-wrap: wrap; gap: 8px; }
+    .peer-chip {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 2px;
+      min-width: 108px;
+      padding: 8px 10px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      height: auto;
+      color: var(--ink);
+      cursor: pointer;
+      font-weight: 800;
+    }
+    .peer-chip:hover { border-color: var(--accent); }
+    .peer-name { font-size: 12px; }
+    .peer-return { font-size: 14px; font-weight: 900; }
     .focus-grid {
       display: grid;
       grid-template-columns: repeat(3, minmax(200px, 1fr));
@@ -924,6 +942,16 @@
         </div>
       </div>
       <section class="metrics" id="detail-metrics"></section>
+      <section class="panel" id="peer-panel" style="display:none;">
+        <div class="panel-head">
+          <div>
+            <div class="panel-title" id="peer-title">同族群個股</div>
+            <div class="muted" id="peer-note"></div>
+          </div>
+          <button class="secondary" id="peer-open-sector">看完整族群</button>
+        </div>
+        <div class="panel-body"><div class="peer-strip" id="peer-strip"></div></div>
+      </section>
       <section class="panel" id="detail-status-panel">
         <div class="panel-head">
           <div>
@@ -2922,7 +2950,10 @@
       if (!state.sectorSelected) { panel.style.display = "none"; return; }
       panel.style.display = "";
       let list = rows.filter(r => String(r.industry || "") === state.sectorSelected);
-      const subs = aggregateGroups(list, r => r.sub_industry);
+      // 細分類跨官方產業聚合：同一細分族群（如散熱）可能散在多個官方產業
+      const subNames = new Set(list.map(r => String(r.sub_industry || "").trim()).filter(Boolean));
+      const subRows = rows.filter(r => subNames.has(String(r.sub_industry || "").trim()));
+      const subs = aggregateGroups(subRows, r => r.sub_industry);
       const unclassified = list.filter(r => !String(r.sub_industry || "").trim()).length;
       subWrap.innerHTML = subs.length
         ? `<div class="sector-grid sub-grid">${subs.map(g => sectorCard(g, "sub")).join("")}</div>` + (unclassified ? `<div class="muted" style="margin-top:8px; font-size:12px;">另有 ${fmt(unclassified)} 檔尚未細分；細分類對照表在 stock_chip/sub_industries.json，可自行增補。</div>` : "")
@@ -2931,7 +2962,7 @@
         state.sectorSub = state.sectorSub === card.dataset.name ? "" : card.dataset.name;
         renderSectorView();
       }));
-      if (state.sectorSub) list = list.filter(r => String(r.sub_industry || "") === state.sectorSub);
+      if (state.sectorSub) list = rows.filter(r => String(r.sub_industry || "").trim() === state.sectorSub);
       document.querySelector("#sector-stocks-title").textContent = `${state.sectorSelected}${state.sectorSub ? " · " + state.sectorSub : ""}（${list.length} 檔）`;
       document.querySelector("#sector-stocks-note").textContent = "點細分類卡可縮小範圍再點一次取消；點個股列進個股頁";
       const sort = state.sectorSort || {key:"multifactor_score", dir:"desc"};
@@ -2945,6 +2976,49 @@
           renderSectorView();
         }
       });
+    }
+    async function ensureScanAllRows() {
+      if (state.sectorRows && state.sectorRows.length) return state.sectorRows;
+      const days = document.querySelector("#days")?.value || 20;
+      try {
+        const data = await getJSON(`/api/scan-all?days=${days}`);
+        state.sectorRows = data.rows || [];
+      } catch (_err) {
+        state.sectorRows = [];
+      }
+      return state.sectorRows;
+    }
+    async function renderPeerStrip(stock) {
+      const panel = document.querySelector("#peer-panel");
+      const strip = document.querySelector("#peer-strip");
+      if (!panel || !strip) return;
+      const rows = await ensureScanAllRows();
+      const sub = String(stock.sub_industry || "").trim();
+      const industry = String(stock.industry || "").trim();
+      let peers = [];
+      let label = "";
+      if (sub) {
+        peers = rows.filter(r => String(r.sub_industry || "").trim() === sub && String(r.stock_id) !== String(stock.stock_id));
+        label = sub;
+      }
+      if (!peers.length && industry) {
+        peers = rows.filter(r => String(r.industry || "").trim() === industry && String(r.stock_id) !== String(stock.stock_id));
+        label = industry;
+      }
+      if (!peers.length) { panel.style.display = "none"; return; }
+      peers.sort((a, b) => (Number(b.multifactor_score) || 0) - (Number(a.multifactor_score) || 0));
+      const shown = peers.slice(0, 12);
+      panel.style.display = "";
+      document.querySelector("#peer-title").textContent = `同族群個股 · ${label}`;
+      document.querySelector("#peer-note").textContent = `顏色為區間漲跌，點卡片切換個股${peers.length > shown.length ? `；共 ${peers.length} 檔，依多因子分顯示前 ${shown.length}` : ""}`;
+      strip.innerHTML = shown.map(r => `
+        <button class="peer-chip ${heatClass(Number(r.period_return_pct))}" data-id="${esc(r.stock_id)}">
+          <span class="peer-name">${esc(r.stock_id)} ${esc(r.name)}</span>
+          <span class="peer-return ${cls(r.period_return_pct)}">${r.period_return_pct === null || r.period_return_pct === undefined ? "-" : fmt(r.period_return_pct) + "%"}</span>
+        </button>`).join("");
+      strip.querySelectorAll(".peer-chip").forEach(btn => btn.addEventListener("click", () => openDetail(btn.dataset.id)));
+      const more = document.querySelector("#peer-open-sector");
+      if (more) more.onclick = () => openSector(industry, sub);
     }
     async function openSector(industry, sub = "") {
       state.sectorSelected = industry || "";
@@ -3471,6 +3545,7 @@
       if (data.lite) {
         document.querySelector("#detail-subtitle").innerHTML += ` <span class="status-pill warn">精簡資料：指標完整，K線/營收/每日明細僅排行與自選股票提供</span>`;
       }
+      renderPeerStrip(data.stock);
       const backBtn = document.querySelector("#back-detail");
       backBtn.style.display = state.previousTab ? "" : "none";
       backBtn.textContent = `返回${state.previousTab === "watchlist" ? "自選股" : state.previousTab === "coverage" ? "資料狀態" : "排行"}`;
