@@ -246,10 +246,52 @@ def parse_args() -> argparse.Namespace:
         help="Also include the top N stocks by total_score from reports/scan_all_20d.csv.",
     )
     parser.add_argument("--scan-report", default="reports/scan_all_20d.csv")
+    parser.add_argument(
+        "--only-missing-month",
+        action="store_true",
+        help="Only fetch stocks missing the latest expected revenue month.",
+    )
+    parser.add_argument(
+        "--fill-market",
+        type=int,
+        default=0,
+        metavar="N",
+        help="Top up the list with up to N market-wide stocks missing the latest month.",
+    )
     parser.add_argument("--sleep", type=float, default=0.2)
     parser.add_argument("--retries", type=int, default=2)
     parser.add_argument("--timeout", type=float, default=20)
     return parser.parse_args()
+
+
+def expected_revenue_month(today: dt.date | None = None) -> str:
+    """最近一個應已公告的營收月份；每月 12 日前保守往前推一個月。"""
+    today = today or dt.date.today()
+    prev = today.replace(day=1) - dt.timedelta(days=1)
+    if today.day < 12:
+        prev = prev.replace(day=1) - dt.timedelta(days=1)
+    return prev.strftime("%Y-%m")
+
+
+def missing_month_ids(db_path: Path, stock_ids: list[str], month: str) -> list[str]:
+    if not stock_ids:
+        return []
+    with connect_db(db_path) as conn:
+        placeholders = ",".join("?" for _ in stock_ids)
+        rows = conn.execute(
+            f"SELECT DISTINCT stock_id FROM monthly_revenues WHERE revenue_month = ? AND stock_id IN ({placeholders})",
+            [month, *stock_ids],
+        ).fetchall()
+    have = {row[0] for row in rows}
+    return [stock_id for stock_id in stock_ids if stock_id not in have]
+
+
+def all_market_ids(db_path: Path) -> list[str]:
+    with connect_db(db_path) as conn:
+        rows = conn.execute(
+            "SELECT stock_id FROM stocks WHERE market IN ('TWSE', 'TPEX') ORDER BY stock_id"
+        ).fetchall()
+    return [row[0] for row in rows]
 
 
 def top_scan_stock_ids(report_path: Path, limit: int) -> list[str]:
@@ -277,10 +319,23 @@ def top_scan_stock_ids(report_path: Path, limit: int) -> list[str]:
 
 def main() -> None:
     args = parse_args()
+    db_path = Path(args.db)
     stock_ids = parse_watchlist(args.watchlist)
     for stock_id in top_scan_stock_ids(Path(args.scan_report), args.from_scan):
         if stock_id not in stock_ids:
             stock_ids.append(stock_id)
+    if args.only_missing_month or args.fill_market > 0:
+        month = expected_revenue_month()
+        if args.only_missing_month:
+            stock_ids = missing_month_ids(db_path, stock_ids, month)
+        if args.fill_market > 0:
+            seen = set(stock_ids)
+            extra = [s for s in missing_month_ids(db_path, all_market_ids(db_path), month) if s not in seen]
+            stock_ids.extend(extra[: args.fill_market])
+        print(f"expected month {month}; fetching {len(stock_ids)} stocks", flush=True)
+        if not stock_ids:
+            print("revenue already up to date")
+            return
     result = run_revenue(
         db_path=Path(args.db),
         stock_ids=stock_ids,

@@ -58,9 +58,11 @@ jobs:
           DAYS: ${{ github.event.inputs.days || '20' }}
         run: python -m stock_chip.scan --days "$DAYS" --limit 50
 
-      - name: 更新自選股與排行前 200 檔月營收
+      - name: 更新月營收（排行優先補缺漏月份 + 全市場分批補齊）
         continue-on-error: true
-        run: python -m stock_chip.revenue --months 24 --from-scan 200 --sleep 0.4
+        run: |
+          python -m stock_chip.revenue --months 24 --from-scan 200 --only-missing-month --sleep 0.4
+          python -m stock_chip.revenue --months 24 --fill-market 250 --only-missing-month --sleep 0.5
 
       - name: 更新大盤指數與期貨多空
         continue-on-error: true

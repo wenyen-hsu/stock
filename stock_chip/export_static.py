@@ -23,6 +23,7 @@ from stock_chip.gui import (
     read_csv,
     stock_detail,
 )
+from stock_chip.official import shares_to_lots
 from stock_chip.scan import recent_dates
 from stock_chip.mops import load_mops_events
 from stock_chip.us_news import load_cached_us_news
@@ -161,12 +162,18 @@ def export_static(out_dir: Path, days_values: list[int], include_all_details: bo
             except Exception as exc:
                 missing_details.append({"stock_id": stock_id, "days": days, "error": str(exc)})
 
-    # 全市場精簡 K 線：未匯出完整明細的股票仍可看 240 日蠟燭圖（每檔約 12KB）
+    # 全市場精簡明細：未匯出完整明細的股票仍有 240 日 K 線、20 日每日進出、
+    # 融資券與 24 個月營收（每檔約 25KB；分點與新聞僅完整明細提供）
     with connect_db(DB_PATH) as conn:
         chart_dates = recent_dates(conn, 240)
+        daily_dates = recent_dates(conn, max(days_values))
+        lite_series: dict[str, dict[str, list[dict[str, object]]]] = {}
+
+        def bucket(sid: str) -> dict[str, list[dict[str, object]]]:
+            return lite_series.setdefault(sid, {"rows": [], "daily": [], "margin": [], "revenues": []})
+
         if chart_dates:
             placeholders = ",".join("?" for _ in chart_dates)
-            lite_series: dict[str, list[dict[str, object]]] = {}
             for sid, date, open_, high, low, close in conn.execute(
                 f"SELECT stock_id, date, open, high, low, close FROM daily_prices "
                 f"WHERE date IN ({placeholders}) ORDER BY stock_id, date",
@@ -174,16 +181,104 @@ def export_static(out_dir: Path, days_values: list[int], include_all_details: bo
             ):
                 if close is None:
                     continue
-                lite_series.setdefault(sid, []).append(
+                bucket(sid)["rows"].append(
                     {"date": date, "open": open_, "high": high, "low": low, "close": close}
                 )
-            lite_count = 0
-            for sid, chart_rows in lite_series.items():
-                if sid in exported_ids:
-                    continue
-                write_json(data_dir / "stocks" / sid / "chart_lite.json", {"stock_id": sid, "rows": chart_rows})
-                lite_count += 1
-            print(f"lite charts exported: {lite_count}")
+        if daily_dates:
+            placeholders = ",".join("?" for _ in daily_dates)
+            for sid, date, close, avg_price, volume, pe, dy, pb, f_net, t_net, d_net in conn.execute(
+                f"""
+                SELECT p.stock_id, p.date, p.close, p.avg_price, p.volume, p.pe_ratio,
+                       p.dividend_yield, p.pb_ratio,
+                       COALESCE(i.foreign_net, 0), COALESCE(i.trust_net, 0), COALESCE(i.dealer_net, 0)
+                FROM daily_prices p
+                LEFT JOIN institutional_trades i
+                    ON i.stock_id = p.stock_id AND i.date = p.date
+                WHERE p.date IN ({placeholders})
+                ORDER BY p.stock_id, p.date DESC
+                """,
+                daily_dates,
+            ):
+                bucket(sid)["daily"].append(
+                    {
+                        "date": date,
+                        "close": close,
+                        "avg_price": avg_price,
+                        "volume_lot": shares_to_lots(volume),
+                        "pe_ratio": pe,
+                        "dividend_yield": dy,
+                        "pb_ratio": pb,
+                        "foreign_net_lot": shares_to_lots(f_net),
+                        "trust_net_lot": shares_to_lots(t_net),
+                        "dealer_net_lot": shares_to_lots(d_net),
+                    }
+                )
+            for row in conn.execute(
+                f"""
+                SELECT stock_id, date, margin_buy, margin_sell, margin_cash_repay,
+                       margin_prev_balance, margin_balance,
+                       short_buy, short_sell, short_stock_repay,
+                       short_prev_balance, short_balance, offset, note
+                FROM margin_trades
+                WHERE date IN ({placeholders})
+                ORDER BY stock_id, date DESC
+                """,
+                daily_dates,
+            ):
+                bucket(row[0])["margin"].append(
+                    {
+                        "date": row[1],
+                        "margin_buy_lot": row[2],
+                        "margin_sell_lot": row[3],
+                        "margin_cash_repay_lot": row[4],
+                        "margin_prev_balance_lot": row[5],
+                        "margin_balance_lot": row[6],
+                        "margin_change_lot": (row[6] - row[5]) if row[6] is not None and row[5] is not None else None,
+                        "short_buy_lot": row[7],
+                        "short_sell_lot": row[8],
+                        "short_stock_repay_lot": row[9],
+                        "short_prev_balance_lot": row[10],
+                        "short_balance_lot": row[11],
+                        "short_change_lot": (row[11] - row[10]) if row[11] is not None and row[10] is not None else None,
+                        "offset_lot": row[12],
+                        "note": row[13],
+                    }
+                )
+        revenue_counts: dict[str, int] = {}
+        for row in conn.execute(
+            """
+            SELECT stock_id, revenue_month, revenue, prev_month_revenue, last_year_revenue,
+                   mom_pct, yoy_pct, cumulative_revenue, last_year_cumulative_revenue,
+                   cumulative_yoy_pct, source
+            FROM monthly_revenues
+            ORDER BY stock_id, revenue_month DESC
+            """
+        ):
+            sid = row[0]
+            if revenue_counts.get(sid, 0) >= 24:
+                continue
+            revenue_counts[sid] = revenue_counts.get(sid, 0) + 1
+            bucket(sid)["revenues"].append(
+                {
+                    "revenue_month": row[1],
+                    "revenue_million": round(row[2] / 1_000_000, 2) if row[2] is not None else None,
+                    "prev_month_revenue_million": round(row[3] / 1_000_000, 2) if row[3] is not None else None,
+                    "last_year_revenue_million": round(row[4] / 1_000_000, 2) if row[4] is not None else None,
+                    "mom_pct": row[5],
+                    "yoy_pct": row[6],
+                    "cumulative_revenue_million": round(row[7] / 1_000_000, 2) if row[7] is not None else None,
+                    "last_year_cumulative_revenue_million": round(row[8] / 1_000_000, 2) if row[8] is not None else None,
+                    "cumulative_yoy_pct": row[9],
+                    "source": row[10],
+                }
+            )
+        lite_count = 0
+        for sid, payload in lite_series.items():
+            if sid in exported_ids:
+                continue
+            write_json(data_dir / "stocks" / sid / "chart_lite.json", {"stock_id": sid, **payload})
+            lite_count += 1
+        print(f"lite details exported: {lite_count}")
 
     default_days = 20 if 20 in days_values else days_values[-1]
     meta = db_meta(default_days)

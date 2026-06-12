@@ -1552,18 +1552,33 @@
           const source = await staticData(`data/rankings/${days}d/search_index.json`);
           const row = (source.rows || []).find(r => String(r.stock_id) === String(stockId));
           if (!row) throw err;
-          let liteChart = [];
+          let lite = {};
           try {
-            const liteData = await staticData(`data/stocks/${stockId}/chart_lite.json`);
-            liteChart = liteData.rows || [];
+            lite = await staticData(`data/stocks/${stockId}/chart_lite.json`);
           } catch (_chartErr) {
-            liteChart = [];
+            lite = {};
           }
+          const liteChart = lite.rows || [];
+          // 均線由收盤價即時計算（與完整明細頁同樣的 MA5/10/20/60）
+          const closes = liteChart.map(r => Number(r.close));
+          [5, 10, 20, 60].forEach(period => {
+            let sum = 0;
+            liteChart.forEach((chartRow, idx) => {
+              sum += closes[idx];
+              if (idx >= period) sum -= closes[idx - period];
+              if (idx >= period - 1) chartRow[`ma${period}`] = Math.round(sum / period * 100) / 100;
+            });
+          });
           return {
             lite: true,
             stock: {...row, in_watchlist: staticWatchlistIds().includes(String(stockId))},
             selection: row,
-            daily: [], margin: [], chart: liteChart, branch_top: [], branch_daily: [], revenues: [], news: [], mops_events: [],
+            daily: lite.daily || [],
+            margin: lite.margin || [],
+            chart: liteChart,
+            branch_top: [], branch_daily: [],
+            revenues: lite.revenues || [],
+            news: [], mops_events: [],
             branch_top_status: {status: "missing"},
           };
         }
@@ -3550,7 +3565,7 @@
       document.querySelector("#detail-subtitle").innerHTML = `${esc(data.stock.market)} · ${industryHtml} · 最新日 ${esc(data.stock.latest_date || "")}${businessText ? " · " + esc(businessText) : ""}`;
       document.querySelector("#detail-industry-link")?.addEventListener("click", () => openSector(data.stock.industry, data.stock.sub_industry || ""));
       if (data.lite) {
-        document.querySelector("#detail-subtitle").innerHTML += ` <span class="status-pill warn">精簡資料：指標與 K 線完整，營收表/每日明細/均線僅排行與自選股票提供</span>`;
+        document.querySelector("#detail-subtitle").innerHTML += ` <span class="status-pill warn">精簡資料：分點與新聞僅排行與自選股票提供，其餘齊全</span>`;
       }
       renderPeerStrip(data.stock);
       const backBtn = document.querySelector("#back-detail");
