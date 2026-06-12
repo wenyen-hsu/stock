@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import argparse
 import datetime as dt
+import json
 import sqlite3
 from pathlib import Path
 from typing import Any
@@ -21,7 +22,32 @@ PROFILE_SOURCES = [
             "https://openapi.twse.com.tw/v1/opendata/t187ap03_O",
         ],
     ),
+    (
+        "ESB",
+        [
+            "https://www.tpex.org.tw/openapi/v1/mopsfin_t187ap03_R",
+            "https://www.tpex.org.tw/openapi/v1/t187ap03_R",
+        ],
+    ),
 ]
+
+SUB_INDUSTRY_PATH = Path(__file__).with_name("sub_industries.json")
+
+
+def load_sub_industry_map() -> dict[str, str]:
+    """stock_id -> 細分類名稱；對照表為 repo 內可手動增補的 JSON。"""
+    try:
+        payload = json.loads(SUB_INDUSTRY_PATH.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        return {}
+    mapping: dict[str, str] = {}
+    for group in payload.get("sub_industries", []):
+        name = str(group.get("name") or "").strip()
+        if not name:
+            continue
+        for stock_id in group.get("stock_ids", []):
+            mapping.setdefault(str(stock_id).strip(), name)
+    return mapping
 
 # TWSE/TPEx 產業別代碼（公開資訊觀測站分類）
 INDUSTRY_CODES = {
@@ -64,10 +90,13 @@ INDUSTRY_CODES = {
     "80": "管理股票",
 }
 
-BUSINESS_KEYS = ("所營業務", "主要經營業務", "營業項目", "主要業務", "公司主要經營業務")
-INDUSTRY_KEYS = ("產業別", "產業類別")
-WEBSITE_KEYS = ("網址", "公司網址")
-CHAIRMAN_KEYS = ("董事長",)
+# TWSE OpenAPI 用中文欄位名，TPEx OpenAPI 用英文欄位名，兩者皆列入候選
+ID_KEYS = ("公司代號", "SecuritiesCompanyCode", "CompanyCode", "Code")
+NAME_KEYS = ("公司簡稱", "公司名稱", "CompanyAbbreviation", "CompanyName")
+BUSINESS_KEYS = ("所營業務", "主要經營業務", "營業項目", "主要業務", "公司主要經營業務", "MainBusiness")
+INDUSTRY_KEYS = ("產業別", "產業類別", "SecuritiesIndustryCode", "IndustryCategory")
+WEBSITE_KEYS = ("網址", "公司網址", "WebAddress")
+CHAIRMAN_KEYS = ("董事長", "Chairman")
 
 
 def pick(row: dict[str, Any], keys: tuple[str, ...]) -> str:
@@ -98,17 +127,18 @@ def fetch_profiles(market: str, url: str, timeout_seconds: float = 30) -> list[d
     rows: list[dict[str, Any]] = []
     now = dt.datetime.now().isoformat(timespec="seconds")
     for item in payload:
-        stock_id = str(item.get("公司代號") or "").strip()
-        if not stock_id:
+        stock_id = pick(item, ID_KEYS)
+        if not stock_id or not stock_id[:1].isdigit():
             continue
         raw_industry = pick(item, INDUSTRY_KEYS)
         rows.append(
             {
                 "stock_id": stock_id,
-                "name": str(item.get("公司簡稱") or item.get("公司名稱") or "").strip(),
+                "name": pick(item, NAME_KEYS),
                 "market": market,
                 "industry_code": raw_industry,
                 "industry_name": industry_name(raw_industry),
+                "sub_industry": "",
                 "business": pick(item, BUSINESS_KEYS),
                 "chairman": pick(item, CHAIRMAN_KEYS),
                 "website": pick(item, WEBSITE_KEYS),
@@ -118,18 +148,30 @@ def fetch_profiles(market: str, url: str, timeout_seconds: float = 30) -> list[d
     return rows
 
 
+def ensure_sub_industry_column(conn: sqlite3.Connection) -> None:
+    columns = [row[1] for row in conn.execute("PRAGMA table_info(stock_profiles)")]
+    if "sub_industry" not in columns:
+        conn.execute("ALTER TABLE stock_profiles ADD COLUMN sub_industry TEXT DEFAULT ''")
+        conn.commit()
+
+
 def upsert_profiles(conn: sqlite3.Connection, rows: list[dict[str, Any]]) -> None:
+    ensure_sub_industry_column(conn)
+    sub_map = load_sub_industry_map()
+    for row in rows:
+        row["sub_industry"] = sub_map.get(row["stock_id"], "")
     conn.executemany(
         """
         INSERT INTO stock_profiles
-            (stock_id, name, market, industry_code, industry_name, business, chairman, website, updated_at)
+            (stock_id, name, market, industry_code, industry_name, sub_industry, business, chairman, website, updated_at)
         VALUES
-            (:stock_id, :name, :market, :industry_code, :industry_name, :business, :chairman, :website, :updated_at)
+            (:stock_id, :name, :market, :industry_code, :industry_name, :sub_industry, :business, :chairman, :website, :updated_at)
         ON CONFLICT(stock_id) DO UPDATE SET
             name = excluded.name,
             market = excluded.market,
             industry_code = excluded.industry_code,
             industry_name = excluded.industry_name,
+            sub_industry = excluded.sub_industry,
             business = CASE WHEN excluded.business != '' THEN excluded.business ELSE stock_profiles.business END,
             chairman = excluded.chairman,
             website = excluded.website,
@@ -155,6 +197,7 @@ def run_profiles(db_path: Path, timeout_seconds: float = 30) -> dict[str, Any]:
                     continue
                 if rows:
                     break
+                errors.append(f"{url}: parsed 0 rows")
             if not rows:
                 failures.append(f"{market}: " + " | ".join(errors))
                 continue

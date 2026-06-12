@@ -256,11 +256,14 @@ def long_momentum_score_row(row: dict[str, Any]) -> float:
 def load_profiles(conn: sqlite3.Connection) -> dict[str, dict[str, Any]]:
     try:
         rows = conn.execute(
-            "SELECT stock_id, industry_name FROM stock_profiles"
+            "SELECT stock_id, industry_name, sub_industry FROM stock_profiles"
         ).fetchall()
     except sqlite3.OperationalError:
-        return {}
-    return {row[0]: {"industry": row[1] or ""} for row in rows}
+        try:
+            rows = [(r[0], r[1], "") for r in conn.execute("SELECT stock_id, industry_name FROM stock_profiles")]
+        except sqlite3.OperationalError:
+            return {}
+    return {row[0]: {"industry": row[1] or "", "sub_industry": row[2] or ""} for row in rows}
 
 
 def load_revenue_momentum(conn: sqlite3.Connection) -> dict[str, dict[str, Any]]:
@@ -784,6 +787,7 @@ def aggregate(
         item.update(history_stats.get(stock_id, {}))
         item.update(profiles.get(stock_id, {}))
         item.setdefault("industry", "")
+        item.setdefault("sub_industry", "")
         item.setdefault("long_momentum_score", 0.0)
         margin_values = [row for row in stock_rows if row.get("margin_balance") is not None]
         margin_balance_change = None
@@ -835,6 +839,7 @@ def to_export_row(row: dict[str, Any], days: int) -> dict[str, Any]:
         "name": row["name"],
         "market": row["market"],
         "industry": row.get("industry", ""),
+        "sub_industry": row.get("sub_industry", ""),
         "observed_days": row["observed_days"],
         "close": row["close"],
         "pe_ratio": row.get("pe_ratio"),

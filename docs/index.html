@@ -714,6 +714,33 @@
     }
     .source-audit-card a { color: var(--accent-dark); font-weight: 800; text-decoration: none; }
     .source-audit-card a:hover { text-decoration: underline; }
+    .sector-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(168px, 1fr)); gap: 10px; }
+    .sub-grid { margin-top: 2px; }
+    .sector-card { border: 1px solid var(--line); border-radius: 8px; padding: 10px; cursor: pointer; }
+    .sector-card:hover { border-color: var(--accent); }
+    .sector-card.selected { box-shadow: inset 0 0 0 2px var(--accent); }
+    .sector-name { font-weight: 850; font-size: 13px; }
+    .sector-return { font-size: 20px; font-weight: 900; margin-top: 4px; }
+    .sector-meta { color: #475467; font-size: 11px; line-height: 1.5; margin-top: 4px; }
+    .heat-p3 { background: #a9ecc4; }
+    .heat-p2 { background: #d2f5e0; }
+    .heat-p1 { background: #eefaf3; }
+    .heat-0 { background: #f7f9fa; }
+    .heat-m1 { background: #fdf0ee; }
+    .heat-m2 { background: #fadcd7; }
+    .heat-m3 { background: #f3bcb4; }
+    .industry-link {
+      background: none;
+      border: 0;
+      padding: 0;
+      height: auto;
+      min-height: 0;
+      color: var(--accent-dark);
+      font-weight: 800;
+      cursor: pointer;
+      font-size: 13px;
+    }
+    .industry-link:hover { text-decoration: underline; background: none; }
     .focus-grid {
       display: grid;
       grid-template-columns: repeat(3, minmax(200px, 1fr));
@@ -833,6 +860,7 @@
     <section class="tabs">
       <button class="tab active" data-tab="ranking">排行</button>
       <button class="tab" data-tab="watchlist">自選股</button>
+      <button class="tab" data-tab="sector">族群</button>
       <button class="tab" data-tab="detail">個股</button>
       <button class="tab" data-tab="market">大盤指數</button>
       <button class="tab" data-tab="mops-events">重大事件</button>
@@ -852,6 +880,29 @@
       <div id="ranking-sentiment"></div>
       <div class="column-controls" id="ranking-columns"></div>
       <div class="table-wrap" id="ranking-table"></div>
+    </section>
+
+    <section id="sector-view" style="display:none;">
+      <section class="panel">
+        <div class="panel-head">
+          <div>
+            <div class="panel-title">族群熱力圖</div>
+            <div class="muted" id="sector-note">依平均區間漲跌排序，綠強紅弱。點族群卡看細分類與個股；統計樣本為已匯出的排行股票。</div>
+          </div>
+          <button class="secondary" id="refresh-sector">重新整理</button>
+        </div>
+        <div class="panel-body"><div class="sector-grid" id="sector-grid"></div></div>
+      </section>
+      <section class="panel" id="sector-stocks-panel" style="display:none;">
+        <div class="panel-head">
+          <div>
+            <div class="panel-title" id="sector-stocks-title">族群個股</div>
+            <div class="muted" id="sector-stocks-note"></div>
+          </div>
+        </div>
+        <div class="panel-body" id="sector-sub-grid"></div>
+        <div class="table-wrap" id="sector-stocks-table"></div>
+      </section>
     </section>
 
     <section id="detail-view" style="display:none;">
@@ -1343,7 +1394,7 @@
     window.STOCK_CHIP_STATIC = true;
   </script>
   <script>
-    const state = { tab: "ranking", previousTab: "ranking", detail: null, broker: "", lastDataUpdatedAt: "", chartRange: 20, rankingRows: [], rankingSort: null, usNewsRows: [], ciUsNewsRows: [], ciUsNewsMeta: {}, mopsEvents: [], mopsSelectedDate: "", mopsVisibleCount: 50, mopsQuickFilter: "", mopsDateInitialized: false, mopsDateMode: "future30", mopsCalendarStart: "", columnGroup: "core", market: null, marketSentiment: null };
+    const state = { tab: "ranking", previousTab: "ranking", detail: null, broker: "", lastDataUpdatedAt: "", chartRange: 20, rankingRows: [], rankingSort: null, usNewsRows: [], ciUsNewsRows: [], ciUsNewsMeta: {}, mopsEvents: [], mopsSelectedDate: "", mopsVisibleCount: 50, mopsQuickFilter: "", mopsDateInitialized: false, mopsDateMode: "future30", mopsCalendarStart: "", columnGroup: "core", sectorRows: [], sectorSelected: "", sectorSub: "", sectorSort: null, market: null, marketSentiment: null };
     const STATIC_MODE = window.STOCK_CHIP_STATIC === true;
     const staticCache = {};
     const chartColors = {
@@ -1429,6 +1480,10 @@
         state.staticMeta = meta;
         const branch = meta.branch_coverage_by_days?.[days] || {};
         return {...meta, branch_covered: branch.branch_covered || 0};
+      }
+      if (parsed.pathname === "/api/scan-all") {
+        const source = await staticData(`data/rankings/${days}d/search_index.json`);
+        return {days, rows: source.rows || []};
       }
       if (parsed.pathname === "/api/ranking") {
         const ranking = parsed.searchParams.get("ranking") || "total_score";
@@ -2775,10 +2830,121 @@
       target.innerHTML = cards.length ? `<div class="focus-grid">${cards.join("")}</div>` : "";
       target.querySelectorAll(".focus-item").forEach(btn => btn.addEventListener("click", () => openDetail(btn.dataset.id)));
     }
+    const sectorCols = [
+      {key:"stock_id", label:"代號", sortType:"text", format: v => v},
+      {key:"name", label:"名稱", sortType:"text"},
+      {key:"sub_industry", label:"細分類", sortType:"text"},
+      {key:"close", label:"收盤"},
+      {key:"period_return_pct", label:"區間漲跌%", signed:true},
+      {key:"multifactor_score", label:"多因子分", signed:true},
+      {key:"inst_net_lot", label:"外資+投信", signed:true},
+      {key:"volume_lot", label:"成交量"},
+      {key:"rs_6m_pct", label:"RS6月%", signed:true},
+      {key:"close_vs_52w_high_pct", label:"距52週高%", signed:true},
+      {key:"base_reason", label:"亮點", sortType:"text", html:true, format: v => reasonBadges(v)}
+    ];
+    function heatClass(value) {
+      if (!Number.isFinite(value)) return "heat-0";
+      if (value >= 5) return "heat-p3";
+      if (value >= 2) return "heat-p2";
+      if (value > 0.3) return "heat-p1";
+      if (value >= -0.3) return "heat-0";
+      if (value >= -2) return "heat-m1";
+      if (value >= -5) return "heat-m2";
+      return "heat-m3";
+    }
+    function aggregateGroups(rows, keyFn) {
+      const groups = new Map();
+      rows.forEach(row => {
+        const key = String(keyFn(row) || "").trim();
+        if (!key) return;
+        if (!groups.has(key)) groups.set(key, []);
+        groups.get(key).push(row);
+      });
+      return [...groups.entries()].map(([name, list]) => {
+        const returns = list.map(r => Number(r.period_return_pct)).filter(Number.isFinite);
+        const avgReturn = returns.length ? returns.reduce((a, b) => a + b, 0) / returns.length : null;
+        const up = list.filter(r => Number(r.period_return_pct) > 0).length;
+        const instNet = list.reduce((sum, r) => sum + (Number(r.inst_net_lot) || 0), 0);
+        const scores = list.map(r => Number(r.multifactor_score)).filter(Number.isFinite);
+        const avgScore = scores.length ? scores.reduce((a, b) => a + b, 0) / scores.length : null;
+        return {name, count: list.length, avgReturn, upRatio: returns.length ? up / returns.length * 100 : null, instNet, avgScore};
+      }).sort((a, b) => (b.avgReturn ?? -999) - (a.avgReturn ?? -999));
+    }
+    function sectorCard(group, type) {
+      const selected = type === "sub" ? state.sectorSub === group.name : state.sectorSelected === group.name;
+      return `<div class="sector-card ${heatClass(group.avgReturn)} ${selected ? "selected" : ""}" data-name="${esc(group.name)}">
+        <div class="sector-name">${esc(group.name)}</div>
+        <div class="sector-return ${cls(group.avgReturn)}">${group.avgReturn === null ? "-" : fmt(group.avgReturn) + "%"}</div>
+        <div class="sector-meta">${fmt(group.count)} 檔 · 上漲 ${group.upRatio === null ? "-" : Math.round(group.upRatio) + "%"}<br />法人 ${fmt(Math.round(group.instNet))} 張 · 多因子均 ${group.avgScore === null ? "-" : fmt(Math.round(group.avgScore * 10) / 10)}</div>
+      </div>`;
+    }
+    async function loadSector() {
+      const days = document.querySelector("#days")?.value || 20;
+      const grid = document.querySelector("#sector-grid");
+      try {
+        const data = await getJSON(`/api/scan-all?days=${days}`);
+        state.sectorRows = data.rows || [];
+      } catch (err) {
+        state.sectorRows = [];
+        if (grid) grid.innerHTML = `<div class="empty">族群資料載入失敗：${esc(err.message)}</div>`;
+        return;
+      }
+      renderSectorView();
+    }
+    function renderSectorView() {
+      const grid = document.querySelector("#sector-grid");
+      if (!grid) return;
+      const rows = state.sectorRows || [];
+      if (!rows.length) { grid.innerHTML = `<div class="empty">尚無族群資料，請先更新排行。</div>`; return; }
+      const industries = aggregateGroups(rows, r => r.industry);
+      grid.innerHTML = industries.map(g => sectorCard(g, "industry")).join("");
+      grid.querySelectorAll(".sector-card").forEach(card => card.addEventListener("click", () => {
+        state.sectorSelected = state.sectorSelected === card.dataset.name ? "" : card.dataset.name;
+        state.sectorSub = "";
+        renderSectorView();
+      }));
+      const panel = document.querySelector("#sector-stocks-panel");
+      const subWrap = document.querySelector("#sector-sub-grid");
+      if (!state.sectorSelected) { panel.style.display = "none"; return; }
+      panel.style.display = "";
+      let list = rows.filter(r => String(r.industry || "") === state.sectorSelected);
+      const subs = aggregateGroups(list, r => r.sub_industry);
+      const unclassified = list.filter(r => !String(r.sub_industry || "").trim()).length;
+      subWrap.innerHTML = subs.length
+        ? `<div class="sector-grid sub-grid">${subs.map(g => sectorCard(g, "sub")).join("")}</div>` + (unclassified ? `<div class="muted" style="margin-top:8px; font-size:12px;">另有 ${fmt(unclassified)} 檔尚未細分；細分類對照表在 stock_chip/sub_industries.json，可自行增補。</div>` : "")
+        : `<div class="muted" style="font-size:12px;">此族群尚未建立細分類；對照表在 stock_chip/sub_industries.json，可自行增補。</div>`;
+      subWrap.querySelectorAll(".sector-card").forEach(card => card.addEventListener("click", () => {
+        state.sectorSub = state.sectorSub === card.dataset.name ? "" : card.dataset.name;
+        renderSectorView();
+      }));
+      if (state.sectorSub) list = list.filter(r => String(r.sub_industry || "") === state.sectorSub);
+      document.querySelector("#sector-stocks-title").textContent = `${state.sectorSelected}${state.sectorSub ? " · " + state.sectorSub : ""}（${list.length} 檔）`;
+      document.querySelector("#sector-stocks-note").textContent = "點細分類卡可縮小範圍再點一次取消；點個股列進個股頁";
+      const sort = state.sectorSort || {key:"multifactor_score", dir:"desc"};
+      renderTable(document.querySelector("#sector-stocks-table"), sortRows(list, sectorCols, sort), sectorCols, {
+        rowId: row => row.stock_id,
+        onClick: stock => openDetail(stock),
+        sort,
+        onSort: key => {
+          const same = state.sectorSort?.key === key;
+          state.sectorSort = { key, dir: same && state.sectorSort.dir === "desc" ? "asc" : "desc" };
+          renderSectorView();
+        }
+      });
+    }
+    async function openSector(industry, sub = "") {
+      state.sectorSelected = industry || "";
+      state.sectorSub = sub || "";
+      state.tab = "sector";
+      document.querySelectorAll(".tab").forEach(btn => btn.classList.toggle("active", btn.dataset.tab === "sector"));
+      await reload();
+    }
     const rankingCols = [
       {key:"stock_id", label:"代號", sortType:"text", format: v => v, groups:["core","chip","foreign","revenue","margin","volume","valuation","momentum"]},
       {key:"name", label:"名稱", sortType:"text", groups:["core","chip","foreign","revenue","margin","volume","valuation","momentum"]},
-      {key:"industry", label:"產業", sortType:"text", groups:["core","chip","valuation","momentum"]},
+      {key:"industry", label:"產業", sortType:"text", html:true, format: (v) => v ? `<button class="industry-link" data-industry="${esc(v)}">${esc(v)}</button>` : "", groups:["core","chip","valuation","momentum"]},
+      {key:"sub_industry", label:"細分類", sortType:"text", html:true, format: (v, row) => v ? `<button class="industry-link" data-industry="${esc(row.industry || "")}" data-sub="${esc(v)}">${esc(v)}</button>` : "", groups:["core","momentum"]},
       {key:"market", label:"市場", sortType:"text", groups:["core","valuation"]},
       {key:"close", label:"收盤", groups:["core","chip","foreign","revenue","margin","volume","valuation","momentum"]},
       {key:"observed_days", label:"資料日", groups:["core"]},
@@ -2907,6 +3073,10 @@
           renderRankingTable();
         }
       });
+      document.querySelectorAll("#ranking-table .industry-link").forEach(btn => btn.addEventListener("click", event => {
+        event.stopPropagation();
+        openSector(btn.dataset.industry, btn.dataset.sub || "");
+      }));
     }
     function renderSelectionAssist(selection) {
       const target = document.querySelector("#selection-assist");
@@ -3280,7 +3450,11 @@
       state.chartRange = rangeSelect?.value === "all" ? "all" : Number(rangeSelect?.value || 20);
       document.querySelector("#detail-title").textContent = `${data.stock.stock_id} ${data.stock.name}`;
       const businessText = String(data.stock.business || "").replace(/\s+/g, " ").slice(0, 90);
-      document.querySelector("#detail-subtitle").textContent = `${data.stock.market} · ${data.stock.industry || "未分類"} · 最新日 ${data.stock.latest_date || ""}${businessText ? " · " + businessText : ""}`;
+      const industryHtml = data.stock.industry
+        ? `<button class="industry-link" id="detail-industry-link">${esc(data.stock.industry)}${data.stock.sub_industry ? " · " + esc(data.stock.sub_industry) : ""}</button>`
+        : "未分類";
+      document.querySelector("#detail-subtitle").innerHTML = `${esc(data.stock.market)} · ${industryHtml} · 最新日 ${esc(data.stock.latest_date || "")}${businessText ? " · " + esc(businessText) : ""}`;
+      document.querySelector("#detail-industry-link")?.addEventListener("click", () => openSector(data.stock.industry, data.stock.sub_industry || ""));
       const backBtn = document.querySelector("#back-detail");
       backBtn.style.display = state.previousTab ? "" : "none";
       backBtn.textContent = `返回${state.previousTab === "watchlist" ? "自選股" : state.previousTab === "coverage" ? "資料狀態" : "排行"}`;
@@ -3411,6 +3585,7 @@
       document.querySelector(".toolbar").style.display = showTwStockOverview ? "" : "none";
       document.querySelector("#metrics").style.display = showTwStockOverview ? "" : "none";
       document.querySelector("#ranking-view").style.display = state.tab === "ranking" || state.tab === "watchlist" ? "" : "none";
+      document.querySelector("#sector-view").style.display = state.tab === "sector" ? "" : "none";
       document.querySelector("#detail-view").style.display = state.tab === "detail" ? "" : "none";
       document.querySelector("#market-view").style.display = state.tab === "market" ? "" : "none";
       document.querySelector("#mops-events-view").style.display = state.tab === "mops-events" ? "" : "none";
@@ -3419,6 +3594,7 @@
       document.querySelector("#coverage-view").style.display = state.tab === "coverage" ? "" : "none";
       if (state.tab === "ranking") await loadRanking(false);
       if (state.tab === "watchlist") await loadRanking(true);
+      if (state.tab === "sector") await loadSector();
       if (state.tab === "detail") await loadDetail();
       if (state.tab === "market") await loadMarket();
       if (state.tab === "mops-events") await loadMopsEvents();
@@ -3430,6 +3606,7 @@
       }
     }
     document.querySelectorAll(".tab").forEach(btn => btn.addEventListener("click", () => setTab(btn.dataset.tab)));
+    document.querySelector("#refresh-sector")?.addEventListener("click", loadSector);
     document.querySelector("#ranking").addEventListener("change", () => {
       enforceRankingDays();
       reload();

@@ -493,6 +493,7 @@ def init_schema(conn: sqlite3.Connection) -> None:
             market TEXT,
             industry_code TEXT,
             industry_name TEXT,
+            sub_industry TEXT DEFAULT '',
             business TEXT,
             chairman TEXT,
             website TEXT,
