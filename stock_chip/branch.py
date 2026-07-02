@@ -670,6 +670,11 @@ def run_branch(
             statuses.append(status)
             upsert_branch_rows(conn, rows)
             upsert_fetch_statuses(conn, [status])
+            print(
+                f"[{idx + 1}/{len(stock_ids)}] {stock_id} {status.status} rows={len(rows)}"
+                + (f" error={status.error}" if status.error else ""),
+                flush=True,
+            )
             if status.status != "success":
                 failures.append({"stock_id": stock_id, "error": status.error or status.status})
 
