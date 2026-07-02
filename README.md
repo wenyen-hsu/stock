@@ -3,7 +3,7 @@
 這個專案分成三個層次：
 
 1. **本機 GUI / SQLite**：主要操作環境。台股行情、法人買賣超、融資融券、營收、MOPS 事件、個股分點與同步後的新聞都寫入本機 `data/stock_chip.sqlite`。
-2. **GitHub Actions 自動快取**：GitHub 上定時抓美股 RSS 新聞，並於台股交易日晚間自動抓官方台股資料、重算排行。網站資料發布到 **`site` 分支**（單一 commit 歷史，避免 repo 隨每日資料膨脹）；main 分支只保留程式碼與 reports。它不會更新你的本機 SQLite。
+2. **GitHub Actions 自動快取**：GitHub 上定時抓美股 RSS 新聞，並於台股交易日晚間自動抓官方台股資料、分點買賣超、重算排行。整條流程都在 GitHub 的雲端主機執行（不需要任何自家電腦開機），網站資料發布到 **`site` 分支**（單一 commit 歷史，避免 repo 隨每日資料膨脹）；main 分支只保留程式碼與 reports。它不會更新你的本機 SQLite。
 3. **GitHub Pages 靜態頁**：只讀 `docs/data/*.json` 的靜態快照，給別人看已匯出的排行、個股快取、新聞快取與頁面功能；沒有 Python 後端，也不能直接替使用者更新資料庫。
 
 因此，clone 這個 repo 的人可以看到程式碼與目前提交的靜態快照，但完整可操作資料仍需要在自己的電腦執行更新流程產生。`data/stock_chip.sqlite` 是本機資料庫，不作為共用資料來源。
@@ -25,7 +25,7 @@
 
 指標設計與後續路線圖見 [OPTIMIZATION.md](OPTIMIZATION.md)。
 
-興櫃目前只接 TPEx OpenAPI 的「興櫃股票當日行情表」，可從每天執行開始累積價格資料；免費公開端點尚未接到興櫃歷史日行情與三大法人買賣超。分點逐價均價尚未接入。TWSE 買賣日報表公開頁面目前要求驗證碼，不適合作為穩定自動化來源；FinMind 分點資料已保留測試接口，但需要 token 且可能需要 sponsor 權限。
+興櫃目前只接 TPEx OpenAPI 的「興櫃股票當日行情表」，可從每天執行開始累積價格資料；免費公開端點尚未接到興櫃歷史日行情與三大法人買賣超。分點資料來源為 MoneyDJ 券商鏡像（免登入、無均價欄位）；TWSE 買賣日報表公開頁面目前要求驗證碼，不適合作為穩定自動化來源。
 
 ## 每日更新與掃描
 
@@ -153,7 +153,7 @@ GUI 目前包含：
 ### 本機資料更新原則
 
 - 一鍵更新適合日常更新官方行情、法人買賣超、融資融券、營收增量、新聞同步、MOPS 與排行重算。
-- 全市場分點不放在一鍵更新；分點來源較慢且覆蓋不穩，現在改成個股頁需要時單獨更新，用來輔助判斷，不參與全市場基礎排名。
+- 全市場分點不放在一鍵更新；雲端每日已自動抓排行前 300 檔＋自選股的分點，本機只在個股頁需要時單獨更新，用來輔助判斷，不參與全市場基礎排名。
 - 全市場營收第一次需要補 24 個月歷史；之後只補最新已公告月份附近資料，避免每次重抓完整歷史。
 - 大盤指數、期貨多空與融資融券採「先補歷史、之後只補缺漏交易日」的方式，避免重複下載已入庫資料。
 - 若 clone 專案到新電腦，請先跑本機 GUI 或 CLI 的更新項目建立自己的 SQLite；GitHub Pages 上的快照不是本機資料庫。
@@ -192,25 +192,27 @@ python3 -m stock_chip.export_static --out docs --include-all-details
 
 靜態版自選股只存於使用者自己的瀏覽器 `localStorage`。更新每日、營收、分點、新聞等按鈕會隱藏；需要重新抓資料時，請回本機 GUI 或 CLI 更新後重新匯出並 push。
 
-### 台股資料自動更新
+### 台股資料自動更新（含分點，全雲端）
 
-Repo 內有 GitHub Actions workflow：`.github/workflows/update-taiwan-data.yml`。
+Repo 內有 GitHub Actions workflow：`.github/workflows/update-taiwan-data.yml`。整條流程在 GitHub 的雲端主機執行，**不需要任何自家電腦開機或參與**。
 
 - 定時：台股交易日（週一至週五）22:30 台北時間自動執行；也可在 Actions 頁手動觸發 `Update Taiwan Stock Data` 並指定天數。
-- 內容：抓官方行情、三大法人、融資融券（20 個交易日），更新自選股月營收、大盤指數與期貨多空、MOPS 重大事件，重算 5 日與 20 日排行（含動能、風險、估值與多因子分數），最後執行 `export_static` 更新 `docs/`。
-- 輸出：更新 `docs/data/*.json` 與 `reports/*.csv`，GitHub Pages 會自動重新部署；不依賴也不會修改你本機的 `data/stock_chip.sqlite`。
-- 營收、大盤與 MOPS 三步設為 `continue-on-error`，個別來源暫時失效不會中斷整體更新。
+- 每次執行的步驟依序為：
+  1. 還原共用 SQLite 快取（actions cache，增量更新避免全量重抓）
+  2. 抓官方行情、三大法人、融資融券（20 個交易日）＋公司基本資料與產業分類
+  3. 初步掃描產生排行，據此更新月營收（排行優先補缺漏＋全市場分批補齊）
+  4. 更新大盤指數、期貨多空與 MOPS 重大事件
+  5. **抓分點買賣超**：排行前 300 檔＋自選股，每檔前 10 大買賣超分點（MoneyDJ 券商鏡像，最近 20 個交易日區間）
+  6. 重算 5 日與 20 日排行（含動能、風險、估值、多因子與共振分數）
+  7. `export_static` 匯出網站資料，發布到 `site` 分支（GitHub Pages 自動重新部署），reports 提交回 main
+- 營收、大盤、MOPS 與分點等步驟設為 `continue-on-error`，個別來源暫時失效不會中斷整體更新。
+- 不依賴也不會修改你本機的 `data/stock_chip.sqlite`。
 
-### 分點資料自動更新（self-hosted runner）
+### 分點資料來源與手動補抓
 
-分點來源（HiStock）封鎖雲端機房 IP，因此由使用者自家常開的電腦（如 Mac mini）擔任 GitHub self-hosted runner，用住宅 IP 抓取：
-
-- workflow：`.github/workflows/fetch-branch-selfhosted.yml`，label 要求 `branch-fetcher`。
-- 定時：交易日 23:45 台北（每日資料更新完成後），抓排行前 300 檔＋自選股的前 10 大分點，寫入共用 SQLite 快取後自動觸發雲端重新匯出。
-- runner 每次執行會自動 checkout 最新 main，程式更新不需在該機器手動同步。
-- runner 離線時任務會排隊，24 小時內上線即補跑。
-- 一次性設定（macOS）：repo Settings → Actions → Runners → New self-hosted runner → macOS/ARM64，照頁面指令下載與 `./config.sh`（labels 加上 `branch-fetcher`），然後 `./svc.sh install && ./svc.sh start` 裝成開機服務；機器需 Python 3.10+。
-- 安全性：公開 repo 使用 self-hosted runner 前，請到 Settings → Actions → General 將 fork PR workflows 設為「Require approval for all outside collaborators」。
+- 來源：MoneyDJ 系統的券商網站鏡像（富邦 `fubon-ebrokerdj.fbs.com.tw` 為主、元大 `jdata.yuanta.com.tw` 備援），免登入、GitHub 雲端 IP 可直連。區間主力進出提供每檔前 15 大買賣超分點（買進/賣出/買賣超張數；**無均價欄位**，均價相關欄位顯示空白、均價相關加減分自動略過）。
+- 手動補抓：Actions 頁觸發 `Fetch Branch Data`（`.github/workflows/fetch-branch.yml`），可指定「前 N 大分點」與「排行前幾檔」，抓完自動觸發重新匯出。中斷後重跑會自動續傳（`--skip-existing`）。
+- 歷史沿革：原始來源 HiStock 於 2026-06 起將分點日報改為登入後才顯示，曾短暫改用自家電腦當 self-hosted runner（住宅 IP）繞過雲端 IP 封鎖，換到 MoneyDJ 後已不需要——舊的 self-hosted workflow 已移除，Mac runner 可自行解除註冊。細節見 [OPTIMIZATION.md](OPTIMIZATION.md)。
 
 ### 美股新聞自動更新
 
@@ -272,8 +274,9 @@ python3 -m stock_chip.gui --host 127.0.0.1 --port 8502
 
 - TWSE / TPEx：行情、成交量、三大法人買賣超、融資融券、上市上櫃清單。
 - TAIFEX：大台、小台、微台三大法人期貨多空與未平倉。
-- FinMind：目前用於月營收；分點資料保留評估方向，正式使用前需確認 token / sponsor 條件。
-- HiStock：目前用於分點排行與分點日明細，但全市場覆蓋不完整，適合當 fallback。
+- FinMind：目前用於月營收；分點資料實測免費等級無權限（需 sponsor），不採用。
+- MoneyDJ 券商鏡像（富邦/元大）：分點排行與單一分點日明細，免登入、雲端可直連；無分點均價欄位。
+- HiStock：已停用——2026-06 起分點日報改為登入後才顯示。
 - MOPS 公開資訊觀測站：重大訊息與公告，已接入事件月曆；之後可再擴到法說會、財報公告與官方月營收追溯。
 - Yahoo 股市、Yahoo Finance、CNBC、MarketWatch：台股與美股新聞標題、連結、摘要。
 
