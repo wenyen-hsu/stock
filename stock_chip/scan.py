@@ -92,6 +92,18 @@ def load_branch_leaders(
     as_of_date: str,
     days: int,
 ) -> dict[str, dict[str, Any]]:
+    # 分點資料可能比行情晚一個交易日（來源尚未更新當日資料時），
+    # 找不到精確日期就回退到最近一次已抓到的日期，避免欄位整批變空。
+    latest = conn.execute(
+        """
+        SELECT MAX(as_of_date)
+        FROM broker_branch_topn
+        WHERE window_days = ?
+          AND as_of_date <= ?
+        """,
+        (days, as_of_date),
+    ).fetchone()
+    effective_date = latest[0] if latest and latest[0] else as_of_date
     rows = conn.execute(
         """
         SELECT
@@ -108,7 +120,7 @@ def load_branch_leaders(
           AND window_days = ?
           AND rank_no = 1
         """,
-        (as_of_date, days),
+        (effective_date, days),
     ).fetchall()
     leaders: dict[str, dict[str, Any]] = {}
     columns = [
