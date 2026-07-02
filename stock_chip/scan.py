@@ -449,7 +449,8 @@ def branch_score_row(row: dict[str, Any]) -> float:
     buy_avg = row.get("top_buy_branch_avg_price")
     sell_net = row.get("top_sell_branch_net_lot")
     sell_avg = row.get("top_sell_branch_avg_price")
-    if close is None or buy_net is None or buy_avg is None:
+    # MoneyDJ 來源沒有分點均價，均價相關加減分自動略過，量能占比部分照算
+    if close is None or buy_net is None:
         return 0.0
 
     score = 0.0
