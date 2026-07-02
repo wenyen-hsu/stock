@@ -7,34 +7,37 @@ jobs:
     runs-on: [self-hosted, branch-fetcher]
     timeout-minutes: 5
     steps:
-      - name: 挖掘頁面 JS 呼叫的資料端點
+      - name: 翻 JS 檔找分點資料端點
         run: |
           python3 - <<'EOF'
           import urllib.request, gzip, re
           UA = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36"
-          def get(url, extra=None):
-              headers = {"User-Agent": UA, "Accept": "*/*", "Accept-Encoding": "gzip",
-                         "Referer": "https://histock.tw/stock/branch.aspx?no=2330"}
-              if extra: headers.update(extra)
-              req = urllib.request.Request(url, headers=headers)
+          def get(url):
+              req = urllib.request.Request(url, headers={"User-Agent": UA, "Accept": "*/*", "Accept-Encoding": "gzip",
+                  "Referer": "https://histock.tw/stock/branch.aspx?no=2330"})
               resp = urllib.request.urlopen(req, timeout=20)
               raw = resp.read()
               if resp.headers.get("Content-Encoding") == "gzip":
                   raw = gzip.decompress(raw)
               return resp.status, raw.decode("utf-8", "replace")
 
-          status, html = get("https://histock.tw/stock/branch.aspx?no=2330&from=20260602&to=20260630")
-          print(f"頁面 HTTP {status}, {len(html)} 字")
-          print("\n== script src ==")
-          for m in re.findall(r'<script[^>]+src=["\']([^"\']+)', html)[:20]:
-              print(" ", m)
-          print("\n== 內嵌 JS 中的 ajax/fetch/url 片段 ==")
-          for kw in ("ajax", "fetch(", "url:", "GetBranch", "Branch", "api/"):
-              for m in re.finditer(re.escape(kw), html):
-                  seg = html[max(0, m.start()-80): m.start()+220].replace("\n", " ")
-                  print(f"[{kw}] ...{seg}...")
-                  break  # 每個關鍵字印第一筆
-          print("\n== 頁面中的相對 URL 候選 ==")
-          for m in sorted(set(re.findall(r'["\'](/[A-Za-z0-9_./-]*(?:ajax|api|json|hand|ashx)[A-Za-z0-9_./?=&-]*)["\']', html, re.I)))[:20]:
-              print(" ", m)
+          for js in ("https://histock.tw/jscript/stock/2017/stock.js?v20180427",
+                     "https://histock.tw/jscript/histock2017.js?v20260317"):
+              try:
+                  status, body = get(js)
+              except Exception as exc:
+                  print(f"== {js} 失敗 {exc!r}"); continue
+              print(f"\n===== {js} ({len(body)} 字) =====")
+              hits = 0
+              for kw in ("ranch", "hip", "asmx", "ashx", "GetB", "GetC", "Broker"):
+                  for m in re.finditer(kw, body):
+                      seg = body[max(0, m.start()-100): m.start()+250].replace("\n", " ")
+                      if any(x in seg for x in ("url", "ajax", "get(", "post(", "load(")):
+                          print(f"[{kw}] ...{seg[:320]}...")
+                          hits += 1
+                          if hits > 14: break
+                  if hits > 14: break
+              # 額外：列出 JS 內所有看似端點的字串
+              urls = sorted(set(re.findall(r'["\']((?:https?://histock\.tw)?/[A-Za-z0-9_./-]+\.(?:asmx|ashx|aspx)[A-Za-z0-9_./?=&-]*)["\']', body)))
+              print("端點候選:", urls[:25])
           EOF
