@@ -7,7 +7,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
-      - name: 完整傾印 MoneyDJ zco 頁面
+      - name: 傾印 MoneyDJ zco0 單一分點頁
         run: |
           python3 - <<'EOF'
           import urllib.request, gzip, re
@@ -24,12 +24,17 @@ jobs:
               enc = m.group(1) if m else charset
               return raw.decode(enc, "replace")
 
-          page = fetch("https://fubon-ebrokerdj.fbs.com.tw/z/zc/zco/zco.djhtm?a=2330&e=2026-6-2&f=2026-6-30")
-          # 去掉最長的日期選單 script 以縮短輸出
-          page_short = re.sub(r"<script[^>]*>.*?</script>", "[[script removed]]", page, flags=re.S | re.I)
-          print(f"=== 全頁（移除 script 後）長度 {len(page_short)} / 原始 {len(page)} ===")
-          print(page_short)
-          print("=== iframe/frame ===")
-          for tag in re.findall(r"<i?frame[^>]*>", page, re.I):
-              print(" ", tag)
+          for label, url in [
+              ("zco0 巢狀路徑", "https://fubon-ebrokerdj.fbs.com.tw/z/zc/zco/zco0/zco0.djhtm?a=2330&b=9800&BHID=9800"),
+              ("zco0 淺路徑", "https://fubon-ebrokerdj.fbs.com.tw/z/zc/zco/zco0.djhtm?a=2330&b=9800"),
+          ]:
+              try:
+                  page = fetch(url)
+              except Exception as exc:
+                  print(f"[{label}] 失敗 {exc!r}"); continue
+              body = re.sub(r"<script[^>]*>.*?</script>", "[[s]]", page, flags=re.S | re.I)
+              # 只印主表格區塊
+              i = body.find("oMainTable")
+              print(f"=== [{label}] 原始 {len(page)} 字，主表附近： ===")
+              print(body[max(0, i - 200):i + 6000])
           EOF
