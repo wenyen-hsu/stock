@@ -7,46 +7,33 @@ jobs:
     runs-on: [self-hosted, branch-fetcher]
     timeout-minutes: 5
     steps:
-      - name: 挖出分點頁的 module URL 並試打
+      - name: 傾印內嵌 JS 資料陣列
         run: |
           python3 - <<'EOF'
           import urllib.request, gzip, re
           UA = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36"
-          def get(url):
-              req = urllib.request.Request(url, headers={"User-Agent": UA, "Accept": "*/*", "Accept-Encoding": "gzip",
-                  "Referer": "https://histock.tw/stock/branch.aspx?no=2330",
-                  "X-Requested-With": "XMLHttpRequest"})
-              resp = urllib.request.urlopen(req, timeout=20)
-              raw = resp.read()
-              if resp.headers.get("Content-Encoding") == "gzip":
-                  raw = gzip.decompress(raw)
-              return resp.status, raw.decode("utf-8", "replace")
+          req = urllib.request.Request(
+              "https://histock.tw/stock/branch.aspx?no=2330&from=20260602&to=20260630",
+              headers={"User-Agent": UA, "Accept": "text/html", "Accept-Encoding": "gzip"})
+          resp = urllib.request.urlopen(req, timeout=20)
+          raw = resp.read()
+          if resp.headers.get("Content-Encoding") == "gzip":
+              raw = gzip.decompress(raw)
+          html = raw.decode("utf-8", "replace")
 
-          status, html = get("https://histock.tw/stock/branch.aspx?no=2330&from=20260602&to=20260630")
-          print(f"分點頁 HTTP {status}, {len(html)} 字")
-          print("\n== 頁面中含 module / .load( / .aspx? 的片段 ==")
-          for kw in ("module", ".load(", "loadData", "GetJson"):
-              count = 0
-              for m in re.finditer(re.escape(kw), html):
-                  seg = html[max(0, m.start()-120): m.start()+260].replace("\n", " ")
-                  print(f"[{kw}] ...{seg[:340]}...")
-                  count += 1
-                  if count >= 3: break
-          print("\n== module URL 候選並試打 ==")
-          urls = sorted(set(re.findall(r'["\']((?:https?://histock\.tw)?/stock/module/[A-Za-z0-9_.]+\.aspx[^"\']*)["\']', html)))
-          print("候選:", urls)
-          for u in urls[:6]:
-              full = u if u.startswith("http") else "https://histock.tw" + u
-              # 帶上股票與日期參數變體
-              for suffix in ("", "&no=2330", "&no=2330&from=20260602&to=20260630"):
-                  test = full + suffix if "?" in full else full + "?no=2330"
-                  try:
-                      st, body = get(test)
-                      tds = body.count("<td")
-                      print(f"  {test} → HTTP {st}, {len(body)} 字, <td> {tds}")
-                      if tds > 10:
-                          print("    片段:", re.sub(r"\s+", " ", body[:400]))
-                          break
-                  except Exception as exc:
-                      print(f"  {test} → 失敗 {exc!r}")
+          # 傾印 series / categories 的賦值內容
+          for var in ("series1", "series2", "categories1", "categories2"):
+              m = re.search(rf'(?:var\s+)?{var}\s*=\s*', html)
+              if not m:
+                  print(f"{var}: 未找到")
+                  continue
+              seg = html[m.start(): m.start()+900].replace("\n", " ")
+              print(f"== {var} ==")
+              print(seg[:900])
+              print()
+          # 檢查隱藏表格 tbChip 附近內容
+          m = re.search(r'tbChip', html)
+          if m:
+              print("== tbChip 周邊 ==")
+              print(html[m.start()-100: m.start()+1200].replace("\n", " ")[:1300])
           EOF
