@@ -119,3 +119,7 @@
 - **方案 D（site 分支發布）**：每日資料改發布到 orphan `site` 分支（git checkout --orphan + force push，歷史永遠單一 commit），main 只提交程式碼與 reports；美股新聞每小時改用 worktree 提交到 site。動機：每日重寫 ~90MB JSON 進 main 歷史已使 repo 達 111MB 且持續膨脹。
 - **需要一次性手動設定**：GitHub Settings → Pages → Deploy from a branch → branch `site` / folder `/docs`。
 - 全市場完整明細（推估 388MB）不適合 git/Pages，維持不做；若未來需要可評估外部物件儲存。
+
+## 分點資料：self-hosted runner 方案上線（2026-06）
+
+FinMind 免費等級實測無分點權限（status 400: level is register）；改採方案 B：使用者的 Mac mini 註冊為 self-hosted runner（label `branch-fetcher`），交易日 23:45 用住宅 IP 抓排行前 300 檔＋自選股的前 10 大分點，寫入共用 actions cache 的 SQLite，隨後 dispatch 雲端每日更新流程重新匯出，網站即顯示分點欄位與共振分。程式更新由 runner 每次 checkout 自動帶入，該機器無需手動同步。

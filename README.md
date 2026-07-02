@@ -201,6 +201,17 @@ Repo 內有 GitHub Actions workflow：`.github/workflows/update-taiwan-data.yml`
 - 輸出：更新 `docs/data/*.json` 與 `reports/*.csv`，GitHub Pages 會自動重新部署；不依賴也不會修改你本機的 `data/stock_chip.sqlite`。
 - 營收、大盤與 MOPS 三步設為 `continue-on-error`，個別來源暫時失效不會中斷整體更新。
 
+### 分點資料自動更新（self-hosted runner）
+
+分點來源（HiStock）封鎖雲端機房 IP，因此由使用者自家常開的電腦（如 Mac mini）擔任 GitHub self-hosted runner，用住宅 IP 抓取：
+
+- workflow：`.github/workflows/fetch-branch-selfhosted.yml`，label 要求 `branch-fetcher`。
+- 定時：交易日 23:45 台北（每日資料更新完成後），抓排行前 300 檔＋自選股的前 10 大分點，寫入共用 SQLite 快取後自動觸發雲端重新匯出。
+- runner 每次執行會自動 checkout 最新 main，程式更新不需在該機器手動同步。
+- runner 離線時任務會排隊，24 小時內上線即補跑。
+- 一次性設定（macOS）：repo Settings → Actions → Runners → New self-hosted runner → macOS/ARM64，照頁面指令下載與 `./config.sh`（labels 加上 `branch-fetcher`），然後 `./svc.sh install && ./svc.sh start` 裝成開機服務；機器需 Python 3.10+。
+- 安全性：公開 repo 使用 self-hosted runner 前，請到 Settings → Actions → General 將 fork PR workflows 設為「Require approval for all outside collaborators」。
+
 ### 美股新聞自動更新
 
 Repo 內有 GitHub Actions workflow：`.github/workflows/fetch-us-news.yml`。
