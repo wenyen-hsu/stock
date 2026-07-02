@@ -3,79 +3,86 @@ on: workflow_dispatch
 permissions:
   contents: read
 jobs:
-  diag:
+  diag-mac:
     runs-on: [self-hosted, branch-fetcher]
     timeout-minutes: 5
     steps:
-      - name: 檢視頁面結構、AJAX 端點、登入牆與 WebForms POST
+      - name: HiStock 登入牆確認 + MoneyDJ zco 測試（住宅 IP）
         run: |
           python3 - <<'EOF'
-          import urllib.request, urllib.parse, gzip, re, http.cookiejar
+          import urllib.request, gzip, re
           UA = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36"
-          cj = http.cookiejar.CookieJar()
-          opener = urllib.request.build_opener(urllib.request.HTTPCookieProcessor(cj))
-          BASE = "https://histock.tw/stock/branch.aspx?no=2330"
 
-          def fetch(url, data=None, extra=None):
-              headers = {"User-Agent": UA, "Accept": "text/html,application/json;q=0.9,*/*;q=0.8",
-                  "Accept-Encoding": "gzip", "Accept-Language": "zh-TW,zh;q=0.9",
-                  "Referer": BASE}
-              if extra:
-                  headers.update(extra)
-              req = urllib.request.Request(url, data=data, headers=headers)
-              resp = opener.open(req, timeout=20)
+          def fetch(url, charset="utf-8"):
+              req = urllib.request.Request(url, headers={"User-Agent": UA, "Accept": "text/html", "Accept-Encoding": "gzip", "Accept-Language": "zh-TW,zh;q=0.9"})
+              resp = urllib.request.urlopen(req, timeout=20)
               raw = resp.read()
               if resp.headers.get("Content-Encoding") == "gzip":
                   raw = gzip.decompress(raw)
-              return raw.decode("utf-8", "replace")
+              ct = resp.headers.get("Content-Type", "")
+              m = re.search(r"charset=([\w-]+)", ct)
+              enc = m.group(1) if m else charset
+              return raw.decode(enc, "replace"), ct
 
-          html = fetch(BASE)
-          print(f"=== GET {len(html)}字 ===")
+          # 1) HiStock：登入字樣的前後文，確認是否登入牆
+          html, _ = fetch("https://histock.tw/stock/branch.aspx?no=2330")
+          print("=== HiStock 登入前後文 ===")
+          for m in re.finditer("登入", html):
+              s = html[max(0, m.start() - 150):m.start() + 150].replace("\n", " ")
+              print("  ...", s, "...")
+          i = html.find("2017.10.18")
+          if i >= 0:
+              print("  [cfdate 前後文]", html[max(0, i - 300):i + 60].replace("\n", " "))
 
-          i = html.find("jsonDatas")
-          print("--- jsonDatas 前後文（前1200字/後400字）---")
-          print(html[max(0, i - 1200):i + 400])
-
-          print("--- 頁內 ashx/asmx/api URL ---")
-          urls = set(re.findall(r'["\'](/[^"\']*?\.(?:ashx|asmx)[^"\']*)["\']', html))
-          urls |= set(re.findall(r'["\'](https?://[^"\']*?\.(?:ashx|asmx)[^"\']*)["\']', html))
-          urls |= set(re.findall(r'url\s*:\s*["\']([^"\']+)["\']', html))
-          for u in sorted(urls):
-              print(" ", u)
-
-          print("--- 登入/權限關鍵字出現次數 ---")
-          for kw in ("登入", "會員", "VIP", "升級", "權限", "免費", "purview", "Purview"):
-              print(f"  {kw}: {html.count(kw)}")
-
-          print("--- hidden 欄位（名稱, 值長度）---")
-          hidden = re.findall(r'<input[^>]*type="hidden"[^>]*name="([^"]+)"[^>]*(?:value="([^"]*)")?', html)
-          for n, v in hidden:
-              print(f"  {n} len={len(v or '')}")
-
-          print("--- 日期/按鈕控制項 ---")
-          for tag in re.findall(r'<input[^>]*name="[^"]*(?:tbx|btn|Btn|date|Date)[^"]*"[^>]*>', html)[:12]:
-              print(" ", tag[:200])
-
-          # WebForms POST 嘗試：帶回所有 hidden 欄位 + 日期欄位
-          fields = {}
-          for m2 in re.finditer(r'<input[^>]*name="([^"]+)"[^>]*?(?:value="([^"]*)")?[^>]*>', html):
-              name, val = m2.group(1), m2.group(2) or ""
-              if "__" in name or "tbx" in name or "hid" in name.lower():
-                  fields[name] = val
-          for name in list(fields):
-              low = name.lower()
-              if "start" in low or ("date" in low and "end" not in low):
-                  fields[name] = "2026/06/02"
-              if "end" in low:
-                  fields[name] = "2026/06/30"
-          print(f"--- POST 欄位數 {len(fields)}: {[k[-40:] for k in fields]} ---")
-          if fields:
-              body = urllib.parse.urlencode(fields).encode()
+          # 2) MoneyDJ 主力進出（富邦 / 元大鏡像），區間 + 當日
+          for label, url in [
+              ("富邦 區間", "https://fubon-ebrokerdj.fbs.com.tw/z/zc/zco/zco.djhtm?a=2330&e=2026-6-2&f=2026-6-30"),
+              ("富邦 當日", "https://fubon-ebrokerdj.fbs.com.tw/z/zc/zco/zco_2330.djhtm"),
+              ("元大 區間", "https://jdata.yuanta.com.tw/z/zc/zco/zco.djhtm?a=2330&e=2026-6-2&f=2026-6-30"),
+          ]:
               try:
-                  html2 = fetch(BASE, data=body, extra={"Content-Type": "application/x-www-form-urlencoded", "Origin": "https://histock.tw"})
-                  m3 = re.search(r'jsonDatas\s*=\s*eval\((.{0,120})', html2, re.S)
-                  seg = (m3.group(1).replace("\n", " ")[:120] if m3 else "eval未找到")
-                  print(f"[POST] {len(html2)}字, <td>={html2.count('<td')}, eval(→ {seg}")
+                  page, ct = fetch(url, charset="big5")
               except Exception as exc:
-                  print(f"[POST] 失敗 {exc!r}")
+                  print(f"[{label}] 失敗 {exc!r}"); continue
+              tds = re.findall(r"<td[^>]*>(.*?)</td>", page, re.S)
+              texts = [re.sub(r"<[^>]+>", "", t).strip() for t in tds]
+              texts = [t for t in texts if t]
+              print(f"[{label}] {len(page)}字, Content-Type={ct}, td數={len(texts)}")
+              print("  前40格:", texts[:40])
+          EOF
+
+  diag-cloud:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: MoneyDJ zco 測試（機房 IP 可否直連）
+        run: |
+          python3 - <<'EOF'
+          import urllib.request, gzip, re
+          UA = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36"
+
+          def fetch(url, charset="big5"):
+              req = urllib.request.Request(url, headers={"User-Agent": UA, "Accept": "text/html", "Accept-Encoding": "gzip", "Accept-Language": "zh-TW,zh;q=0.9"})
+              resp = urllib.request.urlopen(req, timeout=15)
+              raw = resp.read()
+              if resp.headers.get("Content-Encoding") == "gzip":
+                  raw = gzip.decompress(raw)
+              ct = resp.headers.get("Content-Type", "")
+              m = re.search(r"charset=([\w-]+)", ct)
+              enc = m.group(1) if m else charset
+              return raw.decode(enc, "replace"), ct
+
+          for label, url in [
+              ("富邦 區間", "https://fubon-ebrokerdj.fbs.com.tw/z/zc/zco/zco.djhtm?a=2330&e=2026-6-2&f=2026-6-30"),
+              ("元大 區間", "https://jdata.yuanta.com.tw/z/zc/zco/zco.djhtm?a=2330&e=2026-6-2&f=2026-6-30"),
+          ]:
+              try:
+                  page, ct = fetch(url)
+              except Exception as exc:
+                  print(f"[{label}] 失敗 {exc!r}"); continue
+              tds = re.findall(r"<td[^>]*>(.*?)</td>", page, re.S)
+              texts = [re.sub(r"<[^>]+>", "", t).strip() for t in tds]
+              texts = [t for t in texts if t]
+              print(f"[{label}] {len(page)}字, Content-Type={ct}, td數={len(texts)}")
+              print("  前40格:", texts[:40])
           EOF
