@@ -3,59 +3,11 @@ on: workflow_dispatch
 permissions:
   contents: read
 jobs:
-  diag-mac:
-    runs-on: [self-hosted, branch-fetcher]
-    timeout-minutes: 5
-    steps:
-      - name: HiStock 登入牆確認 + MoneyDJ zco 測試（住宅 IP）
-        run: |
-          python3 - <<'EOF'
-          import urllib.request, gzip, re
-          UA = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36"
-
-          def fetch(url, charset="utf-8"):
-              req = urllib.request.Request(url, headers={"User-Agent": UA, "Accept": "text/html", "Accept-Encoding": "gzip", "Accept-Language": "zh-TW,zh;q=0.9"})
-              resp = urllib.request.urlopen(req, timeout=20)
-              raw = resp.read()
-              if resp.headers.get("Content-Encoding") == "gzip":
-                  raw = gzip.decompress(raw)
-              ct = resp.headers.get("Content-Type", "")
-              m = re.search(r"charset=([\w-]+)", ct)
-              enc = m.group(1) if m else charset
-              return raw.decode(enc, "replace"), ct
-
-          # 1) HiStock：登入字樣的前後文，確認是否登入牆
-          html, _ = fetch("https://histock.tw/stock/branch.aspx?no=2330")
-          print("=== HiStock 登入前後文 ===")
-          for m in re.finditer("登入", html):
-              s = html[max(0, m.start() - 150):m.start() + 150].replace("\n", " ")
-              print("  ...", s, "...")
-          i = html.find("2017.10.18")
-          if i >= 0:
-              print("  [cfdate 前後文]", html[max(0, i - 300):i + 60].replace("\n", " "))
-
-          # 2) MoneyDJ 主力進出（富邦 / 元大鏡像），區間 + 當日
-          for label, url in [
-              ("富邦 區間", "https://fubon-ebrokerdj.fbs.com.tw/z/zc/zco/zco.djhtm?a=2330&e=2026-6-2&f=2026-6-30"),
-              ("富邦 當日", "https://fubon-ebrokerdj.fbs.com.tw/z/zc/zco/zco_2330.djhtm"),
-              ("元大 區間", "https://jdata.yuanta.com.tw/z/zc/zco/zco.djhtm?a=2330&e=2026-6-2&f=2026-6-30"),
-          ]:
-              try:
-                  page, ct = fetch(url, charset="big5")
-              except Exception as exc:
-                  print(f"[{label}] 失敗 {exc!r}"); continue
-              tds = re.findall(r"<td[^>]*>(.*?)</td>", page, re.S)
-              texts = [re.sub(r"<[^>]+>", "", t).strip() for t in tds]
-              texts = [t for t in texts if t]
-              print(f"[{label}] {len(page)}字, Content-Type={ct}, td數={len(texts)}")
-              print("  前40格:", texts[:40])
-          EOF
-
   diag-cloud:
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
-      - name: MoneyDJ zco 測試（機房 IP 可否直連）
+      - name: 完整傾印 MoneyDJ zco 頁面
         run: |
           python3 - <<'EOF'
           import urllib.request, gzip, re
@@ -68,21 +20,16 @@ jobs:
               if resp.headers.get("Content-Encoding") == "gzip":
                   raw = gzip.decompress(raw)
               ct = resp.headers.get("Content-Type", "")
-              m = re.search(r"charset=([\w-]+)", ct)
+              m = re.search(r"charset=([\w-]+)", ct, re.I)
               enc = m.group(1) if m else charset
-              return raw.decode(enc, "replace"), ct
+              return raw.decode(enc, "replace")
 
-          for label, url in [
-              ("富邦 區間", "https://fubon-ebrokerdj.fbs.com.tw/z/zc/zco/zco.djhtm?a=2330&e=2026-6-2&f=2026-6-30"),
-              ("元大 區間", "https://jdata.yuanta.com.tw/z/zc/zco/zco.djhtm?a=2330&e=2026-6-2&f=2026-6-30"),
-          ]:
-              try:
-                  page, ct = fetch(url)
-              except Exception as exc:
-                  print(f"[{label}] 失敗 {exc!r}"); continue
-              tds = re.findall(r"<td[^>]*>(.*?)</td>", page, re.S)
-              texts = [re.sub(r"<[^>]+>", "", t).strip() for t in tds]
-              texts = [t for t in texts if t]
-              print(f"[{label}] {len(page)}字, Content-Type={ct}, td數={len(texts)}")
-              print("  前40格:", texts[:40])
+          page = fetch("https://fubon-ebrokerdj.fbs.com.tw/z/zc/zco/zco.djhtm?a=2330&e=2026-6-2&f=2026-6-30")
+          # 去掉最長的日期選單 script 以縮短輸出
+          page_short = re.sub(r"<script[^>]*>.*?</script>", "[[script removed]]", page, flags=re.S | re.I)
+          print(f"=== 全頁（移除 script 後）長度 {len(page_short)} / 原始 {len(page)} ===")
+          print(page_short)
+          print("=== iframe/frame ===")
+          for tag in re.findall(r"<i?frame[^>]*>", page, re.I):
+              print(" ", tag)
           EOF
