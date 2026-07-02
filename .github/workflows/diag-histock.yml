@@ -7,33 +7,35 @@ jobs:
     runs-on: [self-hosted, branch-fetcher]
     timeout-minutes: 5
     steps:
-      - name: 傾印內嵌 JS 資料陣列
+      - name: 測試參數變體找出 eval 有資料的組合
         run: |
           python3 - <<'EOF'
-          import urllib.request, gzip, re
+          import urllib.request, urllib.parse, gzip, re, http.cookiejar
           UA = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36"
-          req = urllib.request.Request(
-              "https://histock.tw/stock/branch.aspx?no=2330&from=20260602&to=20260630",
-              headers={"User-Agent": UA, "Accept": "text/html", "Accept-Encoding": "gzip"})
-          resp = urllib.request.urlopen(req, timeout=20)
-          raw = resp.read()
-          if resp.headers.get("Content-Encoding") == "gzip":
-              raw = gzip.decompress(raw)
-          html = raw.decode("utf-8", "replace")
+          cj = http.cookiejar.CookieJar()
+          opener = urllib.request.build_opener(urllib.request.HTTPCookieProcessor(cj))
+          def get(url):
+              req = urllib.request.Request(url, headers={"User-Agent": UA, "Accept": "text/html", "Accept-Encoding": "gzip",
+                  "Accept-Language": "zh-TW,zh;q=0.9", "Referer": "https://histock.tw/stock/2330"})
+              resp = opener.open(req, timeout=20)
+              raw = resp.read()
+              if resp.headers.get("Content-Encoding") == "gzip":
+                  raw = gzip.decompress(raw)
+              return raw.decode("utf-8", "replace")
 
-          # 傾印 series / categories 的賦值內容
-          for var in ("series1", "series2", "categories1", "categories2"):
-              m = re.search(rf'(?:var\s+)?{var}\s*=\s*', html)
-              if not m:
-                  print(f"{var}: 未找到")
-                  continue
-              seg = html[m.start(): m.start()+900].replace("\n", " ")
-              print(f"== {var} ==")
-              print(seg[:900])
-              print()
-          # 檢查隱藏表格 tbChip 附近內容
-          m = re.search(r'tbChip', html)
-          if m:
-              print("== tbChip 周邊 ==")
-              print(html[m.start()-100: m.start()+1200].replace("\n", " ")[:1300])
+          variants = [
+              ("無日期參數", "https://histock.tw/stock/branch.aspx?no=2330"),
+              ("斜線日期", "https://histock.tw/stock/branch.aspx?no=2330&from=" + urllib.parse.quote("2026/06/02") + "&to=" + urllib.parse.quote("2026/06/30")),
+              ("compact日期", "https://histock.tw/stock/branch.aspx?no=2330&from=20260602&to=20260630"),
+              ("dash日期", "https://histock.tw/stock/branch.aspx?no=2330&from=2026-06-02&to=2026-06-30"),
+          ]
+          for label, url in variants:
+              try:
+                  html = get(url)
+              except Exception as exc:
+                  print(f"[{label}] 失敗 {exc!r}"); continue
+              m = re.search(r'jsonDatas\s*=\s*eval\((.{0,120})', html, re.S)
+              seg = (m.group(1).replace("\n"," ")[:120] if m else "eval未找到")
+              tds = html.count("<td")
+              print(f"[{label}] {len(html)}字, <td>={tds}, eval(→ {seg}")
           EOF
