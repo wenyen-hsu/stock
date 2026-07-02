@@ -30,7 +30,7 @@ concurrency:
 jobs:
   fetch-branch:
     runs-on: [self-hosted, branch-fetcher]
-    timeout-minutes: 90
+    timeout-minutes: 150
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -58,7 +58,8 @@ jobs:
           SCOPE: ${{ github.event.inputs.scope || '300' }}
         run: |
           source "$HOME/stock-chip-venv/bin/activate"
-          python -m stock_chip.branch --days 20 --top "$TOP" --from-scan "$SCOPE" --sleep 1.0
+          # --skip-existing：中斷後重跑可續傳；--retry-sleeps 縮短失敗股的重試等待
+          python -m stock_chip.branch --days 20 --top "$TOP" --from-scan "$SCOPE" --sleep 1.0 --skip-existing --retry-sleeps 3,8
 
       - name: 觸發雲端重新匯出（把分點資料發布到網站）
         run: |
