@@ -1389,7 +1389,7 @@ INDEX_HTML = """<!doctype html>
                 <li><a href="https://www.twse.com.tw/" target="_blank" rel="noreferrer">TWSE</a> / <a href="https://www.tpex.org.tw/" target="_blank" rel="noreferrer">TPEx</a>：行情、成交量、三大法人、融資融券、上市上櫃清單。</li>
                 <li><a href="https://www.taifex.com.tw/" target="_blank" rel="noreferrer">TAIFEX</a>：大台、小台、微台三大法人期貨多空與未平倉。</li>
                 <li><a href="https://finmindtrade.com/" target="_blank" rel="noreferrer">FinMind</a>：目前用於月營收；分點資料尚未正式接入。</li>
-                <li><a href="https://histock.tw/" target="_blank" rel="noreferrer">HiStock</a>：目前分點排行來源，但全市場覆蓋不完整。</li>
+                <li><a href="https://www.moneydj.com/" target="_blank" rel="noreferrer">MoneyDJ（富邦/元大鏡像）</a>：分點排行來源，免登入、CI 可直接抓取。</li>
                 <li>Yahoo 股市、Yahoo Finance、CNBC、MarketWatch：台股與美股新聞標題、連結、摘要。</li>
               </ul>
             </div>
@@ -1404,9 +1404,9 @@ INDEX_HTML = """<!doctype html>
             <div class="source-audit-card">
               <strong>下一步建議</strong>
               <ul>
-                <li>優先測試 FinMind TaiwanStockTradingDailyReport，評估能否取代 HiStock 分點資料。</li>
+                <li>分點資料已改用 MoneyDJ 券商鏡像（zco），每日自動抓取排行前 300 檔。</li>
                 <li>若 FinMind 分點可用，改成本機儲存每日分點明細，再自行計算 5 / 20 日排行與均價。</li>
-                <li>保留 HiStock 當 fallback，並在覆蓋狀態清楚區分「來源空回應」與「尚未嘗試」。</li>
+                <li>富邦與元大雙鏡像互為備援，覆蓋狀態清楚區分「來源空回應」與「尚未嘗試」。</li>
               </ul>
             </div>
           </div>
@@ -1460,7 +1460,7 @@ INDEX_HTML = """<!doctype html>
       <a href="https://finmindtrade.com/" target="_blank" rel="noreferrer">FinMind</a>
       免費 API，月增率與年增率由本機依月營收與去年同期計算。
       分點區間排行與可取得的分點日明細目前解析
-      <a href="https://histock.tw/" target="_blank" rel="noreferrer">HiStock</a>
+      <a href="https://www.moneydj.com/" target="_blank" rel="noreferrer">MoneyDJ</a>
       公開頁面；若批次抓取遇到空回應或該分點未進入單日前排行，個股頁會顯示抓取狀態。
       個股新聞採手動按鈕觸發，來源為
       <a href="https://tw.stock.yahoo.com/" target="_blank" rel="noreferrer">Yahoo 股市</a>
@@ -3732,7 +3732,7 @@ INDEX_HTML = """<!doctype html>
         const message = failed.length
           ? `尚缺 ${failed.length} 個交易日分點日資料；狀態：${failed.map(row => `${row.trade_date} ${row.status}`).join("、")}`
           : success
-            ? `單日分點頁已抓取，但此分點最近 ${days} 個交易日未進入 HiStock 可解析的單日前排行。`
+            ? `單日分點頁已抓取，但此分點最近 ${days} 個交易日未進入來源可解析的單日前排行。`
             : `尚未抓取分點最近 ${days} 個交易日資料。`;
         document.querySelector("#broker-daily-table").innerHTML = `<div class="empty">${esc(message)}</div>`;
         return;
@@ -4248,7 +4248,7 @@ def db_meta(days: int) -> dict[str, object]:
                 FROM broker_branch_topn
                 WHERE as_of_date = ?
                   AND window_days = ?
-                  AND source = 'histock'
+                  AND source = 'moneydj'
                 """,
                 (dates[-1], days),
             ).fetchone()[0]
@@ -4473,7 +4473,7 @@ def failed_branch_ids(days: int = 20, limit: int = 100) -> list[str]:
             FROM branch_fetch_status
             WHERE trade_date = ?
               AND window_days = ?
-              AND source = 'histock'
+              AND source = 'moneydj'
               AND status IN ('failed', 'empty')
             ORDER BY updated_at DESC
             LIMIT ?
@@ -5011,7 +5011,7 @@ def branch_update_health() -> dict[str, object]:
             SELECT status, COUNT(*), MAX(updated_at)
             FROM branch_fetch_status
             WHERE window_days = 20
-              AND source = 'histock'
+              AND source = 'moneydj'
             GROUP BY status
             ORDER BY status
             """
@@ -5021,7 +5021,7 @@ def branch_update_health() -> dict[str, object]:
             SELECT COUNT(DISTINCT stock_id), MAX(updated_at)
             FROM broker_branch_topn
             WHERE window_days = 20
-              AND source = 'histock'
+              AND source = 'moneydj'
             """
         ).fetchone()
     latest_status = max((str(row[2] or "") for row in rows), default="")
@@ -6290,7 +6290,7 @@ def stock_detail(stock_id: str, days: int) -> dict[str, object]:
             WHERE stock_id = ?
               AND trade_date = ?
               AND window_days = ?
-              AND source = 'histock'
+              AND source = 'moneydj'
             """,
             (stock_id, latest_date, days),
         ).fetchone()
@@ -6358,7 +6358,7 @@ def stock_detail(stock_id: str, days: int) -> dict[str, object]:
                 FROM branch_fetch_status
                 WHERE stock_id = ?
                   AND window_days = 1
-                  AND source = 'histock'
+                  AND source = 'moneydj'
                   AND trade_date IN ({date_placeholders})
                 ORDER BY trade_date DESC
                 """,
@@ -6373,7 +6373,7 @@ def stock_detail(stock_id: str, days: int) -> dict[str, object]:
                         SELECT trade_date, COUNT(*)
                         FROM broker_branch_daily
                         WHERE stock_id = ?
-                          AND source = 'histock'
+                          AND source = 'moneydj'
                           AND trade_date IN ({date_placeholders})
                         GROUP BY trade_date
                         """,

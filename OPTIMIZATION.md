@@ -123,3 +123,13 @@
 ## 分點資料：self-hosted runner 方案上線（2026-06）
 
 FinMind 免費等級實測無分點權限（status 400: level is register）；改採方案 B：使用者的 Mac mini 註冊為 self-hosted runner（label `branch-fetcher`），交易日 23:45 用住宅 IP 抓排行前 300 檔＋自選股的前 10 大分點，寫入共用 actions cache 的 SQLite，隨後 dispatch 雲端每日更新流程重新匯出，網站即顯示分點欄位與共振分。程式更新由 runner 每次 checkout 自動帶入，該機器無需手動同步。
+
+## 分點資料改源 MoneyDJ，回歸雲端（2026-07）
+
+Mac runner 實測後發現 HiStock 已把分點日報改為**登入後才顯示**（頁面回傳 `alert('請您先登入嗨投資再查詢')`，匿名只剩 2017 年空殼），住宅 IP 也救不了。改用 MoneyDJ 系統的券商網站鏡像：
+
+- 區間主力進出：`fubon-ebrokerdj.fbs.com.tw/z/zc/zco/zco.djhtm?a=<代號>&e=<起>&f=<迄>`（元大 `jdata.yuanta.com.tw` 同路徑備援），免登入、**GitHub 雲端機房 IP 可直連**，每檔含買賣超前 15 名分點（買進/賣出/買賣超張數；無均價欄位，`avg_price` 一律空值）。
+- 單一分點每日明細：`/z/zc/zco/zco0.djhtm?a=<代號>&b=<分點代號>`；含英文字母的分點代號需以 UTF-16BE 十六進位編碼（9A81 → 0039004100380031）。
+- 抓取已併入每日更新流程（update-taiwan-data.yml，continue-on-error），不再需要 self-hosted runner；`fetch-branch.yml` 保留手動補抓。Mac mini runner 可自行移除（`./svc.sh uninstall`）或留作備用。
+- 注意：這些券商站的 TLS 憑證缺 Subject Key Identifier，Python 3.13 預設 strict 驗證會拒絕，`branch.py` 已關閉 strict 旗標（保留一般鏈驗證）。
+- 資料表 `source` 欄改記 `moneydj`；HiStock 舊碼已移除。

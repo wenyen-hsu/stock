@@ -1,8 +1,8 @@
-name: Fetch Branch Data (Self-hosted)
+name: Fetch Branch Data
 
-# 分點資料只能從住宅 IP 抓（HiStock 封鎖雲端機房 IP），
-# 此 workflow 跑在使用者自家的 self-hosted runner（label: branch-fetcher）。
-# 抓完寫入共用 SQLite 快取，再觸發雲端的每日更新流程重新匯出網站。
+# 手動補抓分點資料（MoneyDJ 券商鏡像，免登入、雲端 IP 可直連）。
+# 平日的自動抓取已併入每日更新流程（update-taiwan-data.yml），
+# 這裡保留手動觸發：改參數重抓、或中斷後續傳。
 
 on:
   workflow_dispatch:
@@ -15,9 +15,6 @@ on:
         description: "抓排行前幾檔（外加自選股）"
         required: false
         default: "300"
-  schedule:
-    # 23:45 台北：每日資料更新（22:30 起跑）完成後再抓分點
-    - cron: "45 15 * * 1-5"
 
 permissions:
   contents: read
@@ -29,13 +26,21 @@ concurrency:
 
 jobs:
   fetch-branch:
-    runs-on: [self-hosted, branch-fetcher]
-    timeout-minutes: 150
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: 還原 SQLite 快取（與雲端每日更新共用）
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: 還原 SQLite 快取（與每日更新共用）
         uses: actions/cache@v4
         with:
           path: data/stock_chip.sqlite
@@ -43,26 +48,16 @@ jobs:
           restore-keys: |
             stock-db-
 
-      - name: 準備 Python 環境（venv 於 runner 工作區重用）
-        run: |
-          python3 -c 'import sys; assert sys.version_info >= (3, 10), f"需要 Python 3.10+，目前是 {sys.version}；請先 brew install python3"'
-          if [ ! -d "$HOME/stock-chip-venv" ]; then
-            python3 -m venv "$HOME/stock-chip-venv"
-          fi
-          source "$HOME/stock-chip-venv/bin/activate"
-          pip install -q -r requirements.txt
-
-      - name: 抓取分點 Top N（排行前 N 檔 + 自選股，住宅 IP）
+      - name: 抓取分點 Top N（排行前 N 檔 + 自選股）
         env:
           TOP: ${{ github.event.inputs.top || '10' }}
           SCOPE: ${{ github.event.inputs.scope || '300' }}
           PYTHONUNBUFFERED: "1"
         run: |
-          source "$HOME/stock-chip-venv/bin/activate"
-          # --skip-existing：中斷後重跑可續傳；--retry-sleeps 縮短失敗股的重試等待
+          # --skip-existing：中斷後重跑可續傳
           python -m stock_chip.branch --days 20 --top "$TOP" --from-scan "$SCOPE" --sleep 1.0 --skip-existing --retry-sleeps 3,8
 
-      - name: 觸發雲端重新匯出（把分點資料發布到網站）
+      - name: 觸發重新匯出（把分點資料發布到網站）
         run: |
           curl -sf -X POST \
             -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \

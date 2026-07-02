@@ -23,7 +23,7 @@ concurrency:
 jobs:
   update:
     runs-on: ubuntu-latest
-    timeout-minutes: 120
+    timeout-minutes: 150
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -71,6 +71,13 @@ jobs:
       - name: 抓取 MOPS 重大事件
         continue-on-error: true
         run: python -m stock_chip.mops --days 14
+
+      - name: 抓取分點 Top 10（排行前 300 檔 + 自選股，MoneyDJ）
+        continue-on-error: true
+        env:
+          DAYS: ${{ github.event.inputs.days || '20' }}
+          PYTHONUNBUFFERED: "1"
+        run: python -m stock_chip.branch --days "$DAYS" --top 10 --from-scan 300 --sleep 1.0 --skip-existing --retry-sleeps 3,8
 
       - name: 掃描 20 日與 5 日排行
         env:

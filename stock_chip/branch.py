@@ -3,24 +3,42 @@ from __future__ import annotations
 import argparse
 import csv
 import datetime as dt
+import gzip
 import re
 import sqlite3
+import ssl
 import time
+import urllib.parse
+import urllib.request
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
 
-import requests
 from bs4 import BeautifulSoup
 
 from stock_chip.official import connect_db
 from stock_chip.scan import DEFAULT_WATCHLIST, parse_watchlist, recent_dates
 
 
-HISTOCK_BRANCH_URL = "https://histock.tw/stock/branch.aspx"
-HISTOCK_BROKER_TRACE_URL = "https://histock.tw/stock/brokertrace.aspx"
+# HiStock 於 2026-06 起分點日報改為登入後才顯示，改用 MoneyDJ 系統的
+# 券商網站鏡像（免登入、機房 IP 可直連）。fubon 為主、yuanta 備援。
+MONEYDJ_ZCO_BASES = (
+    "https://fubon-ebrokerdj.fbs.com.tw",
+    "https://jdata.yuanta.com.tw",
+)
+BRANCH_SOURCE = "moneydj"
 DEFAULT_RETRY_SLEEPS = (5.0, 15.0, 30.0)
 REQUEST_TIMEOUT_SECONDS = 12
+USER_AGENT = (
+    "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 "
+    "(KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36"
+)
+
+# 這些券商站的憑證缺少 Subject Key Identifier 擴充欄位，
+# Python 3.13 預設的嚴格驗證會拒絕；關閉 strict 但保留一般鏈驗證與主機名檢查。
+_SSL_CONTEXT = ssl.create_default_context()
+if hasattr(ssl, "VERIFY_X509_STRICT"):
+    _SSL_CONTEXT.verify_flags &= ~ssl.VERIFY_X509_STRICT
 BROKER_ID_OVERRIDES = {
     "摩根大通": "8440",
     "美林": "1440",
@@ -97,24 +115,60 @@ def parse_number(value: str | None) -> float | None:
         return None
 
 
-def compact_date(value: str) -> str:
-    return value.replace("-", "")
-
-
 def normalize_date(value: str) -> str:
     text = value.strip().replace("/", "-")
     return text
+
+
+def moneydj_date(value: str) -> str:
+    """MoneyDJ zco 查詢用不補零的日期格式，例如 2026-6-2。"""
+    year, month, day = (int(part) for part in normalize_date(value).split("-"))
+    return f"{year}-{month}-{day}"
+
+
+def decode_broker_id(raw: str | None) -> str | None:
+    """分點代號可能以 UTF-16BE 十六進位編碼（例：0039004100380031 → 9A81）。"""
+    if not raw:
+        return None
+    if len(raw) > 4 and len(raw) % 4 == 0 and re.fullmatch(r"[0-9A-Fa-f]+", raw):
+        try:
+            return bytes.fromhex(raw).decode("utf-16-be")
+        except (ValueError, UnicodeDecodeError):
+            return raw
+    return raw
 
 
 def broker_id_from_cell(cell: Any) -> str | None:
     link = cell.find("a", href=True)
     if not link:
         return None
-    match = re.search(r"bno=([^&]+)", link["href"])
-    return match.group(1) if match else None
+    match = re.search(r"[?&]b=([^&]+)", link["href"])
+    return decode_broker_id(match.group(1)) if match else None
 
 
-def fetch_histock_branch(
+def http_get(url: str) -> str:
+    req = urllib.request.Request(
+        url,
+        headers={
+            "User-Agent": USER_AGENT,
+            "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+            "Accept-Encoding": "gzip",
+            "Accept-Language": "zh-TW,zh;q=0.9",
+        },
+    )
+    resp = urllib.request.urlopen(req, timeout=REQUEST_TIMEOUT_SECONDS, context=_SSL_CONTEXT)
+    raw = resp.read()
+    if resp.headers.get("Content-Encoding") == "gzip":
+        raw = gzip.decompress(raw)
+    content_type = resp.headers.get("Content-Type", "")
+    match = re.search(r"charset=([\w-]+)", content_type, re.I)
+    encoding = match.group(1) if match else "big5"
+    return raw.decode(encoding, "replace")
+
+
+def parse_moneydj_zco(
+    html: str,
+    source_url: str,
     stock_id: str,
     stock_name: str,
     from_date: str,
@@ -122,54 +176,21 @@ def fetch_histock_branch(
     window_days: int,
     top_n: int,
 ) -> list[BranchRow]:
-    params = {
-        "no": stock_id,
-        "from": compact_date(from_date),
-        "to": compact_date(to_date),
-    }
-    headers = {
-        "User-Agent": "Mozilla/5.0 stock-chip-branch/0.1",
-        "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
-    }
-    resp = requests.get(HISTOCK_BRANCH_URL, params=params, headers=headers, timeout=REQUEST_TIMEOUT_SECONDS)
-    resp.raise_for_status()
-    source_url = resp.url
-    soup = BeautifulSoup(resp.text, "html.parser")
-
+    """解析 MoneyDJ 主力進出表：左 5 欄買超、右 5 欄賣超，
+    欄位為 券商/買進/賣出/買賣超/佔成交比重（買賣超均以正值顯示）。"""
+    soup = BeautifulSoup(html, "html.parser")
     parsed: list[BranchRow] = []
-    sell_rank = 0
     buy_rank = 0
+    sell_rank = 0
     for tr in soup.find_all("tr"):
         td_cells = tr.find_all("td")
-        cells = [cell.get_text(strip=True) for cell in td_cells]
         if len(td_cells) != 10:
             continue
-        sell_broker, sell_buy, sell_sell, sell_net, sell_avg = cells[:5]
-        buy_broker, buy_buy, buy_sell, buy_net, buy_avg = cells[5:]
-        sell_broker_id = broker_id_from_cell(td_cells[0])
-        buy_broker_id = broker_id_from_cell(td_cells[5])
-        if sell_broker and sell_rank < top_n:
-            sell_rank += 1
-            parsed.append(
-                BranchRow(
-                    as_of_date=to_date,
-                    from_date=from_date,
-                    to_date=to_date,
-                    window_days=window_days,
-                    stock_id=stock_id,
-                    name=stock_name,
-                    rank_side="sell",
-                    rank_no=sell_rank,
-                    broker_name=sell_broker,
-                    broker_id=sell_broker_id,
-                    buy_lot=parse_number(sell_buy),
-                    sell_lot=parse_number(sell_sell),
-                    net_lot=parse_number(sell_net),
-                    avg_price=parse_number(sell_avg),
-                    source="histock",
-                    source_url=source_url,
-                )
-            )
+        if "t4t1" not in (td_cells[0].get("class") or []):
+            continue
+        cells = [cell.get_text(strip=True) for cell in td_cells]
+        buy_broker, buy_buy, buy_sell, buy_net, _buy_pct = cells[:5]
+        sell_broker, sell_buy, sell_sell, sell_net, _sell_pct = cells[5:]
         if buy_broker and buy_rank < top_n:
             buy_rank += 1
             parsed.append(
@@ -183,86 +204,134 @@ def fetch_histock_branch(
                     rank_side="buy",
                     rank_no=buy_rank,
                     broker_name=buy_broker,
-                    broker_id=buy_broker_id,
+                    broker_id=broker_id_from_cell(td_cells[0]),
                     buy_lot=parse_number(buy_buy),
                     sell_lot=parse_number(buy_sell),
                     net_lot=parse_number(buy_net),
-                    avg_price=parse_number(buy_avg),
-                    source="histock",
+                    avg_price=None,
+                    source=BRANCH_SOURCE,
                     source_url=source_url,
                 )
             )
-        if sell_rank >= top_n and buy_rank >= top_n:
+        if sell_broker and sell_rank < top_n:
+            sell_rank += 1
+            parsed.append(
+                BranchRow(
+                    as_of_date=to_date,
+                    from_date=from_date,
+                    to_date=to_date,
+                    window_days=window_days,
+                    stock_id=stock_id,
+                    name=stock_name,
+                    rank_side="sell",
+                    rank_no=sell_rank,
+                    broker_name=sell_broker,
+                    broker_id=broker_id_from_cell(td_cells[5]),
+                    buy_lot=parse_number(sell_buy),
+                    sell_lot=parse_number(sell_sell),
+                    net_lot=parse_number(sell_net),
+                    avg_price=None,
+                    source=BRANCH_SOURCE,
+                    source_url=source_url,
+                )
+            )
+        if buy_rank >= top_n and sell_rank >= top_n:
             break
     return parsed
 
 
-def weighted_avg_price(
-    buy_lot: float | None,
-    buy_avg: float | None,
-    sell_lot: float | None,
-    sell_avg: float | None,
-) -> float | None:
-    buy_value = (buy_lot or 0) * (buy_avg or 0)
-    sell_value = (sell_lot or 0) * (sell_avg or 0)
-    lots = (buy_lot or 0) + (sell_lot or 0)
-    if lots <= 0:
-        return buy_avg or sell_avg
-    return round((buy_value + sell_value) / lots, 4)
+def fetch_moneydj_branch(
+    stock_id: str,
+    stock_name: str,
+    from_date: str,
+    to_date: str,
+    window_days: int,
+    top_n: int,
+    base_url: str,
+) -> list[BranchRow]:
+    query = urllib.parse.urlencode(
+        {"a": stock_id, "e": moneydj_date(from_date), "f": moneydj_date(to_date)}
+    )
+    url = f"{base_url}/z/zc/zco/zco.djhtm?{query}"
+    html = http_get(url)
+    return parse_moneydj_zco(
+        html,
+        source_url=url,
+        stock_id=stock_id,
+        stock_name=stock_name,
+        from_date=from_date,
+        to_date=to_date,
+        window_days=window_days,
+        top_n=top_n,
+    )
 
 
-def fetch_histock_broker_trace(
+def encode_broker_id(broker_id: str) -> str:
+    """含英文字母的分點代號在 zco0 查詢時要用 UTF-16BE 十六進位（9A81 → 0039004100380031）。"""
+    if broker_id.isdigit():
+        return broker_id
+    return broker_id.encode("utf-16-be").hex().upper()
+
+
+def fetch_moneydj_broker_trace(
     stock_id: str,
     stock_name: str,
     broker_name: str,
     broker_id: str,
     wanted_dates: set[str],
 ) -> list[BranchRow]:
-    params = {"bno": broker_id, "no": stock_id}
-    headers = {
-        "User-Agent": "Mozilla/5.0 stock-chip-branch/0.1",
-        "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
-    }
-    resp = requests.get(HISTOCK_BROKER_TRACE_URL, params=params, headers=headers, timeout=REQUEST_TIMEOUT_SECONDS)
-    resp.raise_for_status()
-    soup = BeautifulSoup(resp.text, "html.parser")
-    rows: list[BranchRow] = []
-    for tr in soup.find_all("tr"):
-        cells = [cell.get_text(strip=True) for cell in tr.find_all("td")]
-        if len(cells) < 7:
+    """MoneyDJ zco0 單一分點對單一個股的每日買賣明細，
+    欄位為 日期/買進/賣出/買賣總額/買賣超（買賣超帶正負號），預設約近一個月。"""
+    last_error: Exception | None = None
+    for base_url in MONEYDJ_ZCO_BASES:
+        query = urllib.parse.urlencode({"a": stock_id, "b": encode_broker_id(broker_id)})
+        url = f"{base_url}/z/zc/zco/zco0.djhtm?{query}"
+        try:
+            html = http_get(url)
+        except Exception as exc:
+            last_error = exc
             continue
-        trade_date = normalize_date(cells[0])
-        if trade_date not in wanted_dates:
-            continue
-        buy_lot = parse_number(cells[1])
-        buy_avg = parse_number(cells[2])
-        sell_lot = parse_number(cells[3])
-        sell_avg = parse_number(cells[4])
-        net_lot = parse_number(cells[6])
-        rows.append(
-            BranchRow(
-                as_of_date=trade_date,
-                from_date=trade_date,
-                to_date=trade_date,
-                window_days=1,
-                stock_id=stock_id,
-                name=stock_name,
-                rank_side="buy" if (net_lot or 0) >= 0 else "sell",
-                rank_no=0,
-                broker_name=broker_name,
-                broker_id=broker_id,
-                buy_lot=buy_lot,
-                sell_lot=sell_lot,
-                net_lot=net_lot,
-                avg_price=weighted_avg_price(buy_lot, buy_avg, sell_lot, sell_avg),
-                source="histock",
-                source_url=resp.url,
+        soup = BeautifulSoup(html, "html.parser")
+        rows: list[BranchRow] = []
+        for tr in soup.find_all("tr"):
+            td_cells = tr.find_all("td")
+            if len(td_cells) != 5:
+                continue
+            if "t4n0" not in (td_cells[0].get("class") or []):
+                continue
+            cells = [cell.get_text(strip=True) for cell in td_cells]
+            trade_date = normalize_date(cells[0])
+            if trade_date not in wanted_dates:
+                continue
+            net_lot = parse_number(cells[4])
+            rows.append(
+                BranchRow(
+                    as_of_date=trade_date,
+                    from_date=trade_date,
+                    to_date=trade_date,
+                    window_days=1,
+                    stock_id=stock_id,
+                    name=stock_name,
+                    rank_side="buy" if (net_lot or 0) >= 0 else "sell",
+                    rank_no=0,
+                    broker_name=broker_name,
+                    broker_id=broker_id,
+                    buy_lot=parse_number(cells[1]),
+                    sell_lot=parse_number(cells[2]),
+                    net_lot=net_lot,
+                    avg_price=None,
+                    source=BRANCH_SOURCE,
+                    source_url=url,
+                )
             )
-        )
-    return rows
+        if rows:
+            return rows
+    if last_error is not None:
+        raise last_error
+    return []
 
 
-def fetch_histock_branch_with_retry(
+def fetch_branch_with_retry(
     stock_id: str,
     stock_name: str,
     from_date: str,
@@ -279,40 +348,46 @@ def fetch_histock_branch_with_retry(
     for attempt_index in range(total_attempts):
         if attempt_index:
             time.sleep(retry_sleeps[attempt_index - 1])
-        attempts += 1
-        try:
-            rows = fetch_histock_branch(
-                stock_id=stock_id,
-                stock_name=stock_name,
-                from_date=from_date,
-                to_date=to_date,
-                window_days=window_days,
-                top_n=top_n,
-            )
-            if rows:
-                source_url = rows[0].source_url
-                return rows, FetchStatus(
-                    trade_date=to_date,
+        # 每輪輪替鏡像站：第一輪富邦、重試改元大，避免單站限流
+        for base_url in (
+            MONEYDJ_ZCO_BASES[attempt_index % len(MONEYDJ_ZCO_BASES):]
+            + MONEYDJ_ZCO_BASES[: attempt_index % len(MONEYDJ_ZCO_BASES)]
+        ):
+            attempts += 1
+            try:
+                rows = fetch_moneydj_branch(
                     stock_id=stock_id,
-                    name=stock_name,
+                    stock_name=stock_name,
+                    from_date=from_date,
+                    to_date=to_date,
                     window_days=window_days,
-                    source="histock",
-                    status="success",
-                    row_count=len(rows),
-                    attempts=attempts,
-                    error=None,
-                    source_url=source_url,
+                    top_n=top_n,
+                    base_url=base_url,
                 )
-            last_error = "empty parseable branch table"
-        except Exception as exc:
-            last_error = str(exc)
+                if rows:
+                    source_url = rows[0].source_url
+                    return rows, FetchStatus(
+                        trade_date=to_date,
+                        stock_id=stock_id,
+                        name=stock_name,
+                        window_days=window_days,
+                        source=BRANCH_SOURCE,
+                        status="success",
+                        row_count=len(rows),
+                        attempts=attempts,
+                        error=None,
+                        source_url=source_url,
+                    )
+                last_error = "empty parseable branch table"
+            except Exception as exc:
+                last_error = str(exc)
 
     return [], FetchStatus(
         trade_date=to_date,
         stock_id=stock_id,
         name=stock_name,
         window_days=window_days,
-        source="histock",
+        source=BRANCH_SOURCE,
         status="empty" if last_error == "empty parseable branch table" else "failed",
         row_count=0,
         attempts=attempts,
@@ -367,7 +442,7 @@ def existing_branch_stock_ids(conn: sqlite3.Connection, as_of_date: str, days: i
         FROM broker_branch_topn
         WHERE as_of_date = ?
           AND window_days = ?
-          AND source = 'histock'
+          AND source = 'moneydj'
         """,
         (as_of_date, days),
     ).fetchall()
@@ -377,7 +452,7 @@ def existing_branch_stock_ids(conn: sqlite3.Connection, as_of_date: str, days: i
         FROM branch_fetch_status
         WHERE trade_date = ?
           AND window_days = ?
-          AND source = 'histock'
+          AND source = 'moneydj'
           AND status IN ('success', 'empty')
         """,
         (as_of_date, days),
@@ -402,12 +477,12 @@ def branch_coverage(conn: sqlite3.Connection, as_of_date: str, days: int) -> lis
             ON b.stock_id = s.stock_id
            AND b.as_of_date = ?
            AND b.window_days = ?
-           AND b.source = 'histock'
+           AND b.source = 'moneydj'
         LEFT JOIN branch_fetch_status fs
             ON fs.stock_id = s.stock_id
            AND fs.trade_date = ?
            AND fs.window_days = ?
-           AND fs.source = 'histock'
+           AND fs.source = 'moneydj'
         WHERE s.market IN ('TWSE', 'TPEX')
         GROUP BY s.market
         ORDER BY s.market
@@ -552,7 +627,7 @@ def successful_branch_daily_dates(conn: sqlite3.Connection, stock_id: str, dates
         FROM branch_fetch_status
         WHERE stock_id = ?
           AND window_days = 1
-          AND source = 'histock'
+          AND source = 'moneydj'
           AND status = 'success'
           AND trade_date IN ({placeholders})
         """,
@@ -563,7 +638,7 @@ def successful_branch_daily_dates(conn: sqlite3.Connection, stock_id: str, dates
         SELECT trade_date
         FROM broker_branch_daily
         WHERE stock_id = ?
-          AND source = 'histock'
+          AND source = 'moneydj'
           AND trade_date IN ({placeholders})
         GROUP BY trade_date
         HAVING COUNT(*) > 0
@@ -595,7 +670,7 @@ def export_rows(output_dir: Path, rows: list[BranchRow], days: int, suffix: str 
         "# 分點 Top N 報告",
         "",
         f"- 產生時間：{dt.datetime.now().isoformat(timespec='seconds')}",
-        f"- 來源：HiStock 公開分點頁",
+        f"- 來源：MoneyDJ 券商分點頁（富邦/元大鏡像）",
         "",
     ]
     grouped: dict[str, list[BranchRow]] = {}
@@ -657,7 +732,7 @@ def run_branch(
         for idx, stock_id in enumerate(stock_ids):
             if idx:
                 time.sleep(sleep_seconds)
-            rows, status = fetch_histock_branch_with_retry(
+            rows, status = fetch_branch_with_retry(
                 stock_id=stock_id,
                 stock_name=names[stock_id],
                 from_date=dates[0],
@@ -718,7 +793,7 @@ def run_branch_daily(
                             stock_id=stock_id,
                             name=names[stock_id],
                             window_days=1,
-                            source="histock",
+                            source=BRANCH_SOURCE,
                             status="skipped",
                             row_count=0,
                             attempts=0,
@@ -730,7 +805,7 @@ def run_branch_daily(
                 if request_count:
                     time.sleep(sleep_seconds)
                 request_count += 1
-                rows, status = fetch_histock_branch_with_retry(
+                rows, status = fetch_branch_with_retry(
                     stock_id=stock_id,
                     stock_name=names[stock_id],
                     from_date=trade_date,
@@ -816,7 +891,7 @@ def run_branch_trace_history(
             if idx:
                 time.sleep(sleep_seconds)
             try:
-                rows = fetch_histock_broker_trace(
+                rows = fetch_moneydj_broker_trace(
                     stock_id=broker["stock_id"],
                     stock_name=broker["name"],
                     broker_name=broker["broker_name"],
@@ -899,7 +974,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--trace-history",
         action="store_true",
-        help="Fetch recent per-broker history for interval top buy branches from HiStock brokertrace.",
+        help="Fetch recent per-broker history for interval top buy branches from MoneyDJ zco0.",
     )
     parser.add_argument(
         "--history-days",
@@ -915,7 +990,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--retry-sleeps",
         default="5,15,30",
-        help="Comma-separated retry delays in seconds for empty/failed HiStock branch responses.",
+        help="Comma-separated retry delays in seconds for empty/failed branch responses.",
     )
     return parser.parse_args()
 
