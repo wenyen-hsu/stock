@@ -1044,6 +1044,13 @@
           </div>
           <div class="table-wrap" id="dispersion-table"></div>
         </div>
+        <div class="panel">
+          <div class="panel-head">
+            <div><div class="panel-title">季度財報（單季三率與 EPS）</div><div class="muted" id="financials-note">來源 MOPS 綜合損益表，累計值已差分為單季</div></div>
+            <div class="panel-actions"><button class="secondary" id="refresh-financials">更新財報</button></div>
+          </div>
+          <div class="table-wrap" id="financials-table"></div>
+        </div>
       </section>
       <section class="panel">
         <div class="panel-head">
@@ -1593,6 +1600,7 @@
             branch_top: [], branch_daily: [],
             revenues: lite.revenues || [],
             dispersion: lite.dispersion || [],
+            financials: lite.financials || [],
             news: [], mops_events: [],
             branch_top_status: {status: "missing"},
           };
@@ -3670,6 +3678,17 @@
         {key:"retail_pct", label:"散戶(<100張)%"},
         {key:"total_holders", label:"股東人數"}
       ]);
+      const finRows = data.financials || [];
+      const finNote = document.querySelector("#financials-note");
+      if (finNote) finNote.textContent = finRows.length ? `最新 ${finRows[0].year_quarter}；毛利率 ${fmt(finRows[0].gross_margin_pct)}%` : "尚無財報資料，可按右側更新（金融業僅顯示 EPS）";
+      renderTable(document.querySelector("#financials-table"), finRows, [
+        {key:"year_quarter", label:"季度"},
+        {key:"revenue_million", label:"營收(百萬)"},
+        {key:"gross_margin_pct", label:"毛利率%"},
+        {key:"operating_margin_pct", label:"營益率%"},
+        {key:"net_margin_pct", label:"淨利率%"},
+        {key:"eps", label:"EPS(元)", signed:true}
+      ]);
       const marginLatest = data.margin?.[0];
       document.querySelector("#margin-note").textContent = marginLatest
         ? `最新 ${marginLatest.date}，融資餘額 ${fmt(marginLatest.margin_balance_lot)} 張，融券餘額 ${fmt(marginLatest.short_balance_lot)} 張`
@@ -3832,6 +3851,24 @@
     document.querySelector("#refresh-market-view").addEventListener("click", loadMarket);
     ["market-index-code","market-product","market-range"].forEach(id => document.querySelector("#" + id).addEventListener("change", loadMarket));
     document.querySelector("#refresh-mops-events").addEventListener("click", refreshMopsEvents);
+    document.querySelector("#refresh-financials")?.addEventListener("click", async (event) => {
+      const btn = event.currentTarget;
+      const original = btn.textContent;
+      btn.disabled = true;
+      btn.textContent = "抓取中（首次約 1-2 分鐘）";
+      try {
+        const result = await postJSON("/api/financials/refresh", {});
+        const note = document.querySelector("#financials-note");
+        if (note) note.textContent = `已更新：${fmt(result.row_count)} 列（略過 ${fmt(result.skipped_requests)} 個已入庫季度）`;
+        if (state.stockId) await loadStock(state.stockId);
+      } catch (err) {
+        const note = document.querySelector("#financials-note");
+        if (note) note.textContent = `更新失敗：${err.message}`;
+      } finally {
+        btn.disabled = false;
+        btn.textContent = original;
+      }
+    });
     document.querySelector("#refresh-dispersion")?.addEventListener("click", async (event) => {
       const btn = event.currentTarget;
       const original = btn.textContent;
@@ -3939,7 +3976,7 @@
       btn.addEventListener("click", () => refreshSingleSection(btn.dataset.section, btn));
     });
     if (STATIC_MODE) {
-      document.querySelectorAll(".single-refresh, #refresh-news, #refresh-us-news, #refresh-mops-events, #us-use-ollama, #refresh-dispersion").forEach(btn => btn.style.display = "none");
+      document.querySelectorAll(".single-refresh, #refresh-news, #refresh-us-news, #refresh-mops-events, #us-use-ollama, #refresh-dispersion, #refresh-financials").forEach(btn => btn.style.display = "none");
       document.querySelector("#static-publish-box").style.display = "none";
       document.querySelector("#watchlist-toggle").title = "靜態版自選股儲存在此瀏覽器";
     }

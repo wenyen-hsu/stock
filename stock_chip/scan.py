@@ -375,6 +375,60 @@ def load_shareholding_dispersion(conn: sqlite3.Connection) -> dict[str, dict[str
     return output
 
 
+def load_fundamentals(conn: sqlite3.Connection) -> dict[str, dict[str, Any]]:
+    """MOPS 季度財報：最新季三率、毛利率連升/連降季數、近四季 EPS 與自算本益比。
+
+    quarterly_financials 存的是累計值；此處差分成單季後再算比率。"""
+    from stock_chip.financials import single_quarter_values
+
+    try:
+        raw = conn.execute(
+            """
+            SELECT stock_id, year_quarter, revenue, gross_profit, operating_income, net_income, eps
+            FROM quarterly_financials
+            ORDER BY stock_id, year_quarter
+            """
+        ).fetchall()
+    except sqlite3.OperationalError:
+        return {}
+    by_stock: dict[str, list[dict[str, Any]]] = {}
+    columns = ["year_quarter", "revenue", "gross_profit", "operating_income", "net_income", "eps"]
+    for row in raw:
+        by_stock.setdefault(row[0], []).append(dict(zip(columns, row[1:], strict=True)))
+
+    output: dict[str, dict[str, Any]] = {}
+    for stock_id, cumulative_rows in by_stock.items():
+        quarters = single_quarter_values(cumulative_rows)
+        if not quarters:
+            continue
+        latest = quarters[-1]
+        gross_margins = [q["gross_margin_pct"] for q in quarters if q["gross_margin_pct"] is not None]
+        streak = 0
+        if len(gross_margins) >= 2:
+            direction = 0
+            for prev, cur in zip(gross_margins, gross_margins[1:], strict=False):
+                step = 1 if cur > prev else -1 if cur < prev else 0
+                if step == 0:
+                    direction = 0
+                    streak = 0
+                elif step == direction:
+                    streak += step
+                else:
+                    direction = step
+                    streak = step
+        eps_values = [q["eps"] for q in quarters[-4:] if q["eps"] is not None]
+        eps_ttm = round(sum(eps_values), 2) if len(eps_values) == 4 else None
+        output[stock_id] = {
+            "fin_quarter": latest["year_quarter"],
+            "gross_margin_pct": latest["gross_margin_pct"],
+            "operating_margin_pct": latest["operating_margin_pct"],
+            "net_margin_pct": latest["net_margin_pct"],
+            "gross_margin_streak": streak,
+            "eps_ttm": eps_ttm,
+        }
+    return output
+
+
 def consecutive_count(rows: list[dict[str, Any]], key: str, direction: int) -> int:
     count = 0
     for row in reversed(rows):
@@ -485,6 +539,31 @@ def valuation_score_row(row: dict[str, Any]) -> float:
         elif dividend_yield >= 3:
             score += 1.5
     return round(bounded(score, -4.0, 8.0), 2)
+
+
+def fundamental_score_row(row: dict[str, Any]) -> float:
+    """獲利品質：淨利率水準 + 毛利率趨勢 + 近四季獲利為正。缺財報時為 0。"""
+    net_margin = row.get("net_margin_pct")
+    streak = row.get("gross_margin_streak")
+    eps_ttm = row.get("eps_ttm")
+    if net_margin is None and streak is None and eps_ttm is None:
+        return 0.0
+    score = 0.0
+    if net_margin is not None:
+        if net_margin >= 20:
+            score += 3.0
+        elif net_margin >= 10:
+            score += 1.5
+        elif net_margin < 0:
+            score -= 3.0
+    if streak:
+        score += bounded(streak * 1.2, -3.5, 3.5)
+    if eps_ttm is not None:
+        if eps_ttm > 0:
+            score += 1.5
+        else:
+            score -= 2.0
+    return round(bounded(score, -8.0, 8.0), 2)
 
 
 def dispersion_score_row(row: dict[str, Any]) -> float:
@@ -675,6 +754,12 @@ def base_reason(row: dict[str, Any]) -> str:
     volatility = row.get("volatility_pct")
     if volatility is not None and volatility > 65:
         parts.append("波動偏高")
+    margin_streak = row.get("gross_margin_streak")
+    if margin_streak is not None:
+        if margin_streak >= 2:
+            parts.append(f"毛利率連{margin_streak}升")
+        elif margin_streak <= -2:
+            parts.append(f"毛利率連{-margin_streak}降")
     big_change = row.get("big_holder_change_1w")
     if big_change is not None:
         if big_change >= 0.3:
@@ -808,12 +893,14 @@ def aggregate(
     history_stats: dict[str, dict[str, Any]] | None = None,
     profiles: dict[str, dict[str, Any]] | None = None,
     dispersion: dict[str, dict[str, Any]] | None = None,
+    fundamentals: dict[str, dict[str, Any]] | None = None,
 ) -> list[dict[str, Any]]:
     branch_leaders = branch_leaders or {}
     revenue_momentum = revenue_momentum or {}
     history_stats = history_stats or {}
     profiles = profiles or {}
     dispersion = dispersion or {}
+    fundamentals = fundamentals or {}
     grouped: dict[str, list[dict[str, Any]]] = {}
     for row in rows:
         grouped.setdefault(row["stock_id"], []).append(row)
@@ -903,6 +990,7 @@ def aggregate(
         item.update(history_stats.get(stock_id, {}))
         item.update(profiles.get(stock_id, {}))
         item.update(dispersion.get(stock_id, {}))
+        item.update(fundamentals.get(stock_id, {}))
         item.setdefault("industry", "")
         item.setdefault("sub_industry", "")
         item.setdefault("long_momentum_score", 0.0)
@@ -927,6 +1015,9 @@ def aggregate(
         item["momentum_score"] = momentum_score_row(item)
         item["valuation_score"] = valuation_score_row(item)
         item["dispersion_score"] = dispersion_score_row(item)
+        eps_ttm = item.get("eps_ttm")
+        item["pe_ttm"] = round(close / eps_ttm, 2) if close is not None and eps_ttm and eps_ttm > 0 else None
+        item["fundamental_score"] = fundamental_score_row(item)
         item["base_score"] = round(item["chip_score"] + item["margin_score"] + item["revenue_momentum_score"], 2)
         item["multifactor_score"] = round(
             item["base_score"]
@@ -934,7 +1025,8 @@ def aggregate(
             + item["long_momentum_score"]
             + item["valuation_score"]
             + item["volume_score"] * 0.5
-            + item["dispersion_score"],
+            + item["dispersion_score"]
+            + item["fundamental_score"],
             2,
         )
         item["branch_status"] = branch_status(item)
@@ -990,6 +1082,14 @@ def to_export_row(row: dict[str, Any], days: int) -> dict[str, Any]:
         "retail_pct": row.get("retail_pct"),
         "retail_change_1w": row.get("retail_change_1w"),
         "dispersion_score": row.get("dispersion_score", 0.0),
+        "fin_quarter": row.get("fin_quarter"),
+        "gross_margin_pct": row.get("gross_margin_pct"),
+        "operating_margin_pct": row.get("operating_margin_pct"),
+        "net_margin_pct": row.get("net_margin_pct"),
+        "gross_margin_streak": row.get("gross_margin_streak"),
+        "eps_ttm": row.get("eps_ttm"),
+        "pe_ttm": row.get("pe_ttm"),
+        "fundamental_score": row.get("fundamental_score", 0.0),
         "multifactor_score": row.get("multifactor_score", row.get("base_score", row["chip_score"])),
         f"{days}d_avg_price": round(avg_price, 4) if avg_price is not None else None,
         "close_vs_avg_pct": round(close_vs_avg_pct, 2) if close_vs_avg_pct is not None else None,
@@ -1371,9 +1471,10 @@ def run_scan(
         history_stats = load_history_stats(conn, dates[-1]) if dates else {}
         profiles = load_profiles(conn)
         dispersion = load_shareholding_dispersion(conn)
+        fundamentals = load_fundamentals(conn)
     if len(dates) < days:
         raise RuntimeError(f"資料庫只有 {len(dates)} 個交易日，少於要求的 {days} 日。")
-    rows = aggregate(raw_rows, days, dates[-1], branch_leaders, revenue_momentum, history_stats, profiles, dispersion)
+    rows = aggregate(raw_rows, days, dates[-1], branch_leaders, revenue_momentum, history_stats, profiles, dispersion, fundamentals)
     output_dir.mkdir(parents=True, exist_ok=True)
 
     all_path = output_dir / f"scan_all_{days}d.csv"

@@ -64,6 +64,10 @@ jobs:
           python -m stock_chip.revenue --months 24 --from-scan 200 --only-missing-month --sleep 0.4
           python -m stock_chip.revenue --months 24 --fill-market 250 --only-missing-month --sleep 0.5
 
+      - name: 更新季度財報三率與 EPS（MOPS，僅缺漏季度）
+        continue-on-error: true
+        run: python -m stock_chip.financials --quarters 8 --sleep 3
+
       - name: 更新大盤指數與期貨多空
         continue-on-error: true
         run: python -m stock_chip.market --days 400

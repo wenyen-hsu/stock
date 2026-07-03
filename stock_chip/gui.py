@@ -21,6 +21,7 @@ from urllib.request import Request, urlopen
 
 from stock_chip.branch import branch_coverage, run_branch, run_branch_daily
 from stock_chip.tdcc import refresh_dispersion
+from stock_chip.financials import refresh_financials
 from stock_chip.backtest import backtest_payload
 from stock_chip.market import PRODUCTS as FUTURES_PRODUCTS
 from stock_chip.mops import load_mops_events, refresh_mops_events
@@ -1101,6 +1102,13 @@ INDEX_HTML = """<!doctype html>
           </div>
           <div class="table-wrap" id="dispersion-table"></div>
         </div>
+        <div class="panel">
+          <div class="panel-head">
+            <div><div class="panel-title">季度財報（單季三率與 EPS）</div><div class="muted" id="financials-note">來源 MOPS 綜合損益表，累計值已差分為單季</div></div>
+            <div class="panel-actions"><button class="secondary" id="refresh-financials">更新財報</button></div>
+          </div>
+          <div class="table-wrap" id="financials-table"></div>
+        </div>
       </section>
       <section class="panel">
         <div class="panel-head">
@@ -1650,6 +1658,7 @@ INDEX_HTML = """<!doctype html>
             branch_top: [], branch_daily: [],
             revenues: lite.revenues || [],
             dispersion: lite.dispersion || [],
+            financials: lite.financials || [],
             news: [], mops_events: [],
             branch_top_status: {status: "missing"},
           };
@@ -3727,6 +3736,17 @@ INDEX_HTML = """<!doctype html>
         {key:"retail_pct", label:"散戶(<100張)%"},
         {key:"total_holders", label:"股東人數"}
       ]);
+      const finRows = data.financials || [];
+      const finNote = document.querySelector("#financials-note");
+      if (finNote) finNote.textContent = finRows.length ? `最新 ${finRows[0].year_quarter}；毛利率 ${fmt(finRows[0].gross_margin_pct)}%` : "尚無財報資料，可按右側更新（金融業僅顯示 EPS）";
+      renderTable(document.querySelector("#financials-table"), finRows, [
+        {key:"year_quarter", label:"季度"},
+        {key:"revenue_million", label:"營收(百萬)"},
+        {key:"gross_margin_pct", label:"毛利率%"},
+        {key:"operating_margin_pct", label:"營益率%"},
+        {key:"net_margin_pct", label:"淨利率%"},
+        {key:"eps", label:"EPS(元)", signed:true}
+      ]);
       const marginLatest = data.margin?.[0];
       document.querySelector("#margin-note").textContent = marginLatest
         ? `最新 ${marginLatest.date}，融資餘額 ${fmt(marginLatest.margin_balance_lot)} 張，融券餘額 ${fmt(marginLatest.short_balance_lot)} 張`
@@ -3889,6 +3909,24 @@ INDEX_HTML = """<!doctype html>
     document.querySelector("#refresh-market-view").addEventListener("click", loadMarket);
     ["market-index-code","market-product","market-range"].forEach(id => document.querySelector("#" + id).addEventListener("change", loadMarket));
     document.querySelector("#refresh-mops-events").addEventListener("click", refreshMopsEvents);
+    document.querySelector("#refresh-financials")?.addEventListener("click", async (event) => {
+      const btn = event.currentTarget;
+      const original = btn.textContent;
+      btn.disabled = true;
+      btn.textContent = "抓取中（首次約 1-2 分鐘）";
+      try {
+        const result = await postJSON("/api/financials/refresh", {});
+        const note = document.querySelector("#financials-note");
+        if (note) note.textContent = `已更新：${fmt(result.row_count)} 列（略過 ${fmt(result.skipped_requests)} 個已入庫季度）`;
+        if (state.stockId) await loadStock(state.stockId);
+      } catch (err) {
+        const note = document.querySelector("#financials-note");
+        if (note) note.textContent = `更新失敗：${err.message}`;
+      } finally {
+        btn.disabled = false;
+        btn.textContent = original;
+      }
+    });
     document.querySelector("#refresh-dispersion")?.addEventListener("click", async (event) => {
       const btn = event.currentTarget;
       const original = btn.textContent;
@@ -3996,7 +4034,7 @@ INDEX_HTML = """<!doctype html>
       btn.addEventListener("click", () => refreshSingleSection(btn.dataset.section, btn));
     });
     if (STATIC_MODE) {
-      document.querySelectorAll(".single-refresh, #refresh-news, #refresh-us-news, #refresh-mops-events, #us-use-ollama, #refresh-dispersion").forEach(btn => btn.style.display = "none");
+      document.querySelectorAll(".single-refresh, #refresh-news, #refresh-us-news, #refresh-mops-events, #us-use-ollama, #refresh-dispersion, #refresh-financials").forEach(btn => btn.style.display = "none");
       document.querySelector("#static-publish-box").style.display = "none";
       document.querySelector("#watchlist-toggle").title = "靜態版自選股儲存在此瀏覽器";
     }
@@ -4187,6 +4225,14 @@ def normalize_scan_row(row: dict[str, str], days: int) -> dict[str, object]:
         "retail_pct": as_float_or_none(row.get("retail_pct")),
         "retail_change_1w": as_float_or_none(row.get("retail_change_1w")),
         "dispersion_score": as_float(row.get("dispersion_score")),
+        "fin_quarter": row.get("fin_quarter") or "",
+        "gross_margin_pct": as_float_or_none(row.get("gross_margin_pct")),
+        "operating_margin_pct": as_float_or_none(row.get("operating_margin_pct")),
+        "net_margin_pct": as_float_or_none(row.get("net_margin_pct")),
+        "gross_margin_streak": as_float_or_none(row.get("gross_margin_streak")),
+        "eps_ttm": as_float_or_none(row.get("eps_ttm")),
+        "pe_ttm": as_float_or_none(row.get("pe_ttm")),
+        "fundamental_score": as_float(row.get("fundamental_score")),
         "multifactor_score": as_float(row.get("multifactor_score")),
         "avg_price": as_float(row.get(f"{days}d_avg_price")),
         "volume_lot": as_float(row.get(f"{days}d_volume_lot")),
@@ -6200,7 +6246,7 @@ def stock_detail(stock_id: str, days: int) -> dict[str, object]:
     with connect_db(DB_PATH) as conn:
         dates = recent_dates(conn, days)
         if not dates:
-            return {"stock": {"stock_id": stock_id, "name": stock_id}, "daily": [], "margin": [], "chart": [], "branch_top": [], "branch_daily": [], "revenues": [], "dispersion": [], "mops_events": []}
+            return {"stock": {"stock_id": stock_id, "name": stock_id}, "daily": [], "margin": [], "chart": [], "branch_top": [], "branch_daily": [], "revenues": [], "dispersion": [], "financials": [], "mops_events": []}
         latest_date = dates[-1]
         placeholders = ",".join("?" for _ in dates)
         stock_row = conn.execute(
@@ -6515,6 +6561,7 @@ def stock_detail(stock_id: str, days: int) -> dict[str, object]:
         except sqlite3.OperationalError:
             sub_industry = ""
         dispersion = load_stock_dispersion(conn, stock_id)
+        financials = load_stock_financials(conn, stock_id)
         news = load_cached_news(conn, stock_id)
         mops_events = load_stock_mops_events(conn, stock_id)
     selection = {}
@@ -6567,6 +6614,7 @@ def stock_detail(stock_id: str, days: int) -> dict[str, object]:
         ],
         "revenues": revenues,
         "dispersion": dispersion,
+        "financials": financials,
         "news": news,
         "mops_events": mops_events,
     }
@@ -6602,6 +6650,25 @@ def load_stock_dispersion(conn: sqlite3.Connection, stock_id: str, weeks: int = 
             "total_holders": row[4],
         }
         for row in rows
+    ]
+
+
+def load_stock_financials(conn: sqlite3.Connection, stock_id: str, quarters: int = 8) -> list[dict[str, object]]:
+    """季度財報單季值（自累計差分），新到舊，供個股頁小表。"""
+    from stock_chip.financials import load_financial_rows, single_quarter_values
+
+    cumulative = load_financial_rows(conn, stock_id, limit=quarters + 4)
+    rows = single_quarter_values(cumulative)[-quarters:]
+    return [
+        {
+            "year_quarter": row["year_quarter"],
+            "revenue_million": round(row["revenue"] / 1000, 1) if row.get("revenue") is not None else None,
+            "gross_margin_pct": row.get("gross_margin_pct"),
+            "operating_margin_pct": row.get("operating_margin_pct"),
+            "net_margin_pct": row.get("net_margin_pct"),
+            "eps": row.get("eps"),
+        }
+        for row in reversed(rows)
     ]
 
 
@@ -6851,6 +6918,10 @@ class GUIHandler(BaseHTTPRequestHandler):
             if parsed.path == "/api/tdcc/refresh":
                 payload = self.read_json_body()
                 json_response(self, refresh_dispersion(DB_PATH, force=bool(payload.get("force"))))
+                return
+            if parsed.path == "/api/financials/refresh":
+                payload = self.read_json_body()
+                json_response(self, refresh_financials(DB_PATH, force=bool(payload.get("force"))))
                 return
             if parsed.path == "/api/obsidian/export":
                 result = export_obsidian_vault(DB_PATH)

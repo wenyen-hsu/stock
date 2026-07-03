@@ -667,6 +667,24 @@ def init_schema(conn: sqlite3.Connection) -> None:
             PRIMARY KEY (date, product_code, institution, source)
         );
 
+        CREATE TABLE IF NOT EXISTS quarterly_financials (
+            year_quarter TEXT NOT NULL,
+            stock_id TEXT NOT NULL,
+            name TEXT,
+            market TEXT,
+            revenue REAL,
+            gross_profit REAL,
+            operating_income REAL,
+            net_income REAL,
+            eps REAL,
+            gross_margin_pct REAL,
+            operating_margin_pct REAL,
+            net_margin_pct REAL,
+            source TEXT NOT NULL,
+            updated_at TEXT NOT NULL,
+            PRIMARY KEY (year_quarter, stock_id, source)
+        );
+
         CREATE TABLE IF NOT EXISTS ranking_snapshots (
             snapshot_date TEXT NOT NULL,
             days INTEGER NOT NULL,
@@ -714,6 +732,8 @@ def init_schema(conn: sqlite3.Connection) -> None:
             ON shareholding_dispersion(stock_id, data_date);
         CREATE INDEX IF NOT EXISTS idx_ranking_snapshots_name_date
             ON ranking_snapshots(ranking_name, snapshot_date);
+        CREATE INDEX IF NOT EXISTS idx_quarterly_financials_stock
+            ON quarterly_financials(stock_id, year_quarter);
         """
     )
     ensure_column(conn, "trading_days", "margin_count", "INTEGER NOT NULL DEFAULT 0")
