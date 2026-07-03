@@ -19,16 +19,19 @@ jobs:
           raw = resp.read()
           print("bytes:", len(raw), "content-type:", resp.headers.get("Content-Type"))
           data = json.loads(raw)
-          print("type:", type(data).__name__, "records:", len(data))
-          print("first record keys:", list(data[0].keys()))
-          for row in data[:6]:
-              print(row)
-          # 2330 的所有級距
-          key_id = next(k for k in data[0] if "代號" in k or "code" in k.lower() or "Code" in k)
-          rows_2330 = [r for r in data if r.get(key_id) == "2330"]
-          print(f"--- 2330: {len(rows_2330)} rows ---")
-          for r in rows_2330:
+          print("records:", len(data))
+          codes = [r["證券代號"] for r in data]
+          from collections import Counter
+          print("code length distribution:", Counter(len(c) for c in codes))
+          near = sorted({repr(c) for c in codes if "2330" in c})
+          print("codes containing 2330:", near[:10])
+          # 抽 5 個長度 4 的代號
+          four = sorted({c for c in codes if len(c) == 4})
+          print("len-4 codes sample:", four[:10], "... total", len(four))
+          rows = [r for r in data if r["證券代號"].strip() == "2330"]
+          print(f"--- 2330 (strip 後): {len(rows)} rows ---")
+          for r in rows:
               print(r)
-          dates = {r[next(k for k in data[0] if '日期' in k or 'date' in k.lower())] for r in data[:1000]}
-          print("dates seen (sample):", dates)
+          levels = sorted({r["持股分級"] for r in data})
+          print("levels:", levels)
           EOF
