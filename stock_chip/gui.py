@@ -1127,7 +1127,7 @@ INDEX_HTML = """<!doctype html>
       </section>
       <section class="panel">
         <div class="panel-head">
-          <div><div class="panel-title">區間合計買超前十分點</div><div class="muted" id="branch-top-note">點分點看每日明細</div></div>
+          <div><div class="panel-title">區間合計買超前十分點</div><div class="muted" id="branch-top-note">點分點看每日明細；來源無分點均價，成本為每日買超×當日均價推估（需累積 ≥3 天明細）</div></div>
           <div class="panel-actions">
             <button class="single-refresh" data-section="branch_all">更新分點資訊</button>
             <button class="secondary single-refresh" data-section="branch_top">只更新排行</button>
@@ -3836,7 +3836,7 @@ INDEX_HTML = """<!doctype html>
           {key:"buy_lot", label:"買進"},
           {key:"sell_lot", label:"賣出"},
           {key:"net_lot", label:`${days}日買超`, signed:true},
-          {key:"avg_price", label:"均價"}
+          {key:"est_cost", label:"推估成本"}
         ], {
           rowId: row => row.broker_name,
           onClick: broker => {
@@ -3879,7 +3879,7 @@ INDEX_HTML = """<!doctype html>
         {key:"buy_lot", label:"買進"},
         {key:"sell_lot", label:"賣出"},
         {key:"net_lot", label:"買賣超", signed:true},
-        {key:"avg_price", label:"均價"}
+        {key:"day_avg_price", label:"當日均價(股)"}
       ]);
     }
     async function reload() {
@@ -6465,6 +6465,30 @@ def stock_detail(stock_id: str, days: int) -> dict[str, object]:
             """,
             (stock_id, latest_date, days),
         ).fetchall()
+        # MoneyDJ 區間表沒有分點均價；用每日明細 × 當日成交均價推估成本（≥3 天才算）
+        est_cost_dates = recent_dates(conn, days)
+        est_cost_by_broker: dict[str, float] = {}
+        if est_cost_dates:
+            est_placeholders = ",".join("?" for _ in est_cost_dates)
+            est_rows = conn.execute(
+                f"""
+                SELECT d.broker_name,
+                       SUM(d.net_lot * p.avg_price) / SUM(d.net_lot) AS est_cost,
+                       COUNT(*) AS day_count
+                FROM broker_branch_daily d
+                JOIN daily_prices p
+                  ON p.stock_id = d.stock_id
+                 AND p.date = d.trade_date
+                 AND p.avg_price IS NOT NULL
+                WHERE d.stock_id = ?
+                  AND d.net_lot > 0
+                  AND d.trade_date IN ({est_placeholders})
+                GROUP BY d.broker_name
+                HAVING COUNT(*) >= 3
+                """,
+                [stock_id, *est_cost_dates],
+            ).fetchall()
+            est_cost_by_broker = {row[0]: round(row[1], 2) for row in est_rows if row[1]}
         branch_top = [
             {
                 "rank_no": row[0],
@@ -6473,6 +6497,7 @@ def stock_detail(stock_id: str, days: int) -> dict[str, object]:
                 "sell_lot": row[3],
                 "net_lot": row[4],
                 "avg_price": row[5],
+                "est_cost": row[5] if row[5] is not None else est_cost_by_broker.get(row[1]),
             }
             for row in branch_top_raw
         ]
@@ -6519,12 +6544,15 @@ def stock_detail(stock_id: str, days: int) -> dict[str, object]:
             date_placeholders = ",".join("?" for _ in daily_dates)
             raw = conn.execute(
                 f"""
-                SELECT trade_date, broker_name, rank_side, rank_no, buy_lot, sell_lot, net_lot, avg_price
-                FROM broker_branch_daily
-                WHERE stock_id = ?
-                  AND broker_name IN ({broker_placeholders})
-                  AND trade_date IN ({date_placeholders})
-                ORDER BY trade_date DESC, broker_name
+                SELECT d.trade_date, d.broker_name, d.rank_side, d.rank_no,
+                       d.buy_lot, d.sell_lot, d.net_lot, d.avg_price, p.avg_price
+                FROM broker_branch_daily d
+                LEFT JOIN daily_prices p
+                  ON p.stock_id = d.stock_id AND p.date = d.trade_date
+                WHERE d.stock_id = ?
+                  AND d.broker_name IN ({broker_placeholders})
+                  AND d.trade_date IN ({date_placeholders})
+                ORDER BY d.trade_date DESC, d.broker_name
                 """,
                 [stock_id, *brokers, *daily_dates],
             ).fetchall()
@@ -6538,6 +6566,7 @@ def stock_detail(stock_id: str, days: int) -> dict[str, object]:
                     "sell_lot": row[5],
                     "net_lot": row[6],
                     "avg_price": row[7],
+                    "day_avg_price": round(row[8], 2) if row[8] is not None else None,
                 }
                 for row in raw
             ]

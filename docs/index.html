@@ -1068,7 +1068,7 @@
       </section>
       <section class="panel">
         <div class="panel-head">
-          <div><div class="panel-title">區間合計買超前十分點</div><div class="muted" id="branch-top-note">點分點看每日明細</div></div>
+          <div><div class="panel-title">區間合計買超前十分點</div><div class="muted" id="branch-top-note">點分點看每日明細；來源無分點均價，成本為每日買超×當日均價推估（需累積 ≥3 天明細）</div></div>
           <div class="panel-actions">
             <button class="single-refresh" data-section="branch_all">更新分點資訊</button>
             <button class="secondary single-refresh" data-section="branch_top">只更新排行</button>
@@ -3777,7 +3777,7 @@
           {key:"buy_lot", label:"買進"},
           {key:"sell_lot", label:"賣出"},
           {key:"net_lot", label:`${days}日買超`, signed:true},
-          {key:"avg_price", label:"均價"}
+          {key:"est_cost", label:"推估成本"}
         ], {
           rowId: row => row.broker_name,
           onClick: broker => {
@@ -3820,7 +3820,7 @@
         {key:"buy_lot", label:"買進"},
         {key:"sell_lot", label:"賣出"},
         {key:"net_lot", label:"買賣超", signed:true},
-        {key:"avg_price", label:"均價"}
+        {key:"day_avg_price", label:"當日均價(股)"}
       ]);
     }
     async function reload() {
