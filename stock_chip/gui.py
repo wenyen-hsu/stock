@@ -20,6 +20,7 @@ from urllib.parse import parse_qs, urlparse
 from urllib.request import Request, urlopen
 
 from stock_chip.branch import branch_coverage, run_branch, run_branch_daily
+from stock_chip.tdcc import refresh_dispersion
 from stock_chip.market import PRODUCTS as FUTURES_PRODUCTS
 from stock_chip.mops import load_mops_events, refresh_mops_events
 from stock_chip.news import ensure_news_tables, load_cached_news, refresh_stock_news
@@ -885,6 +886,7 @@ INDEX_HTML = """<!doctype html>
           <option value="momentum_inst_buy">動能 + 法人買超</option>
           <option value="high_52w_inst_buy">52週新高 + 法人買超</option>
           <option value="value_dividend">低估值 + 高殖利率</option>
+          <option value="big_holder_increase">大戶增持 + 法人買超</option>
           <option value="chip_score">法人籌碼分數</option>
           <option value="foreign_buy">外資買超</option>
           <option value="foreign_5d_revenue_growth">外資近5日買超 + 營收成長</option>
@@ -1090,6 +1092,13 @@ INDEX_HTML = """<!doctype html>
             <div class="legend" id="revenue-legend"></div>
           </div>
           <div class="table-wrap" id="revenue-table"></div>
+        </div>
+        <div class="panel">
+          <div class="panel-head">
+            <div><div class="panel-title">股權分散（TDCC 每週）</div><div class="muted" id="dispersion-note">千張大戶與散戶比率，每週更新、自首次抓取起累積</div></div>
+            <div class="panel-actions"><button class="secondary" id="refresh-dispersion">更新股權分散</button></div>
+          </div>
+          <div class="table-wrap" id="dispersion-table"></div>
         </div>
       </section>
       <section class="panel">
@@ -1633,6 +1642,7 @@ INDEX_HTML = """<!doctype html>
             chart: liteChart,
             branch_top: [], branch_daily: [],
             revenues: lite.revenues || [],
+            dispersion: lite.dispersion || [],
             news: [], mops_events: [],
             branch_top_status: {status: "missing"},
           };
@@ -3667,6 +3677,16 @@ INDEX_HTML = """<!doctype html>
         {key:"yoy_pct", label:"年增%", signed:true},
         {key:"last_year_revenue_million", label:"去年同期"}
       ]);
+      const dispRows = data.dispersion || [];
+      const dispNote = document.querySelector("#dispersion-note");
+      if (dispNote) dispNote.textContent = dispRows.length ? `最新 ${dispRows[0].data_date}；千張大戶 ${fmt(dispRows[0].big_holder_pct)}%` : "資料每週累積，尚無資料";
+      renderTable(document.querySelector("#dispersion-table"), dispRows, [
+        {key:"data_date", label:"資料日"},
+        {key:"big_holder_pct", label:"千張大戶%"},
+        {key:"holder_400_pct", label:">400張%"},
+        {key:"retail_pct", label:"散戶(<100張)%"},
+        {key:"total_holders", label:"股東人數"}
+      ]);
       const marginLatest = data.margin?.[0];
       document.querySelector("#margin-note").textContent = marginLatest
         ? `最新 ${marginLatest.date}，融資餘額 ${fmt(marginLatest.margin_balance_lot)} 張，融券餘額 ${fmt(marginLatest.short_balance_lot)} 張`
@@ -3829,6 +3849,24 @@ INDEX_HTML = """<!doctype html>
     document.querySelector("#refresh-market-view").addEventListener("click", loadMarket);
     ["market-index-code","market-product","market-range"].forEach(id => document.querySelector("#" + id).addEventListener("change", loadMarket));
     document.querySelector("#refresh-mops-events").addEventListener("click", refreshMopsEvents);
+    document.querySelector("#refresh-dispersion")?.addEventListener("click", async (event) => {
+      const btn = event.currentTarget;
+      const original = btn.textContent;
+      btn.disabled = true;
+      btn.textContent = "抓取中";
+      try {
+        const result = await postJSON("/api/tdcc/refresh", {});
+        const note = document.querySelector("#dispersion-note");
+        if (note) note.textContent = result.skipped ? result.note : `已更新 ${result.data_date}，共 ${fmt(result.stock_count)} 檔`;
+        if (state.stockId) await loadStock(state.stockId);
+      } catch (err) {
+        const note = document.querySelector("#dispersion-note");
+        if (note) note.textContent = `更新失敗：${err.message}`;
+      } finally {
+        btn.disabled = false;
+        btn.textContent = original;
+      }
+    });
     document.querySelector("#reload-mops-events").addEventListener("click", loadMopsEvents);
     ["mops-start","mops-end","mops-stock","mops-query"].forEach(id => document.querySelector("#" + id).addEventListener("input", () => {
       if (id === "mops-start" || id === "mops-end") {
@@ -3918,7 +3956,7 @@ INDEX_HTML = """<!doctype html>
       btn.addEventListener("click", () => refreshSingleSection(btn.dataset.section, btn));
     });
     if (STATIC_MODE) {
-      document.querySelectorAll(".single-refresh, #refresh-news, #refresh-us-news, #refresh-mops-events, #us-use-ollama").forEach(btn => btn.style.display = "none");
+      document.querySelectorAll(".single-refresh, #refresh-news, #refresh-us-news, #refresh-mops-events, #us-use-ollama, #refresh-dispersion").forEach(btn => btn.style.display = "none");
       document.querySelector("#static-publish-box").style.display = "none";
       document.querySelector("#watchlist-toggle").title = "靜態版自選股儲存在此瀏覽器";
     }
@@ -4101,6 +4139,14 @@ def normalize_scan_row(row: dict[str, str], days: int) -> dict[str, object]:
         "close_vs_ma60_pct": as_float_or_none(row.get("close_vs_ma60_pct")),
         "close_vs_ma240_pct": as_float_or_none(row.get("close_vs_ma240_pct")),
         "valuation_score": as_float(row.get("valuation_score")),
+        "disp_date": row.get("disp_date") or "",
+        "big_holder_pct": as_float_or_none(row.get("big_holder_pct")),
+        "big_holder_change_1w": as_float_or_none(row.get("big_holder_change_1w")),
+        "big_holder_change_4w": as_float_or_none(row.get("big_holder_change_4w")),
+        "holder_400_pct": as_float_or_none(row.get("holder_400_pct")),
+        "retail_pct": as_float_or_none(row.get("retail_pct")),
+        "retail_change_1w": as_float_or_none(row.get("retail_change_1w")),
+        "dispersion_score": as_float(row.get("dispersion_score")),
         "multifactor_score": as_float(row.get("multifactor_score")),
         "avg_price": as_float(row.get(f"{days}d_avg_price")),
         "volume_lot": as_float(row.get(f"{days}d_volume_lot")),
@@ -4162,6 +4208,7 @@ def ranking_path(days: int, ranking: str) -> Path:
         "momentum_inst_buy": "ranking_momentum_inst_buy",
         "high_52w_inst_buy": "ranking_high_52w_inst_buy",
         "value_dividend": "ranking_value_dividend",
+        "big_holder_increase": "ranking_big_holder_increase",
         "chip_score": "ranking_chip_score",
         "branch_score": "ranking_branch_score",
         "confluence_score": "ranking_confluence_score",
@@ -4186,6 +4233,7 @@ RANKING_LABELS = {
     "momentum_inst_buy": "動能 + 法人買超",
     "high_52w_inst_buy": "52週新高 + 法人買超",
     "value_dividend": "低估值 + 高殖利率",
+    "big_holder_increase": "大戶增持 + 法人買超",
     "chip_score": "法人籌碼分數",
     "selection_score": "基礎選股分",
     "foreign_buy": "外資買超",
@@ -6112,7 +6160,7 @@ def stock_detail(stock_id: str, days: int) -> dict[str, object]:
     with connect_db(DB_PATH) as conn:
         dates = recent_dates(conn, days)
         if not dates:
-            return {"stock": {"stock_id": stock_id, "name": stock_id}, "daily": [], "margin": [], "chart": [], "branch_top": [], "branch_daily": [], "revenues": [], "mops_events": []}
+            return {"stock": {"stock_id": stock_id, "name": stock_id}, "daily": [], "margin": [], "chart": [], "branch_top": [], "branch_daily": [], "revenues": [], "dispersion": [], "mops_events": []}
         latest_date = dates[-1]
         placeholders = ",".join("?" for _ in dates)
         stock_row = conn.execute(
@@ -6426,6 +6474,7 @@ def stock_detail(stock_id: str, days: int) -> dict[str, object]:
             sub_industry = (sub_row[0] or "") if sub_row else ""
         except sqlite3.OperationalError:
             sub_industry = ""
+        dispersion = load_stock_dispersion(conn, stock_id)
         news = load_cached_news(conn, stock_id)
         mops_events = load_stock_mops_events(conn, stock_id)
     selection = {}
@@ -6477,9 +6526,43 @@ def stock_detail(stock_id: str, days: int) -> dict[str, object]:
             for row in daily_status_raw
         ],
         "revenues": revenues,
+        "dispersion": dispersion,
         "news": news,
         "mops_events": mops_events,
     }
+
+
+def load_stock_dispersion(conn: sqlite3.Connection, stock_id: str, weeks: int = 26) -> list[dict[str, object]]:
+    """TDCC 股權分散週序列：千張大戶 / 400張以上 / 散戶比率與總股東數。"""
+    try:
+        rows = conn.execute(
+            """
+            SELECT data_date,
+                   SUM(CASE WHEN level = 15 THEN share_pct END) AS big_pct,
+                   SUM(CASE WHEN level BETWEEN 12 AND 15 THEN share_pct END) AS b400_pct,
+                   SUM(CASE WHEN level <= 9 THEN share_pct END) AS retail_pct,
+                   MAX(CASE WHEN level = 17 THEN holder_count END) AS holders
+            FROM shareholding_dispersion
+            WHERE stock_id = ?
+              AND level != 16
+            GROUP BY data_date
+            ORDER BY data_date DESC
+            LIMIT ?
+            """,
+            (stock_id, weeks),
+        ).fetchall()
+    except sqlite3.OperationalError:
+        return []
+    return [
+        {
+            "data_date": row[0],
+            "big_holder_pct": round(row[1], 2) if row[1] is not None else None,
+            "holder_400_pct": round(row[2], 2) if row[2] is not None else None,
+            "retail_pct": round(row[3], 2) if row[3] is not None else None,
+            "total_holders": row[4],
+        }
+        for row in rows
+    ]
 
 
 def json_response(handler: BaseHTTPRequestHandler, payload: object, status: int = 200) -> None:
@@ -6721,6 +6804,10 @@ class GUIHandler(BaseHTTPRequestHandler):
                 start_date = dt.date.fromisoformat(start_date_text) if start_date_text else None
                 end_date = dt.date.fromisoformat(end_date_text) if end_date_text else None
                 json_response(self, refresh_mops_events(DB_PATH, start_date=start_date, end_date=end_date))
+                return
+            if parsed.path == "/api/tdcc/refresh":
+                payload = self.read_json_body()
+                json_response(self, refresh_dispersion(DB_PATH, force=bool(payload.get("force"))))
                 return
             if parsed.path == "/api/obsidian/export":
                 result = export_obsidian_vault(DB_PATH)

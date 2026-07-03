@@ -667,6 +667,18 @@ def init_schema(conn: sqlite3.Connection) -> None:
             PRIMARY KEY (date, product_code, institution, source)
         );
 
+        CREATE TABLE IF NOT EXISTS shareholding_dispersion (
+            data_date TEXT NOT NULL,
+            stock_id TEXT NOT NULL,
+            level INTEGER NOT NULL,
+            holder_count INTEGER,
+            shares INTEGER,
+            share_pct REAL,
+            source TEXT NOT NULL,
+            updated_at TEXT NOT NULL,
+            PRIMARY KEY (data_date, stock_id, level, source)
+        );
+
         CREATE INDEX IF NOT EXISTS idx_daily_prices_stock_date
             ON daily_prices(stock_id, date);
         CREATE INDEX IF NOT EXISTS idx_institutional_stock_date
@@ -685,6 +697,8 @@ def init_schema(conn: sqlite3.Connection) -> None:
             ON market_index_daily(index_code, date);
         CREATE INDEX IF NOT EXISTS idx_futures_institution_product_date
             ON futures_institution_oi(product_code, date);
+        CREATE INDEX IF NOT EXISTS idx_shareholding_dispersion_stock_date
+            ON shareholding_dispersion(stock_id, data_date);
         """
     )
     ensure_column(conn, "trading_days", "margin_count", "INTEGER NOT NULL DEFAULT 0")

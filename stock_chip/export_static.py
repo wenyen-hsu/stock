@@ -35,6 +35,7 @@ RANKINGS = [
     "momentum_inst_buy",
     "high_52w_inst_buy",
     "value_dividend",
+    "big_holder_increase",
     "chip_score",
     "selection_score",
     "foreign_buy",

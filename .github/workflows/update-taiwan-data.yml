@@ -72,6 +72,10 @@ jobs:
         continue-on-error: true
         run: python -m stock_chip.mops --days 14
 
+      - name: 更新 TDCC 股權分散表（每週資料，已入庫則跳過）
+        continue-on-error: true
+        run: python -m stock_chip.tdcc
+
       - name: 抓取分點 Top 10（排行前 300 檔 + 自選股，MoneyDJ）
         continue-on-error: true
         env:

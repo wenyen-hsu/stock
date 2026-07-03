@@ -299,6 +299,82 @@ def load_revenue_momentum(conn: sqlite3.Connection) -> dict[str, dict[str, Any]]
     return output
 
 
+def load_shareholding_dispersion(conn: sqlite3.Connection) -> dict[str, dict[str, Any]]:
+    """TDCC 每週股權分散：千張大戶/400張/散戶比率與近 1 週、4 週變化。"""
+    try:
+        dates = [
+            row[0]
+            for row in conn.execute(
+                "SELECT DISTINCT data_date FROM shareholding_dispersion ORDER BY data_date DESC LIMIT 5"
+            ).fetchall()
+        ]
+    except sqlite3.OperationalError:
+        return {}
+    if not dates:
+        return {}
+    placeholders = ",".join("?" for _ in dates)
+    rows = conn.execute(
+        f"""
+        SELECT data_date, stock_id, level, holder_count, share_pct
+        FROM shareholding_dispersion
+        WHERE data_date IN ({placeholders})
+          AND level != 16
+        """,
+        dates,
+    ).fetchall()
+    # by_stock[stock_id][data_date] = {"big": pct, "b400": pct, "retail": pct, "holders": n}
+    by_stock: dict[str, dict[str, dict[str, float]]] = {}
+    for data_date, stock_id, level, holder_count, share_pct in rows:
+        bucket = by_stock.setdefault(stock_id, {}).setdefault(
+            data_date, {"big": None, "b400": 0.0, "retail": 0.0, "holders": None}
+        )
+        if share_pct is None:
+            continue
+        if level == 15:
+            bucket["big"] = share_pct
+            bucket["b400"] += share_pct
+        elif 12 <= level <= 14:
+            bucket["b400"] += share_pct
+        elif level <= 9:
+            bucket["retail"] += share_pct
+        if level == 17:
+            bucket["holders"] = holder_count
+
+    latest_date = dates[0]
+    output: dict[str, dict[str, Any]] = {}
+    for stock_id, weeks in by_stock.items():
+        latest = weeks.get(latest_date)
+        if latest is None or latest["big"] is None:
+            continue
+        ordered = sorted(weeks)
+        prev = weeks.get(ordered[-2]) if len(ordered) >= 2 else None
+        oldest = weeks.get(ordered[0]) if len(ordered) >= 4 else None
+        change_1w = (
+            round(latest["big"] - prev["big"], 2)
+            if prev is not None and prev["big"] is not None
+            else None
+        )
+        change_4w = (
+            round(latest["big"] - oldest["big"], 2)
+            if oldest is not None and oldest["big"] is not None
+            else None
+        )
+        retail_change_1w = (
+            round(latest["retail"] - prev["retail"], 2) if prev is not None else None
+        )
+        output[stock_id] = {
+            "disp_date": latest_date,
+            "big_holder_pct": round(latest["big"], 2),
+            "holder_400_pct": round(latest["b400"], 2),
+            "retail_pct": round(latest["retail"], 2),
+            "total_holders": latest["holders"],
+            "big_holder_change_1w": change_1w,
+            "big_holder_change_4w": change_4w,
+            "retail_change_1w": retail_change_1w,
+        }
+    return output
+
+
 def consecutive_count(rows: list[dict[str, Any]], key: str, direction: int) -> int:
     count = 0
     for row in reversed(rows):
@@ -409,6 +485,25 @@ def valuation_score_row(row: dict[str, Any]) -> float:
         elif dividend_yield >= 3:
             score += 1.5
     return round(bounded(score, -4.0, 8.0), 2)
+
+
+def dispersion_score_row(row: dict[str, Any]) -> float:
+    """TDCC 千張大戶比率變化：大戶增持加分、散戶減少小幅加分，反向扣分。"""
+    change_1w = row.get("big_holder_change_1w")
+    retail_change = row.get("retail_change_1w")
+    if change_1w is None and retail_change is None:
+        return 0.0
+    score = 0.0
+    if change_1w is not None:
+        score += bounded(change_1w * 8, -4.0, 4.0)
+    change_4w = row.get("big_holder_change_4w")
+    if change_4w is not None:
+        score += bounded(change_4w * 3, -1.5, 1.5)
+    if retail_change is not None and change_1w is not None:
+        # 大戶接、散戶出的換手結構最有意義
+        if change_1w > 0 and retail_change < 0:
+            score += 0.5
+    return round(bounded(score, -6.0, 6.0), 2)
 
 
 def score_row(row: dict[str, Any]) -> float:
@@ -580,6 +675,12 @@ def base_reason(row: dict[str, Any]) -> str:
     volatility = row.get("volatility_pct")
     if volatility is not None and volatility > 65:
         parts.append("波動偏高")
+    big_change = row.get("big_holder_change_1w")
+    if big_change is not None:
+        if big_change >= 0.3:
+            parts.append("千張大戶增持")
+        elif big_change <= -0.3:
+            parts.append("千張大戶減持")
     rev = revenue_reason(row)
     if rev:
         parts.append(rev)
@@ -706,11 +807,13 @@ def aggregate(
     revenue_momentum: dict[str, dict[str, Any]] | None = None,
     history_stats: dict[str, dict[str, Any]] | None = None,
     profiles: dict[str, dict[str, Any]] | None = None,
+    dispersion: dict[str, dict[str, Any]] | None = None,
 ) -> list[dict[str, Any]]:
     branch_leaders = branch_leaders or {}
     revenue_momentum = revenue_momentum or {}
     history_stats = history_stats or {}
     profiles = profiles or {}
+    dispersion = dispersion or {}
     grouped: dict[str, list[dict[str, Any]]] = {}
     for row in rows:
         grouped.setdefault(row["stock_id"], []).append(row)
@@ -799,6 +902,7 @@ def aggregate(
         item.update(revenue_momentum.get(stock_id, {}))
         item.update(history_stats.get(stock_id, {}))
         item.update(profiles.get(stock_id, {}))
+        item.update(dispersion.get(stock_id, {}))
         item.setdefault("industry", "")
         item.setdefault("sub_industry", "")
         item.setdefault("long_momentum_score", 0.0)
@@ -822,13 +926,15 @@ def aggregate(
         item["volume_signal"] = volume_signal_row(item)
         item["momentum_score"] = momentum_score_row(item)
         item["valuation_score"] = valuation_score_row(item)
+        item["dispersion_score"] = dispersion_score_row(item)
         item["base_score"] = round(item["chip_score"] + item["margin_score"] + item["revenue_momentum_score"], 2)
         item["multifactor_score"] = round(
             item["base_score"]
             + item["momentum_score"]
             + item["long_momentum_score"]
             + item["valuation_score"]
-            + item["volume_score"] * 0.5,
+            + item["volume_score"] * 0.5
+            + item["dispersion_score"],
             2,
         )
         item["branch_status"] = branch_status(item)
@@ -876,6 +982,14 @@ def to_export_row(row: dict[str, Any], days: int) -> dict[str, Any]:
         "close_vs_ma240_pct": row.get("close_vs_ma240_pct"),
         "long_momentum_score": row.get("long_momentum_score", 0.0),
         "valuation_score": row.get("valuation_score", 0.0),
+        "disp_date": row.get("disp_date"),
+        "big_holder_pct": row.get("big_holder_pct"),
+        "big_holder_change_1w": row.get("big_holder_change_1w"),
+        "big_holder_change_4w": row.get("big_holder_change_4w"),
+        "holder_400_pct": row.get("holder_400_pct"),
+        "retail_pct": row.get("retail_pct"),
+        "retail_change_1w": row.get("retail_change_1w"),
+        "dispersion_score": row.get("dispersion_score", 0.0),
         "multifactor_score": row.get("multifactor_score", row.get("base_score", row["chip_score"])),
         f"{days}d_avg_price": round(avg_price, 4) if avg_price is not None else None,
         "close_vs_avg_pct": round(close_vs_avg_pct, 2) if close_vs_avg_pct is not None else None,
@@ -975,6 +1089,17 @@ def export_rankings(output_dir: Path, rows: list[dict[str, Any]], days: int, lim
                 and (row.get("avg_turnover_100m") or 0) >= 0.3
             ],
             key=lambda row: (row.get("valuation_score") or 0, row.get("dividend_yield") or 0),
+            reverse=True,
+        ),
+        "big_holder_increase": sorted(
+            [
+                row
+                for row in rows
+                if (row.get("big_holder_change_1w") or 0) > 0
+                and row[f"{days}d_inst_net"] > 0
+                and (row.get("avg_turnover_100m") or 0) >= 0.3
+            ],
+            key=lambda row: (row.get("big_holder_change_1w") or 0, row[f"{days}d_inst_net"]),
             reverse=True,
         ),
         "high_52w_inst_buy": sorted(
@@ -1197,9 +1322,10 @@ def run_scan(
         revenue_momentum = load_revenue_momentum(conn)
         history_stats = load_history_stats(conn, dates[-1]) if dates else {}
         profiles = load_profiles(conn)
+        dispersion = load_shareholding_dispersion(conn)
     if len(dates) < days:
         raise RuntimeError(f"資料庫只有 {len(dates)} 個交易日，少於要求的 {days} 日。")
-    rows = aggregate(raw_rows, days, dates[-1], branch_leaders, revenue_momentum, history_stats, profiles)
+    rows = aggregate(raw_rows, days, dates[-1], branch_leaders, revenue_momentum, history_stats, profiles, dispersion)
     output_dir.mkdir(parents=True, exist_ok=True)
 
     all_path = output_dir / f"scan_all_{days}d.csv"
