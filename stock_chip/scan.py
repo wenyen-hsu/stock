@@ -1208,7 +1208,55 @@ def export_rankings(output_dir: Path, rows: list[dict[str, Any]], days: int, lim
         path = output_dir / f"ranking_{name}_{days}d.csv"
         write_csv(path, [to_export_row(row, days) for row in ranking_rows[:limit]])
         paths[name] = path
-    return paths
+    return paths, rankings
+
+
+SNAPSHOT_TOP_N = 50
+
+
+def snapshot_rankings(
+    db_path: Path,
+    rankings: dict[str, list[dict[str, Any]]],
+    days: int,
+    snapshot_date: str,
+    top_n: int = SNAPSHOT_TOP_N,
+) -> int:
+    """把當日各排行前 N 名寫入 ranking_snapshots，供回測計算後續報酬。
+
+    以資料日（非牆鐘）為鍵，同日重跑會冪等覆蓋。"""
+    now = dt.datetime.now().isoformat(timespec="seconds")
+    records = []
+    for name, ranking_rows in rankings.items():
+        for rank_no, row in enumerate(ranking_rows[:top_n], start=1):
+            records.append(
+                {
+                    "snapshot_date": snapshot_date,
+                    "days": days,
+                    "ranking_name": name,
+                    "rank_no": rank_no,
+                    "stock_id": row["stock_id"],
+                    "score": row.get("multifactor_score"),
+                    "total_score": row.get("total_score"),
+                    "close": row.get("close"),
+                    "updated_at": now,
+                }
+            )
+    if not records:
+        return 0
+    with connect_db(db_path) as conn:
+        conn.executemany(
+            """
+            INSERT OR REPLACE INTO ranking_snapshots (
+                snapshot_date, days, ranking_name, rank_no, stock_id,
+                score, total_score, close, updated_at
+            )
+            VALUES (:snapshot_date, :days, :ranking_name, :rank_no, :stock_id,
+                    :score, :total_score, :close, :updated_at)
+            """,
+            records,
+        )
+        conn.commit()
+    return len(records)
 
 
 def export_watchlist_daily(
@@ -1336,7 +1384,8 @@ def run_scan(
             for row in sorted(rows, key=lambda row: row.get("total_score", row["chip_score"]), reverse=True)
         ],
     )
-    ranking_paths = export_rankings(output_dir, rows, days, limit)
+    ranking_paths, rankings_by_name = export_rankings(output_dir, rows, days, limit)
+    snapshot_count = snapshot_rankings(db_path, rankings_by_name, days, dates[-1])
     watchset = set(watchlist)
     watchlist_rows = [row for row in rows if row["stock_id"] in watchset]
     watchlist_rows.sort(key=lambda row: watchlist.index(row["stock_id"]) if row["stock_id"] in watchlist else 9999)
@@ -1348,6 +1397,7 @@ def run_scan(
     return {
         "dates": dates,
         "stock_count": len(rows),
+        "snapshot_rows": snapshot_count,
         "all": all_path,
         "rankings": ranking_paths,
         "watchlist_summary": watchlist_summary_path,

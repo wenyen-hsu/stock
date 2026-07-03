@@ -667,6 +667,19 @@ def init_schema(conn: sqlite3.Connection) -> None:
             PRIMARY KEY (date, product_code, institution, source)
         );
 
+        CREATE TABLE IF NOT EXISTS ranking_snapshots (
+            snapshot_date TEXT NOT NULL,
+            days INTEGER NOT NULL,
+            ranking_name TEXT NOT NULL,
+            rank_no INTEGER NOT NULL,
+            stock_id TEXT NOT NULL,
+            score REAL,
+            total_score REAL,
+            close REAL,
+            updated_at TEXT NOT NULL,
+            PRIMARY KEY (snapshot_date, days, ranking_name, rank_no)
+        );
+
         CREATE TABLE IF NOT EXISTS shareholding_dispersion (
             data_date TEXT NOT NULL,
             stock_id TEXT NOT NULL,
@@ -699,6 +712,8 @@ def init_schema(conn: sqlite3.Connection) -> None:
             ON futures_institution_oi(product_code, date);
         CREATE INDEX IF NOT EXISTS idx_shareholding_dispersion_stock_date
             ON shareholding_dispersion(stock_id, data_date);
+        CREATE INDEX IF NOT EXISTS idx_ranking_snapshots_name_date
+            ON ranking_snapshots(ranking_name, snapshot_date);
         """
     )
     ensure_column(conn, "trading_days", "margin_count", "INTEGER NOT NULL DEFAULT 0")

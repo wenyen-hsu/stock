@@ -21,6 +21,7 @@ from urllib.request import Request, urlopen
 
 from stock_chip.branch import branch_coverage, run_branch, run_branch_daily
 from stock_chip.tdcc import refresh_dispersion
+from stock_chip.backtest import backtest_payload
 from stock_chip.market import PRODUCTS as FUTURES_PRODUCTS
 from stock_chip.mops import load_mops_events, refresh_mops_events
 from stock_chip.news import ensure_news_tables, load_cached_news, refresh_stock_news
@@ -1421,6 +1422,12 @@ INDEX_HTML = """<!doctype html>
           </div>
         </div>
         <div class="update-grid" id="update-tasks"></div>
+        <div class="panel" style="margin-top:12px;">
+          <div class="panel-head">
+            <div><div class="panel-title">排行回測（快照後續報酬）</div><div class="muted" id="backtest-note">每日排行前 10 名的 5/20/60 日超額報酬，驗證分數預測力</div></div>
+          </div>
+          <div class="table-wrap" id="backtest-table"></div>
+        </div>
         <div class="publish-box" id="static-publish-box">
           <div class="job-meta">
             <div>
@@ -1666,6 +1673,9 @@ INDEX_HTML = """<!doctype html>
         } catch (_err) {
           return {score: 50, label: "尚無資料", risk_multiplier: 0.95, parts: {}, reasons: ["靜態資料未包含大盤多空分"]};
         }
+      }
+      if (parsed.pathname === "/api/backtest") {
+        return staticData("data/backtest.json");
       }
       if (parsed.pathname === "/api/coverage") {
         return staticData(`data/coverage_${days}d.json`);
@@ -3432,7 +3442,37 @@ INDEX_HTML = """<!doctype html>
       state.lastDataUpdatedAt = updateState.latest_data_updated_at || "";
       renderUpdateTasks(updateState.tasks, updateState.running);
       renderJob(updateState.latest_job);
+      await loadBacktest();
       await loadStaticPublishStatus();
+    }
+    async function loadBacktest() {
+      const note = document.querySelector("#backtest-note");
+      const target = document.querySelector("#backtest-table");
+      if (!note || !target) return;
+      try {
+        const data = await getJSON("/api/backtest");
+        const rows = data.results || [];
+        if (!rows.length) {
+          note.textContent = `回測累積中：${fmt(data.snapshot_days || 0)} 個交易日快照（需累積至少一個期間的後續行情）`;
+          target.innerHTML = `<div class="empty">尚無可評估的快照。快照自每日排行自動累積，最短 5 個交易日後開始有結果。</div>`;
+          return;
+        }
+        note.textContent = `快照 ${fmt(data.snapshot_days)} 個交易日（${data.oldest_snapshot || "-"} ~ ${data.latest_snapshot || "-"}），前 ${data.top_k} 名對加權指數的超額報酬`;
+        renderTable(target, rows, [
+          {key:"ranking_name", label:"排行"},
+          {key:"days", label:"視窗(日)"},
+          {key:"horizon", label:"後續(日)"},
+          {key:"n_obs", label:"樣本數"},
+          {key:"avg_return_pct", label:"平均報酬%", signed:true},
+          {key:"avg_excess_pct", label:"平均超額%", signed:true},
+          {key:"win_rate_pct", label:"勝率%"},
+          {key:"median_excess_pct", label:"中位超額%", signed:true},
+          {key:"state", label:"狀態"}
+        ]);
+      } catch (err) {
+        note.textContent = `回測資料載入失敗：${err.message}`;
+        target.innerHTML = "";
+      }
     }
     function renderUpdateTasks(tasks, running) {
       if (STATIC_MODE) {
@@ -6733,6 +6773,9 @@ class GUIHandler(BaseHTTPRequestHandler):
                     dates = recent_dates(conn, days)
                     coverage = branch_coverage(conn, dates[-1], days) if dates else []
                 json_response(self, {"coverage": coverage})
+                return
+            if parsed.path == "/api/backtest":
+                json_response(self, backtest_payload(DB_PATH))
                 return
             if parsed.path == "/api/update-tasks":
                 json_response(self, update_task_state())

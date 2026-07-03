@@ -90,6 +90,10 @@ jobs:
           python -m stock_chip.scan --days "$DAYS" --limit 50
           python -m stock_chip.scan --days 5 --limit 50
 
+      - name: 回測統計與快照備份
+        continue-on-error: true
+        run: python -m stock_chip.backtest
+
       - name: 同步最新美股新聞快取（自 site 分支）
         continue-on-error: true
         run: |
