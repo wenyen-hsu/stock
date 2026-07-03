@@ -3774,7 +3774,14 @@ INDEX_HTML = """<!doctype html>
         document.querySelector("#branch-top-table").innerHTML =
           `<div class="empty">區間分點排行狀態：${esc(statusText)}，最後更新：${esc(branchTopStatus.updated_at || "-")}${esc(detail)}</div>`;
       } else {
-        if (branchTopNote) branchTopNote.textContent = `這是 ${days} 日區間合計；點分點看最近 ${days} 個交易日明細`;
+        if (branchTopNote) {
+          const sel = data.selection || {};
+          const extras = [];
+          if (sel.top_buy_branch_est_cost) extras.push(`主力買超分點推估成本 ${fmt(sel.top_buy_branch_est_cost)}`);
+          if (sel.branch_buy_streak >= 2) extras.push(`${esc(sel.branch_streak_broker || "主力分點")}連${fmt(sel.branch_buy_streak)}日買超`);
+          if (sel.top_buy_is_day_trader) extras.push("⚠ 買超第一名為隔日沖分點");
+          branchTopNote.textContent = `這是 ${days} 日區間合計；點分點看最近 ${days} 個交易日明細` + (extras.length ? `。${extras.join("；")}` : "");
+        }
         renderTable(document.querySelector("#branch-top-table"), data.branch_top, [
           {key:"rank_no", label:"排名"},
           {key:"broker_name", label:"分點"},
@@ -4251,6 +4258,10 @@ def normalize_scan_row(row: dict[str, str], days: int) -> dict[str, object]:
         "top_buy_branch_name": row.get("top_buy_branch_name") or "",
         "top_buy_branch_net_lot": as_float_or_none(row.get("top_buy_branch_net_lot")),
         "top_buy_branch_avg_price": as_float_or_none(row.get("top_buy_branch_avg_price")),
+        "top_buy_branch_est_cost": as_float_or_none(row.get("top_buy_branch_est_cost")),
+        "branch_buy_streak": as_float_or_none(row.get("branch_buy_streak")),
+        "branch_streak_broker": row.get("branch_streak_broker") or "",
+        "top_buy_is_day_trader": as_float(row.get("top_buy_is_day_trader")),
         "top_sell_branch_name": row.get("top_sell_branch_name") or "",
         "top_sell_branch_net_lot": as_float_or_none(row.get("top_sell_branch_net_lot")),
         "top_sell_branch_avg_price": as_float_or_none(row.get("top_sell_branch_avg_price")),

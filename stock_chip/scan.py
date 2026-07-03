@@ -375,6 +375,102 @@ def load_shareholding_dispersion(conn: sqlite3.Connection) -> dict[str, dict[str
     return output
 
 
+_DAY_TRADER_BRANCHES: set[str] | None = None
+
+
+def load_day_trader_branches() -> set[str]:
+    """人工維護的隔日沖分點清單（stock_chip/day_traders.json，可自行增修）。"""
+    global _DAY_TRADER_BRANCHES
+    if _DAY_TRADER_BRANCHES is None:
+        import json
+
+        path = Path(__file__).parent / "day_traders.json"
+        try:
+            data = json.loads(path.read_text(encoding="utf-8"))
+            _DAY_TRADER_BRANCHES = {name.strip() for name in data.get("branches", []) if name.strip()}
+        except (OSError, json.JSONDecodeError):
+            _DAY_TRADER_BRANCHES = set()
+    return _DAY_TRADER_BRANCHES
+
+
+def load_branch_streaks(
+    conn: sqlite3.Connection,
+    branch_leaders: dict[str, dict[str, Any]],
+    dates: list[str],
+) -> dict[str, dict[str, Any]]:
+    """區間 top 買超分點在 broker_branch_daily 的尾端連續買超天數與推估成本。
+
+    連買：從最近一日往回，net_lot>0 連續天數（缺日斷鏈）。
+    推估成本：窗口內 Σ(單日買超 × 當日成交均價)/Σ(買超)，需 ≥3 天資料；
+    補回 MoneyDJ 區間表沒有均價欄位的缺口。"""
+    if not branch_leaders or not dates:
+        return {}
+    top_buy = {
+        stock_id: info.get("top_buy_branch_name")
+        for stock_id, info in branch_leaders.items()
+        if info.get("top_buy_branch_name")
+    }
+    if not top_buy:
+        return {}
+    date_set = list(dates)
+    placeholders_dates = ",".join("?" for _ in date_set)
+    output: dict[str, dict[str, Any]] = {}
+    items = list(top_buy.items())
+    for start in range(0, len(items), 300):
+        chunk = items[start : start + 300]
+        stock_ids = [stock_id for stock_id, _ in chunk]
+        placeholders_ids = ",".join("?" for _ in stock_ids)
+        rows = conn.execute(
+            f"""
+            SELECT stock_id, broker_name, trade_date, net_lot
+            FROM broker_branch_daily
+            WHERE stock_id IN ({placeholders_ids})
+              AND trade_date IN ({placeholders_dates})
+            ORDER BY stock_id, trade_date
+            """,
+            [*stock_ids, *date_set],
+        ).fetchall()
+        daily: dict[tuple[str, str], dict[str, float]] = {}
+        for stock_id, broker_name, trade_date, net_lot in rows:
+            if broker_name != top_buy.get(stock_id):
+                continue
+            daily.setdefault((stock_id, broker_name), {})[trade_date] = net_lot
+        avg_price_rows = conn.execute(
+            f"""
+            SELECT stock_id, date, avg_price
+            FROM daily_prices
+            WHERE stock_id IN ({placeholders_ids})
+              AND date IN ({placeholders_dates})
+              AND avg_price IS NOT NULL
+            """,
+            [*stock_ids, *date_set],
+        ).fetchall()
+        prices: dict[str, dict[str, float]] = {}
+        for stock_id, date, avg_price in avg_price_rows:
+            prices.setdefault(stock_id, {})[date] = avg_price
+        for (stock_id, broker_name), day_nets in daily.items():
+            streak = 0
+            for trade_date in reversed(date_set):
+                net = day_nets.get(trade_date)
+                if net is None or net <= 0:
+                    break
+                streak += 1
+            buy_days = [(d, net) for d, net in day_nets.items() if net and net > 0]
+            est_cost = None
+            priced = [(net, prices.get(stock_id, {}).get(d)) for d, net in buy_days]
+            priced = [(net, price) for net, price in priced if price]
+            if len(priced) >= 3:
+                total_lots = sum(net for net, _ in priced)
+                if total_lots > 0:
+                    est_cost = round(sum(net * price for net, price in priced) / total_lots, 2)
+            output[stock_id] = {
+                "branch_buy_streak": streak,
+                "branch_streak_broker": broker_name,
+                "top_buy_branch_est_cost": est_cost,
+            }
+    return output
+
+
 def load_fundamentals(conn: sqlite3.Connection) -> dict[str, dict[str, Any]]:
     """MOPS 季度財報：最新季三率、毛利率連升/連降季數、近四季 EPS 與自算本益比。
 
@@ -620,19 +716,27 @@ def branch_score_row(row: dict[str, Any]) -> float:
         return 0.0
     close = row["close"]
     buy_net = row.get("top_buy_branch_net_lot")
-    buy_avg = row.get("top_buy_branch_avg_price")
+    # MoneyDJ 區間表沒有均價欄位，改用每日明細推估的成本（top_buy_branch_est_cost）
+    buy_avg = row.get("top_buy_branch_avg_price") or row.get("top_buy_branch_est_cost")
     sell_net = row.get("top_sell_branch_net_lot")
     sell_avg = row.get("top_sell_branch_avg_price")
-    # MoneyDJ 來源沒有分點均價，均價相關加減分自動略過，量能占比部分照算
     if close is None or buy_net is None:
         return 0.0
 
     score = 0.0
     volume_lot = (row[f"{row['days']}d_volume"] or 0) / 1000
+    is_day_trader = bool(row.get("top_buy_is_day_trader"))
     if volume_lot > 0:
-        score += bounded(buy_net / volume_lot * 100, 0, 20) * 1.2
+        if is_day_trader:
+            # 隔日沖分點的大買超是短線籌碼，不加分反而扣分
+            score -= 6.0
+        else:
+            score += bounded(buy_net / volume_lot * 100, 0, 20) * 1.2
         if sell_net is not None:
             score -= bounded(abs(sell_net) / volume_lot * 100, 0, 20) * 0.5
+    streak = row.get("branch_buy_streak")
+    if streak and not is_day_trader:
+        score += min(streak, 5) * 0.8
 
     close_vs_buy_avg = (close - buy_avg) / buy_avg * 100 if buy_avg else None
     if close_vs_buy_avg is not None:
@@ -754,6 +858,11 @@ def base_reason(row: dict[str, Any]) -> str:
     volatility = row.get("volatility_pct")
     if volatility is not None and volatility > 65:
         parts.append("波動偏高")
+    branch_streak = row.get("branch_buy_streak")
+    if branch_streak and branch_streak >= 3 and not row.get("top_buy_is_day_trader"):
+        parts.append(f"主力分點連{branch_streak}買")
+    if row.get("top_buy_is_day_trader"):
+        parts.append("隔日沖分點買超")
     margin_streak = row.get("gross_margin_streak")
     if margin_streak is not None:
         if margin_streak >= 2:
@@ -894,6 +1003,7 @@ def aggregate(
     profiles: dict[str, dict[str, Any]] | None = None,
     dispersion: dict[str, dict[str, Any]] | None = None,
     fundamentals: dict[str, dict[str, Any]] | None = None,
+    branch_streaks: dict[str, dict[str, Any]] | None = None,
 ) -> list[dict[str, Any]]:
     branch_leaders = branch_leaders or {}
     revenue_momentum = revenue_momentum or {}
@@ -901,6 +1011,8 @@ def aggregate(
     profiles = profiles or {}
     dispersion = dispersion or {}
     fundamentals = fundamentals or {}
+    branch_streaks = branch_streaks or {}
+    day_trader_branches = load_day_trader_branches()
     grouped: dict[str, list[dict[str, Any]]] = {}
     for row in rows:
         grouped.setdefault(row["stock_id"], []).append(row)
@@ -991,6 +1103,10 @@ def aggregate(
         item.update(profiles.get(stock_id, {}))
         item.update(dispersion.get(stock_id, {}))
         item.update(fundamentals.get(stock_id, {}))
+        item.update(branch_streaks.get(stock_id, {}))
+        item["top_buy_is_day_trader"] = (
+            1 if item.get("top_buy_branch_name") in day_trader_branches else 0
+        )
         item.setdefault("industry", "")
         item.setdefault("sub_industry", "")
         item.setdefault("long_momentum_score", 0.0)
@@ -1115,6 +1231,10 @@ def to_export_row(row: dict[str, Any], days: int) -> dict[str, Any]:
         "top_buy_branch_name": row.get("top_buy_branch_name"),
         "top_buy_branch_net_lot": row.get("top_buy_branch_net_lot"),
         "top_buy_branch_avg_price": row.get("top_buy_branch_avg_price"),
+        "top_buy_branch_est_cost": row.get("top_buy_branch_est_cost"),
+        "branch_buy_streak": row.get("branch_buy_streak"),
+        "branch_streak_broker": row.get("branch_streak_broker"),
+        "top_buy_is_day_trader": row.get("top_buy_is_day_trader", 0),
         "top_sell_branch_name": row.get("top_sell_branch_name"),
         "top_sell_branch_net_lot": row.get("top_sell_branch_net_lot"),
         "top_sell_branch_avg_price": row.get("top_sell_branch_avg_price"),
@@ -1472,9 +1592,19 @@ def run_scan(
         profiles = load_profiles(conn)
         dispersion = load_shareholding_dispersion(conn)
         fundamentals = load_fundamentals(conn)
+        branch_streaks = load_branch_streaks(conn, branch_leaders, dates)
+        day_trader_hits = sum(
+            1 for info in branch_leaders.values()
+            if info.get("top_buy_branch_name") in load_day_trader_branches()
+        )
+        if branch_leaders:
+            print(
+                f"分點深化：連買/成本樣本 {len(branch_streaks)} 檔，隔日沖分點命中 {day_trader_hits} 檔",
+                flush=True,
+            )
     if len(dates) < days:
         raise RuntimeError(f"資料庫只有 {len(dates)} 個交易日，少於要求的 {days} 日。")
-    rows = aggregate(raw_rows, days, dates[-1], branch_leaders, revenue_momentum, history_stats, profiles, dispersion, fundamentals)
+    rows = aggregate(raw_rows, days, dates[-1], branch_leaders, revenue_momentum, history_stats, profiles, dispersion, fundamentals, branch_streaks)
     output_dir.mkdir(parents=True, exist_ok=True)
 
     all_path = output_dir / f"scan_all_{days}d.csv"

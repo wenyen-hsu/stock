@@ -87,6 +87,12 @@ jobs:
           PYTHONUNBUFFERED: "1"
         run: python -m stock_chip.branch --days "$DAYS" --top 10 --from-scan 300 --sleep 1.0 --skip-existing --retry-sleeps 3,8
 
+      - name: 抓取分點單日進出（排行前 100 檔 + 自選股，累積歷史供連買/成本推估）
+        continue-on-error: true
+        env:
+          PYTHONUNBUFFERED: "1"
+        run: python -m stock_chip.branch --daily --days 1 --top 15 --from-scan 100 --only-missing --sleep 1.0 --retry-sleeps 3,8
+
       - name: 掃描 20 日與 5 日排行
         env:
           DAYS: ${{ github.event.inputs.days || '20' }}
