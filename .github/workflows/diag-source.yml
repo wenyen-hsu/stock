@@ -7,31 +7,55 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
-      - name: 檢視 TDCC 股權分散表 OpenAPI 回應結構
+      - name: 檢視 MOPS t163sb04 綜合損益表回應結構
         run: |
           python3 - <<'EOF'
-          import json, urllib.request
-          req = urllib.request.Request(
-              "https://openapi.tdcc.com.tw/v1/opendata/1-5",
-              headers={"User-Agent": "Mozilla/5.0", "Accept": "application/json"},
-          )
-          resp = urllib.request.urlopen(req, timeout=120)
-          raw = resp.read()
-          print("bytes:", len(raw), "content-type:", resp.headers.get("Content-Type"))
-          data = json.loads(raw)
-          print("records:", len(data))
-          codes = [r["證券代號"] for r in data]
-          from collections import Counter
-          print("code length distribution:", Counter(len(c) for c in codes))
-          near = sorted({repr(c) for c in codes if "2330" in c})
-          print("codes containing 2330:", near[:10])
-          # 抽 5 個長度 4 的代號
-          four = sorted({c for c in codes if len(c) == 4})
-          print("len-4 codes sample:", four[:10], "... total", len(four))
-          rows = [r for r in data if r["證券代號"].strip() == "2330"]
-          print(f"--- 2330 (strip 後): {len(rows)} rows ---")
-          for r in rows:
-              print(r)
-          levels = sorted({r["持股分級"] for r in data})
-          print("levels:", levels)
+          import re, urllib.request, urllib.parse, ssl, gzip
+          ctx = ssl.create_default_context()
+          ctx.check_hostname = False
+          ctx.verify_mode = ssl.CERT_NONE
+          UA = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36"
+
+          def post(url, form):
+              data = urllib.parse.urlencode(form).encode()
+              req = urllib.request.Request(url, data=data, headers={
+                  "User-Agent": UA,
+                  "Content-Type": "application/x-www-form-urlencoded",
+                  "Accept": "text/html",
+                  "Accept-Encoding": "gzip",
+              })
+              resp = urllib.request.urlopen(req, timeout=60, context=ctx)
+              raw = resp.read()
+              if resp.headers.get("Content-Encoding") == "gzip":
+                  raw = gzip.decompress(raw)
+              return raw.decode("utf-8", "replace")
+
+          # 2025 Q3 = ROC 114 年第 3 季（已公告）
+          for label, form in [
+              ("sii 114Q3 zero-pad", {"encodeURIComponent": "1", "step": "1", "firstin": "1", "off": "1", "isQuery": "Y", "TYPEK": "sii", "year": "114", "season": "03"}),
+          ]:
+              try:
+                  html = post("https://mopsov.twse.com.tw/mops/web/ajax_t163sb04", form)
+              except Exception as exc:
+                  print(f"[{label}] 失敗 {exc!r}")
+                  continue
+              print(f"[{label}] {len(html)} 字")
+              tables = re.findall(r"<table[^>]*>.*?</table>", html, re.S | re.I)
+              print("tables:", len(tables))
+              for ti, table in enumerate(tables):
+                  headers = [re.sub(r"<[^>]+>", "", th).strip() for th in re.findall(r"<th[^>]*>(.*?)</th>", table, re.S | re.I)]
+                  trs = re.findall(r"<tr[^>]*>(.*?)</tr>", table, re.S | re.I)
+                  if not headers:
+                      continue
+                  print(f"--- table {ti}: {len(trs)} rows, headers: {headers[:14]}")
+                  # 第一列資料
+                  for tr in trs[1:3]:
+                      cells = [re.sub(r"<[^>]+>", "", td).strip() for td in re.findall(r"<td[^>]*>(.*?)</td>", tr, re.S | re.I)]
+                      if cells:
+                          print("    row:", cells[:14])
+              # 2330 的列
+              m2330 = re.search(r"<tr[^>]*>((?:(?!</tr>).)*2330(?:(?!</tr>).)*)</tr>", html, re.S)
+              if m2330:
+                  cells = [re.sub(r"<[^>]+>", "", td).strip() for td in re.findall(r"<td[^>]*>(.*?)</td>", m2330.group(1), re.S | re.I)]
+                  print("2330 row:", cells)
           EOF
