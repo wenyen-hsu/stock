@@ -15,6 +15,7 @@ on:
 permissions:
   contents: write
   pages: read
+  issues: write
 
 concurrency:
   group: update-taiwan-data
@@ -165,3 +166,10 @@ jobs:
             fi
           done
           git push
+
+      - name: 資料來源健康檢查（異常自動開 GitHub Issue）
+        if: always()
+        continue-on-error: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: python -m stock_chip.health --github-issue

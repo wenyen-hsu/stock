@@ -1374,6 +1374,12 @@
         <div class="update-grid" id="update-tasks"></div>
         <div class="panel" style="margin-top:12px;">
           <div class="panel-head">
+            <div><div class="panel-title">資料來源健康</div><div class="muted" id="health-note">逐來源比對最新資料日與期望值；異常會自動開 GitHub Issue</div></div>
+          </div>
+          <div class="table-wrap" id="health-table"></div>
+        </div>
+        <div class="panel" style="margin-top:12px;">
+          <div class="panel-head">
             <div><div class="panel-title">排行回測（快照後續報酬）</div><div class="muted" id="backtest-note">每日排行前 10 名的 5/20/60 日超額報酬，驗證分數預測力</div></div>
           </div>
           <div class="table-wrap" id="backtest-table"></div>
@@ -1627,6 +1633,9 @@
       }
       if (parsed.pathname === "/api/backtest") {
         return staticData("data/backtest.json");
+      }
+      if (parsed.pathname === "/api/health") {
+        return staticData("data/health.json");
       }
       if (parsed.pathname === "/api/coverage") {
         return staticData(`data/coverage_${days}d.json`);
@@ -3393,8 +3402,32 @@
       state.lastDataUpdatedAt = updateState.latest_data_updated_at || "";
       renderUpdateTasks(updateState.tasks, updateState.running);
       renderJob(updateState.latest_job);
+      await loadHealth();
       await loadBacktest();
       await loadStaticPublishStatus();
+    }
+    async function loadHealth() {
+      const note = document.querySelector("#health-note");
+      const target = document.querySelector("#health-table");
+      if (!note || !target) return;
+      try {
+        const data = await getJSON("/api/health");
+        const rows = (data.sources || []).map(s => ({...s, status_label: {ok:"正常", warn:"注意", fail:"異常", not_deployed:"未啟用"}[s.status] || s.status}));
+        note.textContent = data.ok
+          ? `全部正常（檢查於 ${data.checked_at || "-"}，最新交易日 ${data.latest_trading_day || "-"}）`
+          : `有 ${fmt(data.fail_count)} 項異常、${fmt(data.warn_count)} 項注意（檢查於 ${data.checked_at || "-"}）`;
+        renderTable(target, rows, [
+          {key:"label", label:"來源"},
+          {key:"latest", label:"最新資料"},
+          {key:"expected", label:"期望"},
+          {key:"rows_at_latest", label:"最新日列數"},
+          {key:"status_label", label:"狀態"},
+          {key:"note", label:"備註"}
+        ]);
+      } catch (err) {
+        note.textContent = `健康資料載入失敗：${err.message}`;
+        target.innerHTML = "";
+      }
     }
     async function loadBacktest() {
       const note = document.querySelector("#backtest-note");

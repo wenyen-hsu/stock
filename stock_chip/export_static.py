@@ -26,6 +26,7 @@ from stock_chip.gui import (
 from stock_chip.official import shares_to_lots
 from stock_chip.scan import recent_dates
 from stock_chip.backtest import backtest_payload
+from stock_chip.health import collect_health
 from stock_chip.mops import load_mops_events
 from stock_chip.us_news import load_cached_us_news
 
@@ -299,6 +300,7 @@ def export_static(out_dir: Path, days_values: list[int], include_all_details: bo
         }
     )
     write_json(data_dir / "backtest.json", backtest_payload(DB_PATH))
+    write_json(data_dir / "health.json", collect_health(DB_PATH))
     write_json(data_dir / "meta.json", meta)
     return meta
 

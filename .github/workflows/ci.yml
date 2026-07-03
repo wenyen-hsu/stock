@@ -1,0 +1,30 @@
+name: CI
+
+# 純單元測試：無網路、無資料庫，守住 parser 與分數邏輯不被來源改版或重構悄悄破壞。
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "stock_chip/**"
+      - "tests/**"
+      - "requirements*.txt"
+      - ".github/workflows/ci.yml"
+  pull_request:
+    paths:
+      - "stock_chip/**"
+      - "tests/**"
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - name: Install dependencies
+        run: pip install -r requirements.txt -r requirements-dev.txt
+      - name: Run tests
+        run: python -m pytest tests/ -q

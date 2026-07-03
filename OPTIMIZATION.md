@@ -133,3 +133,26 @@ Mac runner 實測後發現 HiStock 已把分點日報改為**登入後才顯示*
 - 抓取已併入每日更新流程（update-taiwan-data.yml，continue-on-error），不再需要 self-hosted runner；`fetch-branch.yml` 保留手動補抓。Mac mini runner 可自行移除（`./svc.sh uninstall`）或留作備用。
 - 注意：這些券商站的 TLS 憑證缺 Subject Key Identifier，Python 3.13 預設 strict 驗證會拒絕，`branch.py` 已關閉 strict 旗標（保留一般鏈驗證）。
 - 資料表 `source` 欄改記 `moneydj`；HiStock 舊碼已移除。
+
+## 五項優化上線（2026-07）
+
+一次補齊選股決策的三大缺口與工程韌性：
+
+1. **TDCC 股權分散**（`tdcc.py`）：每週千張大戶/400張/散戶比率與 1 週、4 週變化，
+   `dispersion_score`（±6）進多因子分，新排行「大戶增持 + 法人買超」，個股頁 26 週序列。
+   無歷史回補來源，變化欄自首抓次週起有值。
+2. **回測框架**（`backtest.py` + `ranking_snapshots` 表）：每日排行前 50 名快照，
+   前 10 名的 5/20/60 日對 TAIEX 超額報酬與勝率；`reports/ranking_snapshots.csv`
+   為 actions cache 被逐出時的持久備份（自動回灌）。累積數週後才有結論，
+   在此之前資料狀態頁顯示「累積中」。
+3. **季度財報**（`financials.py`）：MOPS t163sb04 整市場單季一請求；累計值差分為單季；
+   三率、毛利率連升/連降、eps_ttm 與自算 pe_ttm，`fundamental_score`（±8）進多因子分。
+   金融業版型缺毛利欄 → 只存淨利與 EPS。
+4. **分點深化**：每日單日 top15 累積（排行前 100 檔）、主力分點連買天數、
+   隔日沖分點識別（`day_traders.json` 人工名單，命中改扣分）、推估成本
+   （Σ單日買超×當日均價，補回 MoneyDJ 無均價的成本訊號）。
+5. **健康檢查 + 測試**（`health.py`、`tests/`、`ci.yml`）：逐來源比對最新資料日與期望，
+   異常自動開/更新 GitHub Issue（label `data-health`，恢復自動關閉）；
+   MoneyDJ parser 與分數邏輯的單元測試在每次 push 時跑（無網路、<1 分鐘）。
+
+原則不變：新分數只進 `multifactor_score`，`total_score`/`base_score` 語意不動；缺資料一律空值。
