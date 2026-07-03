@@ -1449,7 +1449,7 @@
     window.STOCK_CHIP_STATIC = true;
   </script>
   <script>
-    const state = { tab: "ranking", previousTab: "ranking", detail: null, broker: "", lastDataUpdatedAt: "", chartRange: 20, rankingRows: [], rankingSort: null, usNewsRows: [], ciUsNewsRows: [], ciUsNewsMeta: {}, mopsEvents: [], mopsSelectedDate: "", mopsVisibleCount: 50, mopsQuickFilter: "", mopsDateInitialized: false, mopsDateMode: "future30", mopsCalendarStart: "", columnGroup: "core", sectorRows: [], sectorSelected: "", sectorSub: "", sectorSort: null, market: null, marketSentiment: null };
+    const state = { tab: "ranking", previousTab: "ranking", detail: null, broker: "", lastDataUpdatedAt: "", chartRange: 20, rankingRows: [], rankingSort: null, usNewsRows: [], ciUsNewsRows: [], ciUsNewsMeta: {}, mopsEvents: [], mopsSelectedDate: "", mopsVisibleCount: 50, mopsQuickFilter: "", mopsDateInitialized: false, mopsDateMode: "recent30", mopsCalendarStart: "", columnGroup: "core", sectorRows: [], sectorSelected: "", sectorSub: "", sectorSort: null, market: null, marketSentiment: null };
     const STATIC_MODE = window.STOCK_CHIP_STATIC === true;
     const staticCache = {};
     const chartColors = {
@@ -1645,7 +1645,19 @@
         return {running: false, latest_job: null, latest_data_updated_at: meta.exported_at || "", tasks: []};
       }
       if (parsed.pathname === "/api/us-news") {
-        const data = await staticData("data/us_news.json");
+        // us_news.json 只有本機同步後才有內容；靜態版空的時候
+        // 改用 CI 每小時抓的 ci_us_news.json（同一支程式產生、欄位相同）
+        let data;
+        try {
+          data = await staticData("data/us_news.json");
+        } catch (_err) {
+          data = {rows: []};
+        }
+        if (!(data.rows || []).length) {
+          try {
+            data = await staticData("data/ci_us_news.json");
+          } catch (_err) { /* 維持空列表 */ }
+        }
         const industry = parsed.searchParams.get("industry") || "";
         const limit = Number(parsed.searchParams.get("limit") || 80);
         const rows = (data.rows || []).filter(row => !industry || row.industry === industry).slice(0, limit);
@@ -2623,7 +2635,9 @@
       if (shouldLoad) loadMopsEvents();
     }
     function initMopsDates() {
-      if (!state.mopsDateInitialized) setMopsRange("future30", false);
+      // MOPS 重大訊息幾乎都是回顧性公告（event_date ≤ 今天），
+      // 預設近 30 天才看得到內容；未來 30 天留給法說會等預告事件用
+      if (!state.mopsDateInitialized) setMopsRange("recent30", false);
     }
     function renderMopsEventDetail(row) {
       const panel = document.querySelector("#mops-event-detail-panel");
