@@ -208,6 +208,114 @@ def import_snapshots_csv(db_path: Path, csv_path: Path) -> int:
     return after - before
 
 
+DIGEST_RANKINGS = ("multifactor_score", "big_holder_increase", "momentum_inst_buy")
+DIGEST_RANKING_LABELS = {
+    "multifactor_score": "多因子綜合分",
+    "big_holder_increase": "大戶增持 + 法人買超",
+    "momentum_inst_buy": "動能 + 法人買超",
+}
+
+
+def _csv_float(value: Any) -> float | None:
+    text = str(value or "").strip()
+    if not text:
+        return None
+    try:
+        return float(text)
+    except ValueError:
+        return None
+
+
+def build_daily_digest(db_path: Path, scan_csv_path: Path, days: int, top_n: int = 20) -> dict[str, Any]:
+    """今日訊號變化摘要：排行新進榜（快照比對）＋當日訊號觸發清單。
+
+    新進榜需要至少兩天快照；不足時 state=accumulating、只出訊號清單。"""
+    with connect_db(db_path) as conn:
+        snapshot_dates = [
+            row[0]
+            for row in conn.execute(
+                "SELECT DISTINCT snapshot_date FROM ranking_snapshots WHERE days = ? ORDER BY snapshot_date DESC LIMIT 2",
+                (days,),
+            ).fetchall()
+        ]
+        new_entrants: dict[str, list[dict[str, Any]]] = {}
+        if len(snapshot_dates) == 2:
+            latest_date, prev_date = snapshot_dates
+            names = {
+                row[0]: row[1]
+                for row in conn.execute("SELECT stock_id, name FROM stocks").fetchall()
+            }
+            for ranking in DIGEST_RANKINGS:
+                latest_rows = conn.execute(
+                    """
+                    SELECT rank_no, stock_id, score FROM ranking_snapshots
+                    WHERE snapshot_date = ? AND days = ? AND ranking_name = ? AND rank_no <= ?
+                    ORDER BY rank_no
+                    """,
+                    (latest_date, days, ranking, top_n),
+                ).fetchall()
+                prev_ids = {
+                    row[0]
+                    for row in conn.execute(
+                        """
+                        SELECT stock_id FROM ranking_snapshots
+                        WHERE snapshot_date = ? AND days = ? AND ranking_name = ? AND rank_no <= ?
+                        """,
+                        (prev_date, days, ranking, top_n),
+                    ).fetchall()
+                }
+                entrants = [
+                    {
+                        "rank_no": row[0],
+                        "stock_id": row[1],
+                        "name": names.get(row[1], row[1]),
+                        "score": round(row[2], 2) if row[2] is not None else None,
+                    }
+                    for row in latest_rows
+                    if row[1] not in prev_ids
+                ]
+                if entrants:
+                    new_entrants[ranking] = entrants
+
+    signals: dict[str, list[dict[str, Any]]] = {
+        "big_holder": [],
+        "branch_streak": [],
+        "margin_up": [],
+        "margin_down": [],
+        "day_trader": [],
+    }
+    scan_rows: list[dict[str, str]] = []
+    if scan_csv_path.exists():
+        with scan_csv_path.open(encoding="utf-8-sig") as f:
+            scan_rows = list(csv.DictReader(f))
+    ranked = sorted(scan_rows, key=lambda r: _csv_float(r.get("multifactor_score")) or -999, reverse=True)
+    for idx, row in enumerate(ranked):
+        stock = {"stock_id": row.get("stock_id"), "name": row.get("name")}
+        change = _csv_float(row.get("big_holder_change_1w"))
+        if change is not None and change >= 0.3 and len(signals["big_holder"]) < 10:
+            signals["big_holder"].append({**stock, "value": change})
+        streak = _csv_float(row.get("branch_buy_streak"))
+        is_day_trader = (_csv_float(row.get("top_buy_is_day_trader")) or 0) >= 1
+        if streak is not None and streak >= 3 and not is_day_trader and len(signals["branch_streak"]) < 10:
+            signals["branch_streak"].append({**stock, "value": int(streak), "broker": row.get("branch_streak_broker") or ""})
+        margin_streak = _csv_float(row.get("gross_margin_streak"))
+        if margin_streak is not None and margin_streak >= 2 and len(signals["margin_up"]) < 10:
+            signals["margin_up"].append({**stock, "value": int(margin_streak)})
+        if margin_streak is not None and margin_streak <= -2 and len(signals["margin_down"]) < 10:
+            signals["margin_down"].append({**stock, "value": int(margin_streak)})
+        if is_day_trader and idx < 100 and len(signals["day_trader"]) < 10:
+            signals["day_trader"].append({**stock, "broker": row.get("top_buy_branch_name") or ""})
+
+    return {
+        "days": days,
+        "state": "ready" if len(snapshot_dates) == 2 else "accumulating",
+        "snapshot_dates": snapshot_dates,
+        "ranking_labels": DIGEST_RANKING_LABELS,
+        "new_entrants": new_entrants,
+        "signals": signals,
+    }
+
+
 def write_summary_csv(path: Path, results: list[dict[str, Any]]) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     columns = [

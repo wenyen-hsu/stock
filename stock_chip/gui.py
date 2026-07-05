@@ -22,7 +22,7 @@ from urllib.request import Request, urlopen
 from stock_chip.branch import branch_coverage, run_branch, run_branch_daily
 from stock_chip.tdcc import refresh_dispersion
 from stock_chip.financials import refresh_financials
-from stock_chip.backtest import backtest_payload
+from stock_chip.backtest import backtest_payload, build_daily_digest
 from stock_chip.health import collect_health
 from stock_chip.market import PRODUCTS as FUTURES_PRODUCTS
 from stock_chip.mops import load_mops_events, refresh_mops_events
@@ -912,6 +912,12 @@ INDEX_HTML = """<!doctype html>
     }
     .score-fill { display: block; height: 100%; border-radius: 999px; background: var(--accent); }
     .score-fill.neg-fill { background: var(--danger); }
+    .digest-panel { margin-bottom: 12px; }
+    .digest-group { margin-top: 10px; }
+    .digest-group-title { font-size: 13px; font-weight: 800; color: var(--th-ink); margin-bottom: 6px; }
+    .digest-chips { display: flex; gap: 6px; flex-wrap: wrap; }
+    .digest-chip { border: 1px solid var(--line); border-radius: 999px; background: var(--panel-2); color: var(--ink); font-size: 12px; padding: 5px 10px; cursor: pointer; }
+    .digest-chip:hover { border-color: var(--accent); }
     .detail-nav { position: sticky; top: 0; z-index: 6; display: flex; gap: 6px; overflow-x: auto; padding: 8px 0 10px; margin-bottom: 6px; background: var(--bg); -webkit-overflow-scrolling: touch; }
     .detail-nav a { flex: 0 0 auto; border: 1px solid var(--line); border-radius: 999px; background: var(--panel); color: var(--td-ink); font-size: 12px; font-weight: 700; padding: 6px 12px; text-decoration: none; white-space: nowrap; }
     .detail-nav a:hover { border-color: var(--accent); color: var(--accent-dark); }
@@ -1035,6 +1041,7 @@ INDEX_HTML = """<!doctype html>
         <div class="panel-title" id="ranking-title">排行</div>
         <div class="muted" id="ranking-note"></div>
       </div>
+      <div id="ranking-digest"></div>
       <div id="ranking-focus"></div>
       <div id="ranking-sentiment"></div>
       <div class="column-controls" id="ranking-columns"></div>
@@ -1839,6 +1846,9 @@ INDEX_HTML = """<!doctype html>
       }
       if (parsed.pathname === "/api/backtest") {
         return staticData("data/backtest.json");
+      }
+      if (parsed.pathname === "/api/digest") {
+        return staticData(`data/digest_${days}d.json`);
       }
       if (parsed.pathname === "/api/health") {
         return staticData("data/health.json");
@@ -3423,6 +3433,51 @@ INDEX_HTML = """<!doctype html>
         note.innerHTML += "，靜態資料未包含此股票";
       }
       renderRankingTable();
+      loadDigest(watchlist).catch(() => {});
+    }
+    async function loadDigest(watchlistOnly) {
+      const target = document.querySelector("#ranking-digest");
+      if (!target) return;
+      const days = document.querySelector("#days").value;
+      let data;
+      try {
+        data = await getJSON(`/api/digest?days=${days}`);
+      } catch (_err) { target.innerHTML = ""; return; }
+      const watchSet = watchlistOnly ? new Set((state.rankingRows || []).map(r => String(r.stock_id))) : null;
+      const keep = item => !watchSet || watchSet.has(String(item.stock_id));
+      const chip = (item, valueText) =>
+        `<button class="digest-chip" data-stock="${esc(item.stock_id)}"><strong>${esc(item.stock_id)}</strong> ${esc(item.name || "")}${valueText ? `<span class="muted"> ${esc(valueText)}</span>` : ""}</button>`;
+      const groups = [];
+      const labels = data.ranking_labels || {};
+      for (const [ranking, items] of Object.entries(data.new_entrants || {})) {
+        const kept = items.filter(keep);
+        if (kept.length) groups.push({title: `🆕 新進榜：${labels[ranking] || ranking}`, chips: kept.map(i => chip(i, `#${i.rank_no}`))});
+      }
+      const sig = data.signals || {};
+      const signalGroups = [
+        ["big_holder", "💰 千張大戶增持", i => chip(i, `+${i.value}%`)],
+        ["branch_streak", "📈 主力分點連買", i => chip(i, `${i.broker || ""} 連${i.value}日`)],
+        ["margin_up", "🟥 毛利率連升", i => chip(i, `連${i.value}季`)],
+        ["margin_down", "🟩 毛利率連降", i => chip(i, `連${-i.value}季`)],
+        ["day_trader", "⚠️ 隔日沖分點大買", i => chip(i, i.broker || "")],
+      ];
+      for (const [key, title, render] of signalGroups) {
+        const kept = (sig[key] || []).filter(keep);
+        if (kept.length) groups.push({title, chips: kept.map(render)});
+      }
+      if (!groups.length) {
+        target.innerHTML = watchlistOnly
+          ? `<div class="panel digest-panel"><div class="panel-title">你的自選股今日訊號</div><div class="muted" style="margin-top:6px;">今日無新訊號${data.state === "accumulating" ? "（新進榜比對需累積兩天快照）" : ""}</div></div>`
+          : (data.state === "accumulating"
+            ? `<div class="panel digest-panel"><div class="panel-title">今日訊號變化</div><div class="muted" style="margin-top:6px;">快照累積中：新進榜比對需要至少兩個交易日的排行快照。</div></div>`
+            : "");
+        return;
+      }
+      target.innerHTML = `<div class="panel digest-panel">
+        <div class="panel-title">${watchlistOnly ? "你的自選股今日訊號" : "今日訊號變化"}</div>
+        ${groups.map(group => `<div class="digest-group"><div class="digest-group-title">${group.title}</div><div class="digest-chips">${group.chips.join("")}</div></div>`).join("")}
+      </div>`;
+      target.querySelectorAll(".digest-chip").forEach(btn => btn.addEventListener("click", () => openDetail(btn.dataset.stock)));
     }
     function renderRankingTable() {
       renderFocusCards();
@@ -7081,6 +7136,10 @@ class GUIHandler(BaseHTTPRequestHandler):
                 return
             if parsed.path == "/api/backtest":
                 json_response(self, backtest_payload(DB_PATH))
+                return
+            if parsed.path == "/api/digest":
+                days = int(params.get("days", ["20"])[0])
+                json_response(self, build_daily_digest(DB_PATH, REPORTS_DIR / f"scan_all_{days}d.csv", days))
                 return
             if parsed.path == "/api/health":
                 json_response(self, collect_health(DB_PATH))
