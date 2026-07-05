@@ -3495,11 +3495,11 @@
       document.querySelector("#trend-weak").innerHTML = (data.weak_sectors || []).map(sectorCard).join("") || `<div class="empty">無資料</div>`;
       document.querySelectorAll(".trend-sector").forEach(btn => btn.addEventListener("click", () => openSector(btn.dataset.industry, btn.dataset.sub || "")));
       renderTable(document.querySelector("#trend-spikes"), data.volume_spikes || [], [
-        {key:"stock_id", label:"代號"},
+        {key:"stock_id", label:"代號", sortType:"text", format: v => v},
         {key:"name", label:"名稱"},
         {key:"volume_ratio_1d", label:"量比(倍)"},
         {key:"chg_1d_pct", label:"當日漲跌%", signed:true},
-        {key:"latest_volume_lot", label:"當日量(張)"},
+        {key:"latest_volume_lot", label:"當日量(張)", format: v => fmt(Math.round(Number(v) || 0))},
         {key:"foreign_net_lot", label:"當日外資", signed:true},
         {key:"trust_net_lot", label:"當日投信", signed:true},
         {key:"sub_industry", label:"細分類", sortType:"text"},
