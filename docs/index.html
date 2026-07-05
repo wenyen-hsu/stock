@@ -860,15 +860,17 @@
     .query-suggest-item .sid { font-weight: 800; }
     .query-suggest-item .sind { color: var(--muted); font-size: 12px; margin-left: auto; }
     .query-suggest-title { padding: 8px 12px 2px; color: var(--muted); font-size: 11px; font-weight: 700; }
-    .trend-sector { display: block; width: 100%; text-align: left; border: 1px solid var(--line); border-radius: 8px; background: var(--panel-2); color: var(--ink); padding: 10px 12px; margin-bottom: 8px; cursor: pointer; font-size: 13px; }
-    .trend-sector:hover { border-color: var(--accent); }
-    .trend-sector-head { display: flex; justify-content: space-between; align-items: baseline; font-size: 14px; margin-bottom: 4px; }
+    .trend-sector { display: block; width: 100%; height: auto; text-align: left; border: 1px solid var(--line); border-radius: 10px; background: var(--panel-2); color: var(--ink); padding: 12px 14px; margin-bottom: 10px; cursor: pointer; font-size: 13px; font-weight: 400; line-height: 1.6; }
+    .trend-sector:hover { border-color: var(--accent); background: var(--hover); }
+    .trend-sector .muted { font-size: 12.5px; letter-spacing: .02em; margin-top: 4px; display: block; }
+    .trend-sector-head { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; font-size: 15px; margin-bottom: 2px; }
+    .trend-sector-head span { font-size: 16px; }
     .digest-panel { margin-bottom: 12px; }
-    .digest-group { margin-top: 10px; }
-    .digest-group-title { font-size: 13px; font-weight: 800; color: var(--th-ink); margin-bottom: 6px; }
-    .digest-chips { display: flex; gap: 6px; flex-wrap: wrap; }
-    .digest-chip { border: 1px solid var(--line); border-radius: 999px; background: var(--panel-2); color: var(--ink); font-size: 12px; padding: 5px 10px; cursor: pointer; }
-    .digest-chip:hover { border-color: var(--accent); }
+    .digest-group { margin-top: 14px; }
+    .digest-group-title { font-size: 14px; font-weight: 800; color: var(--th-ink); margin-bottom: 8px; }
+    .digest-chips { display: flex; gap: 8px; flex-wrap: wrap; row-gap: 8px; }
+    .digest-chip { height: auto; border: 1px solid var(--line); border-radius: 999px; background: var(--panel-2); color: var(--ink); font-size: 12.5px; font-weight: 400; line-height: 1.5; padding: 6px 12px; cursor: pointer; }
+    .digest-chip:hover { border-color: var(--accent); background: var(--hover); color: var(--ink); }
     .detail-nav { position: sticky; top: 0; z-index: 6; display: flex; gap: 6px; overflow-x: auto; padding: 8px 0 10px; margin-bottom: 6px; background: var(--bg); -webkit-overflow-scrolling: touch; }
     .detail-nav a { flex: 0 0 auto; border: 1px solid var(--line); border-radius: 999px; background: var(--panel); color: var(--td-ink); font-size: 12px; font-weight: 700; padding: 6px 12px; text-decoration: none; white-space: nowrap; }
     .detail-nav a:hover { border-color: var(--accent); color: var(--accent-dark); }
