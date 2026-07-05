@@ -860,6 +860,9 @@
     .query-suggest-item .sid { font-weight: 800; }
     .query-suggest-item .sind { color: var(--muted); font-size: 12px; margin-left: auto; }
     .query-suggest-title { padding: 8px 12px 2px; color: var(--muted); font-size: 11px; font-weight: 700; }
+    .trend-sector { display: block; width: 100%; text-align: left; border: 1px solid var(--line); border-radius: 8px; background: var(--panel-2); color: var(--ink); padding: 10px 12px; margin-bottom: 8px; cursor: pointer; font-size: 13px; }
+    .trend-sector:hover { border-color: var(--accent); }
+    .trend-sector-head { display: flex; justify-content: space-between; align-items: baseline; font-size: 14px; margin-bottom: 4px; }
     .digest-panel { margin-bottom: 12px; }
     .digest-group { margin-top: 10px; }
     .digest-group-title { font-size: 13px; font-weight: 800; color: var(--th-ink); margin-bottom: 6px; }
@@ -975,6 +978,7 @@
 
     <section class="tabs">
       <button class="tab active" data-tab="ranking">排行</button>
+      <button class="tab" data-tab="trend">今日趨勢</button>
       <button class="tab" data-tab="watchlist">自選股</button>
       <button class="tab" data-tab="sector">族群</button>
       <button class="tab" data-tab="detail">個股</button>
@@ -999,6 +1003,38 @@
       <div class="table-wrap" id="ranking-table"></div>
     </section>
 
+    <section id="trend-view" style="display:none;">
+      <div class="panel" style="margin-bottom:12px;">
+        <div class="panel-head">
+          <div>
+            <div class="panel-title">今日可能趨勢</div>
+            <div class="muted" id="trend-note">依最新交易日收盤資料計算：昨日強弱族群、突然爆量的個股與族群共振</div>
+          </div>
+        </div>
+      </div>
+      <section class="layout-2">
+        <div class="panel">
+          <div class="panel-head"><div class="panel-title">昨日強勢族群</div></div>
+          <div class="panel-body" id="trend-strong"></div>
+        </div>
+        <div class="panel">
+          <div class="panel-head"><div class="panel-title">昨日弱勢族群</div></div>
+          <div class="panel-body" id="trend-weak"></div>
+        </div>
+      </section>
+      <section class="panel" style="margin-top:12px;">
+        <div class="panel-head">
+          <div><div class="panel-title">爆量雷達</div><div class="muted">當日成交量 ≥ 20 日均量 3 倍且日均額 ≥ 0.3 億</div></div>
+        </div>
+        <div class="table-wrap" id="trend-spikes"></div>
+      </section>
+      <section class="panel" style="margin-top:12px;">
+        <div class="panel-head">
+          <div><div class="panel-title">族群共振</div><div class="muted">同一族群 ≥2 檔同日爆量——資金可能正在轉進整個族群</div></div>
+        </div>
+        <div class="panel-body" id="trend-clusters"></div>
+      </section>
+    </section>
     <section id="sector-view" style="display:none;">
       <section class="panel">
         <div class="panel-head">
@@ -1800,6 +1836,9 @@
       }
       if (parsed.pathname === "/api/digest") {
         return staticData(`data/digest_${days}d.json`);
+      }
+      if (parsed.pathname === "/api/trend") {
+        return staticData(`data/trend_${days}d.json`);
       }
       if (parsed.pathname === "/api/health") {
         return staticData("data/health.json");
@@ -3430,6 +3469,56 @@
       </div>`;
       target.querySelectorAll(".digest-chip").forEach(btn => btn.addEventListener("click", () => openDetail(btn.dataset.stock)));
     }
+    async function loadTrend() {
+      const days = document.querySelector("#days").value;
+      let data;
+      try {
+        data = await getJSON(`/api/trend?days=${days}`);
+      } catch (err) {
+        document.querySelector("#trend-note").textContent = `趨勢資料載入失敗：${err.message}`;
+        return;
+      }
+      const note = document.querySelector("#trend-note");
+      if (data.state !== "ready") {
+        note.textContent = "資料不足（需要至少兩個交易日的行情）";
+        return;
+      }
+      note.textContent = `${data.trade_date} 收盤資料（對比 ${data.prev_date}）；點族群卡進族群頁、點個股列進個股頁`;
+      const sectorCard = item => `
+        <button class="trend-sector" data-industry="${esc(item.is_sub ? item.industry : item.name)}" data-sub="${esc(item.is_sub ? item.name : "")}">
+          <div class="trend-sector-head"><strong>${esc(item.name)}</strong><span class="${cls(item.avg_chg_1d_pct)}">${fmt(item.avg_chg_1d_pct)}%</span></div>
+          <div class="muted">${esc(item.member_count)} 檔，${esc(item.up_count)} 漲（${fmt(item.up_ratio_pct)}%）｜當日法人 ${fmt(item.inst_net_lot)} 張${item.avg_multifactor !== null && item.avg_multifactor !== undefined ? `｜多因子均 ${fmt(item.avg_multifactor)}` : ""}</div>
+        </button>`;
+      document.querySelector("#trend-strong").innerHTML = (data.strong_sectors || []).map(sectorCard).join("") || `<div class="empty">無資料</div>`;
+      document.querySelector("#trend-weak").innerHTML = (data.weak_sectors || []).map(sectorCard).join("") || `<div class="empty">無資料</div>`;
+      document.querySelectorAll(".trend-sector").forEach(btn => btn.addEventListener("click", () => openSector(btn.dataset.industry, btn.dataset.sub || "")));
+      renderTable(document.querySelector("#trend-spikes"), data.volume_spikes || [], [
+        {key:"stock_id", label:"代號"},
+        {key:"name", label:"名稱"},
+        {key:"volume_ratio_1d", label:"量比(倍)"},
+        {key:"chg_1d_pct", label:"當日漲跌%", signed:true},
+        {key:"latest_volume_lot", label:"當日量(張)"},
+        {key:"foreign_net_lot", label:"當日外資", signed:true},
+        {key:"trust_net_lot", label:"當日投信", signed:true},
+        {key:"sub_industry", label:"細分類", sortType:"text"},
+        {key:"industry", label:"產業", sortType:"text"},
+        {key:"multifactor_score", label:"多因子分"}
+      ], {
+        rowId: row => row.stock_id,
+        onClick: stock => openDetail(stock)
+      });
+      const chip = item => `<button class="digest-chip" data-stock="${esc(item.stock_id)}"><strong>${esc(item.stock_id)}</strong> ${esc(item.name || "")}${item.chg_1d_pct !== null && item.chg_1d_pct !== undefined ? `<span class="${cls(item.chg_1d_pct)}"> ${fmt(item.chg_1d_pct)}%</span>` : ""}</button>`;
+      const clusterBox = document.querySelector("#trend-clusters");
+      clusterBox.innerHTML = (data.clusters || []).length
+        ? (data.clusters || []).map(cluster => `
+          <div class="digest-group">
+            <div class="digest-group-title">🔥 ${esc(cluster.name)}（${esc(cluster.spike_members.length)} 檔同日爆量）</div>
+            <div class="digest-chips">${cluster.spike_members.map(chip).join("")}</div>
+            ${cluster.peers.length ? `<div class="muted" style="margin:6px 0 4px;">同族群其他成員：</div><div class="digest-chips">${cluster.peers.map(chip).join("")}</div>` : ""}
+          </div>`).join("")
+        : `<div class="empty">今日沒有同族群多檔爆量的共振訊號。</div>`;
+      clusterBox.querySelectorAll(".digest-chip").forEach(btn => btn.addEventListener("click", () => openDetail(btn.dataset.stock)));
+    }
     function renderRankingTable() {
       renderFocusCards();
       renderColumnControls();
@@ -4115,6 +4204,7 @@
       document.querySelector(".toolbar").style.display = showTwStockOverview ? "" : "none";
       document.querySelector("#metrics").style.display = showTwStockOverview ? "" : "none";
       document.querySelector("#ranking-view").style.display = state.tab === "ranking" || state.tab === "watchlist" ? "" : "none";
+      document.querySelector("#trend-view").style.display = state.tab === "trend" ? "" : "none";
       document.querySelector("#sector-view").style.display = state.tab === "sector" ? "" : "none";
       document.querySelector("#detail-view").style.display = state.tab === "detail" ? "" : "none";
       document.querySelector("#market-view").style.display = state.tab === "market" ? "" : "none";
@@ -4124,6 +4214,7 @@
       document.querySelector("#coverage-view").style.display = state.tab === "coverage" ? "" : "none";
       if (state.tab === "ranking") await loadRanking(false);
       if (state.tab === "watchlist") await loadRanking(true);
+      if (state.tab === "trend") await loadTrend();
       if (state.tab === "sector") await loadSector();
       if (state.tab === "detail") await loadDetail();
       if (state.tab === "market") await loadMarket();

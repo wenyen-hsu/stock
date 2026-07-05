@@ -26,6 +26,7 @@ from stock_chip.gui import (
 from stock_chip.official import shares_to_lots
 from stock_chip.scan import recent_dates
 from stock_chip.backtest import backtest_payload, build_daily_digest
+from stock_chip.trend import build_trend_report
 from stock_chip.health import collect_health
 from stock_chip.mops import load_mops_events
 from stock_chip.us_news import load_cached_us_news
@@ -138,6 +139,10 @@ def export_static(out_dir: Path, days_values: list[int], include_all_details: bo
             write_json(
                 data_dir / f"digest_{days}d.json",
                 build_daily_digest(DB_PATH, REPORTS_DIR / f"scan_all_{days}d.csv", days),
+            )
+            write_json(
+                data_dir / f"trend_{days}d.json",
+                build_trend_report(DB_PATH, REPORTS_DIR / f"scan_all_{days}d.csv", days),
             )
         write_json(data_dir / "us_news.json", {"rows": load_cached_us_news(conn, limit=200)})
         write_json(data_dir / "mops_events.json", load_mops_events(conn, limit=10000))
