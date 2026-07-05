@@ -70,14 +70,65 @@ INDEX_HTML = """<!doctype html>
       --ink: #17212b;
       --muted: #607080;
       --line: #d8e0e6;
+      --line-2: var(--line-2);
       --panel: #fff;
+      --panel-2: var(--panel-2);
+      --panel-3: var(--panel-3);
+      --hover: var(--hover);
       --head: #102a2a;
       --accent: #0f766e;
       --accent-dark: #115e59;
       --danger: #b42318;
       --good: #067647;
       --warn: #b54708;
+      /* 台股行情慣例：紅漲綠跌（狀態語意仍是綠=正常紅=異常） */
+      --up: #b42318;
+      --down: #067647;
+      --th-ink: var(--th-ink);
+      --td-ink: var(--td-ink);
+      --tint-up-bg: #fff6f5;
+      --tint-up-line: #efc4c0;
+      --tint-down-bg: #f3fbf6;
+      --tint-down-line: #bfe3d0;
+      --tint-warn-bg: #fff4e5;
+      --tint-warn-line: #f6c76d;
     }
+    :root[data-theme="dark"] {
+      color-scheme: dark;
+      --bg: #0e1418;
+      --ink: #e2e8ee;
+      --muted: #93a3b3;
+      --line: #2b3844;
+      --line-2: #233039;
+      --panel: #151d24;
+      --panel-2: #19232b;
+      --panel-3: #182129;
+      --hover: #1d2b31;
+      --head: #0a1616;
+      --accent: #14b8a6;
+      --accent-dark: #5eead4;
+      --danger: #f97066;
+      --good: #3ecf8e;
+      --warn: #f7b955;
+      --up: #f26d5f;
+      --down: #3ecf8e;
+      --th-ink: #a9b8c6;
+      --td-ink: #c2cedb;
+      --tint-up-bg: #391513;
+      --tint-up-line: #5c2622;
+      --tint-down-bg: #0f2b1f;
+      --tint-down-line: #1d4733;
+      --tint-warn-bg: #38270e;
+      --tint-warn-line: #5c451e;
+    }
+    :root[data-theme="dark"] .status-pill.done { background: #0c2b1e; }
+    :root[data-theme="dark"] .status-pill.failed, :root[data-theme="dark"] .status-pill.bad { background: #391513; }
+    :root[data-theme="dark"] .status-pill.running, :root[data-theme="dark"] .status-pill.warn { background: #38270e; }
+    :root[data-theme="dark"] .status-card.good { border-color: #1d4733; background: #0f2b1f; }
+    :root[data-theme="dark"] .status-card.warn { border-color: #5c451e; background: #38270e; }
+    :root[data-theme="dark"] .event-tag.good { border-color: #1d4733; background: #0f2b1f; }
+    :root[data-theme="dark"] .event-tag.hot { border-color: #5c2622; background: #391513; }
+    :root[data-theme="dark"] .tag.ai { border-color: #234a44; background: #12302b; }
     * { box-sizing: border-box; }
     body {
       margin: 0;
@@ -99,7 +150,7 @@ INDEX_HTML = """<!doctype html>
       height: 38px;
       border: 1px solid var(--line);
       border-radius: 6px;
-      background: #fff;
+      background: var(--panel);
       color: var(--ink);
       padding: 0 10px;
       font-size: 14px;
@@ -115,11 +166,11 @@ INDEX_HTML = """<!doctype html>
     }
     button:hover { background: var(--accent-dark); }
     button:disabled {
-      background: #cbd5dc;
-      color: #52616f;
+      background: var(--line-2);
+      color: var(--muted);
       cursor: not-allowed;
     }
-    button:disabled:hover { background: #cbd5dc; }
+    button:disabled:hover { background: var(--line-2); }
     button.secondary,
     a.secondary {
       display: inline-flex;
@@ -129,14 +180,14 @@ INDEX_HTML = """<!doctype html>
       padding: 0 12px;
       border: 1px solid var(--line);
       border-radius: 6px;
-      background: #fff;
+      background: var(--panel);
       color: var(--ink);
       font-size: 14px;
       font-weight: 800;
       text-decoration: none;
     }
     button.secondary:hover,
-    a.secondary:hover { background: #eef6f5; }
+    a.secondary:hover { background: var(--hover); }
     .toolbar {
       display: grid;
       grid-template-columns: repeat(6, minmax(120px, 1fr));
@@ -147,7 +198,7 @@ INDEX_HTML = """<!doctype html>
     .tabs { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 14px; }
     .tab {
       border: 1px solid var(--line);
-      background: #fff;
+      background: var(--panel);
       color: var(--ink);
       padding: 9px 12px;
       height: auto;
@@ -173,7 +224,7 @@ INDEX_HTML = """<!doctype html>
       gap: 12px;
       padding: 14px;
       border-bottom: 1px solid var(--line);
-      background: #f8fafc;
+      background: var(--panel-3);
     }
     .sentiment-score {
       font-size: 36px;
@@ -212,7 +263,7 @@ INDEX_HTML = """<!doctype html>
       border: 1px solid var(--line);
       border-radius: 8px;
       padding: 10px;
-      background: #fbfdff;
+      background: var(--panel-2);
     }
     .assist-label { color: var(--muted); font-size: 12px; font-weight: 800; }
     .assist-value { color: var(--ink); font-size: 22px; font-weight: 900; margin-top: 4px; }
@@ -220,7 +271,7 @@ INDEX_HTML = """<!doctype html>
     .assist-reason {
       border-top: 1px solid var(--line);
       padding: 12px 14px;
-      color: #344054;
+      color: var(--th-ink);
       font-size: 13px;
       line-height: 1.6;
     }
@@ -234,7 +285,7 @@ INDEX_HTML = """<!doctype html>
       border: 1px solid var(--line);
       border-radius: 8px;
       padding: 10px;
-      background: #fbfdff;
+      background: var(--panel-2);
     }
     .status-card.good { border-color: #bfe3d0; background: #f3fbf6; }
     .status-card.warn { border-color: #f6c76d; background: #fffbf0; }
@@ -245,10 +296,10 @@ INDEX_HTML = """<!doctype html>
     .judgement-box {
       border-top: 1px solid var(--line);
       padding: 13px 14px;
-      color: #26384d;
+      color: var(--ink);
       font-size: 14px;
       line-height: 1.65;
-      background: #fbfdff;
+      background: var(--panel-2);
     }
     .column-controls {
       display: flex;
@@ -256,7 +307,7 @@ INDEX_HTML = """<!doctype html>
       gap: 8px;
       padding: 12px 14px;
       border-top: 1px solid var(--line);
-      background: #fbfdff;
+      background: var(--panel-2);
     }
     .column-controls .toggle { height: 28px; font-size: 12px; }
     .tooltip-anchor { position: relative; }
@@ -268,10 +319,10 @@ INDEX_HTML = """<!doctype html>
       z-index: 20;
       width: min(320px, 72vw);
       padding: 10px 12px;
-      border: 1px solid #cfd9e1;
+      border: 1px solid var(--line-2);
       border-radius: 8px;
-      background: #102a43;
-      color: #f8fafc;
+      background: var(--ink);
+      color: var(--panel-3);
       box-shadow: 0 10px 24px rgba(15, 23, 42, .18);
       font-size: 12px;
       font-weight: 700;
@@ -312,16 +363,16 @@ INDEX_HTML = """<!doctype html>
       background: var(--panel);
     }
     table { width: 100%; border-collapse: collapse; font-size: 13px; white-space: nowrap; }
-    th, td { border-bottom: 1px solid #edf1f4; padding: 8px 10px; text-align: right; }
-    th { position: sticky; top: 0; background: #f8fafb; color: #344054; z-index: 1; font-size: 12px; }
+    th, td { border-bottom: 1px solid var(--line-2); padding: 8px 10px; text-align: right; }
+    th { position: sticky; top: 0; background: var(--panel-3); color: var(--th-ink); z-index: 1; font-size: 12px; }
     th.sortable { cursor: pointer; user-select: none; }
-    th.sortable:hover { background: #eef6f5; color: var(--accent-dark); }
+    th.sortable:hover { background: var(--hover); color: var(--accent-dark); }
     th.sortable .sort-mark { margin-left: 4px; color: var(--accent-dark); }
     th:first-child, td:first-child, th:nth-child(2), td:nth-child(2), th:nth-child(3), td:nth-child(3) { text-align: left; }
     tr.clickable { cursor: pointer; }
-    tr.clickable:hover td { background: #eef8f6; }
-    .pos { color: var(--good); font-weight: 800; }
-    .neg { color: var(--danger); font-weight: 800; }
+    tr.clickable:hover td { background: var(--hover); }
+    .pos { color: var(--up); font-weight: 800; }
+    .neg { color: var(--down); font-weight: 800; }
     .warn { color: var(--warn); font-weight: 800; }
     .muted { color: var(--muted); }
     .layout-2 { display: grid; grid-template-columns: 1.2fr .8fr; gap: 14px; }
@@ -344,7 +395,7 @@ INDEX_HTML = """<!doctype html>
       padding: 0 8px;
       border: 1px solid var(--line);
       border-radius: 6px;
-      background: #fff;
+      background: var(--panel);
       color: var(--ink);
       cursor: pointer;
     }
@@ -409,11 +460,11 @@ INDEX_HTML = """<!doctype html>
       border: 1px solid var(--line);
       border-radius: 8px;
       padding: 14px;
-      background: #fff;
+      background: var(--panel);
     }
     .job-card.primary-job {
       border-color: #9ccdc8;
-      background: #f6fbfa;
+      background: var(--panel-3);
     }
     .job-card.stale-warn {
       border-color: #f6c76d;
@@ -426,13 +477,13 @@ INDEX_HTML = """<!doctype html>
     .job-title { font-weight: 850; margin-bottom: 6px; }
     .job-desc { color: var(--muted); font-size: 13px; line-height: 1.5; min-height: 38px; }
     .job-time { color: var(--muted); font-size: 12px; margin-top: 8px; line-height: 1.5; }
-    .job-extra { color: #344054; font-size: 12px; margin-top: 8px; line-height: 1.5; }
+    .job-extra { color: var(--th-ink); font-size: 12px; margin-top: 8px; line-height: 1.5; }
     .job-card button { margin-top: 12px; min-width: 120px; }
     .publish-box {
       border: 1px solid var(--line);
       border-radius: 8px;
       padding: 14px;
-      background: #fff;
+      background: var(--panel);
       margin-bottom: 14px;
     }
     .publish-actions { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 10px; }
@@ -443,7 +494,7 @@ INDEX_HTML = """<!doctype html>
       min-height: 24px;
       padding: 2px 8px;
       border-radius: 999px;
-      background: #eef6f5;
+      background: var(--hover);
       color: var(--accent-dark);
       font-size: 12px;
       font-weight: 800;
@@ -468,7 +519,7 @@ INDEX_HTML = """<!doctype html>
       padding: 0 10px;
       border: 1px solid var(--line);
       border-radius: 6px;
-      background: #fff;
+      background: var(--panel);
       color: var(--ink);
       font-weight: 750;
     }
@@ -499,7 +550,7 @@ INDEX_HTML = """<!doctype html>
       font-weight: 800;
       margin-bottom: 4px;
     }
-    .obsidian-text { color: #344054; font-size: 13px; line-height: 1.55; }
+    .obsidian-text { color: var(--th-ink); font-size: 13px; line-height: 1.55; }
     .news-section-title {
       margin: 16px 0 10px;
       color: var(--ink);
@@ -509,11 +560,11 @@ INDEX_HTML = """<!doctype html>
     .news-list { display: grid; gap: 10px; }
     .news-item {
       padding: 14px;
-      border: 1px solid #dce5ec;
+      border: 1px solid var(--line-2);
       border-radius: 8px;
-      background: #fbfdff;
+      background: var(--panel-2);
     }
-    .news-item:nth-child(even) { background: #f7fafc; }
+    .news-item:nth-child(even) { background: var(--panel-3); }
     .event-alert {
       display: grid;
       gap: 10px;
@@ -528,9 +579,9 @@ INDEX_HTML = """<!doctype html>
     }
     .event-item {
       padding: 12px 14px;
-      border: 1px solid #dce5ec;
+      border: 1px solid var(--line-2);
       border-radius: 8px;
-      background: #fbfdff;
+      background: var(--panel-2);
     }
     .event-item.important {
       border-color: #f2c9c5;
@@ -557,7 +608,7 @@ INDEX_HTML = """<!doctype html>
     }
     .event-text {
       margin-top: 8px;
-      color: #344054;
+      color: var(--th-ink);
       font-size: 13px;
       line-height: 1.55;
     }
@@ -568,8 +619,8 @@ INDEX_HTML = """<!doctype html>
       padding: 2px 8px;
       border-radius: 999px;
       border: 1px solid #cfdbe5;
-      background: #f7fafc;
-      color: #344054;
+      background: var(--panel-3);
+      color: var(--th-ink);
       font-size: 12px;
       font-weight: 850;
       white-space: nowrap;
@@ -587,11 +638,11 @@ INDEX_HTML = """<!doctype html>
       min-height: 102px;
       border: 1px solid var(--line);
       border-radius: 8px;
-      background: #fbfdff;
+      background: var(--panel-2);
       padding: 8px;
       cursor: pointer;
     }
-    .calendar-day:hover { border-color: #9fcfc8; background: #f1faf8; }
+    .calendar-day:hover { border-color: #9fcfc8; background: var(--hover); }
     .calendar-day.selected { border-color: var(--accent); background: #eaf8f5; box-shadow: inset 0 0 0 1px var(--accent); }
     .calendar-day.empty-day {
       background: #f3f6f8;
@@ -639,7 +690,7 @@ INDEX_HTML = """<!doctype html>
     .mops-summary-card {
       border: 1px solid var(--line);
       border-radius: 8px;
-      background: #fbfdff;
+      background: var(--panel-2);
       padding: 10px;
     }
     .mops-summary-card .label { color: var(--muted); font-size: 12px; font-weight: 800; }
@@ -655,7 +706,7 @@ INDEX_HTML = """<!doctype html>
       padding: 0 10px;
       border: 1px solid var(--line);
       border-radius: 999px;
-      background: #fff;
+      background: var(--panel);
       color: var(--ink);
       font-weight: 800;
       cursor: pointer;
@@ -664,17 +715,17 @@ INDEX_HTML = """<!doctype html>
     .event-card {
       border: 1px solid var(--line);
       border-radius: 8px;
-      background: #fbfdff;
+      background: var(--panel-2);
       padding: 12px;
       margin-bottom: 10px;
       cursor: pointer;
     }
-    .event-card:hover { border-color: #9fcfc8; background: #f1faf8; }
+    .event-card:hover { border-color: #9fcfc8; background: var(--hover); }
     .event-title { font-size: 15px; font-weight: 900; line-height: 1.45; }
     .event-meta { color: var(--muted); font-size: 12px; margin-top: 6px; }
     .event-detail-text {
       white-space: pre-wrap;
-      color: #26384d;
+      color: var(--ink);
       font-size: 14px;
       line-height: 1.7;
     }
@@ -696,8 +747,8 @@ INDEX_HTML = """<!doctype html>
     }
     .news-open:hover { text-decoration: underline; }
     .news-meta { color: var(--muted); font-size: 12px; margin: 5px 0 7px; }
-    .news-text { color: #344054; font-size: 13px; line-height: 1.65; white-space: pre-wrap; }
-    .news-match { color: #475467; font-size: 12px; line-height: 1.5; margin-top: 6px; }
+    .news-text { color: var(--th-ink); font-size: 13px; line-height: 1.65; white-space: pre-wrap; }
+    .news-match { color: var(--td-ink); font-size: 12px; line-height: 1.5; margin-top: 6px; }
     .tag-list { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 6px; }
     .tag {
       display: inline-flex;
@@ -706,13 +757,14 @@ INDEX_HTML = """<!doctype html>
       padding: 3px 8px;
       border: 1px solid var(--line);
       border-radius: 6px;
-      color: #344054;
-      background: #f8fafb;
+      color: var(--th-ink);
+      background: var(--panel-3);
       font-size: 12px;
       font-weight: 700;
     }
-    .tag.good { color: var(--good); border-color: #bfe3d0; background: #f3fbf6; }
-    .tag.bad { color: var(--danger); border-color: #efc4c0; background: #fff6f5; }
+    .tag.good { color: var(--up); border-color: var(--tint-up-line); background: var(--tint-up-bg); }
+    .tag.bad { color: var(--down); border-color: var(--tint-down-line); background: var(--tint-down-bg); }
+    .tag.warn-tag { color: var(--warn); border-color: var(--tint-warn-line); background: var(--tint-warn-bg); }
     .tag.ai { color: var(--accent-dark); border-color: #b8d9d5; background: #f0faf8; }
     pre {
       margin: 0;
@@ -734,7 +786,7 @@ INDEX_HTML = """<!doctype html>
       font-size: 12px;
       line-height: 1.7;
     }
-    .sources strong { color: #344054; }
+    .sources strong { color: var(--th-ink); }
     .sources a { color: var(--accent-dark); text-decoration: none; font-weight: 700; }
     .sources a:hover { text-decoration: underline; }
     .source-audit {
@@ -742,7 +794,7 @@ INDEX_HTML = """<!doctype html>
       padding: 16px;
       border: 1px solid var(--line);
       border-radius: 8px;
-      background: #f8fafb;
+      background: var(--panel-3);
     }
     .source-audit h3 {
       margin: 0 0 10px;
@@ -757,7 +809,7 @@ INDEX_HTML = """<!doctype html>
       padding: 12px;
       border: 1px solid #d6e0e8;
       border-radius: 8px;
-      background: #fff;
+      background: var(--panel);
     }
     .source-audit-card strong {
       display: block;
@@ -767,7 +819,7 @@ INDEX_HTML = """<!doctype html>
     .source-audit-card ul {
       margin: 0;
       padding-left: 18px;
-      color: #475467;
+      color: var(--td-ink);
       font-size: 13px;
       line-height: 1.65;
     }
@@ -780,7 +832,7 @@ INDEX_HTML = """<!doctype html>
     .sector-card.selected { box-shadow: inset 0 0 0 2px var(--accent); }
     .sector-name { font-weight: 850; font-size: 13px; }
     .sector-return { font-size: 20px; font-weight: 900; margin-top: 4px; }
-    .sector-meta { color: #475467; font-size: 11px; line-height: 1.5; margin-top: 4px; }
+    .sector-meta { color: var(--td-ink); font-size: 11px; line-height: 1.5; margin-top: 4px; }
     .heat-p3 { background: #a9ecc4; }
     .heat-p2 { background: #d2f5e0; }
     .heat-p1 { background: #eefaf3; }
@@ -824,9 +876,9 @@ INDEX_HTML = """<!doctype html>
       gap: 10px;
       padding: 12px 14px;
       border-bottom: 1px solid var(--line);
-      background: #fbfdff;
+      background: var(--panel-2);
     }
-    .focus-card { border: 1px solid var(--line); border-radius: 8px; background: #fff; padding: 10px; }
+    .focus-card { border: 1px solid var(--line); border-radius: 8px; background: var(--panel); padding: 10px; }
     .focus-title { font-weight: 850; font-size: 13px; margin-bottom: 8px; }
     .focus-note { color: var(--muted); font-weight: 700; font-size: 11px; margin-left: 6px; }
     .focus-item {
@@ -838,15 +890,15 @@ INDEX_HTML = """<!doctype html>
       height: auto;
       padding: 6px 8px;
       margin-bottom: 4px;
-      border: 1px solid #edf1f4;
+      border: 1px solid var(--line-2);
       border-radius: 6px;
-      background: #fbfdff;
+      background: var(--panel-2);
       color: var(--ink);
       font-size: 13px;
       font-weight: 750;
       cursor: pointer;
     }
-    .focus-item:hover { border-color: #9fcfc8; background: #f1faf8; }
+    .focus-item:hover { border-color: #9fcfc8; background: var(--hover); }
     .focus-stock { text-align: left; }
     .focus-meta { color: var(--muted); font-size: 11px; font-weight: 700; }
     .score-cell { display: inline-flex; align-items: center; gap: 6px; justify-content: flex-end; }
@@ -860,6 +912,23 @@ INDEX_HTML = """<!doctype html>
     }
     .score-fill { display: block; height: 100%; border-radius: 999px; background: var(--accent); }
     .score-fill.neg-fill { background: var(--danger); }
+    .detail-nav { position: sticky; top: 0; z-index: 6; display: flex; gap: 6px; overflow-x: auto; padding: 8px 0 10px; margin-bottom: 6px; background: var(--bg); -webkit-overflow-scrolling: touch; }
+    .detail-nav a { flex: 0 0 auto; border: 1px solid var(--line); border-radius: 999px; background: var(--panel); color: var(--td-ink); font-size: 12px; font-weight: 700; padding: 6px 12px; text-decoration: none; white-space: nowrap; }
+    .detail-nav a:hover { border-color: var(--accent); color: var(--accent-dark); }
+    .theme-toggle { border: 1px solid rgba(255,255,255,.35); background: transparent; color: #fff; border-radius: 999px; padding: 4px 12px; font-size: 13px; cursor: pointer; }
+    .ranking-desc { grid-column: 1 / -1; color: var(--muted); font-size: 12px; line-height: 1.5; margin-top: -4px; }
+    @media (max-width: 640px) {
+      main { padding: 10px 10px 24px; }
+      header { padding: 12px 14px 10px; }
+      h1 { font-size: 19px; }
+      .toolbar { grid-template-columns: 1fr 1fr; gap: 8px; }
+      .tabs { flex-wrap: nowrap; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+      .tabs .tab { flex: 0 0 auto; }
+      .metrics { grid-template-columns: 1fr 1fr; }
+      .focus-grid, .assist-grid { grid-template-columns: 1fr; }
+      table { font-size: 12px; }
+      .detail-title { font-size: 19px; }
+    }
     @media (max-width: 1000px) {
       main { padding: 14px; }
       .toolbar { grid-template-columns: repeat(2, minmax(140px, 1fr)); }
@@ -869,7 +938,10 @@ INDEX_HTML = """<!doctype html>
 </head>
 <body>
   <header>
-    <h1>台股籌碼觀察</h1>
+    <div style="display:flex; align-items:center; justify-content:space-between; gap:12px;">
+      <h1>台股籌碼觀察</h1>
+      <button class="theme-toggle" id="theme-toggle" title="切換深色/淺色">🌙 深色</button>
+    </div>
     <div class="subhead" id="meta">讀取中...</div>
   </header>
   <main>
@@ -884,22 +956,30 @@ INDEX_HTML = """<!doctype html>
       <div>
         <label for="ranking">排行</label>
         <select id="ranking">
-          <option value="total_score">基礎選股分</option>
-          <option value="multifactor_score">多因子綜合分</option>
-          <option value="momentum_inst_buy">動能 + 法人買超</option>
-          <option value="high_52w_inst_buy">52週新高 + 法人買超</option>
-          <option value="value_dividend">低估值 + 高殖利率</option>
-          <option value="big_holder_increase">大戶增持 + 法人買超</option>
-          <option value="chip_score">法人籌碼分數</option>
-          <option value="foreign_buy">外資買超</option>
-          <option value="foreign_5d_revenue_growth">外資近5日買超 + 營收成長</option>
-          <option value="inst_buy_volume">法人買超 + 占量</option>
-          <option value="volume_expansion">成交量放大</option>
-          <option value="revenue_volume_breakout">營收成長 + 量能</option>
-          <option value="margin_down_foreign_buy">融資下降 + 外資買超</option>
-          <option value="trust_buy">投信買超</option>
-          <option value="inst_buy">外資 + 投信</option>
-          <option value="near_avg_with_inst_buy">接近均價且法人買超</option>
+          <optgroup label="綜合分數">
+            <option value="multifactor_score">多因子綜合分</option>
+            <option value="total_score" selected>基礎選股分</option>
+            <option value="chip_score">法人籌碼分數</option>
+          </optgroup>
+          <optgroup label="籌碼追蹤">
+            <option value="foreign_buy">外資買超</option>
+            <option value="trust_buy">投信買超</option>
+            <option value="inst_buy">外資 + 投信</option>
+            <option value="inst_buy_volume">法人買超 + 占量</option>
+            <option value="margin_down_foreign_buy">融資下降 + 外資買超</option>
+            <option value="big_holder_increase">大戶增持 + 法人買超</option>
+            <option value="foreign_5d_revenue_growth">外資近5日買超 + 營收成長</option>
+          </optgroup>
+          <optgroup label="動能與量能">
+            <option value="momentum_inst_buy">動能 + 法人買超</option>
+            <option value="high_52w_inst_buy">52週新高 + 法人買超</option>
+            <option value="volume_expansion">成交量放大</option>
+            <option value="revenue_volume_breakout">營收成長 + 量能</option>
+            <option value="near_avg_with_inst_buy">接近均價且法人買超</option>
+          </optgroup>
+          <optgroup label="價值">
+            <option value="value_dividend">低估值 + 高殖利率</option>
+          </optgroup>
         </select>
       </div>
       <div>
@@ -933,6 +1013,7 @@ INDEX_HTML = """<!doctype html>
         </select>
       </div>
       <button id="refresh">重新整理</button>
+      <div class="ranking-desc" id="ranking-desc"></div>
     </section>
 
     <section class="tabs">
@@ -1001,6 +1082,17 @@ INDEX_HTML = """<!doctype html>
           <button class="secondary" id="watchlist-toggle">加入自選</button>
         </div>
       </div>
+      <nav class="detail-nav" id="detail-nav">
+        <a href="#selection-panel">選股輔助</a>
+        <a href="#sec-events">重大事件</a>
+        <a href="#sec-chart">K線</a>
+        <a href="#sec-news">新聞</a>
+        <a href="#sec-fundamentals">營收財報</a>
+        <a href="#sec-margin">融資券</a>
+        <a href="#sec-branch">分點</a>
+        <a href="#sec-branch-daily">分點明細</a>
+        <a href="#top" data-top="1">⬆ 頂部</a>
+      </nav>
       <section class="metrics" id="detail-metrics"></section>
       <section class="panel" id="peer-panel" style="display:none;">
         <div class="panel-head">
@@ -1031,7 +1123,7 @@ INDEX_HTML = """<!doctype html>
         </div>
         <div id="selection-assist"></div>
       </section>
-      <section class="panel">
+      <section class="panel" id="sec-events">
         <div class="panel-head">
           <div>
             <div class="panel-title">近期重大事件</div>
@@ -1041,7 +1133,7 @@ INDEX_HTML = """<!doctype html>
         </div>
         <div class="panel-body" id="stock-events-list"></div>
       </section>
-      <section class="panel">
+      <section class="panel" id="sec-chart">
         <div class="panel-head">
           <div class="panel-title">股價走勢</div>
           <div class="chart-toolbar">
@@ -1065,7 +1157,7 @@ INDEX_HTML = """<!doctype html>
           <div class="legend" id="price-legend"></div>
         </div>
       </section>
-      <section class="panel">
+      <section class="panel" id="sec-news">
         <div class="panel-head">
           <div>
             <div class="panel-title">個股新聞</div>
@@ -1077,7 +1169,7 @@ INDEX_HTML = """<!doctype html>
         </div>
         <div class="panel-body" id="news-list"></div>
       </section>
-      <section class="layout-2">
+      <section class="layout-2" id="sec-fundamentals">
         <div class="panel">
           <div class="panel-head">
             <div><div class="panel-title">每日進出</div><div class="muted">成交量為全市場成交張數；三大法人欄位為買賣超</div></div>
@@ -1111,7 +1203,7 @@ INDEX_HTML = """<!doctype html>
           <div class="table-wrap" id="financials-table"></div>
         </div>
       </section>
-      <section class="panel">
+      <section class="panel" id="sec-margin">
         <div class="panel-head">
           <div>
             <div class="panel-title">融資融券餘額</div>
@@ -1125,7 +1217,7 @@ INDEX_HTML = """<!doctype html>
         </div>
         <div class="table-wrap" id="margin-table"></div>
       </section>
-      <section class="panel">
+      <section class="panel" id="sec-branch">
         <div class="panel-head">
           <div><div class="panel-title">區間合計買超前十分點</div><div class="muted" id="branch-top-note">點分點看每日明細；來源無分點均價，成本為每日買超×當日均價推估（需累積 ≥3 天明細）</div></div>
           <div class="panel-actions">
@@ -1135,7 +1227,7 @@ INDEX_HTML = """<!doctype html>
         </div>
         <div class="table-wrap" id="branch-top-table"></div>
       </section>
-      <section class="panel">
+      <section class="panel" id="sec-branch-daily">
         <div class="panel-head">
           <div class="panel-title" id="broker-title">分點每日明細</div>
           <div class="panel-actions">
@@ -1511,6 +1603,61 @@ INDEX_HTML = """<!doctype html>
     const state = { tab: "ranking", previousTab: "ranking", detail: null, broker: "", lastDataUpdatedAt: "", chartRange: 20, rankingRows: [], rankingSort: null, usNewsRows: [], ciUsNewsRows: [], ciUsNewsMeta: {}, mopsEvents: [], mopsSelectedDate: "", mopsVisibleCount: 50, mopsQuickFilter: "", mopsDateInitialized: false, mopsDateMode: "recent30", mopsCalendarStart: "", columnGroup: "core", sectorRows: [], sectorSelected: "", sectorSub: "", sectorSort: null, market: null, marketSentiment: null };
     const STATIC_MODE = window.STOCK_CHIP_STATIC === true;
     const staticCache = {};
+    const cssVar = (name, fallback) => (getComputedStyle(document.documentElement).getPropertyValue(name) || "").trim() || fallback;
+    function applyTheme(theme) {
+      document.documentElement.dataset.theme = theme;
+      const btn = document.querySelector("#theme-toggle");
+      if (btn) btn.textContent = theme === "dark" ? "☀️ 淺色" : "🌙 深色";
+      // 重畫 canvas 圖表（K線等 resize handler 會依新主題色重繪）
+      window.dispatchEvent(new Event("resize"));
+    }
+    (function initTheme() {
+      const stored = localStorage.getItem("stockChipTheme");
+      const prefersDark = window.matchMedia("(prefers-color-scheme: dark)");
+      applyTheme(stored || (prefersDark.matches ? "dark" : "light"));
+      prefersDark.addEventListener("change", event => {
+        if (!localStorage.getItem("stockChipTheme")) applyTheme(event.matches ? "dark" : "light");
+      });
+      document.addEventListener("DOMContentLoaded", () => {
+        document.querySelector("#theme-toggle")?.addEventListener("click", () => {
+          const next = document.documentElement.dataset.theme === "dark" ? "light" : "dark";
+          localStorage.setItem("stockChipTheme", next);
+          applyTheme(next);
+        });
+        document.querySelector("#detail-nav")?.addEventListener("click", event => {
+          const link = event.target.closest("a");
+          if (!link) return;
+          event.preventDefault();
+          if (link.dataset.top) { window.scrollTo({top: 0, behavior: "smooth"}); return; }
+          document.querySelector(link.getAttribute("href"))?.scrollIntoView({behavior: "smooth", block: "start"});
+        });
+        updateRankingDesc();
+      });
+    })();
+    const RANKING_DESCRIPTIONS = {
+      total_score: "法人籌碼＋融資券＋營收動能的基礎綜合分，是最保守的底層排序。",
+      multifactor_score: "基礎分再加動能、長線、估值、量能、大戶與獲利品質，最全面的一個排序。",
+      chip_score: "只看三大法人買賣超與連續性，純籌碼流量視角。",
+      foreign_buy: "區間外資買超張數排序。",
+      trust_buy: "區間投信買超張數排序（投信認養常有波段行情）。",
+      inst_buy: "外資＋投信合計買超排序。",
+      inst_buy_volume: "法人買超且佔成交量比重高——買超相對籌碼面更有力。",
+      margin_down_foreign_buy: "融資下降（散戶退場）同時外資買超，籌碼沉澱訊號。",
+      big_holder_increase: "TDCC 千張大戶持股比率週增，且法人同步買超。",
+      foreign_5d_revenue_growth: "外資近 5 日買超且最新月營收年增為正。",
+      momentum_inst_buy: "區間上漲、動能分為正且法人買超，順勢追蹤。",
+      high_52w_inst_buy: "接近 52 週新高且法人買超——動能策略經典訊號。",
+      volume_expansion: "成交量明顯放大的股票，關注資金新流入。",
+      revenue_volume_breakout: "營收成長配合量能放大，基本面＋籌碼共振。",
+      near_avg_with_inst_buy: "收盤接近區間均價且法人買超，回檔上車視角。",
+      value_dividend: "殖利率 ≥3%、本益比 ≤20 且法人未賣超的價值傾斜。",
+    };
+    function updateRankingDesc() {
+      const target = document.querySelector("#ranking-desc");
+      const select = document.querySelector("#ranking");
+      if (!target || !select) return;
+      target.textContent = RANKING_DESCRIPTIONS[select.value] || "";
+    }
     const chartColors = {
       up: "#b42318",
       down: "#087f5b",
@@ -1954,8 +2101,8 @@ INDEX_HTML = """<!doctype html>
       const y = value => pad.top + (max - value) * (h - pad.top - pad.bottom) / (max - min);
       ctx.font = "12px -apple-system, BlinkMacSystemFont, Segoe UI, sans-serif";
       ctx.lineWidth = 1;
-      ctx.strokeStyle = "#edf1f4";
-      ctx.fillStyle = "#607080";
+      ctx.strokeStyle = cssVar("--line-2", "#edf1f4");
+      ctx.fillStyle = cssVar("--muted", "#607080");
       ctx.textAlign = "right";
       ctx.textBaseline = "middle";
       for (let i = 0; i <= 4; i++) {
@@ -2076,8 +2223,8 @@ INDEX_HTML = """<!doctype html>
       const baseY = h - pad.bottom;
       ctx.font = "12px -apple-system, BlinkMacSystemFont, Segoe UI, sans-serif";
       ctx.lineWidth = 1;
-      ctx.strokeStyle = "#edf1f4";
-      ctx.fillStyle = "#607080";
+      ctx.strokeStyle = cssVar("--line-2", "#edf1f4");
+      ctx.fillStyle = cssVar("--muted", "#607080");
       ctx.textAlign = "right";
       ctx.textBaseline = "middle";
       for (let i = 0; i <= 4; i++) {
@@ -2112,7 +2259,7 @@ INDEX_HTML = """<!doctype html>
           ctx.fillStyle = bar.color;
           ctx.fillRect(bar.x - barW / 2, top, barW, Math.max(1, baseY - top));
         });
-        ctx.fillStyle = "#607080";
+        ctx.fillStyle = cssVar("--muted", "#607080");
         ctx.textAlign = "center";
         ctx.textBaseline = "top";
         ctx.fillText(String(row.revenue_month || "").slice(2), center, baseY + 10);
@@ -2199,8 +2346,8 @@ INDEX_HTML = """<!doctype html>
       const y = value => pad.top + (max - value) * (h - pad.top - pad.bottom) / (max - min);
       ctx.font = "12px -apple-system, BlinkMacSystemFont, Segoe UI, sans-serif";
       ctx.lineWidth = 1;
-      ctx.strokeStyle = "#edf1f4";
-      ctx.fillStyle = "#607080";
+      ctx.strokeStyle = cssVar("--line-2", "#edf1f4");
+      ctx.fillStyle = cssVar("--muted", "#607080");
       ctx.textAlign = "right";
       ctx.textBaseline = "middle";
       for (let i = 0; i <= 4; i++) {
@@ -2282,8 +2429,8 @@ INDEX_HTML = """<!doctype html>
       const y = value => pad.top + (max - value) * (h - pad.top - pad.bottom) / (max - min);
       ctx.font = "12px -apple-system, BlinkMacSystemFont, Segoe UI, sans-serif";
       ctx.lineWidth = 1;
-      ctx.strokeStyle = "#edf1f4";
-      ctx.fillStyle = "#607080";
+      ctx.strokeStyle = cssVar("--line-2", "#edf1f4");
+      ctx.fillStyle = cssVar("--muted", "#607080");
       ctx.textAlign = "right";
       ctx.textBaseline = "middle";
       for (let i = 0; i <= 4; i++) {
@@ -2297,7 +2444,7 @@ INDEX_HTML = """<!doctype html>
       }
       if (options.zeroLine && min < 0 && max > 0) {
         const zy = y(0);
-        ctx.strokeStyle = "#b8c4cc";
+        ctx.strokeStyle = cssVar("--line", "#b8c4cc");
         ctx.setLineDash([4, 4]);
         ctx.beginPath();
         ctx.moveTo(pad.left, zy);
@@ -2961,9 +3108,11 @@ INDEX_HTML = """<!doctype html>
       const parts = String(text || "").split("；").filter(Boolean);
       if (!parts.length) return "";
       return `<span class="tag-list">${parts.map(part => {
-        const warn = /融資增加|RSI過熱|波動偏高|賣超/.test(part);
-        const good = /買超|融資下降|放量|營收|接近區間高點|連買/.test(part);
-        return `<span class="tag ${warn ? "bad" : good ? "good" : ""}">${esc(part)}</span>`;
+        // 台股慣例：利多紅（good）、利空綠（bad）、風險警示橘（warn-tag）
+        const warn = /融資增加|RSI過熱|波動偏高|隔日沖/.test(part);
+        const bearish = /賣超|減持|毛利率連\\d*降|年線之下/.test(part);
+        const bullish = /買超|融資下降|放量|營收|接近區間高點|連\\d*買|增持|毛利率連\\d*升|逼近52週高點/.test(part);
+        return `<span class="tag ${warn ? "warn-tag" : bearish ? "bad" : bullish ? "good" : ""}">${esc(part)}</span>`;
       }).join("")}</span>`;
     }
     function scoreBarCell(value, key) {
@@ -3911,6 +4060,7 @@ INDEX_HTML = """<!doctype html>
     document.querySelectorAll(".tab").forEach(btn => btn.addEventListener("click", () => setTab(btn.dataset.tab)));
     document.querySelector("#refresh-sector")?.addEventListener("click", loadSector);
     document.querySelector("#ranking").addEventListener("change", () => {
+      updateRankingDesc();
       enforceRankingDays();
       reload();
     });
