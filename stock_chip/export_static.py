@@ -161,6 +161,23 @@ def export_static(out_dir: Path, days_values: list[int], include_all_details: bo
         searchable = scan_all_rows(days)
         write_json(ranking_dir / "search_index.json", {"days": days, "rows": searchable})
         exported_by_days[str(days)] = len(searchable)
+        if days == max(days_values):
+            # 輕量搜尋建議索引（~150KB）：typeahead 不必下載 6MB 完整索引
+            write_json(
+                data_dir / "suggest.json",
+                {
+                    "rows": [
+                        {
+                            "i": row.get("stock_id"),
+                            "n": row.get("name"),
+                            "d": row.get("industry") or "",
+                            "c": row.get("close"),
+                            "m": row.get("multifactor_score"),
+                        }
+                        for row in searchable
+                    ]
+                },
+            )
 
     for stock_id in sorted(exported_ids):
         for days in days_values:

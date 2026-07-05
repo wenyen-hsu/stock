@@ -912,6 +912,13 @@ INDEX_HTML = """<!doctype html>
     }
     .score-fill { display: block; height: 100%; border-radius: 999px; background: var(--accent); }
     .score-fill.neg-fill { background: var(--danger); }
+    .query-wrap { position: relative; }
+    .query-suggest { position: absolute; top: 40px; left: 0; right: 0; z-index: 20; background: var(--panel); border: 1px solid var(--line); border-radius: 8px; box-shadow: 0 8px 24px rgba(0,0,0,.12); max-height: 320px; overflow-y: auto; }
+    .query-suggest-item { display: flex; gap: 8px; align-items: baseline; width: 100%; border: 0; background: transparent; color: var(--ink); text-align: left; padding: 8px 12px; font-size: 13px; cursor: pointer; }
+    .query-suggest-item:hover, .query-suggest-item.active { background: var(--hover); }
+    .query-suggest-item .sid { font-weight: 800; }
+    .query-suggest-item .sind { color: var(--muted); font-size: 12px; margin-left: auto; }
+    .query-suggest-title { padding: 8px 12px 2px; color: var(--muted); font-size: 11px; font-weight: 700; }
     .digest-panel { margin-bottom: 12px; }
     .digest-group { margin-top: 10px; }
     .digest-group-title { font-size: 13px; font-weight: 800; color: var(--th-ink); margin-bottom: 6px; }
@@ -1004,7 +1011,10 @@ INDEX_HTML = """<!doctype html>
       </div>
       <div>
         <label for="query">搜尋</label>
-        <input id="query" placeholder="代號或名稱" />
+        <div class="query-wrap">
+          <input id="query" placeholder="代號或名稱" autocomplete="off" />
+          <div class="query-suggest" id="query-suggest" style="display:none;"></div>
+        </div>
       </div>
       <div>
         <label for="min-volume">最低成交量(張)</label>
@@ -3903,7 +3913,79 @@ INDEX_HTML = """<!doctype html>
       document.querySelectorAll(".tab").forEach(btn => btn.classList.toggle("active", btn.dataset.tab === tab));
       reload();
     }
+    function recentStocks() {
+      try {
+        const saved = JSON.parse(localStorage.getItem("stockChipRecent") || "[]");
+        return Array.isArray(saved) ? saved : [];
+      } catch (_err) { return []; }
+    }
+    function rememberRecent(stockId, name) {
+      const list = recentStocks().filter(item => item.i !== stockId);
+      list.unshift({i: stockId, n: name || ""});
+      localStorage.setItem("stockChipRecent", JSON.stringify(list.slice(0, 8)));
+    }
+    let suggestRows = null;
+    async function loadSuggestRows() {
+      if (suggestRows) return suggestRows;
+      try {
+        const data = STATIC_MODE ? await staticData("data/suggest.json") : await getJSON("/api/suggest");
+        suggestRows = data.rows || [];
+      } catch (_err) { suggestRows = []; }
+      return suggestRows;
+    }
+    function hideSuggest() {
+      const box = document.querySelector("#query-suggest");
+      if (box) box.style.display = "none";
+    }
+    function renderSuggest(items, title) {
+      const box = document.querySelector("#query-suggest");
+      if (!box) return;
+      if (!items.length) { hideSuggest(); return; }
+      box.innerHTML = (title ? `<div class="query-suggest-title">${esc(title)}</div>` : "") + items.map(item =>
+        `<button class="query-suggest-item" data-stock="${esc(item.i)}" data-name="${esc(item.n || "")}">
+          <span class="sid">${esc(item.i)}</span><span>${esc(item.n || "")}</span>
+          <span class="sind">${esc(item.d || "")}${item.m !== undefined && item.m !== null ? ` · 多因子 ${fmt(item.m)}` : ""}</span>
+        </button>`).join("");
+      box.style.display = "";
+      box.querySelectorAll(".query-suggest-item").forEach(btn => btn.addEventListener("mousedown", event => {
+        event.preventDefault();
+        hideSuggest();
+        openDetail(btn.dataset.stock);
+      }));
+    }
+    async function updateSuggest() {
+      const input = document.querySelector("#query");
+      const text = input.value.trim().toLowerCase();
+      if (!text) {
+        const recent = recentStocks();
+        renderSuggest(recent.map(item => ({i: item.i, n: item.n})), recent.length ? "最近看過" : "");
+        return;
+      }
+      const rows = await loadSuggestRows();
+      const matches = [];
+      for (const row of rows) {
+        if (String(row.i).toLowerCase().includes(text) || String(row.n || "").toLowerCase().includes(text)) {
+          matches.push(row);
+          if (matches.length >= 10) break;
+        }
+      }
+      renderSuggest(matches, "");
+    }
+    (function initSuggest() {
+      document.addEventListener("DOMContentLoaded", () => {
+        const input = document.querySelector("#query");
+        if (!input) return;
+        input.addEventListener("input", () => {
+          clearTimeout(window.__suggestTimer);
+          window.__suggestTimer = setTimeout(updateSuggest, 150);
+        });
+        input.addEventListener("focus", updateSuggest);
+        input.addEventListener("blur", () => setTimeout(hideSuggest, 150));
+        input.addEventListener("keydown", event => { if (event.key === "Escape") hideSuggest(); });
+      });
+    })();
     async function openDetail(stock) {
+      rememberRecent(String(stock), (suggestRows || []).find(row => row.i === String(stock))?.n || (state.rankingRows || []).find(row => String(row.stock_id) === String(stock))?.name || "");
       document.querySelector("#detail-stock").value = stock;
       if (state.tab !== "detail") state.previousTab = state.tab;
       state.tab = "detail";
@@ -6965,6 +7047,32 @@ def load_stock_financials(conn: sqlite3.Connection, stock_id: str, quarters: int
     ]
 
 
+_SUGGEST_CACHE: dict[str, object] = {"mtime": None, "rows": []}
+
+
+def suggest_rows(days: int = 20) -> list[dict[str, object]]:
+    """搜尋 typeahead 用的輕量索引（代號/名稱/產業/收盤/多因子分）。"""
+    path = REPORTS_DIR / f"scan_all_{days}d.csv"
+    if not path.exists():
+        return []
+    mtime = path.stat().st_mtime
+    if _SUGGEST_CACHE["mtime"] == mtime:
+        return _SUGGEST_CACHE["rows"]  # type: ignore[return-value]
+    rows = [
+        {
+            "i": row.get("stock_id"),
+            "n": row.get("name"),
+            "d": row.get("industry") or "",
+            "c": as_float_or_none(row.get("close")),
+            "m": as_float_or_none(row.get("multifactor_score")),
+        }
+        for row in read_csv(path)
+    ]
+    _SUGGEST_CACHE["mtime"] = mtime
+    _SUGGEST_CACHE["rows"] = rows
+    return rows
+
+
 def json_response(handler: BaseHTTPRequestHandler, payload: object, status: int = 200) -> None:
     body = json.dumps(payload, ensure_ascii=False, default=str).encode("utf-8")
     handler.send_response(status)
@@ -7140,6 +7248,9 @@ class GUIHandler(BaseHTTPRequestHandler):
             if parsed.path == "/api/digest":
                 days = int(params.get("days", ["20"])[0])
                 json_response(self, build_daily_digest(DB_PATH, REPORTS_DIR / f"scan_all_{days}d.csv", days))
+                return
+            if parsed.path == "/api/suggest":
+                json_response(self, {"rows": suggest_rows()})
                 return
             if parsed.path == "/api/health":
                 json_response(self, collect_health(DB_PATH))
