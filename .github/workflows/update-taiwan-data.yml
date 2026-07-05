@@ -169,6 +169,36 @@ jobs:
           done
           git push
 
+      - name: 確認 Pages 部署成功（失敗自動重新請求建置）
+        continue-on-error: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          check_build() {
+            curl -s -H "Authorization: Bearer $GITHUB_TOKEN" \
+              -H "Accept: application/vnd.github+json" \
+              "https://api.github.com/repos/$GITHUB_REPOSITORY/pages/builds/latest" \
+              | python3 -c "import json,sys; d=json.load(sys.stdin); print(d.get('status') or '')"
+          }
+          # 等最新建置離開排隊/建置中狀態（最多 ~4 分鐘）
+          for i in $(seq 1 24); do
+            status=$(check_build)
+            echo "pages build status: $status"
+            if [ "$status" = "built" ]; then
+              echo "Pages 部署成功"; exit 0
+            fi
+            if [ "$status" = "errored" ]; then
+              echo "Pages 部署失敗，重新請求建置"
+              curl -s -X POST -H "Authorization: Bearer $GITHUB_TOKEN" \
+                -H "Accept: application/vnd.github+json" \
+                "https://api.github.com/repos/$GITHUB_REPOSITORY/pages/builds" >/dev/null
+              sleep 30
+            else
+              sleep 10
+            fi
+          done
+          echo "警告：Pages 部署狀態未在時限內轉為 built（不中斷流程，網站可能暫時停留在前一版）"
+
       - name: 資料來源健康檢查（異常自動開 GitHub Issue）
         if: always()
         continue-on-error: true
