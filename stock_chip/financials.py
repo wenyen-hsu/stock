@@ -251,8 +251,10 @@ def refresh_financials(
         existing = existing_quarter_counts(conn)
         for year, season in targets:
             year_quarter = f"{year}Q{season}"
-            for typek, market in (("sii", "TWSE"), ("otc", "TPEX")):
-                if not force and existing.get((year_quarter, market), 0) >= 300:
+            for typek, market in (("sii", "TWSE"), ("otc", "TPEX"), ("rotc", "ESB")):
+                # 興櫃家數少，已入庫門檻降為 50
+                threshold = 50 if market == "ESB" else 300
+                if not force and existing.get((year_quarter, market), 0) >= threshold:
                     skipped += 1
                     continue
                 if fetched:
