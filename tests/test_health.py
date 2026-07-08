@@ -75,3 +75,28 @@ def test_trading_days_back():
         assert trading_days_back(conn, latest, 0) == latest
         one_back = trading_days_back(conn, latest, 1)
         assert one_back < latest
+
+
+def test_trickle_in_month_is_not_failure():
+    """公布期剛開始（少數公司提前公告新月份）不應觸發告警——2026-07-08 月營收誤報的回歸測試。"""
+    from stock_chip.health import check_source
+
+    tmp = Path(tempfile.mkdtemp()) / "trickle.sqlite"
+    with connect_db(tmp) as conn:
+        for i in range(150):
+            conn.execute(
+                "INSERT INTO monthly_revenues(revenue_month, stock_id, name, market, source, updated_at) VALUES ('2026-05',?,?,?,'finmind','now')",
+                (f"{1000 + i}", "x", "TWSE"),
+            )
+        for sid in ("1101", "2330", "3324"):
+            conn.execute(
+                "INSERT INTO monthly_revenues(revenue_month, stock_id, name, market, source, updated_at) VALUES ('2026-06',?,?,?,'finmind','now')",
+                (sid, "x", "TWSE"),
+            )
+        conn.commit()
+        result = check_source(conn, "monthly_revenues", "月營收", "monthly_revenues", "revenue_month", expected="2026-05", min_rows=100)
+        assert result["status"] == "ok"
+        assert "公布中" in result["note"]
+        # 期望月份真的落後（達門檻的只有 2026-05 但期望 2026-06）仍要 fail
+        behind = check_source(conn, "monthly_revenues", "月營收", "monthly_revenues", "revenue_month", expected="2026-06", min_rows=100)
+        assert behind["status"] == "fail"

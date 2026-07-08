@@ -64,22 +64,38 @@ def check_source(
         return {"key": key, "label": label, "latest": None, "expected": expected,
                 "rows_at_latest": 0,
                 "status": "warn" if warn_only else "fail", "note": "資料表為空"}
-    rows_at_latest = conn.execute(
-        f"SELECT COUNT(*) FROM {table} {date_filter_sql} {'AND' if date_filter_sql else 'WHERE'} {date_column} = ?",
-        (latest,),
-    ).fetchone()[0]
-    ok = latest >= expected and rows_at_latest >= min_rows
+    # 檢核基準：最近一個「列數達門檻」的日期。公布期剛開始時（如月營收，
+    # 少數公司提前公告新月份）最大日期只有涓滴資料，不應觸發告警。
+    healthy_row = conn.execute(
+        f"""
+        SELECT {date_column}, COUNT(*) FROM {table} {date_filter_sql}
+        GROUP BY {date_column}
+        HAVING COUNT(*) >= ?
+        ORDER BY {date_column} DESC
+        LIMIT 1
+        """,
+        (min_rows,),
+    ).fetchone()
+    healthy_latest = healthy_row[0] if healthy_row else None
+    rows_at_healthy = healthy_row[1] if healthy_row else 0
+    ok = healthy_latest is not None and healthy_latest >= expected
     note = ""
-    if latest < expected:
-        note = f"最新 {latest} 落後期望 {expected}"
-    elif rows_at_latest < min_rows:
-        note = f"最新日僅 {rows_at_latest} 列（門檻 {min_rows}）"
+    if healthy_latest is None:
+        note = f"沒有任何日期的列數達門檻 {min_rows}"
+    elif healthy_latest < expected:
+        note = f"達門檻的最新日 {healthy_latest} 落後期望 {expected}"
+    elif latest > healthy_latest:
+        rows_at_max = conn.execute(
+            f"SELECT COUNT(*) FROM {table} {date_filter_sql} {'AND' if date_filter_sql else 'WHERE'} {date_column} = ?",
+            (latest,),
+        ).fetchone()[0]
+        note = f"{latest} 公布中（{rows_at_max} 列），以 {healthy_latest} 檢核"
     return {
         "key": key,
         "label": label,
-        "latest": latest,
+        "latest": healthy_latest or latest,
         "expected": expected,
-        "rows_at_latest": rows_at_latest,
+        "rows_at_latest": rows_at_healthy,
         "status": "ok" if ok else ("warn" if warn_only else "fail"),
         "note": note,
     }
