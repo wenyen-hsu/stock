@@ -853,6 +853,12 @@
     }
     .score-fill { display: block; height: 100%; border-radius: 999px; background: var(--accent); }
     .score-fill.neg-fill { background: var(--danger); }
+    .pf-form { display: grid; grid-template-columns: repeat(8, 1fr); gap: 10px; align-items: end; }
+    .pf-form .pf-note-cell { grid-column: 1 / 7; }
+    .pf-form .pf-submit-cell { grid-column: 7 / 9; }
+    .pf-position-card { border: 1px solid var(--tint-up-line); background: var(--tint-up-bg); border-radius: 10px; padding: 10px 14px; margin-bottom: 12px; font-size: 13px; line-height: 1.7; }
+    .pf-position-card.loss { border-color: var(--tint-down-line); background: var(--tint-down-bg); }
+    @media (max-width: 1000px) { .pf-form { grid-template-columns: repeat(2, 1fr); } .pf-form .pf-note-cell, .pf-form .pf-submit-cell { grid-column: 1 / -1; } }
     .query-wrap { position: relative; }
     .query-suggest { position: absolute; top: 40px; left: 0; right: 0; z-index: 20; background: var(--panel); border: 1px solid var(--line); border-radius: 8px; box-shadow: 0 8px 24px rgba(0,0,0,.12); max-height: 320px; overflow-y: auto; }
     .query-suggest-item { display: flex; gap: 8px; align-items: baseline; width: 100%; border: 0; background: transparent; color: var(--ink); text-align: left; padding: 8px 12px; font-size: 13px; cursor: pointer; }
@@ -982,6 +988,7 @@
       <button class="tab active" data-tab="ranking">排行</button>
       <button class="tab" data-tab="trend">今日趨勢</button>
       <button class="tab" data-tab="watchlist">自選股</button>
+      <button class="tab" data-tab="portfolio">我的持股</button>
       <button class="tab" data-tab="sector">族群</button>
       <button class="tab" data-tab="detail">個股</button>
       <button class="tab" data-tab="market">大盤指數</button>
@@ -1005,6 +1012,56 @@
       <div class="table-wrap" id="ranking-table"></div>
     </section>
 
+    <section id="portfolio-view" style="display:none;">
+      <div class="panel" style="margin-bottom:12px;">
+        <div class="panel-head">
+          <div>
+            <div class="panel-title">我的持股</div>
+            <div class="muted">交易紀錄只存在這個瀏覽器（localStorage），不會上傳；換裝置請用匯出/匯入備份。損益以最近收盤價計算。</div>
+          </div>
+          <div class="panel-actions">
+            <button class="secondary" id="pf-export">匯出備份</button>
+            <button class="secondary" id="pf-import">匯入備份</button>
+            <input type="file" id="pf-import-file" accept="application/json" style="display:none;" />
+          </div>
+        </div>
+      </div>
+      <section class="metrics" id="pf-overview"></section>
+      <section class="panel" style="margin-top:12px;">
+        <div class="panel-head">
+          <div><div class="panel-title">新增交易</div><div class="muted" id="pf-form-note">手續費 0.1425%（可設折扣、最低 20 元）、賣出加證交稅 0.3%，皆可手動修改</div></div>
+          <div style="display:flex; gap:8px; align-items:center;">
+            <label style="margin:0;">手續費折扣</label>
+            <input id="pf-discount" type="number" min="0.1" max="1" step="0.05" style="width:80px;" />
+          </div>
+        </div>
+        <div class="pf-form">
+          <div><label>買/賣</label><select id="pf-side"><option value="buy">買進</option><option value="sell">賣出</option></select></div>
+          <div><label>代號</label><input id="pf-stock" placeholder="2330" autocomplete="off" /></div>
+          <div><label>名稱</label><input id="pf-name" disabled placeholder="自動帶入" /></div>
+          <div><label>日期</label><input id="pf-date" type="date" /></div>
+          <div><label>股數</label><input id="pf-shares" type="number" min="1" step="1" placeholder="1000 = 1張" /></div>
+          <div><label>成交價</label><input id="pf-price" type="number" min="0" step="0.01" /></div>
+          <div><label>手續費</label><input id="pf-fee" type="number" min="0" step="1" /></div>
+          <div><label>交易稅</label><input id="pf-tax" type="number" min="0" step="1" /></div>
+          <div class="pf-note-cell"><label>備註（買賣理由）</label><input id="pf-note" placeholder="例：分點連買+大戶增持，看好散熱族群" /></div>
+          <div class="pf-submit-cell"><button id="pf-add">新增交易</button></div>
+        </div>
+        <div class="muted" id="pf-form-error" style="margin-top:6px;"></div>
+      </section>
+      <section class="panel" style="margin-top:12px;">
+        <div class="panel-head">
+          <div><div class="panel-title">庫存</div><div class="muted" id="pf-holdings-note">點列可進個股頁（K 線圖會標出你的買賣點）</div></div>
+        </div>
+        <div class="table-wrap" id="pf-holdings"></div>
+      </section>
+      <section class="panel" style="margin-top:12px;">
+        <div class="panel-head">
+          <div><div class="panel-title">交易歷史</div><div class="muted">賣出列顯示該筆已實現損益（平均成本法）</div></div>
+        </div>
+        <div class="table-wrap" id="pf-trades"></div>
+      </section>
+    </section>
     <section id="trend-view" style="display:none;">
       <div class="panel" style="margin-bottom:12px;">
         <div class="panel-head">
@@ -1089,6 +1146,7 @@
         <a href="#sec-branch-daily">分點明細</a>
         <a href="#top" data-top="1">⬆ 頂部</a>
       </nav>
+      <div id="my-position"></div>
       <section class="metrics" id="detail-metrics"></section>
       <section class="panel" id="peer-panel" style="display:none;">
         <div class="panel-head">
@@ -2176,12 +2234,46 @@
         ctx.stroke();
       }
       maSeries.forEach(drawLine);
+      // 我的買賣點標記（僅本瀏覽器的交易紀錄）
+      let hasMyTrades = false;
+      const detailId = String(state.detail?.stock?.stock_id || "");
+      if (detailId) {
+        const myTrades = loadTradesLS().filter(trade => String(trade.stock_id) === detailId);
+        if (myTrades.length) {
+          const dateIndex = new Map(rows.map((row, idx) => [String(row.date), idx]));
+          myTrades.forEach(trade => {
+            const idx = dateIndex.get(String(trade.date));
+            if (idx === undefined) return;
+            hasMyTrades = true;
+            const cx = x(idx);
+            const py = y(Number(trade.price) || Number(rows[idx].close) || min);
+            ctx.beginPath();
+            if (trade.side === "buy") {
+              ctx.fillStyle = chartColors.up;
+              ctx.moveTo(cx, py + 6);
+              ctx.lineTo(cx - 6, py + 16);
+              ctx.lineTo(cx + 6, py + 16);
+            } else {
+              ctx.fillStyle = chartColors.down;
+              ctx.moveTo(cx, py - 6);
+              ctx.lineTo(cx - 6, py - 16);
+              ctx.lineTo(cx + 6, py - 16);
+            }
+            ctx.closePath();
+            ctx.fill();
+            ctx.strokeStyle = cssVar("--panel", "#fff");
+            ctx.lineWidth = 1;
+            ctx.stroke();
+          });
+        }
+      }
       const latest = rows[rows.length - 1];
       const candleLegend = [
         `<span class="legend-item"><span class="legend-swatch" style="background:${chartColors.up}"></span>上漲K</span>`,
         `<span class="legend-item"><span class="legend-swatch" style="background:${chartColors.down}"></span>下跌K</span>`,
         `<span class="legend-item">收盤 ${esc(fmt(latest?.close))}</span>`,
-        `<span class="legend-item">量 ${esc(fmt(latest?.volume_lot))} 張</span>`
+        `<span class="legend-item">量 ${esc(fmt(latest?.volume_lot))} 張</span>`,
+        ...(hasMyTrades ? [`<span class="legend-item"><span class="legend-swatch" style="background:${chartColors.up}"></span>▲我的買進</span>`, `<span class="legend-item"><span class="legend-swatch" style="background:${chartColors.down}"></span>▼我的賣出</span>`] : [])
       ].join("");
       legend.innerHTML = candleLegend + maSeries.map(s => {
         const value = latest?.[s.key];
@@ -3945,6 +4037,273 @@
       document.querySelectorAll(".tab").forEach(btn => btn.classList.toggle("active", btn.dataset.tab === tab));
       reload();
     }
+    // ===== 我的持股：localStorage 交易紀錄與平均成本引擎 =====
+    function loadTradesLS() {
+      try {
+        const saved = JSON.parse(localStorage.getItem("stockChipTrades") || "[]");
+        return Array.isArray(saved) ? saved : [];
+      } catch (_err) { return []; }
+    }
+    function saveTradesLS(trades) {
+      localStorage.setItem("stockChipTrades", JSON.stringify(trades));
+    }
+    function feeDiscount() {
+      const saved = Number(localStorage.getItem("stockChipFeeDiscount"));
+      return Number.isFinite(saved) && saved > 0 && saved <= 1 ? saved : 1.0;
+    }
+    function estFee(shares, price) {
+      const amount = Number(shares) * Number(price);
+      if (!Number.isFinite(amount) || amount <= 0) return 0;
+      return Math.max(20, Math.round(amount * 0.001425 * feeDiscount()));
+    }
+    function estTax(side, shares, price) {
+      if (side !== "sell") return 0;
+      const amount = Number(shares) * Number(price);
+      return Number.isFinite(amount) && amount > 0 ? Math.round(amount * 0.003) : 0;
+    }
+    function replayPortfolio(trades) {
+      // 依日期時序重放，平均成本法（成本含買進手續費）
+      const ordered = [...trades].sort((a, b) => (a.date === b.date ? (a.id || 0) - (b.id || 0) : a.date < b.date ? -1 : 1));
+      const holdings = {};
+      let realizedTotal = 0;
+      const realizedByTrade = {};
+      const warnings = [];
+      for (const trade of ordered) {
+        const sid = String(trade.stock_id);
+        const shares = Number(trade.shares) || 0;
+        const price = Number(trade.price) || 0;
+        const fee = Number(trade.fee) || 0;
+        const tax = Number(trade.tax) || 0;
+        const slot = holdings[sid] || (holdings[sid] = { shares: 0, cost: 0 });
+        if (trade.side === "buy") {
+          slot.shares += shares;
+          slot.cost += shares * price + fee;
+        } else {
+          const sellable = Math.min(shares, slot.shares);
+          if (sellable < shares) warnings.push(`${trade.date} ${sid} 賣出 ${shares} 股超過庫存，僅結算 ${sellable} 股`);
+          if (sellable > 0 && slot.shares > 0) {
+            const avg = slot.cost / slot.shares;
+            const proceeds = sellable * price - fee - tax;
+            const pnl = proceeds - avg * sellable;
+            realizedTotal += pnl;
+            realizedByTrade[trade.id] = pnl;
+            slot.cost -= avg * sellable;
+            slot.shares -= sellable;
+          }
+        }
+      }
+      for (const sid of Object.keys(holdings)) {
+        if (holdings[sid].shares <= 0) delete holdings[sid];
+      }
+      return { holdings, realizedTotal, realizedByTrade, warnings };
+    }
+    async function priceLookup() {
+      const rows = await loadSuggestRows();
+      const map = {};
+      for (const row of rows) map[String(row.i)] = row;
+      return map;
+    }
+    async function loadPortfolio() {
+      const trades = loadTradesLS();
+      const info = await priceLookup();
+      const { holdings, realizedTotal, realizedByTrade, warnings } = replayPortfolio(trades);
+      // 總覽
+      let totalCost = 0, totalValue = 0;
+      const holdingRows = Object.entries(holdings).map(([sid, slot]) => {
+        const meta = info[sid] || {};
+        const close = Number(meta.c);
+        const avg = slot.shares > 0 ? slot.cost / slot.shares : 0;
+        const value = Number.isFinite(close) ? close * slot.shares : null;
+        totalCost += slot.cost;
+        if (value !== null) totalValue += value;
+        const pnl = value !== null ? value - slot.cost : null;
+        return {
+          stock_id: sid,
+          name: meta.n || "",
+          shares: slot.shares,
+          avg_cost: Math.round(avg * 100) / 100,
+          close: Number.isFinite(close) ? close : null,
+          value: value !== null ? Math.round(value) : null,
+          pnl: pnl !== null ? Math.round(pnl) : null,
+          pnl_pct: pnl !== null && slot.cost > 0 ? Math.round(pnl / slot.cost * 10000) / 100 : null,
+          multifactor: meta.m,
+        };
+      }).sort((a, b) => (b.value || 0) - (a.value || 0));
+      const totalPnl = totalValue - totalCost;
+      const overview = [
+        {label: "總市值", value: fmt(Math.round(totalValue))},
+        {label: "總成本", value: fmt(Math.round(totalCost))},
+        {label: "未實現損益", value: `<span class="${cls(totalPnl)}">${fmt(Math.round(totalPnl))}（${totalCost > 0 ? fmt(Math.round(totalPnl / totalCost * 10000) / 100) : 0}%）</span>`, html: true},
+        {label: "已實現損益（累計）", value: `<span class="${cls(realizedTotal)}">${fmt(Math.round(realizedTotal))}</span>`, html: true},
+        {label: "持股檔數", value: String(holdingRows.length)},
+      ];
+      document.querySelector("#pf-overview").innerHTML = overview.map(item =>
+        `<div class="metric"><div class="label">${item.label}</div><div class="value">${item.html ? item.value : esc(item.value)}</div></div>`
+      ).join("");
+      // 庫存表
+      if (!holdingRows.length) {
+        document.querySelector("#pf-holdings").innerHTML = `<div class="empty">尚無持股。在上方新增第一筆買進交易即可開始。</div>`;
+      } else {
+        renderTable(document.querySelector("#pf-holdings"), holdingRows, [
+          {key:"stock_id", label:"代號", sortType:"text", format: v => v},
+          {key:"name", label:"名稱"},
+          {key:"shares", label:"股數"},
+          {key:"avg_cost", label:"平均成本"},
+          {key:"close", label:"最近收盤"},
+          {key:"value", label:"市值"},
+          {key:"pnl", label:"未實現損益", signed:true},
+          {key:"pnl_pct", label:"報酬率%", signed:true},
+          {key:"multifactor", label:"多因子分"}
+        ], { rowId: row => row.stock_id, onClick: stock => openDetail(stock) });
+      }
+      // 交易歷史（新到舊）
+      const tradeRows = [...trades].sort((a, b) => (a.date === b.date ? (b.id || 0) - (a.id || 0) : a.date < b.date ? 1 : -1)).map(trade => ({
+        ...trade,
+        side_label: trade.side === "buy" ? "買進" : "賣出",
+        realized: trade.side === "sell" && realizedByTrade[trade.id] !== undefined ? Math.round(realizedByTrade[trade.id]) : null,
+      }));
+      if (!tradeRows.length) {
+        document.querySelector("#pf-trades").innerHTML = `<div class="empty">尚無交易紀錄。</div>`;
+      } else {
+        const table = document.querySelector("#pf-trades");
+        table.innerHTML = `<table><thead><tr>
+          <th>日期</th><th>方向</th><th>代號</th><th>股數</th><th>成交價</th><th>手續費</th><th>交易稅</th><th>已實現損益</th><th>備註</th><th></th>
+        </tr></thead><tbody>${tradeRows.map(trade => `<tr>
+          <td>${esc(trade.date)}</td>
+          <td class="${trade.side === "buy" ? "pos" : "neg"}">${trade.side_label}</td>
+          <td style="text-align:left;">${esc(trade.stock_id)}</td>
+          <td>${fmt(trade.shares)}</td>
+          <td>${fmt(trade.price)}</td>
+          <td>${fmt(trade.fee)}</td>
+          <td>${fmt(trade.tax)}</td>
+          <td class="${trade.realized !== null ? cls(trade.realized) : ""}">${trade.realized !== null ? fmt(trade.realized) : ""}</td>
+          <td style="text-align:left; white-space:normal; max-width:260px;">${esc(trade.note || "")}</td>
+          <td><button class="secondary pf-del" data-id="${esc(trade.id)}" style="height:26px; padding:0 10px; font-size:12px;">刪除</button></td>
+        </tr>`).join("")}</tbody></table>`;
+        table.querySelectorAll(".pf-del").forEach(btn => btn.addEventListener("click", () => {
+          if (!confirm("刪除這筆交易？")) return;
+          saveTradesLS(loadTradesLS().filter(trade => String(trade.id) !== String(btn.dataset.id)));
+          loadPortfolio();
+        }));
+      }
+      const note = document.querySelector("#pf-holdings-note");
+      if (note) note.textContent = warnings.length ? `⚠ ${warnings.join("；")}` : "點列可進個股頁（K 線圖會標出你的買賣點）";
+    }
+    function renderMyPosition(stockId, close) {
+      const target = document.querySelector("#my-position");
+      if (!target) return;
+      const trades = loadTradesLS().filter(trade => String(trade.stock_id) === String(stockId));
+      if (!trades.length) { target.innerHTML = ""; return; }
+      const { holdings, realizedByTrade } = replayPortfolio(trades);
+      const slot = holdings[String(stockId)];
+      const realized = trades.filter(t => t.side === "sell").reduce((sum, t) => sum + (realizedByTrade[t.id] || 0), 0);
+      if (!slot) {
+        target.innerHTML = `<div class="pf-position-card ${realized < 0 ? "loss" : ""}">📒 這檔已無庫存；歷史交易 ${trades.length} 筆，已實現損益 <strong class="${cls(realized)}">${fmt(Math.round(realized))}</strong>。K 線圖上有你的買賣點標記。</div>`;
+        return;
+      }
+      const avg = slot.cost / slot.shares;
+      const price = Number(close);
+      const value = Number.isFinite(price) ? price * slot.shares : null;
+      const pnl = value !== null ? value - slot.cost : null;
+      const pct = pnl !== null && slot.cost > 0 ? pnl / slot.cost * 100 : null;
+      target.innerHTML = `<div class="pf-position-card ${pnl !== null && pnl < 0 ? "loss" : ""}">
+        📒 <strong>我的持股</strong>：${fmt(slot.shares)} 股（均價成本 ${fmt(Math.round(avg * 100) / 100)}）
+        ${value !== null ? `｜市值 ${fmt(Math.round(value))}｜未實現 <strong class="${cls(pnl)}">${fmt(Math.round(pnl))}（${fmt(Math.round(pct * 100) / 100)}%）</strong>` : ""}
+        ${realized ? `｜此檔已實現 <span class="${cls(realized)}">${fmt(Math.round(realized))}</span>` : ""}
+        ｜K 線圖上 ▲▼ 為你的買賣點
+      </div>`;
+    }
+    function pfRecalcFees() {
+      const side = document.querySelector("#pf-side").value;
+      const shares = Number(document.querySelector("#pf-shares").value);
+      const price = Number(document.querySelector("#pf-price").value);
+      document.querySelector("#pf-fee").value = estFee(shares, price) || "";
+      document.querySelector("#pf-tax").value = estTax(side, shares, price) || (side === "sell" ? 0 : "");
+    }
+    async function pfLookupName() {
+      const sid = document.querySelector("#pf-stock").value.trim();
+      if (!sid) return;
+      const info = await priceLookup();
+      const meta = info[sid];
+      document.querySelector("#pf-name").value = meta ? meta.n : "查無此代號";
+      if (meta && meta.c && !document.querySelector("#pf-price").value) {
+        document.querySelector("#pf-price").value = meta.c;
+        pfRecalcFees();
+      }
+    }
+    function initPortfolioForm() {
+      const dateInput = document.querySelector("#pf-date");
+      if (dateInput && !dateInput.value) dateInput.value = new Date().toISOString().slice(0, 10);
+      const discount = document.querySelector("#pf-discount");
+      if (discount) {
+        discount.value = feeDiscount();
+        discount.addEventListener("change", () => {
+          const v = Number(discount.value);
+          if (Number.isFinite(v) && v > 0 && v <= 1) localStorage.setItem("stockChipFeeDiscount", String(v));
+          pfRecalcFees();
+        });
+      }
+      ["pf-shares", "pf-price"].forEach(id => document.querySelector(`#${id}`)?.addEventListener("input", pfRecalcFees));
+      document.querySelector("#pf-side")?.addEventListener("change", pfRecalcFees);
+      document.querySelector("#pf-stock")?.addEventListener("blur", pfLookupName);
+      document.querySelector("#pf-add")?.addEventListener("click", async () => {
+        const error = document.querySelector("#pf-form-error");
+        error.textContent = "";
+        const sid = document.querySelector("#pf-stock").value.trim();
+        const date = document.querySelector("#pf-date").value;
+        const shares = Number(document.querySelector("#pf-shares").value);
+        const price = Number(document.querySelector("#pf-price").value);
+        const info = await priceLookup();
+        if (!info[sid]) { error.textContent = "代號不存在，請確認"; return; }
+        if (!date) { error.textContent = "請選日期"; return; }
+        if (!Number.isFinite(shares) || shares <= 0) { error.textContent = "股數需為正整數（1 張 = 1000 股）"; return; }
+        if (!Number.isFinite(price) || price <= 0) { error.textContent = "成交價需大於 0"; return; }
+        const trade = {
+          id: Date.now(),
+          date,
+          stock_id: sid,
+          side: document.querySelector("#pf-side").value,
+          shares: Math.round(shares),
+          price,
+          fee: Number(document.querySelector("#pf-fee").value) || 0,
+          tax: Number(document.querySelector("#pf-tax").value) || 0,
+          note: document.querySelector("#pf-note").value.trim(),
+        };
+        saveTradesLS([...loadTradesLS(), trade]);
+        ["pf-shares", "pf-price", "pf-fee", "pf-tax", "pf-note"].forEach(id => { document.querySelector(`#${id}`).value = ""; });
+        loadPortfolio();
+      });
+      document.querySelector("#pf-export")?.addEventListener("click", () => {
+        const blob = new Blob([JSON.stringify({trades: loadTradesLS(), fee_discount: feeDiscount()}, null, 2)], {type: "application/json"});
+        const link = document.createElement("a");
+        link.href = URL.createObjectURL(blob);
+        link.download = `stock-portfolio-${new Date().toISOString().slice(0, 10)}.json`;
+        link.click();
+        URL.revokeObjectURL(link.href);
+      });
+      document.querySelector("#pf-import")?.addEventListener("click", () => document.querySelector("#pf-import-file").click());
+      document.querySelector("#pf-import-file")?.addEventListener("change", event => {
+        const file = event.target.files?.[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = () => {
+          try {
+            const data = JSON.parse(reader.result);
+            const trades = Array.isArray(data) ? data : data.trades;
+            if (!Array.isArray(trades)) throw new Error("格式不符");
+            if (!confirm(`匯入 ${trades.length} 筆交易，將取代目前的紀錄。確定？`)) return;
+            saveTradesLS(trades);
+            if (data.fee_discount) localStorage.setItem("stockChipFeeDiscount", String(data.fee_discount));
+            loadPortfolio();
+          } catch (err) {
+            document.querySelector("#pf-form-error").textContent = `匯入失敗：${err.message}`;
+          }
+        };
+        reader.readAsText(file);
+        event.target.value = "";
+      });
+    }
+    document.addEventListener("DOMContentLoaded", initPortfolioForm);
     function recentStocks() {
       try {
         const saved = JSON.parse(localStorage.getItem("stockChipRecent") || "[]");
@@ -4067,6 +4426,7 @@
       ]);
       renderDataQuality(data);
       renderSelectionAssist(data.selection);
+      renderMyPosition(data.stock.stock_id, data.stock.close);
       renderPriceChart();
       renderRevenueChart();
       renderMarginChart();
@@ -4206,6 +4566,7 @@
       document.querySelector(".toolbar").style.display = showTwStockOverview ? "" : "none";
       document.querySelector("#metrics").style.display = showTwStockOverview ? "" : "none";
       document.querySelector("#ranking-view").style.display = state.tab === "ranking" || state.tab === "watchlist" ? "" : "none";
+      document.querySelector("#portfolio-view").style.display = state.tab === "portfolio" ? "" : "none";
       document.querySelector("#trend-view").style.display = state.tab === "trend" ? "" : "none";
       document.querySelector("#sector-view").style.display = state.tab === "sector" ? "" : "none";
       document.querySelector("#detail-view").style.display = state.tab === "detail" ? "" : "none";
@@ -4216,6 +4577,7 @@
       document.querySelector("#coverage-view").style.display = state.tab === "coverage" ? "" : "none";
       if (state.tab === "ranking") await loadRanking(false);
       if (state.tab === "watchlist") await loadRanking(true);
+      if (state.tab === "portfolio") await loadPortfolio();
       if (state.tab === "trend") await loadTrend();
       if (state.tab === "sector") await loadSector();
       if (state.tab === "detail") await loadDetail();
