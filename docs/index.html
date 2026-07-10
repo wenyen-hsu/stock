@@ -1017,7 +1017,7 @@
         <div class="panel-head">
           <div>
             <div class="panel-title">我的持股</div>
-            <div class="muted">交易紀錄只存在這個瀏覽器（localStorage），不會上傳；換裝置請用匯出/匯入備份。損益以最近收盤價計算。</div>
+            <div class="muted" id="pf-storage-note">交易紀錄存在這個瀏覽器；設定雲端同步後會自動備份到你的私人 GitHub repo，跨裝置共用。損益以最近收盤價計算。</div>
           </div>
           <div class="panel-actions">
             <button class="secondary" id="pf-export">匯出備份</button>
@@ -1026,6 +1026,23 @@
           </div>
         </div>
       </div>
+      <section class="panel" style="margin-bottom:12px;">
+        <div class="panel-head" style="cursor:pointer;" id="pf-sync-toggle">
+          <div><div class="panel-title">☁ 雲端同步 <span id="pf-sync-status" class="muted" style="font-weight:normal; font-size:12px;"></span></div>
+          <div class="muted">交易紀錄存到你自己的私人 GitHub repo（別人看不到、改不了）；每台裝置只需設定一次</div></div>
+          <button class="secondary" id="pf-sync-expand">設定</button>
+        </div>
+        <div id="pf-sync-form" style="display:none; padding-top:4px;">
+          <div class="pf-form" style="grid-template-columns: 2fr 3fr auto auto;">
+            <div><label>私人 repo（owner/名稱）</label><input id="pf-sync-repo" placeholder="wenyen-hsu/stock-portfolio" autocomplete="off" /></div>
+            <div><label>Fine-grained token（只需 Contents 讀寫權限）</label><input id="pf-sync-token" type="password" placeholder="github_pat_..." autocomplete="off" /></div>
+            <div><button id="pf-sync-save">啟用同步</button></div>
+            <div><button class="secondary" id="pf-sync-off">停用</button></div>
+          </div>
+          <div class="muted" style="margin-top:6px;">Token 只存在這個瀏覽器（localStorage），不會出現在任何公開位置。建議用只授權單一私人 repo 的 fine-grained token。</div>
+          <div class="muted" id="pf-sync-error" style="margin-top:4px;"></div>
+        </div>
+      </section>
       <section class="metrics" id="pf-overview"></section>
       <section class="panel" style="margin-top:12px;">
         <div class="panel-head">
@@ -4097,6 +4114,132 @@
       }
       return { holdings, realizedTotal, realizedByTrade, warnings };
     }
+    // ===== 雲端同步：私人 GitHub repo 的 trades.json（Contents API） =====
+    function syncConfig() {
+      return {
+        repo: localStorage.getItem("stockChipSyncRepo") || "",
+        token: localStorage.getItem("stockChipSyncToken") || "",
+      };
+    }
+    function syncEnabled() {
+      const cfg = syncConfig();
+      return Boolean(cfg.repo && cfg.token);
+    }
+    function loadTombstones() {
+      try {
+        const saved = JSON.parse(localStorage.getItem("stockChipTradeTombstones") || "[]");
+        return Array.isArray(saved) ? saved : [];
+      } catch (_err) { return []; }
+    }
+    function loadSyncBase() {
+      try {
+        const saved = JSON.parse(localStorage.getItem("stockChipSyncBase") || "[]");
+        return Array.isArray(saved) ? saved : [];
+      } catch (_err) { return []; }
+    }
+    function b64EncodeUtf8(text) {
+      const bytes = new TextEncoder().encode(text);
+      let bin = "";
+      for (let i = 0; i < bytes.length; i += 8192) bin += String.fromCharCode(...bytes.subarray(i, i + 8192));
+      return btoa(bin);
+    }
+    function b64DecodeUtf8(b64) {
+      const bin = atob(b64.replace(/\s/g, ""));
+      return new TextDecoder().decode(Uint8Array.from(bin, ch => ch.charCodeAt(0)));
+    }
+    async function ghRequest(method, body) {
+      const cfg = syncConfig();
+      const response = await fetch(`https://api.github.com/repos/${cfg.repo}/contents/trades.json`, {
+        method,
+        headers: {
+          "Authorization": `Bearer ${cfg.token}`,
+          "Accept": "application/vnd.github+json",
+          "X-GitHub-Api-Version": "2022-11-28",
+        },
+        body: body ? JSON.stringify(body) : undefined,
+      });
+      if (method === "GET" && response.status === 404) return { status: 404, data: null };
+      if (!response.ok) {
+        const detail = await response.json().catch(() => ({}));
+        const err = new Error(`GitHub API ${response.status}：${detail.message || "未知錯誤"}`);
+        err.status = response.status;
+        throw err;
+      }
+      return { status: response.status, data: await response.json() };
+    }
+    async function syncPull() {
+      const result = await ghRequest("GET");
+      if (result.status === 404 || !result.data) return { sha: null, payload: null };
+      let payload = null;
+      try { payload = JSON.parse(b64DecodeUtf8(result.data.content || "")); } catch (_err) { payload = null; }
+      return { sha: result.data.sha, payload };
+    }
+    async function syncPush(payload, sha) {
+      const body = {
+        message: `更新交易紀錄（${payload.trades.length} 筆）`,
+        content: b64EncodeUtf8(JSON.stringify(payload, null, 2)),
+      };
+      if (sha) body.sha = sha;
+      const result = await ghRequest("PUT", body);
+      return result.data.content.sha;
+    }
+    function mergeTrades(remoteTrades, localTrades, baseIds, tombstones) {
+      // 三方合併：遠端 ∪ 本機新增（不在 base 者）− 本機刪除墓碑。
+      // 本機有、base 有、遠端沒有 → 別台裝置刪的，不復活。
+      const dead = new Set(tombstones.map(String));
+      const base = new Set(baseIds.map(String));
+      const byId = new Map();
+      for (const trade of (remoteTrades || [])) {
+        if (!dead.has(String(trade.id))) byId.set(String(trade.id), trade);
+      }
+      for (const trade of (localTrades || [])) {
+        const key = String(trade.id);
+        if (!dead.has(key) && !base.has(key) && !byId.has(key)) byId.set(key, trade);
+      }
+      return [...byId.values()].sort((a, b) => (a.date === b.date ? (a.id || 0) - (b.id || 0) : a.date < b.date ? -1 : 1));
+    }
+    function setSyncStatus(text, isError) {
+      const el = document.querySelector("#pf-sync-status");
+      if (el) {
+        el.textContent = text;
+        el.style.color = isError ? "var(--down)" : "";
+      }
+    }
+    async function syncNow() {
+      if (!syncEnabled()) return false;
+      setSyncStatus("同步中…", false);
+      try {
+        const { sha, payload } = await syncPull();
+        const remoteTrades = payload?.trades || [];
+        const merged = mergeTrades(remoteTrades, loadTradesLS(), loadSyncBase(), loadTombstones());
+        saveTradesLS(merged);
+        const remoteKey = JSON.stringify(remoteTrades.map(t => t.id).sort());
+        const mergedKey = JSON.stringify(merged.map(t => t.id).sort());
+        if (remoteKey !== mergedKey || !sha) {
+          try {
+            await syncPush({ version: 1, fee_discount: feeDiscount(), trades: merged }, sha);
+          } catch (err) {
+            if (err.status === 409 || err.status === 422) {
+              // sha 衝突：重拉重合併再推一次
+              const retry = await syncPull();
+              const remerged = mergeTrades(retry.payload?.trades || [], merged, loadSyncBase(), loadTombstones());
+              saveTradesLS(remerged);
+              await syncPush({ version: 1, fee_discount: feeDiscount(), trades: remerged }, retry.sha);
+            } else { throw err; }
+          }
+        } else if (payload && payload.fee_discount && !localStorage.getItem("stockChipFeeDiscount")) {
+          localStorage.setItem("stockChipFeeDiscount", String(payload.fee_discount));
+        }
+        localStorage.setItem("stockChipSyncBase", JSON.stringify(loadTradesLS().map(t => t.id)));
+        localStorage.setItem("stockChipTradeTombstones", "[]");
+        const now = new Date();
+        setSyncStatus(`✓ 已同步 ${String(now.getHours()).padStart(2, "0")}:${String(now.getMinutes()).padStart(2, "0")}`, false);
+        return true;
+      } catch (err) {
+        setSyncStatus(`⚠ 未同步：${err.message}`, true);
+        return false;
+      }
+    }
     async function priceLookup() {
       const rows = await loadSuggestRows();
       const map = {};
@@ -4104,6 +4247,8 @@
       return map;
     }
     async function loadPortfolio() {
+      if (syncEnabled()) await syncNow();
+      else setSyncStatus("純本機模式", false);
       const trades = loadTradesLS();
       const info = await priceLookup();
       const { holdings, realizedTotal, realizedByTrade, warnings } = replayPortfolio(trades);
@@ -4183,6 +4328,9 @@
         table.querySelectorAll(".pf-del").forEach(btn => btn.addEventListener("click", () => {
           if (!confirm("刪除這筆交易？")) return;
           saveTradesLS(loadTradesLS().filter(trade => String(trade.id) !== String(btn.dataset.id)));
+          if (syncEnabled()) {
+            localStorage.setItem("stockChipTradeTombstones", JSON.stringify([...loadTombstones(), btn.dataset.id]));
+          }
           loadPortfolio();
         }));
       }
@@ -4303,7 +4451,47 @@
         event.target.value = "";
       });
     }
-    document.addEventListener("DOMContentLoaded", initPortfolioForm);
+    function initSyncForm() {
+      const form = document.querySelector("#pf-sync-form");
+      const expandBtn = document.querySelector("#pf-sync-expand");
+      const toggle = () => { form.style.display = form.style.display === "none" ? "" : "none"; };
+      expandBtn?.addEventListener("click", event => { event.stopPropagation(); toggle(); });
+      document.querySelector("#pf-sync-toggle")?.addEventListener("click", toggle);
+      const repoInput = document.querySelector("#pf-sync-repo");
+      const tokenInput = document.querySelector("#pf-sync-token");
+      const cfg = syncConfig();
+      if (repoInput) repoInput.value = cfg.repo;
+      if (tokenInput && cfg.token) tokenInput.placeholder = "已設定（重貼可更換）";
+      document.querySelector("#pf-sync-save")?.addEventListener("click", async () => {
+        const error = document.querySelector("#pf-sync-error");
+        error.textContent = "";
+        const repo = repoInput.value.trim();
+        const token = tokenInput.value.trim() || syncConfig().token;
+        if (!/^[\w.-]+\/[\w.-]+$/.test(repo)) { error.textContent = "repo 格式應為 owner/名稱，例如 wenyen-hsu/stock-portfolio"; return; }
+        if (!token) { error.textContent = "請貼上 token"; return; }
+        localStorage.setItem("stockChipSyncRepo", repo);
+        localStorage.setItem("stockChipSyncToken", token);
+        const ok = await syncNow();
+        if (ok) {
+          error.textContent = "✓ 連線成功，同步已啟用";
+          tokenInput.value = "";
+          tokenInput.placeholder = "已設定（重貼可更換）";
+          loadPortfolio();
+        } else {
+          error.textContent = "連線失敗：請確認 repo 名稱與 token 權限（Contents 讀寫）。設定已保留，可修正後重試。";
+        }
+      });
+      document.querySelector("#pf-sync-off")?.addEventListener("click", () => {
+        localStorage.removeItem("stockChipSyncRepo");
+        localStorage.removeItem("stockChipSyncToken");
+        localStorage.removeItem("stockChipSyncBase");
+        localStorage.setItem("stockChipTradeTombstones", "[]");
+        if (tokenInput) { tokenInput.value = ""; tokenInput.placeholder = "github_pat_..."; }
+        document.querySelector("#pf-sync-error").textContent = "已停用同步；交易紀錄仍保留在這個瀏覽器。";
+        setSyncStatus("純本機模式", false);
+      });
+    }
+    document.addEventListener("DOMContentLoaded", () => { initPortfolioForm(); initSyncForm(); });
     function recentStocks() {
       try {
         const saved = JSON.parse(localStorage.getItem("stockChipRecent") || "[]");
