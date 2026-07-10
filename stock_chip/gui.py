@@ -4214,6 +4214,7 @@ INDEX_HTML = """<!doctype html>
         headers: {
           "Authorization": `Bearer ${cfg.token}`,
           "Accept": "application/vnd.github+json",
+          "Content-Type": "application/json",
           "X-GitHub-Api-Version": "2022-11-28",
         },
         body: body ? JSON.stringify(body) : undefined,
@@ -4274,6 +4275,12 @@ INDEX_HTML = """<!doctype html>
       try {
         const { sha, payload } = await syncPull();
         const remoteTrades = payload?.trades || [];
+        // 本機未設定手續費折扣時先採納雲端值，之後的推送才不會用預設 1.0 蓋掉它
+        if (payload && payload.fee_discount && !localStorage.getItem("stockChipFeeDiscount")) {
+          localStorage.setItem("stockChipFeeDiscount", String(payload.fee_discount));
+          const discountInput = document.querySelector("#pf-discount");
+          if (discountInput) discountInput.value = feeDiscount();
+        }
         const localBefore = loadTradesLS();
         let merged = mergeTrades(remoteTrades, localBefore, loadSyncBase(), roundTombstones);
         saveTradesLS(merged);
@@ -4291,8 +4298,6 @@ INDEX_HTML = """<!doctype html>
               await syncPush({ version: 1, fee_discount: feeDiscount(), trades: merged }, retry.sha);
             } else { throw err; }
           }
-        } else if (payload && payload.fee_discount && !localStorage.getItem("stockChipFeeDiscount")) {
-          localStorage.setItem("stockChipFeeDiscount", String(payload.fee_discount));
         }
         // base 只記「這一輪實際推上雲端」的內容；推送期間新增的交易不在其中，
         // 下一輪會被視為本機新增再補推，不會被誤判成他機刪除而遺失
@@ -4554,7 +4559,7 @@ INDEX_HTML = """<!doctype html>
           error.textContent = "✓ 連線成功，同步已啟用";
           tokenInput.value = "";
           tokenInput.placeholder = "已設定（重貼可更換）";
-          loadPortfolio();
+          renderPortfolioView();
         } else {
           error.textContent = "連線失敗：請確認 repo 名稱與 token 權限（Contents 讀寫）。設定已保留，可修正後重試。";
         }
