@@ -4204,7 +4204,7 @@ INDEX_HTML = """<!doctype html>
       return btoa(bin);
     }
     function b64DecodeUtf8(b64) {
-      const bin = atob(b64.replace(/\s/g, ""));
+      const bin = atob(b64.replace(/\\s/g, ""));
       return new TextDecoder().decode(Uint8Array.from(bin, ch => ch.charCodeAt(0)));
     }
     async function ghRequest(method, body) {
@@ -4214,6 +4214,7 @@ INDEX_HTML = """<!doctype html>
         headers: {
           "Authorization": `Bearer ${cfg.token}`,
           "Accept": "application/vnd.github+json",
+          "Content-Type": "application/json",
           "X-GitHub-Api-Version": "2022-11-28",
         },
         body: body ? JSON.stringify(body) : undefined,
@@ -4266,12 +4267,22 @@ INDEX_HTML = """<!doctype html>
       }
     }
     async function syncNow() {
-      if (!syncEnabled()) return false;
+      if (!syncEnabled()) return { ok: false, changed: false };
       setSyncStatus("同步中…", false);
+      // 快照這一輪要處理的墓碑：推送期間若使用者又刪了交易，
+      // 新墓碑不在快照裡、結尾只清快照內的，不會被誤清而讓刪除復活
+      const roundTombstones = loadTombstones();
       try {
         const { sha, payload } = await syncPull();
         const remoteTrades = payload?.trades || [];
-        const merged = mergeTrades(remoteTrades, loadTradesLS(), loadSyncBase(), loadTombstones());
+        // 本機未設定手續費折扣時先採納雲端值，之後的推送才不會用預設 1.0 蓋掉它
+        if (payload && payload.fee_discount && !localStorage.getItem("stockChipFeeDiscount")) {
+          localStorage.setItem("stockChipFeeDiscount", String(payload.fee_discount));
+          const discountInput = document.querySelector("#pf-discount");
+          if (discountInput) discountInput.value = feeDiscount();
+        }
+        const localBefore = loadTradesLS();
+        let merged = mergeTrades(remoteTrades, localBefore, loadSyncBase(), roundTombstones);
         saveTradesLS(merged);
         const remoteKey = JSON.stringify(remoteTrades.map(t => t.id).sort());
         const mergedKey = JSON.stringify(merged.map(t => t.id).sort());
@@ -4282,22 +4293,23 @@ INDEX_HTML = """<!doctype html>
             if (err.status === 409 || err.status === 422) {
               // sha 衝突：重拉重合併再推一次
               const retry = await syncPull();
-              const remerged = mergeTrades(retry.payload?.trades || [], merged, loadSyncBase(), loadTombstones());
-              saveTradesLS(remerged);
-              await syncPush({ version: 1, fee_discount: feeDiscount(), trades: remerged }, retry.sha);
+              merged = mergeTrades(retry.payload?.trades || [], merged, loadSyncBase(), roundTombstones);
+              saveTradesLS(merged);
+              await syncPush({ version: 1, fee_discount: feeDiscount(), trades: merged }, retry.sha);
             } else { throw err; }
           }
-        } else if (payload && payload.fee_discount && !localStorage.getItem("stockChipFeeDiscount")) {
-          localStorage.setItem("stockChipFeeDiscount", String(payload.fee_discount));
         }
-        localStorage.setItem("stockChipSyncBase", JSON.stringify(loadTradesLS().map(t => t.id)));
-        localStorage.setItem("stockChipTradeTombstones", "[]");
+        // base 只記「這一輪實際推上雲端」的內容；推送期間新增的交易不在其中，
+        // 下一輪會被視為本機新增再補推，不會被誤判成他機刪除而遺失
+        localStorage.setItem("stockChipSyncBase", JSON.stringify(merged.map(t => t.id)));
+        const processed = new Set(roundTombstones.map(String));
+        localStorage.setItem("stockChipTradeTombstones", JSON.stringify(loadTombstones().filter(id => !processed.has(String(id)))));
         const now = new Date();
         setSyncStatus(`✓ 已同步 ${String(now.getHours()).padStart(2, "0")}:${String(now.getMinutes()).padStart(2, "0")}`, false);
-        return true;
+        return { ok: true, changed: JSON.stringify(localBefore.map(t => t.id).sort()) !== JSON.stringify(loadTradesLS().map(t => t.id).sort()) };
       } catch (err) {
         setSyncStatus(`⚠ 未同步：${err.message}`, true);
-        return false;
+        return { ok: false, changed: false };
       }
     }
     async function priceLookup() {
@@ -4306,9 +4318,20 @@ INDEX_HTML = """<!doctype html>
       for (const row of rows) map[String(row.i)] = row;
       return map;
     }
+    let pfSyncInFlight = false;
     async function loadPortfolio() {
-      if (syncEnabled()) await syncNow();
-      else setSyncStatus("純本機模式", false);
+      if (!syncEnabled()) {
+        setSyncStatus("純本機模式", false);
+      } else if (!pfSyncInFlight) {
+        pfSyncInFlight = true;
+        syncNow().then(result => {
+          pfSyncInFlight = false;
+          if (result.ok && result.changed && state.tab === "portfolio") renderPortfolioView();
+        }).catch(() => { pfSyncInFlight = false; });
+      }
+      await renderPortfolioView();
+    }
+    async function renderPortfolioView() {
       const trades = loadTradesLS();
       const info = await priceLookup();
       const { holdings, realizedTotal, realizedByTrade, warnings } = replayPortfolio(trades);
@@ -4527,16 +4550,16 @@ INDEX_HTML = """<!doctype html>
         error.textContent = "";
         const repo = repoInput.value.trim();
         const token = tokenInput.value.trim() || syncConfig().token;
-        if (!/^[\w.-]+\/[\w.-]+$/.test(repo)) { error.textContent = "repo 格式應為 owner/名稱，例如 wenyen-hsu/stock-portfolio"; return; }
+        if (!/^[\\w.-]+\\/[\\w.-]+$/.test(repo)) { error.textContent = "repo 格式應為 owner/名稱，例如 wenyen-hsu/stock-portfolio"; return; }
         if (!token) { error.textContent = "請貼上 token"; return; }
         localStorage.setItem("stockChipSyncRepo", repo);
         localStorage.setItem("stockChipSyncToken", token);
-        const ok = await syncNow();
-        if (ok) {
+        const result = await syncNow();
+        if (result.ok) {
           error.textContent = "✓ 連線成功，同步已啟用";
           tokenInput.value = "";
           tokenInput.placeholder = "已設定（重貼可更換）";
-          loadPortfolio();
+          renderPortfolioView();
         } else {
           error.textContent = "連線失敗：請確認 repo 名稱與 token 權限（Contents 讀寫）。設定已保留，可修正後重試。";
         }
