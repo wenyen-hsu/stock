@@ -1,6 +1,6 @@
 name: Probe ETF APIs
 
-# 拋棄式：探測 ETF PCF（成分股）端點，取得後移除本檔。
+# 拋棄式：從 ETFortune 頁面萃取實際 XHR 端點，取得後移除本檔。
 
 on:
   workflow_dispatch:
@@ -10,26 +10,25 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 6
     steps:
-      - name: Scan TWSE swagger for composition keywords
+      - name: Extract rwd paths from ETFortune pages
         run: |
-          curl -s -m 30 "https://openapi.twse.com.tw/v1/swagger.json" | python3 -c "
-          import json, sys
-          spec = json.load(sys.stdin)
-          for path, item in spec.get('paths', {}).items():
-              desc = json.dumps(item, ensure_ascii=False)
-              if any(k in desc for k in ('成分', '申購買回', 'PCF', '受益')) or any(k in path.lower() for k in ('pcf',)):
-                  print(path, '|', next(iter(item.values())).get('summary', ''))
-          " || true
-      - name: Probe PCF candidates
+          for page in \
+            "https://www.twse.com.tw/zh/ETFortune/" \
+            "https://www.twse.com.tw/zh/ETFortune/products" \
+            "https://www.twse.com.tw/zh/products/securities/etf/overview.html" \
+            ; do
+            echo "===== $page ====="
+            curl -s -m 30 "$page" -H "User-Agent: Mozilla/5.0" | grep -oE '(rwd|api)/[A-Za-z0-9/_-]+' | sort -u | head -30
+            echo
+          done
+      - name: Probe ETFortune-style endpoints
         run: |
           for url in \
-            "https://www.twse.com.tw/rwd/zh/ETF/etfPCF?stkNo=0050&response=json" \
-            "https://www.twse.com.tw/rwd/zh/ETF/list?response=json" \
-            "https://mis.twse.com.tw/stock/data/etf_basket_0050.txt" \
-            "https://www.yuantaetfs.com/api/Trade/pcf?fundid=0050" \
-            "https://www.twse.com.tw/rwd/zh/ETFReport/ETFRank?response=json" \
-            "https://openapi.twse.com.tw/v1/opendata/t187ap48_L" \
+            "https://www.twse.com.tw/rwd/zh/ETFortune/overview?response=json" \
+            "https://www.twse.com.tw/rwd/zh/ETFortune/products?response=json" \
+            "https://www.twse.com.tw/rwd/zh/ETFortune/productDetail?stkNo=0050&response=json" \
+            "https://www.twse.com.tw/rwd/zh/ETFortune/etfHoldings?stkNo=0050&response=json" \
             ; do
             echo "===== $url ====="
-            curl -s -m 25 "$url" -H "accept: application/json" -H "User-Agent: Mozilla/5.0" | head -c 900; echo; echo
+            curl -s -m 25 "$url" -H "accept: application/json" -H "User-Agent: Mozilla/5.0" | head -c 700; echo; echo
           done
