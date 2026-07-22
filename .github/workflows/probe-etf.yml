@@ -1,6 +1,6 @@
 name: Probe ETF APIs
 
-# 拋棄式：從 ETFortune 頁面萃取實際 XHR 端點，取得後移除本檔。
+# 拋棄式：實跑 etf 模組驗證抓取與名單，驗證後移除本檔。
 
 on:
   workflow_dispatch:
@@ -8,27 +8,27 @@ on:
 jobs:
   probe:
     runs-on: ubuntu-latest
-    timeout-minutes: 6
+    timeout-minutes: 8
     steps:
-      - name: Extract rwd paths from ETFortune pages
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+      - name: Run etf module against temp db
         run: |
-          for page in \
-            "https://www.twse.com.tw/zh/ETFortune/" \
-            "https://www.twse.com.tw/zh/ETFortune/products" \
-            "https://www.twse.com.tw/zh/products/securities/etf/overview.html" \
-            ; do
-            echo "===== $page ====="
-            curl -s -m 30 "$page" -H "User-Agent: Mozilla/5.0" | grep -oE '(rwd|api)/[A-Za-z0-9/_-]+' | sort -u | head -30
-            echo
-          done
-      - name: Probe ETFortune-style endpoints
-        run: |
-          for url in \
-            "https://www.twse.com.tw/rwd/zh/ETFortune/overview?response=json" \
-            "https://www.twse.com.tw/rwd/zh/ETFortune/products?response=json" \
-            "https://www.twse.com.tw/rwd/zh/ETFortune/productDetail?stkNo=0050&response=json" \
-            "https://www.twse.com.tw/rwd/zh/ETFortune/etfHoldings?stkNo=0050&response=json" \
-            ; do
-            echo "===== $url ====="
-            curl -s -m 25 "$url" -H "accept: application/json" -H "User-Agent: Mozilla/5.0" | head -c 700; echo; echo
-          done
+          python -m stock_chip.etf --db /tmp/probe.sqlite
+          python3 - <<'PYEOF'
+          import sqlite3, sys
+          sys.path.insert(0, ".")
+          from pathlib import Path
+          from stock_chip.etf import load_etf_flows
+          from stock_chip.official import connect_db
+          with connect_db(Path("/tmp/probe.sqlite")) as conn:
+              flows = load_etf_flows(conn)
+              print("state:", flows["state"], "| hot rows:", len(flows["rows"]))
+              for row in flows["rows"][:20]:
+                  print(f"{row['etf_id']:8s} {row['name']:14s} {row['category']:4s} AUM {row['aum'] or 0:>16,.0f} 單位數 {row['units'] or 0:>16,.0f}")
+              assert len(flows["rows"]) >= 10, "熱門名單過少"
+          PYEOF

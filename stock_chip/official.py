@@ -723,6 +723,34 @@ def init_schema(conn: sqlite3.Connection) -> None:
             PRIMARY KEY (ex_date, stock_id, source)
         );
 
+        CREATE TABLE IF NOT EXISTS etf_universe (
+            data_date TEXT NOT NULL,
+            etf_id TEXT NOT NULL,
+            name TEXT,
+            fund_type TEXT,
+            has_foreign INTEGER,
+            units REAL,
+            nav REAL,
+            aum REAL,
+            is_hot INTEGER DEFAULT 0,
+            updated_at TEXT NOT NULL,
+            PRIMARY KEY (data_date, etf_id)
+        );
+
+        CREATE TABLE IF NOT EXISTS etf_holdings (
+            data_date TEXT NOT NULL,
+            etf_id TEXT NOT NULL,
+            stock_id TEXT NOT NULL,
+            stock_name TEXT,
+            shares REAL,
+            weight_pct REAL,
+            updated_at TEXT NOT NULL,
+            PRIMARY KEY (data_date, etf_id, stock_id)
+        );
+
+        CREATE INDEX IF NOT EXISTS idx_etf_holdings_stock
+            ON etf_holdings(stock_id, data_date);
+
         CREATE INDEX IF NOT EXISTS idx_daily_prices_stock_date
             ON daily_prices(stock_id, date);
         CREATE INDEX IF NOT EXISTS idx_institutional_stock_date
