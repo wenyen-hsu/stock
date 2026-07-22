@@ -1974,6 +1974,9 @@ INDEX_HTML = """<!doctype html>
       if (parsed.pathname === "/api/digest") {
         return staticData(`data/digest_${days}d.json`);
       }
+      if (parsed.pathname === "/api/dividends") {
+        return staticData("data/dividends.json");
+      }
       if (parsed.pathname === "/api/trend") {
         return staticData(`data/trend_${days}d.json`);
       }
@@ -4115,6 +4118,19 @@ INDEX_HTML = """<!doctype html>
       reload();
     }
     // ===== 我的持股：localStorage 交易紀錄與平均成本引擎 =====
+    async function loadDividendMap() {
+      // {stock_id: [{ex_date, cash, stock}]}；載入失敗回空（純本機/舊資料相容）
+      if (state.dividendMap) return state.dividendMap;
+      const map = {};
+      try {
+        const payload = await getJSON("/api/dividends");
+        for (const event of (payload?.events || [])) {
+          (map[String(event.stock_id)] = map[String(event.stock_id)] || []).push(event);
+        }
+      } catch (_err) { /* 靜態資料尚未發布或後端無資料 */ }
+      state.dividendMap = map;
+      return map;
+    }
     function loadTradesLS() {
       try {
         const saved = JSON.parse(localStorage.getItem("stockChipTrades") || "[]");
@@ -4138,14 +4154,56 @@ INDEX_HTML = """<!doctype html>
       const amount = Number(shares) * Number(price);
       return Number.isFinite(amount) && amount > 0 ? Math.round(amount * 0.003) : 0;
     }
-    function replayPortfolio(trades) {
-      // 依日期時序重放，平均成本法（成本含買進手續費）
-      const ordered = [...trades].sort((a, b) => (a.date === b.date ? (a.id || 0) - (b.id || 0) : a.date < b.date ? -1 : 1));
+    function replayPortfolio(trades, dividendMap) {
+      // 依日期時序重放，平均成本法（成本含買進手續費）。
+      // dividendMap 提供時，持有期間跨越除息/除權日的部位：
+      //   配息 → 股利收入（成本不動，採含息損益呈現，避免成本轉負）
+      //   配股 → 股數增加、成本不變（均價自動攤薄）
+      const items = [...trades].map(trade => ({ kind: "trade", date: trade.date, trade }));
+      if (dividendMap) {
+        const today = new Date().toISOString().slice(0, 10);
+        const touched = new Set(trades.map(trade => String(trade.stock_id)));
+        for (const sid of touched) {
+          for (const event of (dividendMap[sid] || [])) {
+            if (event.ex_date <= today) items.push({ kind: "dividend", date: event.ex_date, sid, event });
+          }
+        }
+      }
+      // 同日排序：先除權息（除息日開盤前就生效）再交易
+      const ordered = items.sort((a, b) => {
+        if (a.date !== b.date) return a.date < b.date ? -1 : 1;
+        if (a.kind !== b.kind) return a.kind === "dividend" ? -1 : 1;
+        return (a.trade?.id || 0) - (b.trade?.id || 0);
+      });
       const holdings = {};
       let realizedTotal = 0;
+      let dividendIncome = 0;
+      const dividendByStock = {};
+      const dividendEventsApplied = [];
       const realizedByTrade = {};
       const warnings = [];
-      for (const trade of ordered) {
+      for (const item of ordered) {
+        if (item.kind === "dividend") {
+          const slot = holdings[item.sid];
+          if (!slot || slot.shares <= 0) continue;
+          const cash = Number(item.event.cash) || 0;
+          const ratio = Number(item.event.stock) || 0;
+          if (cash > 0) {
+            const amount = slot.shares * cash;
+            dividendIncome += amount;
+            dividendByStock[item.sid] = (dividendByStock[item.sid] || 0) + amount;
+            dividendEventsApplied.push({ date: item.date, stock_id: item.sid, type: "cash", per_share: cash, amount: Math.round(amount) });
+          }
+          if (ratio > 0) {
+            const bonus = Math.floor(slot.shares * ratio);
+            if (bonus > 0) {
+              slot.shares += bonus;
+              dividendEventsApplied.push({ date: item.date, stock_id: item.sid, type: "stock", per_share: ratio, amount: bonus });
+            }
+          }
+          continue;
+        }
+        const trade = item.trade;
         const sid = String(trade.stock_id);
         const shares = Number(trade.shares) || 0;
         const price = Number(trade.price) || 0;
@@ -4172,7 +4230,7 @@ INDEX_HTML = """<!doctype html>
       for (const sid of Object.keys(holdings)) {
         if (holdings[sid].shares <= 0) delete holdings[sid];
       }
-      return { holdings, realizedTotal, realizedByTrade, warnings };
+      return { holdings, realizedTotal, realizedByTrade, warnings, dividendIncome, dividendByStock, dividendEventsApplied };
     }
     // ===== 雲端同步：私人 GitHub repo 的 trades.json（Contents API） =====
     function syncConfig() {
@@ -4334,7 +4392,8 @@ INDEX_HTML = """<!doctype html>
     async function renderPortfolioView() {
       const trades = loadTradesLS();
       const info = await priceLookup();
-      const { holdings, realizedTotal, realizedByTrade, warnings } = replayPortfolio(trades);
+      const dividendMap = await loadDividendMap();
+      const { holdings, realizedTotal, realizedByTrade, warnings, dividendIncome, dividendByStock, dividendEventsApplied } = replayPortfolio(trades, dividendMap);
       // 總覽
       let totalCost = 0, totalValue = 0;
       const holdingRows = Object.entries(holdings).map(([sid, slot]) => {
@@ -4345,6 +4404,7 @@ INDEX_HTML = """<!doctype html>
         totalCost += slot.cost;
         if (value !== null) totalValue += value;
         const pnl = value !== null ? value - slot.cost : null;
+        const divIncome = Math.round(dividendByStock[sid] || 0);
         return {
           stock_id: sid,
           name: meta.n || "",
@@ -4353,15 +4413,19 @@ INDEX_HTML = """<!doctype html>
           close: Number.isFinite(close) ? close : null,
           value: value !== null ? Math.round(value) : null,
           pnl: pnl !== null ? Math.round(pnl) : null,
-          pnl_pct: pnl !== null && slot.cost > 0 ? Math.round(pnl / slot.cost * 10000) / 100 : null,
+          pnl_pct: pnl !== null && slot.cost > 0 ? Math.round((pnl + divIncome) / slot.cost * 10000) / 100 : null,
+          dividend: divIncome || null,
           multifactor: meta.m,
         };
       }).sort((a, b) => (b.value || 0) - (a.value || 0));
       const totalPnl = totalValue - totalCost;
+      const withDiv = totalPnl + (dividendIncome || 0);
       const overview = [
         {label: "總市值", value: fmt(Math.round(totalValue))},
         {label: "總成本", value: fmt(Math.round(totalCost))},
         {label: "未實現損益", value: `<span class="${cls(totalPnl)}">${fmt(Math.round(totalPnl))}（${totalCost > 0 ? fmt(Math.round(totalPnl / totalCost * 10000) / 100) : 0}%）</span>`, html: true},
+        {label: "累計股利", value: `<span class="${dividendIncome ? "pos" : ""}">${fmt(Math.round(dividendIncome || 0))}</span>`, html: true},
+        {label: "含息報酬率", value: `<span class="${cls(withDiv)}">${totalCost > 0 ? fmt(Math.round(withDiv / totalCost * 10000) / 100) : 0}%</span>`, html: true},
         {label: "已實現損益（累計）", value: `<span class="${cls(realizedTotal)}">${fmt(Math.round(realizedTotal))}</span>`, html: true},
         {label: "持股檔數", value: String(holdingRows.length)},
       ];
@@ -4380,7 +4444,8 @@ INDEX_HTML = """<!doctype html>
           {key:"close", label:"最近收盤"},
           {key:"value", label:"市值"},
           {key:"pnl", label:"未實現損益", signed:true},
-          {key:"pnl_pct", label:"報酬率%", signed:true},
+          {key:"dividend", label:"累計股利"},
+          {key:"pnl_pct", label:"含息報酬%", signed:true},
           {key:"multifactor", label:"多因子分"}
         ], { rowId: row => row.stock_id, onClick: stock => openDetail(stock) });
       }
@@ -4390,13 +4455,32 @@ INDEX_HTML = """<!doctype html>
         side_label: trade.side === "buy" ? "買進" : "賣出",
         realized: trade.side === "sell" && realizedByTrade[trade.id] !== undefined ? Math.round(realizedByTrade[trade.id]) : null,
       }));
+      const divRows = (dividendEventsApplied || []).map(event => ({
+        isDividend: true,
+        date: event.date,
+        stock_id: event.stock_id,
+        side_label: event.type === "cash" ? "除息" : "除權",
+        note: event.type === "cash"
+          ? `系統：每股配息 ${event.per_share} 元，入帳 ${fmt(event.amount)} 元`
+          : `系統：每股配 ${event.per_share} 股，庫存 +${fmt(event.amount)} 股`,
+        realized: event.type === "cash" ? event.amount : null,
+      }));
+      const historyRows = [...tradeRows, ...divRows].sort((a, b) => (a.date === b.date ? (a.isDividend ? -1 : 1) : a.date < b.date ? 1 : -1));
       if (!tradeRows.length) {
         document.querySelector("#pf-trades").innerHTML = `<div class="empty">尚無交易紀錄。</div>`;
       } else {
         const table = document.querySelector("#pf-trades");
         table.innerHTML = `<table><thead><tr>
-          <th>日期</th><th>方向</th><th>代號</th><th>股數</th><th>成交價</th><th>手續費</th><th>交易稅</th><th>已實現損益</th><th>備註</th><th></th>
-        </tr></thead><tbody>${tradeRows.map(trade => `<tr>
+          <th>日期</th><th>方向</th><th>代號</th><th>股數</th><th>成交價</th><th>手續費</th><th>交易稅</th><th>已實現/股利</th><th>備註</th><th></th>
+        </tr></thead><tbody>${historyRows.map(trade => trade.isDividend ? `<tr style="opacity:.75;">
+          <td>${esc(trade.date)}</td>
+          <td class="pos">${esc(trade.side_label)}</td>
+          <td style="text-align:left;">${esc(trade.stock_id)}</td>
+          <td></td><td></td><td></td><td></td>
+          <td class="pos">${trade.realized !== null ? fmt(trade.realized) : ""}</td>
+          <td style="text-align:left; white-space:normal; max-width:260px;" class="muted">${esc(trade.note)}</td>
+          <td></td>
+        </tr>` : `<tr>
           <td>${esc(trade.date)}</td>
           <td class="${trade.side === "buy" ? "pos" : "neg"}">${trade.side_label}</td>
           <td style="text-align:left;">${esc(trade.stock_id)}</td>
@@ -4420,12 +4504,14 @@ INDEX_HTML = """<!doctype html>
       const note = document.querySelector("#pf-holdings-note");
       if (note) note.textContent = warnings.length ? `⚠ ${warnings.join("；")}` : "點列可進個股頁（K 線圖會標出你的買賣點）";
     }
-    function renderMyPosition(stockId, close) {
+    async function renderMyPosition(stockId, close) {
       const target = document.querySelector("#my-position");
       if (!target) return;
       const trades = loadTradesLS().filter(trade => String(trade.stock_id) === String(stockId));
       if (!trades.length) { target.innerHTML = ""; return; }
-      const { holdings, realizedByTrade } = replayPortfolio(trades);
+      const dividendMap = await loadDividendMap();
+      const { holdings, realizedByTrade, dividendByStock } = replayPortfolio(trades, dividendMap);
+      const divIncome = Math.round(dividendByStock?.[String(stockId)] || 0);
       const slot = holdings[String(stockId)];
       const realized = trades.filter(t => t.side === "sell").reduce((sum, t) => sum + (realizedByTrade[t.id] || 0), 0);
       if (!slot) {
@@ -4436,11 +4522,12 @@ INDEX_HTML = """<!doctype html>
       const price = Number(close);
       const value = Number.isFinite(price) ? price * slot.shares : null;
       const pnl = value !== null ? value - slot.cost : null;
-      const pct = pnl !== null && slot.cost > 0 ? pnl / slot.cost * 100 : null;
+      const pct = pnl !== null && slot.cost > 0 ? (pnl + divIncome) / slot.cost * 100 : null;
       target.innerHTML = `<div class="pf-position-card ${pnl !== null && pnl < 0 ? "loss" : ""}">
         📒 <strong>我的持股</strong>：${fmt(slot.shares)} 股（均價成本 ${fmt(Math.round(avg * 100) / 100)}）
         ${value !== null ? `｜市值 ${fmt(Math.round(value))}｜未實現 <strong class="${cls(pnl)}">${fmt(Math.round(pnl))}（${fmt(Math.round(pct * 100) / 100)}%）</strong>` : ""}
         ${realized ? `｜此檔已實現 <span class="${cls(realized)}">${fmt(Math.round(realized))}</span>` : ""}
+        ${divIncome ? `｜累計股利 <span class="pos">${fmt(divIncome)}</span>（已計入報酬）` : ""}
         ｜K 線圖上 ▲▼ 為你的買賣點
       </div>`;
     }
