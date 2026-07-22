@@ -1,0 +1,32 @@
+name: Probe Dividend APIs
+
+# 拋棄式：探測 TWSE/TPEx 除權息 openapi 的實際欄位名，取得後即刪除本檔。
+
+on:
+  workflow_dispatch:
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Probe endpoints
+        run: |
+          for url in \
+            "https://openapi.twse.com.tw/v1/exchangeReport/TWT49U" \
+            "https://openapi.twse.com.tw/v1/opendata/t187ap45_L" \
+            "https://www.tpex.org.tw/openapi/v1/mopsfin_t187ap45_O" \
+            "https://www.tpex.org.tw/openapi/v1/exright_prepost" \
+            ; do
+            echo "===== $url ====="
+            curl -s -m 30 "$url" -H "accept: application/json" | python3 -c "
+          import json, sys
+          try:
+              data = json.load(sys.stdin)
+              print('rows:', len(data))
+              for row in data[:3]:
+                  print(json.dumps(row, ensure_ascii=False))
+          except Exception as exc:
+              print('FAIL:', exc)
+          " || true
+          done
