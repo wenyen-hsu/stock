@@ -10,58 +10,20 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
-      - name: List openapi catalogs for exright endpoints
-        run: |
-          echo "===== TWSE swagger paths (exright/divid/TWT4 相關) ====="
-          curl -s -m 30 "https://openapi.twse.com.tw/v1/swagger.json" | python3 -c "
-          import json, sys
-          try:
-              spec = json.load(sys.stdin)
-              for path, item in spec.get('paths', {}).items():
-                  desc = json.dumps(item, ensure_ascii=False)
-                  if any(k in path.lower() for k in ('exright', 'twt48', 'twt49', 'divid')) or any(k in desc for k in ('除權', '除息', '股利')):
-                      summary = next(iter(item.values())).get('summary', '')
-                      print(path, '|', summary)
-          except Exception as exc:
-              print('FAIL:', exc)
-          " || true
-          echo "===== TPEx swagger paths ====="
-          for spec_url in "https://www.tpex.org.tw/openapi/v1/swagger.json" "https://www.tpex.org.tw/openapi/swagger.json" "https://www.tpex.org.tw/openapi/openapi.json"; do
-            echo "--- $spec_url ---"
-            curl -s -m 30 "$spec_url" | python3 -c "
-          import json, sys
-          try:
-              spec = json.load(sys.stdin)
-              for path, item in spec.get('paths', {}).items():
-                  desc = json.dumps(item, ensure_ascii=False)
-                  if any(k in path.lower() for k in ('exright', 'divid')) or any(k in desc for k in ('除權', '除息', '股利')):
-                      summary = next(iter(item.values())).get('summary', '')
-                      print(path, '|', summary)
-          except Exception as exc:
-              print('FAIL:', exc)
-          " || true
-          done
-      - name: Probe candidate data endpoints
+      - name: Probe TPEx exright endpoints
         run: |
           for url in \
-            "https://www.twse.com.tw/rwd/zh/exRight/TWT49U?startDate=20260601&endDate=20260721&response=json" \
-            "https://openapi.twse.com.tw/v1/exchangeReport/TWT48U" \
+            "https://www.tpex.org.tw/openapi/v1/tpex_exright_daily" \
+            "https://www.tpex.org.tw/openapi/v1/tpex_exright_prepost" \
             ; do
             echo "===== $url ====="
             curl -s -m 30 "$url" -H "accept: application/json" | python3 -c "
           import json, sys
           try:
               data = json.load(sys.stdin)
-              if isinstance(data, dict):
-                  print('keys:', list(data.keys()))
-                  print('fields:', data.get('fields'))
-                  rows = data.get('data') or []
-                  for row in rows[:3]:
-                      print(json.dumps(row, ensure_ascii=False)[:400])
-              else:
-                  print('rows:', len(data))
-                  for row in data[:2]:
-                      print(json.dumps(row, ensure_ascii=False)[:500])
+              print('rows:', len(data))
+              for row in data[:3]:
+                  print(json.dumps(row, ensure_ascii=False)[:700])
           except Exception as exc:
               print('FAIL:', exc)
           " || true
