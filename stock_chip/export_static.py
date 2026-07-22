@@ -7,6 +7,7 @@ import time
 from pathlib import Path
 
 from stock_chip.branch import branch_coverage
+from stock_chip.dividends import load_dividend_events
 from stock_chip.gui import (
     DB_PATH,
     INDEX_HTML,
@@ -146,6 +147,7 @@ def export_static(out_dir: Path, days_values: list[int], include_all_details: bo
             )
         write_json(data_dir / "us_news.json", {"rows": load_cached_us_news(conn, limit=200)})
         write_json(data_dir / "mops_events.json", load_mops_events(conn, limit=10000))
+        write_json(data_dir / "dividends.json", load_dividend_events(conn, days=400))
         if ci_news_payload is None:
             ci_news_payload = {"rows": load_cached_us_news(conn, limit=200)}
         write_json(data_dir / "ci_us_news.json", ci_news_payload)

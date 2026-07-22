@@ -138,6 +138,8 @@ def collect_health(db_path: Path) -> dict[str, Any]:
                          expected=three_days_ago, warn_only=True),
             check_source(conn, "shareholding_dispersion", "TDCC 股權分散", "shareholding_dispersion", "data_date",
                          expected=two_weeks_ago, min_rows=10000),
+            check_source(conn, "dividend_events", "除權息事件", "dividend_events", "ex_date",
+                         expected=two_weeks_ago, warn_only=True),
             check_source(conn, "quarterly_financials", "季度財報", "quarterly_financials", "year_quarter",
                          expected=latest_published_quarter(), min_rows=300),
             check_source(conn, "ranking_snapshots", "排行快照", "ranking_snapshots", "snapshot_date",

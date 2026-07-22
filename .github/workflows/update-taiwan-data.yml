@@ -77,6 +77,10 @@ jobs:
         continue-on-error: true
         run: python -m stock_chip.mops --days 14
 
+      - name: 抓取除權息事件（TWSE TWT49U + TPEx prepost）
+        continue-on-error: true
+        run: python -m stock_chip.dividends --backfill-days 120
+
       - name: 更新 TDCC 股權分散表（每週資料，已入庫則跳過）
         continue-on-error: true
         run: python -m stock_chip.tdcc

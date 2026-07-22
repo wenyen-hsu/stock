@@ -710,6 +710,19 @@ def init_schema(conn: sqlite3.Connection) -> None:
             PRIMARY KEY (data_date, stock_id, level, source)
         );
 
+        CREATE TABLE IF NOT EXISTS dividend_events (
+            ex_date TEXT NOT NULL,
+            stock_id TEXT NOT NULL,
+            name TEXT,
+            market TEXT,
+            event_type TEXT,
+            cash_dividend REAL,
+            stock_dividend_per_share REAL,
+            source TEXT NOT NULL,
+            updated_at TEXT NOT NULL,
+            PRIMARY KEY (ex_date, stock_id, source)
+        );
+
         CREATE INDEX IF NOT EXISTS idx_daily_prices_stock_date
             ON daily_prices(stock_id, date);
         CREATE INDEX IF NOT EXISTS idx_institutional_stock_date

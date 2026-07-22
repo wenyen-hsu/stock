@@ -1,6 +1,6 @@
 name: Probe Dividend APIs
 
-# 拋棄式：探測 TWSE/TPEx 除權息 openapi 的實際欄位名，取得後即刪除本檔。
+# 拋棄式：實跑 dividends 模組驗證抓取與入庫，驗證後移除本檔。
 
 on:
   workflow_dispatch:
@@ -8,23 +8,30 @@ on:
 jobs:
   probe:
     runs-on: ubuntu-latest
-    timeout-minutes: 5
+    timeout-minutes: 8
     steps:
-      - name: Probe TPEx exright endpoints
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+      - name: Run dividends module against temp db
         run: |
-          for url in \
-            "https://www.tpex.org.tw/openapi/v1/tpex_exright_daily" \
-            "https://www.tpex.org.tw/openapi/v1/tpex_exright_prepost" \
-            ; do
-            echo "===== $url ====="
-            curl -s -m 30 "$url" -H "accept: application/json" | python3 -c "
-          import json, sys
-          try:
-              data = json.load(sys.stdin)
-              print('rows:', len(data))
-              for row in data[:3]:
-                  print(json.dumps(row, ensure_ascii=False)[:700])
-          except Exception as exc:
-              print('FAIL:', exc)
-          " || true
-          done
+          python -m stock_chip.dividends --db /tmp/probe.sqlite --backfill-days 120
+          python3 - <<'PYEOF'
+          import sqlite3
+          conn = sqlite3.connect("/tmp/probe.sqlite")
+          total, twse, tpex = (conn.execute(q).fetchone()[0] for q in (
+              "SELECT COUNT(*) FROM dividend_events",
+              "SELECT COUNT(*) FROM dividend_events WHERE market='TWSE'",
+              "SELECT COUNT(*) FROM dividend_events WHERE market='TPEX'",
+          ))
+          print(f"total={total} twse={twse} tpex={tpex}")
+          print("--- 樣本（現金 / 配股皆有的前 12 筆）---")
+          for row in conn.execute(
+              "SELECT ex_date, stock_id, name, event_type, cash_dividend, stock_dividend_per_share, market"
+              " FROM dividend_events ORDER BY stock_dividend_per_share DESC, ex_date DESC LIMIT 12"):
+              print(row)
+          assert total > 100, "資料量異常"
+          PYEOF
