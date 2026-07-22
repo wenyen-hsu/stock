@@ -1,6 +1,6 @@
 name: Probe ETF APIs
 
-# 拋棄式：探測 ETF 清單/規模/單位數/PCF 端點與欄位，取得後移除本檔。
+# 拋棄式：探測 ETF PCF（成分股）端點，取得後移除本檔。
 
 on:
   workflow_dispatch:
@@ -10,33 +10,26 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 6
     steps:
-      - name: Scan swaggers for ETF paths
+      - name: Scan TWSE swagger for composition keywords
         run: |
-          echo "===== TWSE swagger ETF 相關 ====="
           curl -s -m 30 "https://openapi.twse.com.tw/v1/swagger.json" | python3 -c "
           import json, sys
           spec = json.load(sys.stdin)
           for path, item in spec.get('paths', {}).items():
               desc = json.dumps(item, ensure_ascii=False)
-              if 'etf' in path.lower() or 'ETF' in desc:
+              if any(k in desc for k in ('成分', '申購買回', 'PCF', '受益')) or any(k in path.lower() for k in ('pcf',)):
                   print(path, '|', next(iter(item.values())).get('summary', ''))
           " || true
-          echo "===== TPEx swagger ETF 相關 ====="
-          curl -s -m 30 "https://www.tpex.org.tw/openapi/v1/swagger.json" | python3 -c "
-          import json, sys
-          spec = json.load(sys.stdin)
-          for path, item in spec.get('paths', {}).items():
-              desc = json.dumps(item, ensure_ascii=False)
-              if 'etf' in path.lower() or 'ETF' in desc:
-                  print(path, '|', next(iter(item.values())).get('summary', ''))
-          " || true
-      - name: Probe candidate endpoints
+      - name: Probe PCF candidates
         run: |
           for url in \
-            "https://openapi.twse.com.tw/v1/opendata/t187ap47_L" \
-            "https://www.twse.com.tw/rwd/zh/ETF/etfIssueUnit?response=json" \
-            "https://mis.twse.com.tw/stock/data/all_etf.txt" \
+            "https://www.twse.com.tw/rwd/zh/ETF/etfPCF?stkNo=0050&response=json" \
+            "https://www.twse.com.tw/rwd/zh/ETF/list?response=json" \
+            "https://mis.twse.com.tw/stock/data/etf_basket_0050.txt" \
+            "https://www.yuantaetfs.com/api/Trade/pcf?fundid=0050" \
+            "https://www.twse.com.tw/rwd/zh/ETFReport/ETFRank?response=json" \
+            "https://openapi.twse.com.tw/v1/opendata/t187ap48_L" \
             ; do
             echo "===== $url ====="
-            curl -s -m 30 "$url" -H "accept: application/json" | head -c 1200; echo
+            curl -s -m 25 "$url" -H "accept: application/json" -H "User-Agent: Mozilla/5.0" | head -c 900; echo; echo
           done
