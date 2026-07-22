@@ -941,6 +941,7 @@ INDEX_HTML = """<!doctype html>
     .detail-nav a { flex: 0 0 auto; border: 1px solid var(--line); border-radius: 999px; background: var(--panel); color: var(--td-ink); font-size: 12px; font-weight: 700; padding: 6px 12px; text-decoration: none; white-space: nowrap; }
     .detail-nav a:hover { border-color: var(--accent); color: var(--accent-dark); }
     .theme-toggle { border: 1px solid rgba(255,255,255,.35); background: transparent; color: #fff; border-radius: 999px; padding: 4px 12px; font-size: 13px; cursor: pointer; }
+    section.tabs { position: sticky; top: 0; z-index: 30; background: var(--bg); padding-top: 8px; padding-bottom: 8px; margin-top: -8px; }
     .ranking-desc { grid-column: 1 / -1; color: var(--muted); font-size: 12px; line-height: 1.5; margin-top: -4px; }
     @media (max-width: 640px) {
       main { padding: 10px 10px 24px; }
@@ -1784,11 +1785,28 @@ INDEX_HTML = """<!doctype html>
       near_avg_with_inst_buy: "收盤接近區間均價且法人買超，回檔上車視角。",
       value_dividend: "殖利率 ≥3%、本益比 ≤20 且法人未賣超的價值傾斜。",
     };
-    function updateRankingDesc() {
+    async function rankingBacktestNote(ranking, days) {
+      // 該排行的近況回測（5 日視野超額報酬與勝率），讓選榜有依據
+      try {
+        const data = await getJSON("/api/backtest");
+        const hit = (data?.results || []).find(item =>
+          item.ranking_name === ranking && String(item.days) === String(days) && item.horizon === 5);
+        if (!hit) return "";
+        const sign = hit.avg_excess_pct > 0 ? "+" : "";
+        const tone = hit.avg_excess_pct >= 1 ? "pos" : hit.avg_excess_pct <= -1 ? "neg" : "";
+        const accumulating = hit.state === "accumulating" ? "（樣本累積中，僅供參考）" : "";
+        return ` ｜ 回測：進榜後 5 日超額 <span class="${tone}">${sign}${fmt(hit.avg_excess_pct)}%</span>、勝率 ${fmt(hit.win_rate_pct)}%（樣本 ${hit.n_obs}）${accumulating}`;
+      } catch (_err) { return ""; }
+    }
+    async function updateRankingDesc() {
       const target = document.querySelector("#ranking-desc");
       const select = document.querySelector("#ranking");
       if (!target || !select) return;
-      target.textContent = RANKING_DESCRIPTIONS[select.value] || "";
+      const ranking = select.value;
+      const base = RANKING_DESCRIPTIONS[ranking] || "";
+      target.textContent = base;
+      const note = await rankingBacktestNote(ranking, document.querySelector("#days")?.value || 20);
+      if (select.value === ranking && note) target.innerHTML = esc(base) + note;
     }
     const chartColors = {
       up: "#b42318",
@@ -2143,7 +2161,7 @@ INDEX_HTML = """<!doctype html>
       const head = columns.map(c => {
         const sortable = options.onSort ? " sortable" : "";
         const mark = sort.key === c.key ? `<span class="sort-mark">${sort.dir === "asc" ? "▲" : "▼"}</span>` : "";
-        return `<th class="${sortable}" data-key="${esc(c.key)}">${esc(c.label)}${mark}</th>`;
+        return `<th class="${sortable}" data-key="${esc(c.key)}"${c.tip ? ` title="${esc(c.tip)}"` : ""}>${esc(c.label)}${mark}</th>`;
       }).join("");
       const body = rows.map(row => {
         const clickable = options.onClick ? " clickable" : "";
@@ -4115,6 +4133,7 @@ INDEX_HTML = """<!doctype html>
       }, 2500);
     }
     function setTab(tab) {
+      try { localStorage.setItem("stockChipLastTab", tab); } catch (_err) {}
       if (tab !== "detail") state.previousTab = tab;
       state.tab = tab;
       document.querySelectorAll(".tab").forEach(btn => btn.classList.toggle("active", btn.dataset.tab === tab));
@@ -4408,6 +4427,13 @@ INDEX_HTML = """<!doctype html>
       } catch (_err) { /* digest 未發布 */ }
       return sets;
     }
+    const ALERT_TIPS = {
+      "跌破20日均線": "收盤價低於 20 日均價，短線趨勢轉弱",
+      "外資投信同賣": "最新交易日外資與投信同時賣超",
+      "爆量收均線下": "單日量能 ≥ 20 日均量 2 倍且收在 20 日均價之下，慎防出貨",
+      "毛利率連降": "毛利率連續兩季以上下滑（今日訊號）",
+      "隔日沖分點進駐": "主買分點為隔日沖券商，隔日賣壓風險（今日訊號）",
+    };
     function holdingAlerts(meta, sid, digestSets) {
       const alerts = [];
       const vsAvg = Number(meta?.g);
@@ -4441,7 +4467,7 @@ INDEX_HTML = """<!doctype html>
         const alerts = holdingAlerts(meta, sid, digestSets);
         return {
           alerts,
-          alerts_html: alerts.length ? alerts.map(text => `<span class="neg" style="font-size:12px; white-space:nowrap;">⚠${esc(text)}</span>`).join(" ") : "",
+          alerts_html: alerts.length ? alerts.map(text => `<span class="neg" style="font-size:12px; white-space:nowrap;" title="${esc(ALERT_TIPS[text] || "")}">⚠${esc(text)}</span>`).join(" ") : "",
           stock_id: sid,
           name: meta.n || "",
           shares: slot.shares,
@@ -4490,8 +4516,8 @@ INDEX_HTML = """<!doctype html>
           {key:"pnl", label:"未實現損益", signed:true},
           {key:"dividend", label:"累計股利"},
           {key:"pnl_pct", label:"含息報酬%", signed:true},
-          {key:"multifactor", label:"多因子分"},
-          {key:"alerts_html", label:"警示", html:true, format: value => value || ""}
+          {key:"multifactor", label:"多因子分", tip:"籌碼+營收+毛利+動能+估值+股權分散+基本面的綜合分（樣本累積中，請搭配回測參考）"},
+          {key:"alerts_html", label:"警示", html:true, format: value => value || "", tip:"賣出提醒：滑鼠停在警示上看判定規則"}
         ], { rowId: row => row.stock_id, onClick: stock => openDetail(stock) });
       }
       // 交易歷史（新到舊）
@@ -4607,6 +4633,9 @@ INDEX_HTML = """<!doctype html>
         });
       }
       ["pf-shares", "pf-price"].forEach(id => document.querySelector(`#${id}`)?.addEventListener("input", pfRecalcFees));
+      document.querySelectorAll(".pf-form input").forEach(input => input.addEventListener("keydown", event => {
+        if (event.key === "Enter") { event.preventDefault(); document.querySelector("#pf-add")?.click(); }
+      }));
       document.querySelector("#pf-side")?.addEventListener("change", pfRecalcFees);
       document.querySelector("#pf-stock")?.addEventListener("blur", pfLookupName);
       document.querySelector("#pf-add")?.addEventListener("click", async () => {
@@ -5196,6 +5225,18 @@ INDEX_HTML = """<!doctype html>
     reload().catch(err => {
       document.querySelector("#ranking-table").innerHTML = `<div class="empty">${esc(err.message)}</div>`;
     });
+    (() => {
+      // 還原上次分頁：排行是預設不必切；個股頁帶最近看過的股票
+      try {
+        const last = localStorage.getItem("stockChipLastTab");
+        if (!last || last === "ranking" || !document.querySelector(`button[data-tab="${last}"]`)) return;
+        if (last === "detail") {
+          const recent = recentStocks()[0];
+          if (recent) document.querySelector("#detail-stock").value = recent;
+        }
+        setTab(last);
+      } catch (_err) {}
+    })();
   </script>
 </body>
 </html>
