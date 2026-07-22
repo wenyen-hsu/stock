@@ -28,3 +28,34 @@ jobs:
         run: pip install -r requirements.txt -r requirements-dev.txt
       - name: Run tests
         run: python -m pytest tests/ -q
+
+  e2e:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Install Python dependencies
+        run: pip install -r requirements.txt
+      - name: Fetch published data from site branch
+        run: |
+          git fetch origin site --depth 1
+          git archive origin/site docs/data | tar -x
+      - name: Generate static index.html
+        run: |
+          python3 -c "
+          from stock_chip.gui import INDEX_HTML
+          html = INDEX_HTML.replace('window.STOCK_CHIP_STATIC = false;', 'window.STOCK_CHIP_STATIC = true;')
+          open('docs/index.html', 'w').write(html)
+          "
+      - name: Install Playwright
+        run: |
+          npm install --no-save playwright
+          npx playwright install --with-deps chromium
+      - name: Run E2E tests
+        run: npm run e2e
