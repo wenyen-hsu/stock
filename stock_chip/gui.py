@@ -1150,6 +1150,13 @@ INDEX_HTML = """<!doctype html>
           </div>
         </div>
       </div>
+      <section class="panel" style="margin-bottom:12px;">
+        <div class="panel-head">
+          <div><div class="panel-title">ETF 資金流（熱門台股 ETF 申購熱度）</div>
+          <div class="muted" id="etf-flow-note">發行單位數增加＝申購潮＝發行商將進場買成分股。名單為台股現貨股票型按規模前 20 動態產生；個股級成分對照為後續版本。</div></div>
+        </div>
+        <div class="table-wrap" id="etf-flow-table"></div>
+      </section>
       <section class="layout-2">
         <div class="panel">
           <div class="panel-head"><div class="panel-title">昨日強勢族群</div></div>
@@ -1995,6 +2002,9 @@ INDEX_HTML = """<!doctype html>
       }
       if (parsed.pathname === "/api/dividends") {
         return staticData("data/dividends.json");
+      }
+      if (parsed.pathname === "/api/etf") {
+        return staticData("data/etf.json");
       }
       if (parsed.pathname === "/api/trend") {
         return staticData(`data/trend_${days}d.json`);
@@ -3664,7 +3674,39 @@ INDEX_HTML = """<!doctype html>
       </div>`;
       target.querySelectorAll(".digest-chip").forEach(btn => btn.addEventListener("click", () => openDetail(btn.dataset.stock)));
     }
+    async function loadEtfFlows() {
+      const target = document.querySelector("#etf-flow-table");
+      if (!target) return;
+      try {
+        const data = await getJSON("/api/etf");
+        const rows = data?.rows || [];
+        if (!rows.length) {
+          target.innerHTML = `<div class="empty">ETF 資料累積中（每日管線更新後出現）。</div>`;
+          return;
+        }
+        if (data.state === "accumulating") {
+          document.querySelector("#etf-flow-note").textContent = "單位數變化需要多日資料，目前僅有首日快照——變化欄將於明日起顯示。";
+        }
+        const display = rows.map(row => ({
+          ...row,
+          aum_billion: row.aum ? Math.round(row.aum / 1e8 * 10) / 10 : null,
+          units_million: row.units ? Math.round(row.units / 1e6 * 10) / 10 : null,
+        }));
+        renderTable(target, display, [
+          {key: "etf_id", label: "代號", sortType: "text", format: value => value},
+          {key: "name", label: "名稱"},
+          {key: "category", label: "類型"},
+          {key: "aum_billion", label: "規模(億)", tip: "發行單位數 × 預估淨值"},
+          {key: "units_million", label: "單位數(百萬)"},
+          {key: "units_chg_1d_pct", label: "單位數日變%", signed: true, tip: "正=申購（買盤將進場）、負=贖回"},
+          {key: "units_chg_5d_pct", label: "單位數週變%", signed: true},
+        ], {});
+      } catch (_err) {
+        target.innerHTML = `<div class="empty">ETF 資料尚未發布。</div>`;
+      }
+    }
     async function loadTrend() {
+      loadEtfFlows();
       const days = document.querySelector("#days").value;
       let data;
       try {
