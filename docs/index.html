@@ -1044,6 +1044,7 @@
         </div>
       </section>
       <section class="metrics" id="pf-overview"></section>
+      <div id="pf-alerts"></div>
       <section class="panel" style="margin-top:12px;">
         <div class="panel-head">
           <div><div class="panel-title">新增交易</div><div class="muted" id="pf-form-note">手續費 0.1425%（可設折扣、最低 20 元）、賣出加證交稅 0.3%，皆可手動修改</div></div>
@@ -3547,7 +3548,9 @@
       try {
         data = await getJSON(`/api/digest?days=${days}`);
       } catch (_err) { target.innerHTML = ""; return; }
-      const watchSet = watchlistOnly ? new Set((state.rankingRows || []).map(r => String(r.stock_id))) : null;
+      const watchSet = watchlistOnly
+        ? new Set([...(state.rankingRows || []).map(r => String(r.stock_id)), ...portfolioHoldingIds()])
+        : null;
       const keep = item => !watchSet || watchSet.has(String(item.stock_id));
       const chip = (item, valueText) =>
         `<button class="digest-chip" data-stock="${esc(item.stock_id)}"><strong>${esc(item.stock_id)}</strong> ${esc(item.name || "")}${valueText ? `<span class="muted"> ${esc(valueText)}</span>` : ""}</button>`;
@@ -4329,10 +4332,40 @@
       }
       await renderPortfolioView();
     }
+    function portfolioHoldingIds() {
+      const { holdings } = replayPortfolio(loadTradesLS(), state.dividendMap);
+      return Object.keys(holdings);
+    }
+    async function digestSignalSets() {
+      // {margin_down: Set, day_trader: Set}；digest 未就緒回空集
+      const sets = { margin_down: new Set(), day_trader: new Set() };
+      try {
+        const days = document.querySelector("#days")?.value || 20;
+        const digest = await getJSON(`/api/digest?days=${days}`);
+        for (const key of ["margin_down", "day_trader"]) {
+          for (const item of (digest?.signals?.[key] || [])) sets[key].add(String(item.stock_id));
+        }
+      } catch (_err) { /* digest 未發布 */ }
+      return sets;
+    }
+    function holdingAlerts(meta, sid, digestSets) {
+      const alerts = [];
+      const vsAvg = Number(meta?.g);
+      const foreignNet = Number(meta?.f);
+      const trustNet = Number(meta?.t);
+      const volRatio = Number(meta?.v);
+      if (Number.isFinite(vsAvg) && vsAvg < 0) alerts.push("跌破20日均線");
+      if (Number.isFinite(foreignNet) && Number.isFinite(trustNet) && foreignNet < 0 && trustNet < 0) alerts.push("外資投信同賣");
+      if (Number.isFinite(volRatio) && volRatio >= 2 && Number.isFinite(vsAvg) && vsAvg < 0) alerts.push("爆量收均線下");
+      if (digestSets.margin_down.has(String(sid))) alerts.push("毛利率連降");
+      if (digestSets.day_trader.has(String(sid))) alerts.push("隔日沖分點進駐");
+      return alerts;
+    }
     async function renderPortfolioView() {
       const trades = loadTradesLS();
       const info = await priceLookup();
       const dividendMap = await loadDividendMap();
+      const digestSets = await digestSignalSets();
       const { holdings, realizedTotal, realizedByTrade, warnings, dividendIncome, dividendByStock, dividendEventsApplied } = replayPortfolio(trades, dividendMap);
       // 總覽
       let totalCost = 0, totalValue = 0;
@@ -4345,7 +4378,10 @@
         if (value !== null) totalValue += value;
         const pnl = value !== null ? value - slot.cost : null;
         const divIncome = Math.round(dividendByStock[sid] || 0);
+        const alerts = holdingAlerts(meta, sid, digestSets);
         return {
+          alerts,
+          alerts_html: alerts.length ? alerts.map(text => `<span class="neg" style="font-size:12px; white-space:nowrap;">⚠${esc(text)}</span>`).join(" ") : "",
           stock_id: sid,
           name: meta.n || "",
           shares: slot.shares,
@@ -4372,6 +4408,14 @@
       document.querySelector("#pf-overview").innerHTML = overview.map(item =>
         `<div class="metric"><div class="label">${item.label}</div><div class="value">${item.html ? item.value : esc(item.value)}</div></div>`
       ).join("");
+      const alertRows = holdingRows.filter(row => row.alerts.length);
+      const alertBox = document.querySelector("#pf-alerts");
+      if (alertBox) {
+        alertBox.innerHTML = alertRows.length
+          ? `<div class="pf-position-card loss" style="margin-top:12px;">⚠ <strong>持股警示</strong>：${alertRows.map(row =>
+              `${esc(row.stock_id)} ${esc(row.name)}（${row.alerts.map(esc).join("、")}）`).join("；")}<span class="muted">　—— 點庫存列進個股頁檢視細節</span></div>`
+          : "";
+      }
       // 庫存表
       if (!holdingRows.length) {
         document.querySelector("#pf-holdings").innerHTML = `<div class="empty">尚無持股。在上方新增第一筆買進交易即可開始。</div>`;
@@ -4386,7 +4430,8 @@
           {key:"pnl", label:"未實現損益", signed:true},
           {key:"dividend", label:"累計股利"},
           {key:"pnl_pct", label:"含息報酬%", signed:true},
-          {key:"multifactor", label:"多因子分"}
+          {key:"multifactor", label:"多因子分"},
+          {key:"alerts_html", label:"警示", html:true, format: value => value || ""}
         ], { rowId: row => row.stock_id, onClick: stock => openDetail(stock) });
       }
       // 交易歷史（新到舊）

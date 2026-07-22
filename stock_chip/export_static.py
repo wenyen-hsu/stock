@@ -180,6 +180,11 @@ def export_static(out_dir: Path, days_values: list[int], include_all_details: bo
                             "d": row.get("industry") or "",
                             "c": row.get("close"),
                             "m": row.get("multifactor_score"),
+                            # 持股警示用：收盤 vs 20 日均價 %、當日外資/投信買賣超、單日量倍
+                            "g": row.get("close_vs_avg_pct"),
+                            "f": row.get("latest_foreign_net_lot"),
+                            "t": row.get("latest_trust_net_lot"),
+                            "v": row.get("volume_ratio_1d"),
                         }
                         for row in searchable
                     ]
