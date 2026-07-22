@@ -4,6 +4,7 @@ import argparse
 import datetime as dt
 import re
 import sqlite3
+import time
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
@@ -36,6 +37,24 @@ HEADERS = {
 }
 
 EXCLUDE_KEYWORDS = ("期貨", "槓桿", "反向", "正向2", "債券")
+
+RETRY_SLEEPS = (5, 20, 60)
+
+
+def get_json(url: str, params: dict | None = None, timeout: int = 60):
+    """帶退避重試的 JSON GET。TWSE 在管線連續請求下會限速回空頁，
+    立即失敗會讓當日資料全缺；退避後重試幾乎都能成功。"""
+    last_error: Exception | None = None
+    for attempt, sleep_s in enumerate((0,) + RETRY_SLEEPS):
+        if sleep_s:
+            time.sleep(sleep_s)
+        try:
+            response = requests.get(url, params=params, headers=HEADERS, timeout=timeout)
+            response.raise_for_status()
+            return response.json()
+        except Exception as exc:
+            last_error = exc
+    raise RuntimeError(f"fetch failed after {1 + len(RETRY_SLEEPS)} attempts: {url}: {last_error}")
 
 
 @dataclass
@@ -75,9 +94,7 @@ def is_domestic_equity(fund_type: str, has_foreign: int, name: str) -> bool:
 
 
 def fetch_meta(timeout: int = 60) -> list[dict[str, Any]]:
-    response = requests.get(META_URL, headers=HEADERS, timeout=timeout)
-    response.raise_for_status()
-    rows = response.json()
+    rows = get_json(META_URL, timeout=timeout)
     output = []
     for row in rows:
         etf_id = str(row.get("基金代號") or "").strip()
@@ -96,9 +113,7 @@ def fetch_meta(timeout: int = 60) -> list[dict[str, Any]]:
 
 def fetch_index_names(timeout: int = 60) -> dict[str, str]:
     try:
-        response = requests.get(LIST_URL, params={"response": "json"}, headers=HEADERS, timeout=timeout)
-        response.raise_for_status()
-        payload = response.json()
+        payload = get_json(LIST_URL, params={"response": "json"}, timeout=timeout)
         fields = payload.get("fields") or []
         idx = {name: i for i, name in enumerate(fields)}
         if "證券代號" not in idx or "標的指數" not in idx:
@@ -114,9 +129,7 @@ def fetch_index_names(timeout: int = 60) -> dict[str, str]:
 def fetch_navs(timeout: int = 60) -> dict[str, float]:
     """mis all_etf.txt：a=代號、e=預估淨值。失敗回空（AUM 退用單位數排序）。"""
     try:
-        response = requests.get(MIS_URL, headers=HEADERS, timeout=timeout)
-        response.raise_for_status()
-        payload = response.json()
+        payload = get_json(MIS_URL, timeout=timeout)
         navs: dict[str, float] = {}
         for group in payload.get("a1") or []:
             for item in group.get("msgArray") or []:
@@ -242,7 +255,11 @@ def load_etf_flows(conn: sqlite3.Connection) -> dict[str, Any]:
 
 
 def run_etf(db_path: Path) -> None:
-    meta = fetch_meta()
+    try:
+        meta = fetch_meta()
+    except Exception as exc:
+        print(f"[etf] 基本資料抓取失敗（含重試）：{exc}")
+        return
     index_names = fetch_index_names()
     navs = fetch_navs()
     rows = build_rows(meta, index_names, navs)
