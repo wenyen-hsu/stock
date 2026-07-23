@@ -986,6 +986,7 @@
     </section>
 
     <section class="tabs">
+      <button class="tab" id="nav-back" title="回到上一個畫面（同瀏覽器返回鍵）" style="padding-left:10px; padding-right:10px;">←</button>
       <button class="tab active" data-tab="ranking">排行</button>
       <button class="tab" data-tab="trend">今日趨勢</button>
       <button class="tab" data-tab="watchlist">自選股</button>
@@ -4179,8 +4180,32 @@
         }
       }, 2500);
     }
+    // 瀏覽器歷史整合：切分頁/切個股都推一筆 history，
+    // 讓瀏覽器返回鍵、手機滑動返回與頁內「← 返回」鈕都能回到上一個畫面
+    let navFromPopstate = false;
+    function pushNav(tab, stock) {
+      if (navFromPopstate) return;
+      const entry = { tab, stock: stock || null };
+      const hash = tab === "detail" && stock ? `#detail/${stock}` : `#${tab}`;
+      if (history.state && history.state.tab === entry.tab && history.state.stock === entry.stock) return;
+      history.pushState(entry, "", hash);
+    }
+    window.addEventListener("popstate", event => {
+      const entry = event.state || {};
+      const tab = entry.tab && document.querySelector(`button[data-tab="${entry.tab}"]`) ? entry.tab : "ranking";
+      navFromPopstate = true;
+      try {
+        if (tab === "detail" && entry.stock) {
+          document.querySelector("#detail-stock").value = entry.stock;
+        }
+        setTab(tab);
+      } finally {
+        navFromPopstate = false;
+      }
+    });
     function setTab(tab) {
       try { localStorage.setItem("stockChipLastTab", tab); } catch (_err) {}
+      pushNav(tab, tab === "detail" ? document.querySelector("#detail-stock")?.value?.trim() : null);
       if (tab !== "detail") state.previousTab = tab;
       state.tab = tab;
       document.querySelectorAll(".tab").forEach(btn => btn.classList.toggle("active", btn.dataset.tab === tab));
@@ -4857,6 +4882,7 @@
     async function openDetail(stock) {
       rememberRecent(String(stock), (suggestRows || []).find(row => row.i === String(stock))?.n || (state.rankingRows || []).find(row => String(row.stock_id) === String(stock))?.name || "");
       document.querySelector("#detail-stock").value = stock;
+      pushNav("detail", String(stock));
       if (state.tab !== "detail") state.previousTab = state.tab;
       state.tab = "detail";
       document.querySelectorAll(".tab").forEach(btn => btn.classList.toggle("active", btn.dataset.tab === "detail"));
@@ -5069,7 +5095,8 @@
         startJobPolling();
       }
     }
-    document.querySelectorAll(".tab").forEach(btn => btn.addEventListener("click", () => setTab(btn.dataset.tab)));
+    document.querySelectorAll(".tab").forEach(btn => { if (btn.dataset.tab) btn.addEventListener("click", () => setTab(btn.dataset.tab)); });
+    document.querySelector("#nav-back")?.addEventListener("click", () => history.back());
     document.querySelector("#refresh-sector")?.addEventListener("click", loadSector);
     document.querySelector("#ranking").addEventListener("change", () => {
       updateRankingDesc();
@@ -5273,15 +5300,26 @@
       document.querySelector("#ranking-table").innerHTML = `<div class="empty">${esc(err.message)}</div>`;
     });
     (() => {
-      // 還原上次分頁：排行是預設不必切；個股頁帶最近看過的股票
+      // 還原上次分頁（或網址 hash 直達）；初始畫面用 replaceState 當歷史基準
       try {
-        const last = localStorage.getItem("stockChipLastTab");
-        if (!last || last === "ranking" || !document.querySelector(`button[data-tab="${last}"]`)) return;
-        if (last === "detail") {
+        const hash = location.hash.replace(/^#/, "");
+        const hashTab = hash.startsWith("detail/") ? "detail" : hash;
+        const hashStock = hash.startsWith("detail/") ? hash.slice(7) : "";
+        const preferred = hashTab && document.querySelector(`button[data-tab="${hashTab}"]`)
+          ? hashTab
+          : localStorage.getItem("stockChipLastTab");
+        if (hashStock) document.querySelector("#detail-stock").value = hashStock;
+        else if (preferred === "detail") {
           const recent = recentStocks()[0];
           if (recent) document.querySelector("#detail-stock").value = recent;
         }
-        setTab(last);
+        const initial = preferred && document.querySelector(`button[data-tab="${preferred}"]`) ? preferred : "ranking";
+        const initialStock = initial === "detail" ? document.querySelector("#detail-stock").value.trim() : null;
+        history.replaceState({ tab: initial, stock: initialStock }, "", initial === "detail" && initialStock ? `#detail/${initialStock}` : `#${initial}`);
+        if (initial !== "ranking") {
+          navFromPopstate = true;
+          try { setTab(initial); } finally { navFromPopstate = false; }
+        }
       } catch (_err) {}
     })();
   </script>
