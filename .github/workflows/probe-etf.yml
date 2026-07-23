@@ -1,6 +1,6 @@
 name: Probe ETF Holdings
 
-# 拋棄式：探測 MoneyDJ 鏡站 ETF 持股明細頁結構，取得後移除本檔。
+# 拋棄式：實跑 etf 模組（含成分股抓取與映射率）驗證，取得後移除本檔。
 
 on:
   workflow_dispatch:
@@ -8,28 +8,44 @@ on:
 jobs:
   probe:
     runs-on: ubuntu-latest
-    timeout-minutes: 6
+    timeout-minutes: 12
     steps:
-      - name: Probe ETF holdings pages
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+      - name: Restore db cache
+        uses: actions/cache/restore@v4
+        with:
+          path: data/stock_chip.sqlite
+          key: stock-db-none
+          restore-keys: |
+            stock-db-
+      - name: Run etf module (with holdings)
         run: |
-          for url in \
-            "https://fubon-ebrokerdj.fbs.com.tw/ETF/X/Basic/Basic0007A.xdjhtm?etfid=0050.TW" \
-            "https://jdata.yuanta.com.tw/ETF/X/Basic/Basic0007A.xdjhtm?etfid=00919.TW" \
-            "https://www.moneydj.com/ETF/X/Basic/Basic0007A.xdjhtm?etfid=00878.TW" \
-            ; do
-            echo "===== $url ====="
-            curl -s -m 30 "$url" -H "User-Agent: Mozilla/5.0" | python3 -c "
-          import re, sys
-          html = sys.stdin.read()
-          print('bytes:', len(html))
-          # 抓表格列樣本：找含百分比的 tr
-          rows = re.findall(r'<tr[^>]*>.*?</tr>', html, re.S)
-          hits = [r for r in rows if '%' in r or '比例' in r or '持股' in r]
-          print('tr total:', len(rows), '| with pct:', len(hits))
-          for r in hits[:6]:
-              text = re.sub(r'<[^>]+>', '|', r)
-              text = re.sub(r'\|+', '|', text).strip('|')
-              print(text[:200])
-          " || true
-            echo
-          done
+          python -m stock_chip.etf
+          python3 - <<'PYEOF'
+          import sys
+          sys.path.insert(0, ".")
+          from pathlib import Path
+          from stock_chip.etf import load_etf_flows
+          from stock_chip.official import connect_db
+          with connect_db(Path("data/stock_chip.sqlite")) as conn:
+              mapped, unmapped = conn.execute(
+                  "SELECT SUM(CASE WHEN stock_id NOT LIKE '?%' THEN 1 ELSE 0 END),"
+                  " SUM(CASE WHEN stock_id LIKE '?%' THEN 1 ELSE 0 END) FROM etf_holdings"
+              ).fetchone()
+              print(f"成分股映射：代號成功 {mapped} 列、未映射 {unmapped} 列")
+              for row in conn.execute(
+                  "SELECT stock_name FROM etf_holdings WHERE stock_id LIKE '?%' LIMIT 15"):
+                  print("  未映射:", row[0])
+              flows = load_etf_flows(conn)
+              print("top_stocks:", len(flows.get("top_stocks", [])))
+              for item in flows["top_stocks"][:8]:
+                  print(f"  {item['stock_id']:6s} {item['name']:8s} 被 {item['etf_count']} 檔持有"
+                        f" 合計 {item['held_value']/1e8:,.0f} 億")
+              assert mapped and mapped > 200, "映射列數異常"
+              assert len(flows["top_stocks"]) >= 20, "重倉統計異常"
+          PYEOF

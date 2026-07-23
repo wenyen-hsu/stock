@@ -1096,6 +1096,17 @@
           <div class="muted" id="etf-flow-note">發行單位數增加＝申購潮＝發行商將進場買成分股。名單為台股現貨股票型按規模前 20 動態產生；個股級成分對照為後續版本。</div></div>
         </div>
         <div class="table-wrap" id="etf-flow-table"></div>
+        <div id="etf-holdings-panel" style="display:none; margin-top:10px; border-top:1px solid var(--line); padding-top:10px;">
+          <div class="muted" id="etf-holdings-title" style="margin-bottom:6px;"></div>
+          <div class="table-wrap" id="etf-holdings-table"></div>
+        </div>
+      </section>
+      <section class="panel" style="margin-bottom:12px;">
+        <div class="panel-head">
+          <div><div class="panel-title">ETF 重倉個股（熱門 ETF 合計持有）</div>
+          <div class="muted">合計持有市值 = Σ（權重 × 該 ETF 規模）。被多檔大型 ETF 重倉的股票，申購潮來時買盤最集中。點列進個股頁。</div></div>
+        </div>
+        <div class="table-wrap" id="etf-top-stocks"></div>
       </section>
       <section class="layout-2">
         <div class="panel">
@@ -3632,6 +3643,7 @@
           aum_billion: row.aum ? Math.round(row.aum / 1e8 * 10) / 10 : null,
           units_million: row.units ? Math.round(row.units / 1e6 * 10) / 10 : null,
         }));
+        const hasHoldings = display.some(row => (row.holdings || []).length);
         renderTable(target, display, [
           {key: "etf_id", label: "代號", sortType: "text", format: value => value},
           {key: "name", label: "名稱"},
@@ -3640,10 +3652,63 @@
           {key: "units_million", label: "單位數(百萬)"},
           {key: "units_chg_1d_pct", label: "單位數日變%", signed: true, tip: "正=申購（買盤將進場）、負=贖回"},
           {key: "units_chg_5d_pct", label: "單位數週變%", signed: true},
-        ], {});
+        ], hasHoldings ? { rowId: row => row.etf_id, onClick: etfId => showEtfHoldings(data, etfId) } : {});
+        if (hasHoldings) {
+          const note = document.querySelector("#etf-flow-note");
+          if (note && !note.textContent.includes("點列")) note.textContent += "　點任一列展開該 ETF 成分股。";
+        }
+        renderEtfTopStocks(data);
       } catch (_err) {
         target.innerHTML = `<div class="empty">ETF 資料尚未發布。</div>`;
       }
+    }
+    function showEtfHoldings(data, etfId) {
+      const row = (data.rows || []).find(item => String(item.etf_id) === String(etfId));
+      const panel = document.querySelector("#etf-holdings-panel");
+      if (!row || !(row.holdings || []).length || !panel) return;
+      if (panel.dataset.etf === String(etfId) && panel.style.display !== "none") {
+        panel.style.display = "none";
+        return;
+      }
+      panel.dataset.etf = String(etfId);
+      panel.style.display = "";
+      document.querySelector("#etf-holdings-title").textContent =
+        `${row.etf_id} ${row.name} 成分股（${row.holdings.length} 檔，資料日 ${data.holdings_date || "-"}；權重來源 MoneyDJ）`;
+      const rows = row.holdings.map(item => ({
+        stock_id: item.s || "",
+        display_id: item.s || "—",
+        name: item.n,
+        weight: item.w,
+      }));
+      renderTable(document.querySelector("#etf-holdings-table"), rows, [
+        {key: "display_id", label: "代號", sortType: "text", format: value => value},
+        {key: "name", label: "名稱"},
+        {key: "weight", label: "權重%"},
+      ], { rowId: item => item.stock_id, onClick: stock => { if (stock) openDetail(stock); } });
+      panel.scrollIntoView({ behavior: "smooth", block: "nearest" });
+    }
+    function renderEtfTopStocks(data) {
+      const target = document.querySelector("#etf-top-stocks");
+      if (!target) return;
+      const stocks = data.top_stocks || [];
+      if (!stocks.length) {
+        target.innerHTML = `<div class="empty">成分股資料累積中（每日管線更新後出現）。</div>`;
+        return;
+      }
+      const rows = stocks.map(item => ({
+        stock_id: item.stock_id,
+        name: item.name,
+        etf_count: item.etf_count,
+        held_billion: Math.round(item.held_value / 1e8 * 10) / 10,
+        top_etfs: (item.etfs || []).map(etf => `${esc(etf.en)} ${fmt(etf.w)}%`).join("、"),
+      }));
+      renderTable(target, rows, [
+        {key: "stock_id", label: "代號", sortType: "text", format: value => value},
+        {key: "name", label: "名稱"},
+        {key: "etf_count", label: "被持有檔數", tip: "出現在幾檔熱門 ETF 的成分股中"},
+        {key: "held_billion", label: "合計持有市值(億)", tip: "Σ(權重 × 該 ETF 規模)"},
+        {key: "top_etfs", label: "主要持有 ETF（權重）", html: true, format: value => value},
+      ], { rowId: row => row.stock_id, onClick: stock => openDetail(stock) });
     }
     async function loadTrend() {
       loadEtfFlows();

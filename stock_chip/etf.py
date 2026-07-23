@@ -10,6 +10,7 @@ from pathlib import Path
 from typing import Any
 
 import requests
+from bs4 import BeautifulSoup
 
 from stock_chip.dividends import parse_roc_date, to_number
 from stock_chip.official import connect_db
@@ -27,6 +28,8 @@ from stock_chip.official import connect_db
 META_URL = "https://openapi.twse.com.tw/v1/opendata/t187ap47_L"
 LIST_URL = "https://www.twse.com.tw/rwd/zh/ETF/list"
 MIS_URL = "https://mis.twse.com.tw/stock/data/all_etf.txt"
+# 成分股明細：MoneyDJ 主站（鏡站不含 /ETF/ 專區；分點資料已有 MoneyDJ 先例）
+HOLDINGS_URL = "https://www.moneydj.com/ETF/X/Basic/Basic0007A.xdjhtm"
 SOURCE = "twse_t187ap47"
 HOT_COUNT = 20
 
@@ -169,6 +172,96 @@ def build_rows(
     return candidates
 
 
+def get_html(url: str, params: dict | None = None, timeout: int = 60) -> str:
+    last_error: Exception | None = None
+    for sleep_s in (0,) + RETRY_SLEEPS:
+        if sleep_s:
+            time.sleep(sleep_s)
+        try:
+            response = requests.get(url, params=params, headers=HEADERS, timeout=timeout)
+            response.raise_for_status()
+            return response.text
+        except Exception as exc:
+            last_error = exc
+    raise RuntimeError(f"fetch failed: {url}: {last_error}")
+
+
+def parse_holdings_html(html: str) -> list[dict[str, Any]]:
+    """MoneyDJ Basic0007A 持股明細表：股票名稱|持股(千股)|比例|增減。"""
+    soup = BeautifulSoup(html, "html.parser")
+    for table in soup.find_all("table"):
+        header_text = table.get_text()
+        if "股票名稱" not in header_text or "比例" not in header_text:
+            continue
+        holdings = []
+        for tr in table.find_all("tr"):
+            cells = [td.get_text(strip=True) for td in tr.find_all("td")]
+            if len(cells) < 3 or cells[0] in {"", "股票名稱"}:
+                continue
+            weight = to_number(cells[2].rstrip("%"))
+            if weight is None or weight <= 0:
+                continue
+            change = to_number(cells[3].rstrip("%").lstrip("+")) if len(cells) > 3 else None
+            holdings.append({
+                "name": cells[0],
+                "thousand_shares": to_number(cells[1]),
+                "weight_pct": weight,
+                "change_pct": change,
+            })
+        if holdings:
+            return holdings
+    return []
+
+
+def fetch_holdings(etf_id: str) -> list[dict[str, Any]]:
+    html = get_html(HOLDINGS_URL, params={"etfid": f"{etf_id}.TW"})
+    return parse_holdings_html(html)
+
+
+def stock_name_map(conn: sqlite3.Connection) -> dict[str, str]:
+    """股名 → 代號（MoneyDJ 表只有名稱）。日行情簡稱為準，profile 名稱補位。"""
+    mapping: dict[str, str] = {}
+    for table, name_col in (("stocks", "name"), ("daily_prices", "name")):
+        try:
+            for stock_id, name in conn.execute(
+                f"SELECT DISTINCT stock_id, {name_col} FROM {table} WHERE {name_col} IS NOT NULL"
+            ):
+                clean = str(name).strip()
+                if clean and clean not in mapping:
+                    mapping[clean] = str(stock_id)
+        except sqlite3.OperationalError:
+            continue
+    return mapping
+
+
+def upsert_holdings(conn: sqlite3.Connection, data_date: str, etf_id: str,
+                    holdings: list[dict[str, Any]], name_to_id: dict[str, str]) -> None:
+    if not holdings:
+        return
+    now = dt.datetime.now().isoformat(timespec="seconds")
+    conn.execute("DELETE FROM etf_holdings WHERE data_date = ? AND etf_id = ?", (data_date, etf_id))
+    conn.executemany(
+        """
+        INSERT OR REPLACE INTO etf_holdings (
+            data_date, etf_id, stock_id, stock_name, shares, weight_pct, updated_at
+        ) VALUES (?, ?, ?, ?, ?, ?, ?)
+        """,
+        [
+            (
+                data_date,
+                etf_id,
+                name_to_id.get(item["name"], f"?{item['name']}"),
+                item["name"],
+                (item["thousand_shares"] or 0) * 1000,
+                item["weight_pct"],
+                now,
+            )
+            for item in holdings
+        ],
+    )
+    conn.commit()
+
+
 def upsert_rows(conn: sqlite3.Connection, rows: list[EtfRow]) -> None:
     if not rows:
         return
@@ -245,12 +338,50 @@ def load_etf_flows(conn: sqlite3.Connection) -> dict[str, Any]:
             "units_chg_1d_pct": units_change_pct(units, prev_units.get(etf_id)),
             "units_chg_5d_pct": units_change_pct(units, week_units.get(etf_id)),
         })
+    # 成分股（每檔 ETF 的最新持股明細）
+    holdings_date = conn.execute("SELECT MAX(data_date) FROM etf_holdings").fetchone()[0]
+    holdings_by_etf: dict[str, list] = {}
+    if holdings_date:
+        for etf_id, stock_id, stock_name, weight, shares in conn.execute(
+            """
+            SELECT etf_id, stock_id, stock_name, weight_pct, shares
+            FROM etf_holdings WHERE data_date = ?
+            ORDER BY etf_id, weight_pct DESC
+            """,
+            (holdings_date,),
+        ):
+            holdings_by_etf.setdefault(etf_id, []).append({
+                "s": stock_id if not str(stock_id).startswith("?") else None,
+                "n": stock_name,
+                "w": weight,
+            })
+    aum_by_etf = {row["etf_id"]: row["aum"] or 0 for row in rows}
+    name_by_etf = {row["etf_id"]: row["name"] for row in rows}
+    for row in rows:
+        row["holdings"] = holdings_by_etf.get(row["etf_id"], [])
+    # 全 ETF 重倉聚合：Σ(權重 × 該 ETF 規模) = 熱門 ETF 合計持有市值
+    aggregate: dict[str, dict[str, Any]] = {}
+    for etf_id, items in holdings_by_etf.items():
+        aum = aum_by_etf.get(etf_id, 0)
+        for item in items:
+            if not item["s"]:
+                continue
+            slot = aggregate.setdefault(item["s"], {"stock_id": item["s"], "name": item["n"], "etf_count": 0, "held_value": 0.0, "etfs": []})
+            slot["etf_count"] += 1
+            slot["held_value"] += (item["w"] or 0) / 100 * aum
+            slot["etfs"].append({"e": etf_id, "en": name_by_etf.get(etf_id, etf_id), "w": item["w"]})
+    top_stocks = sorted(aggregate.values(), key=lambda slot: -slot["held_value"])[:60]
+    for slot in top_stocks:
+        slot["held_value"] = round(slot["held_value"])
+        slot["etfs"] = sorted(slot["etfs"], key=lambda item: -(item["w"] or 0))[:3]
     return {
         "generated_at": dt.datetime.now().isoformat(timespec="seconds"),
         "state": "ready" if prev else "accumulating",
         "latest_date": latest,
+        "holdings_date": holdings_date,
         "observed_days": len(dates),
         "rows": rows,
+        "top_stocks": top_stocks,
     }
 
 
@@ -264,11 +395,22 @@ def run_etf(db_path: Path) -> None:
     navs = fetch_navs()
     rows = build_rows(meta, index_names, navs)
     hot = [row for row in rows if row.is_hot]
+    today = dt.date.today().isoformat()
     with connect_db(db_path) as conn:
         upsert_rows(conn, rows)
+        name_to_id = stock_name_map(conn)
+        holdings_total = 0
+        for etf in hot:
+            try:
+                holdings = fetch_holdings(etf.etf_id)
+                upsert_holdings(conn, today, etf.etf_id, holdings, name_to_id)
+                holdings_total += len(holdings)
+            except Exception as exc:
+                print(f"[etf] {etf.etf_id} 成分股抓取失敗：{exc}")
+            time.sleep(1.0)
         total = conn.execute("SELECT COUNT(*) FROM etf_universe").fetchone()[0]
     print(f"[etf] 全量 {len(rows)} 檔（含淨值 {sum(1 for r in rows if r.nav)} 檔）；"
-          f"熱門台股型 {len(hot)} 檔：{'、'.join(f'{r.etf_id} {r.name}' for r in hot[:8])}…；資料庫累計 {total} 列")
+          f"熱門台股型 {len(hot)} 檔、成分股 {holdings_total} 列；資料庫累計 {total} 列")
 
 
 def parse_args() -> argparse.Namespace:

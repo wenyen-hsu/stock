@@ -36,3 +36,24 @@ def test_units_change_pct():
     assert units_change_pct(110.0, 100.0) == 10.0
     assert units_change_pct(None, 100.0) is None
     assert units_change_pct(100.0, 0) is None
+
+
+def test_parse_holdings_html():
+    from stock_chip.etf import parse_holdings_html
+    html = """
+    <table><tr><th>顏色</th><th>產業</th><th>投資金額</th></tr></table>
+    <table>
+      <tr><td>股票名稱</td><td>持股(千股)</td><td>比例</td><td>增減</td></tr>
+      <tr><td>中信金</td><td>890,050.00</td><td>10.28</td><td>+1.41%</td></tr>
+      <tr><td>廣達</td><td>168,882.00</td><td>10.11</td><td>-2.51%</td></tr>
+      <tr><td>現金</td><td></td><td>0</td><td></td></tr>
+    </table>"""
+    holdings = parse_holdings_html(html)
+    assert len(holdings) == 2
+    assert holdings[0] == {"name": "中信金", "thousand_shares": 890050.0, "weight_pct": 10.28, "change_pct": 1.41}
+    assert holdings[1]["change_pct"] == -2.51
+
+
+def test_parse_holdings_html_no_table():
+    from stock_chip.etf import parse_holdings_html
+    assert parse_holdings_html("<html><body>error</body></html>") == []
