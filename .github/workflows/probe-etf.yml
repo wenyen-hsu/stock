@@ -1,6 +1,6 @@
 name: Probe ETF Holdings
 
-# 拋棄式：比對 requests 各種 header 組合 vs curl 抓回的頁面差異。
+# 拋棄式：用 parse_holdings_html 解析真頁，失敗時印出真實表格結構。
 
 on:
   workflow_dispatch:
@@ -10,40 +10,31 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
-      - name: Compare fetch variants
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+      - name: Parse real page
         run: |
-          pip -q install requests
           python3 - <<'PYEOF'
-          import requests, warnings
-          from urllib3.exceptions import InsecureRequestWarning
-          warnings.simplefilter("ignore", InsecureRequestWarning)
-          URL = "https://www.moneydj.com/ETF/X/Basic/Basic0007A.xdjhtm"
-          variants = {
-              "minimal-ua": {"User-Agent": "Mozilla/5.0"},
-              "full-browser": {
-                  "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0 Safari/537.36",
-                  "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
-                  "Accept-Language": "zh-TW,zh;q=0.9",
-              },
-          }
-          for label, headers in variants.items():
-              try:
-                  resp = requests.get(URL, params={"etfid": "0050.TW"}, headers=headers, timeout=30, verify=False, allow_redirects=True)
-                  resp.encoding = "utf-8"
-                  html = resp.text
-                  title = html.split("<title>")[1].split("</title>")[0] if "<title>" in html else "(no title)"
-                  print(f"[{label}] status={resp.status_code} len={len(html)} final_url={resp.url}")
-                  print(f"  title={title[:80]}")
-                  print(f"  股票名稱 in html: {'股票名稱' in html} | 持股 in: {'持股' in html}")
-                  print(f"  history: {[r.status_code for r in resp.history]}")
-              except Exception as exc:
-                  print(f"[{label}] FAIL: {exc}")
-          # curl 對照
+          import re, sys
+          sys.path.insert(0, ".")
+          from stock_chip.etf import get_html, parse_holdings_html, HOLDINGS_URL
+          html = get_html(HOLDINGS_URL, params={"etfid": "0050.TW"})
+          print("len:", len(html), "| 股票名稱 in:", "股票名稱" in html)
+          parsed = parse_holdings_html(html)
+          print("parsed rows:", len(parsed))
+          print("sample:", parsed[:5])
+          if len(parsed) < 5:
+              from bs4 import BeautifulSoup
+              soup = BeautifulSoup(html, "html.parser")
+              for i, table in enumerate(soup.find_all("table")):
+                  text = table.get_text()
+                  if "股票名稱" in text:
+                      raw = str(table)
+                      print(f"--- 含股票名稱的 table[{i}] 原始 HTML 前 2000 字 ---")
+                      print(raw[:2000])
+                      break
           PYEOF
-          echo "===== curl 對照 ====="
-          curl -s -m 30 "https://www.moneydj.com/ETF/X/Basic/Basic0007A.xdjhtm?etfid=0050.TW" -H "User-Agent: Mozilla/5.0" -o /tmp/c.html -w "http=%{http_code} size=%{size_download} final=%{url_effective}\n"
-          python3 -c "
-          html = open('/tmp/c.html', encoding='utf-8', errors='replace').read()
-          title = html.split('<title>')[1].split('</title>')[0] if '<title>' in html else '(no title)'
-          print('curl title:', title[:80])
-          print('curl 股票名稱 in html:', '股票名稱' in html)"
