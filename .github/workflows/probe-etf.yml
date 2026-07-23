@@ -1,0 +1,35 @@
+name: Probe ETF Holdings
+
+# 拋棄式：探測 MoneyDJ 鏡站 ETF 持股明細頁結構，取得後移除本檔。
+
+on:
+  workflow_dispatch:
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 6
+    steps:
+      - name: Probe ETF holdings pages
+        run: |
+          for url in \
+            "https://fubon-ebrokerdj.fbs.com.tw/ETF/X/Basic/Basic0007A.xdjhtm?etfid=0050.TW" \
+            "https://jdata.yuanta.com.tw/ETF/X/Basic/Basic0007A.xdjhtm?etfid=00919.TW" \
+            "https://www.moneydj.com/ETF/X/Basic/Basic0007A.xdjhtm?etfid=00878.TW" \
+            ; do
+            echo "===== $url ====="
+            curl -s -m 30 "$url" -H "User-Agent: Mozilla/5.0" | python3 -c "
+          import re, sys
+          html = sys.stdin.read()
+          print('bytes:', len(html))
+          # 抓表格列樣本：找含百分比的 tr
+          rows = re.findall(r'<tr[^>]*>.*?</tr>', html, re.S)
+          hits = [r for r in rows if '%' in r or '比例' in r or '持股' in r]
+          print('tr total:', len(rows), '| with pct:', len(hits))
+          for r in hits[:6]:
+              text = re.sub(r'<[^>]+>', '|', r)
+              text = re.sub(r'\|+', '|', text).strip('|')
+              print(text[:200])
+          " || true
+            echo
+          done
