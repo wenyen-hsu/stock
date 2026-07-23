@@ -193,6 +193,7 @@ def get_html(url: str, params: dict | None = None, timeout: int = 30) -> str:
         try:
             response = requests.get(url, params=params, headers=HTML_HEADERS, timeout=timeout, verify=False)
             response.raise_for_status()
+            response.encoding = "utf-8"  # MoneyDJ 未帶 charset，requests 預設 ISO-8859-1 會把中文解成亂碼
             if len(response.text) < 3000:
                 raise RuntimeError(f"回應過短（{len(response.text)} bytes），疑似錯誤頁")
             return response.text
