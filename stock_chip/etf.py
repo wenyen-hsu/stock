@@ -172,14 +172,23 @@ def build_rows(
     return candidates
 
 
-def get_html(url: str, params: dict | None = None, timeout: int = 60) -> str:
+HTML_HEADERS = {
+    "User-Agent": HEADERS["User-Agent"],
+    "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+    "Accept-Language": "zh-TW,zh;q=0.9",
+}
+
+
+def get_html(url: str, params: dict | None = None, timeout: int = 30) -> str:
     last_error: Exception | None = None
-    for sleep_s in (0,) + RETRY_SLEEPS:
+    for sleep_s in (0, 5, 15):
         if sleep_s:
             time.sleep(sleep_s)
         try:
-            response = requests.get(url, params=params, headers=HEADERS, timeout=timeout)
+            response = requests.get(url, params=params, headers=HTML_HEADERS, timeout=timeout)
             response.raise_for_status()
+            if len(response.text) < 3000:
+                raise RuntimeError(f"回應過短（{len(response.text)} bytes），疑似錯誤頁")
             return response.text
         except Exception as exc:
             last_error = exc
