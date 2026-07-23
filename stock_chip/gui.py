@@ -71,11 +71,11 @@ INDEX_HTML = """<!doctype html>
       --ink: #17212b;
       --muted: #607080;
       --line: #d8e0e6;
-      --line-2: var(--line-2);
+      --line-2: #e6ebef;
       --panel: #fff;
-      --panel-2: var(--panel-2);
-      --panel-3: var(--panel-3);
-      --hover: var(--hover);
+      --panel-2: #f6f8fa;
+      --panel-3: #eef2f5;
+      --hover: #f0f4f7;
       --head: #102a2a;
       --accent: #0f766e;
       --accent-dark: #115e59;
@@ -85,8 +85,8 @@ INDEX_HTML = """<!doctype html>
       /* 台股行情慣例：紅漲綠跌（狀態語意仍是綠=正常紅=異常） */
       --up: #b42318;
       --down: #067647;
-      --th-ink: var(--th-ink);
-      --td-ink: var(--td-ink);
+      --th-ink: #55677a;
+      --td-ink: #1e2a36;
       --tint-up-bg: #fff6f5;
       --tint-up-line: #efc4c0;
       --tint-down-bg: #f3fbf6;
