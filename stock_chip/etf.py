@@ -9,8 +9,11 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
 
+import warnings
+
 import requests
 from bs4 import BeautifulSoup
+from urllib3.exceptions import InsecureRequestWarning
 
 from stock_chip.dividends import parse_roc_date, to_number
 from stock_chip.official import connect_db
@@ -180,12 +183,15 @@ HTML_HEADERS = {
 
 
 def get_html(url: str, params: dict | None = None, timeout: int = 30) -> str:
+    # MoneyDJ 憑證缺 Subject Key Identifier，Python 3.13 驗證會拒絕；
+    # 公開唯讀行情資料停用驗證（同 financials.py 對 MOPS 備援的先例）
+    warnings.simplefilter("ignore", InsecureRequestWarning)
     last_error: Exception | None = None
     for sleep_s in (0, 5, 15):
         if sleep_s:
             time.sleep(sleep_s)
         try:
-            response = requests.get(url, params=params, headers=HTML_HEADERS, timeout=timeout)
+            response = requests.get(url, params=params, headers=HTML_HEADERS, timeout=timeout, verify=False)
             response.raise_for_status()
             if len(response.text) < 3000:
                 raise RuntimeError(f"回應過短（{len(response.text)} bytes），疑似錯誤頁")
