@@ -8,7 +8,7 @@ on:
 jobs:
   probe:
     runs-on: ubuntu-latest
-    timeout-minutes: 5
+    timeout-minutes: 12
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -16,22 +16,36 @@ jobs:
           python-version: "3.13"
       - name: Install dependencies
         run: pip install -r requirements.txt
-      - name: Diagnose single page
+      - name: Restore db cache
+        uses: actions/cache/restore@v4
+        with:
+          path: data/stock_chip.sqlite
+          key: stock-db-none
+          restore-keys: |
+            stock-db-
+      - name: Run etf module (with holdings)
         run: |
+          python -m stock_chip.etf
           python3 - <<'PYEOF'
-          import re, sys
+          import sys
           sys.path.insert(0, ".")
-          from stock_chip.etf import get_html, parse_holdings_html, HOLDINGS_URL
-          html = get_html(HOLDINGS_URL, params={"etfid": "0050.TW"})
-          print("len:", len(html))
-          for key in ("股票名稱", "持股", "比例", "增減"):
-              print(f"  '{key}' in html:", key in html)
-          parsed = parse_holdings_html(html)
-          print("parsed rows:", len(parsed))
-          print("sample:", parsed[:3])
-          if not parsed:
-              idx = html.find("股票名稱")
-              print("context around 股票名稱:")
-              print(html[max(0, idx - 300):idx + 800] if idx >= 0 else "(關鍵字不存在)")
-              print("table tag count:", len(re.findall(r"<table", html)))
+          from pathlib import Path
+          from stock_chip.etf import load_etf_flows
+          from stock_chip.official import connect_db
+          with connect_db(Path("data/stock_chip.sqlite")) as conn:
+              mapped, unmapped = conn.execute(
+                  "SELECT SUM(CASE WHEN stock_id NOT LIKE '?%' THEN 1 ELSE 0 END),"
+                  " SUM(CASE WHEN stock_id LIKE '?%' THEN 1 ELSE 0 END) FROM etf_holdings"
+              ).fetchone()
+              print(f"成分股映射：代號成功 {mapped} 列、未映射 {unmapped} 列")
+              for row in conn.execute(
+                  "SELECT DISTINCT stock_name FROM etf_holdings WHERE stock_id LIKE '?%' LIMIT 15"):
+                  print("  未映射:", row[0])
+              flows = load_etf_flows(conn)
+              print("top_stocks:", len(flows.get("top_stocks", [])))
+              for item in flows["top_stocks"][:8]:
+                  print(f"  {item['stock_id']:6s} {item['name']:8s} 被 {item['etf_count']} 檔持有"
+                        f" 合計 {item['held_value']/1e8:,.0f} 億")
+              assert mapped and mapped > 200, "映射列數異常"
+              assert len(flows["top_stocks"]) >= 20, "重倉統計異常"
           PYEOF
