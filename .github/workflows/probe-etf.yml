@@ -1,6 +1,6 @@
 name: Probe ETF Holdings
 
-# 拋棄式：單頁診斷 requests 抓回的 MoneyDJ 頁面與解析結果。
+# 拋棄式：比對 requests 各種 header 組合 vs curl 抓回的頁面差異。
 
 on:
   workflow_dispatch:
@@ -8,44 +8,42 @@ on:
 jobs:
   probe:
     runs-on: ubuntu-latest
-    timeout-minutes: 12
+    timeout-minutes: 5
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
-        with:
-          python-version: "3.13"
-      - name: Install dependencies
-        run: pip install -r requirements.txt
-      - name: Restore db cache
-        uses: actions/cache/restore@v4
-        with:
-          path: data/stock_chip.sqlite
-          key: stock-db-none
-          restore-keys: |
-            stock-db-
-      - name: Run etf module (with holdings)
+      - name: Compare fetch variants
         run: |
-          python -m stock_chip.etf
+          pip -q install requests
           python3 - <<'PYEOF'
-          import sys
-          sys.path.insert(0, ".")
-          from pathlib import Path
-          from stock_chip.etf import load_etf_flows
-          from stock_chip.official import connect_db
-          with connect_db(Path("data/stock_chip.sqlite")) as conn:
-              mapped, unmapped = conn.execute(
-                  "SELECT SUM(CASE WHEN stock_id NOT LIKE '?%' THEN 1 ELSE 0 END),"
-                  " SUM(CASE WHEN stock_id LIKE '?%' THEN 1 ELSE 0 END) FROM etf_holdings"
-              ).fetchone()
-              print(f"成分股映射：代號成功 {mapped} 列、未映射 {unmapped} 列")
-              for row in conn.execute(
-                  "SELECT DISTINCT stock_name FROM etf_holdings WHERE stock_id LIKE '?%' LIMIT 15"):
-                  print("  未映射:", row[0])
-              flows = load_etf_flows(conn)
-              print("top_stocks:", len(flows.get("top_stocks", [])))
-              for item in flows["top_stocks"][:8]:
-                  print(f"  {item['stock_id']:6s} {item['name']:8s} 被 {item['etf_count']} 檔持有"
-                        f" 合計 {item['held_value']/1e8:,.0f} 億")
-              assert mapped and mapped > 200, "映射列數異常"
-              assert len(flows["top_stocks"]) >= 20, "重倉統計異常"
+          import requests, warnings
+          from urllib3.exceptions import InsecureRequestWarning
+          warnings.simplefilter("ignore", InsecureRequestWarning)
+          URL = "https://www.moneydj.com/ETF/X/Basic/Basic0007A.xdjhtm"
+          variants = {
+              "minimal-ua": {"User-Agent": "Mozilla/5.0"},
+              "full-browser": {
+                  "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0 Safari/537.36",
+                  "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+                  "Accept-Language": "zh-TW,zh;q=0.9",
+              },
+          }
+          for label, headers in variants.items():
+              try:
+                  resp = requests.get(URL, params={"etfid": "0050.TW"}, headers=headers, timeout=30, verify=False, allow_redirects=True)
+                  resp.encoding = "utf-8"
+                  html = resp.text
+                  title = html.split("<title>")[1].split("</title>")[0] if "<title>" in html else "(no title)"
+                  print(f"[{label}] status={resp.status_code} len={len(html)} final_url={resp.url}")
+                  print(f"  title={title[:80]}")
+                  print(f"  股票名稱 in html: {'股票名稱' in html} | 持股 in: {'持股' in html}")
+                  print(f"  history: {[r.status_code for r in resp.history]}")
+              except Exception as exc:
+                  print(f"[{label}] FAIL: {exc}")
+          # curl 對照
           PYEOF
+          echo "===== curl 對照 ====="
+          curl -s -m 30 "https://www.moneydj.com/ETF/X/Basic/Basic0007A.xdjhtm?etfid=0050.TW" -H "User-Agent: Mozilla/5.0" -o /tmp/c.html -w "http=%{http_code} size=%{size_download} final=%{url_effective}\n"
+          python3 -c "
+          html = open('/tmp/c.html', encoding='utf-8', errors='replace').read()
+          title = html.split('<title>')[1].split('</title>')[0] if '<title>' in html else '(no title)'
+          print('curl title:', title[:80])
+          print('curl 股票名稱 in html:', '股票名稱' in html)"
