@@ -115,8 +115,8 @@ def test_market_current_month_always_refetched():
             date = dt.date(2026, 7, day)
             if date.weekday() < 5:
                 conn.execute(
-                    "INSERT INTO market_index_daily(date, index_code, close, source, updated_at)"
-                    " VALUES (?, 'TAIEX', 22000.0, 'twse', 'now')",
+                    "INSERT INTO market_index_daily(date, index_code, index_name, close, source, updated_at)"
+                    " VALUES (?, 'TAIEX', '加權指數', 22000.0, 'twse', 'now')",
                     (date.isoformat(),),
                 )
         conn.commit()
