@@ -242,7 +242,8 @@ def existing_index_months(conn: sqlite3.Connection, start: dt.date, end: dt.date
         """,
         (start.isoformat(), end.isoformat()),
     ).fetchall()
-    return {row[0] for row in rows if int(row[1] or 0) >= 15}
+    # 閾值 10：台股單月交易日最少約 11-14（2 月遇春節），15 會讓短月永遠重抓
+    return {row[0] for row in rows if int(row[1] or 0) >= 10}
 
 
 def existing_futures_dates(conn: sqlite3.Connection, product_code: str) -> set[str]:
@@ -290,6 +291,10 @@ def refresh_market_data(
 
     with connect_db(db_path) as conn:
         covered_months = set() if force else existing_index_months(conn, start, end)
+        # 當月與上月永遠重抓：月中累積滿門檻後若視為已涵蓋，月下旬的新交易日
+        # 將永遠進不來（2026-07-24 大盤斷更事故的根因）；upsert 冪等、成本僅兩請求
+        covered_months.discard(end.strftime("%Y-%m"))
+        covered_months.discard((end.replace(day=1) - dt.timedelta(days=1)).strftime("%Y-%m"))
         for month in month_starts(start, end):
             if month.strftime("%Y-%m") in covered_months:
                 continue
