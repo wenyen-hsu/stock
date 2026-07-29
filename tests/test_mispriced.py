@@ -78,3 +78,22 @@ def test_institutional_selling_penalised():
     selling = mispriced_value_breakdown(_row(**{"20d_inst_net": -1_000_000}))
     neutral = mispriced_value_breakdown(_row())
     assert selling["mispriced_trap_penalty"] < neutral["mispriced_trap_penalty"]
+
+
+def test_normalize_scan_row_keeps_mispriced_fields():
+    """CSV→JSON 的欄位白名單必須含錯殺欄位，否則前端拿不到分數與理由
+    （2026-07-29 首次發布時 mispriced_score 全空的回歸測試）。"""
+    from stock_chip.gui import normalize_scan_row
+
+    csv_row = {
+        "latest_date": "2026-07-29", "stock_id": "2385", "name": "群光", "market": "TWSE",
+        "observed_days": "20", "close": "80", "days": "20",
+        "pe_ratio": "9.8", "pe_percentile": "6.0", "eps_yoy_pct": "42.0",
+        "mispriced_score": "31.5", "mispriced_reason": "單季 EPS 年增 42%",
+        "close_vs_52w_high_pct": "-38.0", "revenue_yoy_pct": "22.0", "gross_margin_streak": "3",
+    }
+    normalized = normalize_scan_row(csv_row, 20)
+    assert normalized["mispriced_score"] == 31.5
+    assert normalized["pe_percentile"] == 6.0
+    assert normalized["eps_yoy_pct"] == 42.0
+    assert normalized["mispriced_reason"] == "單季 EPS 年增 42%"
