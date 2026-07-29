@@ -97,3 +97,29 @@ def test_normalize_scan_row_keeps_mispriced_fields():
     assert normalized["pe_percentile"] == 6.0
     assert normalized["eps_yoy_pct"] == 42.0
     assert normalized["mispriced_reason"] == "單季 EPS 年增 42%"
+
+
+def test_cyclical_peak_flagged_and_penalised():
+    """記憶體/航運等循環股在獲利高峰時 PE 最低，低 PE 是警訊不是錯殺
+    （2026-07-29 首發時前 20 名有 6 檔記憶體模組股的實測發現）。"""
+    peak = mispriced_value_breakdown(_row(eps_yoy_pct=2600.0, eps_ttm_at_high=1, pe_percentile=2.0))
+    steady = mispriced_value_breakdown(_row(eps_yoy_pct=45.0, eps_ttm_at_high=0, pe_percentile=2.0))
+    assert peak["mispriced_cyclical_peak"] == 1
+    assert peak["mispriced_trap_penalty"] <= -5
+    assert "循環高峰" in peak["mispriced_reason"]
+    # 穩健成長不該被誤標，且分數要高於循環高峰股
+    assert steady["mispriced_cyclical_peak"] == 0
+    assert steady["mispriced_score"] > peak["mispriced_score"]
+
+
+def test_extreme_growth_rewarded_less_than_steady():
+    """年增 3000%（低基期反彈）獲利分不應高於年增 60%（穩健成長）。"""
+    explosive = mispriced_value_breakdown(_row(eps_yoy_pct=3000.0, eps_ttm_at_high=0))
+    steady = mispriced_value_breakdown(_row(eps_yoy_pct=60.0, eps_ttm_at_high=0))
+    assert explosive["mispriced_earnings_score"] < steady["mispriced_earnings_score"]
+
+
+def test_high_ttm_alone_is_not_a_peak_flag():
+    """只有 TTM 在高點但年增溫和、PE 未在極低分位 → 不算循環高峰。"""
+    result = mispriced_value_breakdown(_row(eps_yoy_pct=40.0, eps_ttm_at_high=1, pe_percentile=35.0))
+    assert result["mispriced_cyclical_peak"] == 0

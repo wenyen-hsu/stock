@@ -528,6 +528,16 @@ def load_fundamentals(conn: sqlite3.Connection) -> dict[str, dict[str, Any]]:
                     streak = step
         eps_values = [q["eps"] for q in quarters[-4:] if q["eps"] is not None]
         eps_ttm = round(sum(eps_values), 2) if len(eps_values) == 4 else None
+        # TTM EPS 是否落在可得歷史的高點：循環股（記憶體/航運/鋼鐵）在獲利
+        # 高峰時 PE 反而最低，「便宜」是市場預期獲利即將反轉，不是錯殺。
+        ttm_series: list[float] = []
+        for end in range(4, len(quarters) + 1):
+            window = [q["eps"] for q in quarters[end - 4:end] if q["eps"] is not None]
+            if len(window) == 4:
+                ttm_series.append(sum(window))
+        eps_ttm_at_high = None
+        if len(ttm_series) >= 3 and eps_ttm is not None:
+            eps_ttm_at_high = 1 if eps_ttm >= max(ttm_series) - 1e-9 else 0
         # 單季 EPS 年增：與去年同季比（差 4 季），避開淡旺季造成的季增誤判
         eps_yoy = None
         if len(quarters) >= 5:
@@ -551,6 +561,7 @@ def load_fundamentals(conn: sqlite3.Connection) -> dict[str, dict[str, Any]]:
             "eps_ttm": eps_ttm,
             "eps_single_q": latest["eps"],
             "eps_yoy_pct": eps_yoy,
+            "eps_ttm_at_high": eps_ttm_at_high,
             "operating_margin_yoy_pt": operating_margin_yoy_pt,
         }
     return output
@@ -956,7 +967,16 @@ def mispriced_value_breakdown(row: dict[str, Any]) -> dict[str, Any]:
     # 第 2 層：獲利愈來愈強
     earnings = 0.0
     if eps_yoy is not None:
-        earnings += 8.0 if eps_yoy >= 50 else 6.0 if eps_yoy >= 25 else 4.0 if eps_yoy >= 10 else 2.0 if eps_yoy > 0 else -6.0
+        # 年增 ≥300% 幾乎都是去年低基期（記憶體/航運等循環股的谷底反彈），
+        # 給分不應高於穩健成長——遞減處理避免把循環高峰捧上榜首
+        earnings += (
+            6.0 if eps_yoy >= 300
+            else 8.0 if eps_yoy >= 50
+            else 6.0 if eps_yoy >= 25
+            else 4.0 if eps_yoy >= 10
+            else 2.0 if eps_yoy > 0
+            else -6.0
+        )
     earnings += bounded(streak * 1.5, -4.0, 4.0)
     if om_yoy is not None:
         earnings += 3.0 if om_yoy >= 2 else 1.5 if om_yoy >= 0 else -3.0 if om_yoy <= -2 else 0.0
@@ -979,6 +999,15 @@ def mispriced_value_breakdown(row: dict[str, Any]) -> dict[str, Any]:
 
     # 陷阱扣分：營收與毛利同步走弱＝便宜有理由，不是錯殺
     trap = 0.0
+    # 循環高峰疑慮：TTM 獲利在多年高點 + PE 在歷史低分位 + 年增來自低基期
+    # ——這組合是記憶體/航運/鋼鐵在循環頂點的典型特徵，低 PE 反是警訊
+    cyclical_peak = (
+        row.get("eps_ttm_at_high") == 1
+        and pe_pct is not None and pe_pct <= 20
+        and eps_yoy is not None and eps_yoy >= 300
+    )
+    if cyclical_peak:
+        trap -= 5.0
     if (revenue_yoy is not None and revenue_yoy < -10) and streak < 0:
         trap -= 6.0
     if (eps_yoy is not None and eps_yoy < 0) and (revenue_yoy is not None and revenue_yoy < 0):
@@ -995,11 +1024,13 @@ def mispriced_value_breakdown(row: dict[str, Any]) -> dict[str, Any]:
         "mispriced_cheap_score": round(cheap, 2),
         "mispriced_trap_penalty": round(trap, 2),
         "mispriced_eligible": 1,
-        "mispriced_reason": mispriced_reason(row, earnings, cheap, trap),
+        "mispriced_cyclical_peak": 1 if cyclical_peak else 0,
+        "mispriced_reason": mispriced_reason(row, earnings, cheap, trap, cyclical_peak),
     }
 
 
-def mispriced_reason(row: dict[str, Any], earnings: float, cheap: float, trap: float) -> str:
+def mispriced_reason(row: dict[str, Any], earnings: float, cheap: float, trap: float,
+                     cyclical_peak: bool = False) -> str:
     """把入選原因寫成人話，讓榜單自帶判讀而不只是分數。"""
     parts: list[str] = []
     eps_yoy = row.get("eps_yoy_pct")
@@ -1021,6 +1052,8 @@ def mispriced_reason(row: dict[str, Any], earnings: float, cheap: float, trap: f
     if vs_high is not None and vs_high < 0:
         parts.append(f"距 52 週高點 {vs_high:.0f}%")
     text = "、".join(parts)
+    if cyclical_peak:
+        return f"⚠ 循環高峰疑慮（獲利在多年高點、年增來自低基期，低 PE 可能反映市場預期獲利反轉）：{text}"
     if trap <= -4:
         return f"⚠ 便宜但基本面轉弱：{text}"
     return text
@@ -1360,6 +1393,8 @@ def to_export_row(row: dict[str, Any], days: int) -> dict[str, Any]:
         "mispriced_earnings_score": row.get("mispriced_earnings_score"),
         "mispriced_cheap_score": row.get("mispriced_cheap_score"),
         "mispriced_trap_penalty": row.get("mispriced_trap_penalty"),
+        "mispriced_cyclical_peak": row.get("mispriced_cyclical_peak"),
+        "eps_ttm_at_high": row.get("eps_ttm_at_high"),
         "mispriced_reason": row.get("mispriced_reason"),
         "fundamental_score": row.get("fundamental_score", 0.0),
         "multifactor_score": row.get("multifactor_score", row.get("base_score", row["chip_score"])),

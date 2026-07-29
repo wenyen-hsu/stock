@@ -919,6 +919,7 @@ INDEX_HTML = """<!doctype html>
     .mispriced-card { border: 1px solid var(--tint-up-line); background: var(--tint-up-bg); border-radius: 10px; padding: 12px 14px; display: flex; flex-direction: column; gap: 6px; cursor: pointer; }
     .mispriced-card:hover { border-color: var(--accent); }
     .mispriced-card.trap { border-color: var(--tint-warn-line); background: var(--tint-warn-bg); }
+    .mispriced-card .mp-flag { display: inline-block; font-size: 11.5px; padding: 1px 7px; border-radius: 999px; border: 1px solid var(--tint-warn-line); background: var(--tint-warn-bg); color: var(--warn); margin-left: 6px; }
     .mispriced-card .mp-title { font-size: 15px; font-weight: 600; }
     .mispriced-card .mp-reason { font-size: 12.5px; line-height: 1.65; color: var(--muted); }
     .mispriced-card .mp-metrics { display: flex; flex-wrap: wrap; gap: 6px 14px; font-size: 12.5px; }
@@ -1163,7 +1164,7 @@ INDEX_HTML = """<!doctype html>
       <section class="panel" style="margin-bottom:12px;">
         <div class="panel-head">
           <div><div class="panel-title">錯殺價值雷達（跌深但獲利轉強）</div>
-          <div class="muted" id="mispriced-note">獲利仍在轉強、股價卻被殺到自身歷史低本益比區的個股。便宜以「PE 一年分位」而非絕對倍數判斷；營收與毛利同步走弱者標為價值陷阱。景氣循環股低 PE 常出現在獲利高峰，請搭配產業判斷。</div></div>
+          <div class="muted" id="mispriced-note">獲利仍在轉強、股價卻被殺到自身歷史低本益比區的個股。便宜以「PE 一年分位」而非絕對倍數判斷。兩種警示：橘框「基本面轉弱」＝營收與毛利同步下滑；「循環高峰疑慮」＝獲利在多年高點且年增來自低基期（記憶體、航運、鋼鐵常見），此時低 PE 往往反映市場預期獲利即將反轉，不是錯殺。</div></div>
         </div>
         <div id="mispriced-cards"></div>
       </section>
@@ -3557,6 +3558,7 @@ INDEX_HTML = """<!doctype html>
       {key:"gross_margin_streak", label:"毛利率連升季", signed:true, groups:["mispriced"]},
       {key:"revenue_yoy_pct", label:"月營收年增%", signed:true, groups:["mispriced"]},
       {key:"close_vs_52w_high_pct", label:"距52週高%", signed:true, groups:["mispriced"]},
+      {key:"mispriced_cyclical_peak", label:"循環高峰", groups:["mispriced"], tip:"1＝獲利在多年高點且 PE 在歷史低分位且年增來自低基期，循環股頂點的典型組合，低 PE 可能是警訊", format: v => (Number(v) === 1 ? "⚠" : "")},
       {key:"mispriced_reason", label:"入選理由", sortType:"text", groups:["mispriced"]},
       {key:"total_score", label:"基礎分", signed:true, html:true, format: v => scoreBarCell(v, "total_score"), groups:["core"]},
       {key:"multifactor_score", label:"多因子分", signed:true, html:true, format: v => scoreBarCell(v, "multifactor_score"), groups:["core","momentum"]},
@@ -3725,6 +3727,7 @@ INDEX_HTML = """<!doctype html>
         }
         target.innerHTML = `<div class="mispriced-grid">${rows.map(row => {
           const trap = String(row.mispriced_reason || "").startsWith("⚠");
+          const peak = row.mispriced_cyclical_peak === 1;
           const metrics = [
             row.pe_ratio != null ? `<span>PE <strong>${fmt(row.pe_ratio)}</strong>${row.pe_percentile != null ? `（分位 ${fmt(row.pe_percentile)}%）` : ""}</span>` : "",
             row.close_vs_52w_high_pct != null ? `<span>距高點 <strong class="${cls(row.close_vs_52w_high_pct)}">${fmt(row.close_vs_52w_high_pct)}%</strong></span>` : "",
@@ -3732,7 +3735,7 @@ INDEX_HTML = """<!doctype html>
             row.revenue_yoy_pct != null ? `<span>營收年增 <strong class="${cls(row.revenue_yoy_pct)}">${fmt(row.revenue_yoy_pct)}%</strong></span>` : "",
           ].filter(Boolean);
           return `<div class="mispriced-card ${trap ? "trap" : ""}" data-stock="${esc(row.stock_id)}">
-            <div class="mp-title">${esc(row.stock_id)} ${esc(row.name)} <span class="muted" style="font-weight:normal; font-size:12px;">錯殺分 ${fmt(row.mispriced_score)}${row.industry ? " · " + esc(row.industry) : ""}</span></div>
+            <div class="mp-title">${esc(row.stock_id)} ${esc(row.name)} <span class="muted" style="font-weight:normal; font-size:12px;">錯殺分 ${fmt(row.mispriced_score)}${row.industry ? " · " + esc(row.industry) : ""}</span>${peak ? `<span class="mp-flag" title="獲利在多年高點、年增來自低基期、PE 在歷史低分位——循環股在頂點的典型組合，低 PE 可能反映市場預期獲利即將反轉">循環高峰疑慮</span>` : ""}</div>
             <div class="mp-metrics">${metrics.join("")}</div>
             <div class="mp-reason">${esc(row.mispriced_reason || "")}</div>
           </div>`;
@@ -5593,6 +5596,8 @@ def normalize_scan_row(row: dict[str, str], days: int) -> dict[str, object]:
         "mispriced_earnings_score": as_float_or_none(row.get("mispriced_earnings_score")),
         "mispriced_cheap_score": as_float_or_none(row.get("mispriced_cheap_score")),
         "mispriced_trap_penalty": as_float_or_none(row.get("mispriced_trap_penalty")),
+        "mispriced_cyclical_peak": as_float_or_none(row.get("mispriced_cyclical_peak")),
+        "eps_ttm_at_high": as_float_or_none(row.get("eps_ttm_at_high")),
         "mispriced_reason": row.get("mispriced_reason") or "",
         "period_return_pct": as_float_or_none(row.get("period_return_pct")),
         "rsi14": as_float_or_none(row.get("rsi14")),
