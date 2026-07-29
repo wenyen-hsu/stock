@@ -180,20 +180,22 @@ def load_history_stats(conn: sqlite3.Connection, latest_date: str) -> dict[str, 
 
     rows = conn.execute(
         """
-        SELECT stock_id, close, high, low FROM daily_prices
+        SELECT stock_id, close, high, low, pe_ratio FROM daily_prices
         WHERE date >= ? AND date <= ?
         ORDER BY stock_id, date
         """,
         (date_from, latest_date),
     ).fetchall()
     series: dict[str, dict[str, list[float]]] = {}
-    for stock_id, close, high, low in rows:
+    for stock_id, close, high, low, pe_ratio in rows:
         if close is None:
             continue
-        bucket = series.setdefault(stock_id, {"close": [], "high": [], "low": []})
+        bucket = series.setdefault(stock_id, {"close": [], "high": [], "low": [], "pe": []})
         bucket["close"].append(close)
         bucket["high"].append(high if high is not None else close)
         bucket["low"].append(low if low is not None else close)
+        if pe_ratio is not None and pe_ratio > 0:
+            bucket["pe"].append(pe_ratio)
 
     output: dict[str, dict[str, Any]] = {}
     for stock_id, bucket in series.items():
@@ -216,6 +218,18 @@ def load_history_stats(conn: sqlite3.Connection, latest_date: str) -> dict[str, 
             if return_12m is not None and index_return_12m is not None
             else None
         )
+
+        # PE 歷史分位：現在的本益比落在自己過去一年的第幾百分位。
+        # 「PE 15 倍」本身無意義，「過去一年多在 20-30 倍、現在剩 14 倍」才是被殺的證據。
+        pe_history = bucket["pe"]
+        if len(pe_history) >= 60:
+            current_pe = pe_history[-1]
+            below = sum(1 for value in pe_history if value < current_pe)
+            item["pe_percentile"] = round(below / len(pe_history) * 100, 1)
+            item["pe_median_1y"] = round(sorted(pe_history)[len(pe_history) // 2], 2)
+        else:
+            item["pe_percentile"] = None
+            item["pe_median_1y"] = None
 
         # Need at least half a year of history before calling it a 52-week level.
         if history_days >= 120:
@@ -514,6 +528,20 @@ def load_fundamentals(conn: sqlite3.Connection) -> dict[str, dict[str, Any]]:
                     streak = step
         eps_values = [q["eps"] for q in quarters[-4:] if q["eps"] is not None]
         eps_ttm = round(sum(eps_values), 2) if len(eps_values) == 4 else None
+        # 單季 EPS 年增：與去年同季比（差 4 季），避開淡旺季造成的季增誤判
+        eps_yoy = None
+        if len(quarters) >= 5:
+            current_eps = latest["eps"]
+            year_ago_eps = quarters[-5]["eps"]
+            if current_eps is not None and year_ago_eps is not None and year_ago_eps > 0:
+                eps_yoy = round((current_eps - year_ago_eps) / year_ago_eps * 100, 1)
+        # 營益率年增（百分點）：本業賺錢能力的方向
+        operating_margin_yoy_pt = None
+        if len(quarters) >= 5:
+            current_om = latest["operating_margin_pct"]
+            year_ago_om = quarters[-5]["operating_margin_pct"]
+            if current_om is not None and year_ago_om is not None:
+                operating_margin_yoy_pt = round(current_om - year_ago_om, 2)
         output[stock_id] = {
             "fin_quarter": latest["year_quarter"],
             "gross_margin_pct": latest["gross_margin_pct"],
@@ -521,6 +549,9 @@ def load_fundamentals(conn: sqlite3.Connection) -> dict[str, dict[str, Any]]:
             "net_margin_pct": latest["net_margin_pct"],
             "gross_margin_streak": streak,
             "eps_ttm": eps_ttm,
+            "eps_single_q": latest["eps"],
+            "eps_yoy_pct": eps_yoy,
+            "operating_margin_yoy_pt": operating_margin_yoy_pt,
         }
     return output
 
@@ -881,6 +912,120 @@ def base_reason(row: dict[str, Any]) -> str:
     return "；".join(parts)
 
 
+def mispriced_value_breakdown(row: dict[str, Any]) -> dict[str, Any]:
+    """錯殺價值：獲利在轉強、股價卻被殺到自身歷史低估區的個股。
+
+    大跌時低本益比有兩種：錯殺（獲利向上、被情緒帶下來）與價值陷阱
+    （便宜是因為基本面正在壞）。此處以獲利動能剔除後者，再以「PE 自身
+    歷史分位」而非絕對倍數衡量便宜——PE 15 倍本身無意義，
+    「過去一年多在 20-30 倍、現在剩 14 倍」才是被殺的證據。
+
+    景氣循環股（航運/鋼鐵/面板）低 PE 常出現在獲利高峰，EPS 年增門檻
+    可擋掉衰退期，但無法完全免疫，前端說明會註記。
+    """
+    empty = {
+        "mispriced_score": 0.0,
+        "mispriced_earnings_score": 0.0,
+        "mispriced_cheap_score": 0.0,
+        "mispriced_trap_penalty": 0.0,
+        "mispriced_eligible": 0,
+        "mispriced_reason": "",
+    }
+    eps_ttm = row.get("eps_ttm")
+    eps_single = row.get("eps_single_q")
+    volume_lot = (row.get(f"{row['days']}d_volume") or 0) / 1000 / max(row.get("observed_days") or 1, 1)
+
+    # 資格門檻：虧損股談本益比無意義；日均量過低是流動性陷阱（進得去出不來）
+    if eps_ttm is None or eps_ttm <= 0:
+        return {**empty, "mispriced_reason": "近四季 EPS 未轉正或缺財報"}
+    if eps_single is not None and eps_single <= 0:
+        return {**empty, "mispriced_reason": "最新單季虧損"}
+    if volume_lot < 500:
+        return {**empty, "mispriced_reason": f"日均量 {volume_lot:.0f} 張偏低（門檻 500）"}
+
+    eps_yoy = row.get("eps_yoy_pct")
+    streak = row.get("gross_margin_streak") or 0
+    om_yoy = row.get("operating_margin_yoy_pt")
+    revenue_yoy = row.get("revenue_yoy_pct")
+    pe = row.get("pe_ratio")
+    pe_pct = row.get("pe_percentile")
+    vs_high = row.get("close_vs_52w_high_pct")
+    dividend_yield = row.get("dividend_yield")
+    pb = row.get("pb_ratio")
+
+    # 第 2 層：獲利愈來愈強
+    earnings = 0.0
+    if eps_yoy is not None:
+        earnings += 8.0 if eps_yoy >= 50 else 6.0 if eps_yoy >= 25 else 4.0 if eps_yoy >= 10 else 2.0 if eps_yoy > 0 else -6.0
+    earnings += bounded(streak * 1.5, -4.0, 4.0)
+    if om_yoy is not None:
+        earnings += 3.0 if om_yoy >= 2 else 1.5 if om_yoy >= 0 else -3.0 if om_yoy <= -2 else 0.0
+    # 財報最新僅到上一季，月營收補時效性（大跌當下要看最新的獲利證據）
+    if revenue_yoy is not None:
+        earnings += 5.0 if revenue_yoy >= 20 else 3.0 if revenue_yoy >= 10 else 1.0 if revenue_yoy > 0 else -5.0 if revenue_yoy <= -10 else -2.0
+
+    # 第 3 層：股價被殺到多低
+    cheap = 0.0
+    if pe_pct is not None:
+        cheap += 8.0 if pe_pct <= 10 else 6.0 if pe_pct <= 25 else 3.0 if pe_pct <= 40 else 0.0
+    if pe is not None and pe > 0:
+        cheap += 4.0 if pe <= 10 else 2.0 if pe <= 15 else -3.0 if pe >= 30 else 0.0
+    if vs_high is not None:
+        cheap += 5.0 if vs_high <= -40 else 3.5 if vs_high <= -25 else 2.0 if vs_high <= -15 else 0.0
+    if dividend_yield is not None:
+        cheap += 2.0 if dividend_yield >= 5 else 1.0 if dividend_yield >= 3 else 0.0
+    if pb is not None and 0 < pb <= 1.5:
+        cheap += 1.5
+
+    # 陷阱扣分：營收與毛利同步走弱＝便宜有理由，不是錯殺
+    trap = 0.0
+    if (revenue_yoy is not None and revenue_yoy < -10) and streak < 0:
+        trap -= 6.0
+    if (eps_yoy is not None and eps_yoy < 0) and (revenue_yoy is not None and revenue_yoy < 0):
+        trap -= 4.0
+    inst_net = row.get(f"{row['days']}d_inst_net") or 0
+    volume = row.get(f"{row['days']}d_volume") or 0
+    if volume > 0 and inst_net / volume * 100 <= -3:
+        trap -= 2.0
+
+    score = round(bounded(earnings + cheap + trap, -20.0, 40.0), 2)
+    return {
+        "mispriced_score": score,
+        "mispriced_earnings_score": round(earnings, 2),
+        "mispriced_cheap_score": round(cheap, 2),
+        "mispriced_trap_penalty": round(trap, 2),
+        "mispriced_eligible": 1,
+        "mispriced_reason": mispriced_reason(row, earnings, cheap, trap),
+    }
+
+
+def mispriced_reason(row: dict[str, Any], earnings: float, cheap: float, trap: float) -> str:
+    """把入選原因寫成人話，讓榜單自帶判讀而不只是分數。"""
+    parts: list[str] = []
+    eps_yoy = row.get("eps_yoy_pct")
+    if eps_yoy is not None and eps_yoy > 0:
+        parts.append(f"單季 EPS 年增 {eps_yoy:.0f}%")
+    streak = row.get("gross_margin_streak") or 0
+    if streak > 0:
+        parts.append(f"毛利率連 {streak} 季升")
+    elif streak < 0:
+        parts.append(f"毛利率連 {abs(streak)} 季降")
+    revenue_yoy = row.get("revenue_yoy_pct")
+    if revenue_yoy is not None:
+        parts.append(f"月營收年{'增' if revenue_yoy >= 0 else '減'} {abs(revenue_yoy):.0f}%")
+    pe = row.get("pe_ratio")
+    pe_pct = row.get("pe_percentile")
+    if pe is not None and pe > 0:
+        parts.append(f"PE {pe:.1f}" + (f"（一年 {pe_pct:.0f}% 分位）" if pe_pct is not None else ""))
+    vs_high = row.get("close_vs_52w_high_pct")
+    if vs_high is not None and vs_high < 0:
+        parts.append(f"距 52 週高點 {vs_high:.0f}%")
+    text = "、".join(parts)
+    if trap <= -4:
+        return f"⚠ 便宜但基本面轉弱：{text}"
+    return text
+
+
 def confluence_breakdown(row: dict[str, Any]) -> dict[str, Any]:
     """Explain cases where institutional flow and top branch buying point the same way."""
     empty = {
@@ -1148,6 +1293,7 @@ def aggregate(
         item["branch_status"] = branch_status(item)
         item["base_reason"] = base_reason(item)
         item.update(confluence_breakdown(item))
+        item.update(mispriced_value_breakdown(item))
         item["total_score"] = item["base_score"]
         output.append(item)
     return output
@@ -1205,6 +1351,16 @@ def to_export_row(row: dict[str, Any], days: int) -> dict[str, Any]:
         "gross_margin_streak": row.get("gross_margin_streak"),
         "eps_ttm": row.get("eps_ttm"),
         "pe_ttm": row.get("pe_ttm"),
+        "pe_percentile": row.get("pe_percentile"),
+        "pe_median_1y": row.get("pe_median_1y"),
+        "eps_single_q": row.get("eps_single_q"),
+        "eps_yoy_pct": row.get("eps_yoy_pct"),
+        "operating_margin_yoy_pt": row.get("operating_margin_yoy_pt"),
+        "mispriced_score": row.get("mispriced_score"),
+        "mispriced_earnings_score": row.get("mispriced_earnings_score"),
+        "mispriced_cheap_score": row.get("mispriced_cheap_score"),
+        "mispriced_trap_penalty": row.get("mispriced_trap_penalty"),
+        "mispriced_reason": row.get("mispriced_reason"),
         "fundamental_score": row.get("fundamental_score", 0.0),
         "multifactor_score": row.get("multifactor_score", row.get("base_score", row["chip_score"])),
         f"{days}d_avg_price": round(avg_price, 4) if avg_price is not None else None,
@@ -1296,6 +1452,17 @@ def export_rankings(output_dir: Path, rows: list[dict[str, Any]], days: int, lim
                 and (row.get("avg_turnover_100m") or 0) >= 0.3
             ],
             key=lambda row: (row.get("momentum_score") or 0, row[f"{days}d_inst_net"]),
+            reverse=True,
+        ),
+        "mispriced_value": sorted(
+            [
+                row
+                for row in rows
+                if row.get("mispriced_eligible")
+                and (row.get("mispriced_score") or 0) > 0
+                and (row.get("pe_percentile") is not None or (row.get("close_vs_52w_high_pct") or 0) <= -15)
+            ],
+            key=lambda row: (row.get("mispriced_score") or 0, -(row.get("pe_percentile") or 100)),
             reverse=True,
         ),
         "value_dividend": sorted(

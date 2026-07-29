@@ -856,6 +856,14 @@
     .pf-form { display: grid; grid-template-columns: repeat(8, 1fr); gap: 10px; align-items: end; }
     .pf-form .pf-note-cell { grid-column: 1 / 7; }
     .pf-form .pf-submit-cell { grid-column: 7 / 9; }
+    .mispriced-card { border: 1px solid var(--tint-up-line); background: var(--tint-up-bg); border-radius: 10px; padding: 12px 14px; display: flex; flex-direction: column; gap: 6px; cursor: pointer; }
+    .mispriced-card:hover { border-color: var(--accent); }
+    .mispriced-card.trap { border-color: var(--tint-warn-line); background: var(--tint-warn-bg); }
+    .mispriced-card .mp-title { font-size: 15px; font-weight: 600; }
+    .mispriced-card .mp-reason { font-size: 12.5px; line-height: 1.65; color: var(--muted); }
+    .mispriced-card .mp-metrics { display: flex; flex-wrap: wrap; gap: 6px 14px; font-size: 12.5px; }
+    .mispriced-card .mp-metrics > span { white-space: nowrap; }
+    .mispriced-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(330px, 1fr)); gap: 12px; }
     .pf-position-card { border: 1px solid var(--tint-up-line); background: var(--tint-up-bg); border-radius: 10px; padding: 10px 14px; margin-bottom: 12px; font-size: 13px; line-height: 1.7; }
     .pf-position-card.loss { border-color: var(--tint-down-line); background: var(--tint-down-bg); }
     @media (max-width: 1000px) { .pf-form { grid-template-columns: repeat(2, 1fr); } .pf-form .pf-note-cell, .pf-form .pf-submit-cell { grid-column: 1 / -1; } }
@@ -944,6 +952,7 @@
             <option value="near_avg_with_inst_buy">接近均價且法人買超</option>
           </optgroup>
           <optgroup label="價值">
+            <option value="mispriced_value">錯殺價值（跌深 + 獲利轉強）</option>
             <option value="value_dividend">低估值 + 高殖利率</option>
           </optgroup>
         </select>
@@ -1091,6 +1100,13 @@
           </div>
         </div>
       </div>
+      <section class="panel" style="margin-bottom:12px;">
+        <div class="panel-head">
+          <div><div class="panel-title">錯殺價值雷達（跌深但獲利轉強）</div>
+          <div class="muted" id="mispriced-note">獲利仍在轉強、股價卻被殺到自身歷史低本益比區的個股。便宜以「PE 一年分位」而非絕對倍數判斷；營收與毛利同步走弱者標為價值陷阱。景氣循環股低 PE 常出現在獲利高峰，請搭配產業判斷。</div></div>
+        </div>
+        <div id="mispriced-cards"></div>
+      </section>
       <section class="panel" style="margin-bottom:12px;">
         <div class="panel-head">
           <div><div class="panel-title">ETF 資金流（熱門台股 ETF 申購熱度）</div>
@@ -1742,6 +1758,7 @@
       volume_expansion: "成交量明顯放大的股票，關注資金新流入。",
       revenue_volume_breakout: "營收成長配合量能放大，基本面＋籌碼共振。",
       near_avg_with_inst_buy: "收盤接近區間均價且法人買超，回檔上車視角。",
+      mispriced_value: "大跌時的錯殺標的：獲利仍在轉強（單季 EPS 年增、毛利率連升、月營收年增）但股價被殺到自身歷史低本益比區。以 PE 一年分位而非絕對倍數判斷便宜，並對「營收與毛利同步走弱」的價值陷阱扣分。景氣循環股低 PE 常出現在獲利高峰，請搭配產業判斷。",
       value_dividend: "殖利率 ≥3%、本益比 ≤20 且法人未賣超的價值傾斜。",
     };
     async function rankingBacktestNote(ranking, days) {
@@ -3473,6 +3490,14 @@
       {key:"dividend_yield", label:"殖利率%", groups:["valuation"]},
       {key:"pb_ratio", label:"股淨比", groups:["valuation"]},
       {key:"valuation_score", label:"估值分", signed:true, groups:["valuation"]},
+      {key:"mispriced_score", label:"錯殺分", signed:true, groups:["mispriced"], tip:"獲利動能分＋便宜分－陷阱扣分；越高代表「獲利在轉強但股價被殺」的程度越明顯"},
+      {key:"pe_ratio", label:"本益比", groups:["mispriced"]},
+      {key:"pe_percentile", label:"PE一年分位%", groups:["mispriced"], tip:"現在 PE 落在自己過去一年的第幾百分位；10 以下＝比過去一年 90% 的日子都便宜"},
+      {key:"eps_yoy_pct", label:"單季EPS年增%", signed:true, groups:["mispriced"]},
+      {key:"gross_margin_streak", label:"毛利率連升季", signed:true, groups:["mispriced"]},
+      {key:"revenue_yoy_pct", label:"月營收年增%", signed:true, groups:["mispriced"]},
+      {key:"close_vs_52w_high_pct", label:"距52週高%", signed:true, groups:["mispriced"]},
+      {key:"mispriced_reason", label:"入選理由", sortType:"text", groups:["mispriced"]},
       {key:"total_score", label:"基礎分", signed:true, html:true, format: v => scoreBarCell(v, "total_score"), groups:["core"]},
       {key:"multifactor_score", label:"多因子分", signed:true, html:true, format: v => scoreBarCell(v, "multifactor_score"), groups:["core","momentum"]},
       {key:"market_sentiment_score", label:"大盤分", signed:true, groups:["core"]},
@@ -3525,7 +3550,8 @@
       {key:"margin", label:"融資券", tip:"融資券：觀察融資餘額與融券餘額增減。融資快速增加可能代表散戶追價，融資下降且法人買超通常較乾淨。"},
       {key:"volume", label:"量能", tip:"量能：比較最新日成交量與區間平均量、5日均量與區間均量。單日量倍高代表當天成交明顯放大，5日量倍高代表最近一段時間量能持續升溫。"},
       {key:"momentum", label:"動能風險", tip:"動能風險：短週期看區間漲跌%、RSI14、年化波動率與日均成交額；長週期看 6/12 個月報酬、相對大盤強弱（RS）、距 52 週高點與季線/年線位階。RS 為正代表強於大盤；距 52 週高 ≥ -3% 是典型突破訊號；年線之下代表長線趨勢轉弱。長線資料需要足夠的歷史日線，新上市股票可能空白。"},
-      {key:"valuation", label:"估值", tip:"估值：使用交易所每日行情揭露的本益比、殖利率與股價淨值比。空值通常代表該來源未揭露、EPS 為負或資料不可計算；估值分會納入多因子綜合分，但不影響基礎分。"}
+      {key:"valuation", label:"估值", tip:"估值：使用交易所每日行情揭露的本益比、殖利率與股價淨值比。空值通常代表該來源未揭露、EPS 為負或資料不可計算；估值分會納入多因子綜合分，但不影響基礎分。"},
+      {key:"mispriced", label:"錯殺價值", tip:"錯殺價值：大跌時分辨「錯殺」與「價值陷阱」。獲利動能（單季 EPS 年增、毛利率連升、月營收年增）＋便宜程度（PE 一年分位、距 52 週高點）－陷阱扣分（營收與毛利同步走弱、法人大賣）。景氣循環股低 PE 常在獲利高峰，低 PE 反可能是賣訊，請搭配產業判斷。"}
     ];
     function visibleRankingCols() {
       return rankingCols.filter(col => (col.groups || ["core"]).includes(state.columnGroup));
@@ -3626,6 +3652,37 @@
       </div>`;
       target.querySelectorAll(".digest-chip").forEach(btn => btn.addEventListener("click", () => openDetail(btn.dataset.stock)));
     }
+    async function loadMispricedRadar() {
+      const target = document.querySelector("#mispriced-cards");
+      if (!target) return;
+      try {
+        const days = document.querySelector("#days")?.value || 20;
+        const data = await getJSON(`/api/ranking?ranking=mispriced_value&days=${days}&limit=12`);
+        const rows = (data?.rows || []).filter(row => (row.mispriced_score || 0) > 0);
+        if (!rows.length) {
+          target.innerHTML = `<div class="empty">目前沒有同時符合「獲利轉強」與「股價被殺到歷史低估區」的個股——市場尚未出現明顯錯殺，或財報/營收資料仍在更新。</div>`;
+          return;
+        }
+        target.innerHTML = `<div class="mispriced-grid">${rows.map(row => {
+          const trap = String(row.mispriced_reason || "").startsWith("⚠");
+          const metrics = [
+            row.pe_ratio != null ? `<span>PE <strong>${fmt(row.pe_ratio)}</strong>${row.pe_percentile != null ? `（分位 ${fmt(row.pe_percentile)}%）` : ""}</span>` : "",
+            row.close_vs_52w_high_pct != null ? `<span>距高點 <strong class="${cls(row.close_vs_52w_high_pct)}">${fmt(row.close_vs_52w_high_pct)}%</strong></span>` : "",
+            row.eps_yoy_pct != null ? `<span>EPS年增 <strong class="${cls(row.eps_yoy_pct)}">${fmt(row.eps_yoy_pct)}%</strong></span>` : "",
+            row.revenue_yoy_pct != null ? `<span>營收年增 <strong class="${cls(row.revenue_yoy_pct)}">${fmt(row.revenue_yoy_pct)}%</strong></span>` : "",
+          ].filter(Boolean);
+          return `<div class="mispriced-card ${trap ? "trap" : ""}" data-stock="${esc(row.stock_id)}">
+            <div class="mp-title">${esc(row.stock_id)} ${esc(row.name)} <span class="muted" style="font-weight:normal; font-size:12px;">錯殺分 ${fmt(row.mispriced_score)}${row.industry ? " · " + esc(row.industry) : ""}</span></div>
+            <div class="mp-metrics">${metrics.join("")}</div>
+            <div class="mp-reason">${esc(row.mispriced_reason || "")}</div>
+          </div>`;
+        }).join("")}</div>`;
+        target.querySelectorAll(".mispriced-card").forEach(card =>
+          card.addEventListener("click", () => openDetail(card.dataset.stock)));
+      } catch (_err) {
+        target.innerHTML = `<div class="empty">錯殺價值資料尚未發布（下次管線更新後出現）。</div>`;
+      }
+    }
     async function loadEtfFlows() {
       const target = document.querySelector("#etf-flow-table");
       if (!target) return;
@@ -3712,6 +3769,7 @@
       ], { rowId: row => row.stock_id, onClick: stock => openDetail(stock) });
     }
     async function loadTrend() {
+      loadMispricedRadar();
       loadEtfFlows();
       const days = document.querySelector("#days").value;
       let data;

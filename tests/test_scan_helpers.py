@@ -138,4 +138,5 @@ def test_to_export_row_field_freeze():
         "top_buy_branch_est_cost", "branch_buy_streak", "branch_streak_broker", "top_buy_is_day_trader",
     }
     assert expected_new_fields <= set(exported.keys())
-    assert len(exported) == 103, f"CSV 欄位數改變：{len(exported)}（若為刻意調整請同步更新此測試）"
+    assert {"mispriced_score", "pe_percentile", "eps_yoy_pct", "mispriced_reason"} <= set(exported.keys())
+    assert len(exported) == 113, f"CSV 欄位數改變：{len(exported)}（若為刻意調整請同步更新此測試）"

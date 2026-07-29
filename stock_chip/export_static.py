@@ -39,6 +39,7 @@ RANKINGS = [
     "multifactor_score",
     "momentum_inst_buy",
     "high_52w_inst_buy",
+    "mispriced_value",
     "value_dividend",
     "big_holder_increase",
     "chip_score",
