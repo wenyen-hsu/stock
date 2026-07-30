@@ -5233,7 +5233,26 @@ INDEX_HTML = """<!doctype html>
       ]);
       const branchTopStatus = data.branch_top_status;
       const branchTopNote = document.querySelector("#branch-top-note");
-      if (!data.branch_top.length && branchTopStatus) {
+      if (!data.branch_top.length && !branchTopStatus) {
+        // 分點沒有全市場批次端點，須逐檔抓取；名單為各排行前段＋自選股。
+        // 留白會讓人誤以為「這檔沒有主力進出」，實際是尚未進入抓取名單。
+        if (branchTopNote) branchTopNote.textContent = "尚未進入分點抓取名單";
+        document.querySelector("#branch-top-table").innerHTML =
+          `<div class="empty">此檔尚無分點資料。分點須逐檔向來源抓取，每日名單為<strong>各排行前段 ＋ 你的自選股</strong>；`
+          + `<button class="secondary" id="branch-add-watch" style="height:26px; padding:0 10px; font-size:12px; margin:0 4px;">加入自選股</button>`
+          + `後，明日管線更新起就會有這檔的分點資料。</div>`;
+        document.querySelector("#branch-add-watch")?.addEventListener("click", async event => {
+          const target = document.querySelector("#branch-top-table");
+          try {
+            await postJSON("/api/watchlist", { stock_id: String(data.stock?.stock_id || ""), action: "add" });
+            if (state.detail?.stock) state.detail.stock.in_watchlist = true;
+            updateWatchlistButton();
+            target.innerHTML = `<div class="empty">已加入自選股，明日管線更新後即會出現這檔的分點資料。</div>`;
+          } catch (err) {
+            event.target.textContent = `加入失敗：${err.message}`;
+          }
+        });
+      } else if (!data.branch_top.length && branchTopStatus) {
         const statusText = {success:"成功", empty:"空回應", failed:"抓取失敗", missing:"尚未抓取"}[branchTopStatus.status] || branchTopStatus.status;
         const detail = branchTopStatus.error ? `；原因：${branchTopStatus.error}` : "";
         if (branchTopNote) branchTopNote.textContent = `狀態：${statusText}，可單檔更新`;

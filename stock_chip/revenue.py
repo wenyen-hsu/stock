@@ -294,6 +294,42 @@ def all_market_ids(db_path: Path) -> list[str]:
     return [row[0] for row in rows]
 
 
+def union_ranking_stock_ids(reports_dir: Path, days: int, per_ranking: int) -> list[str]:
+    """各排行前 N 名的交錯聯集，供分點等逐檔抓取決定名單。
+
+    只用單一 total_score 前 N 名會漏掉其他榜的標的——錯殺價值、爆量這類
+    榜的個股在籌碼總分上通常很難看（正在被賣才會跌深），實測「錯殺價值榜
+    前 20 只有 1 檔有分點資料」。改取各榜聯集後，任何榜點進去都有資料。
+
+    交錯排列（各榜第 1 名 → 各榜第 2 名 → …）使下游 --limit 截斷時
+    仍能覆蓋每個榜的前段，而非把配額用完在單一榜上。
+    """
+    if per_ranking <= 0 or not reports_dir.exists():
+        return []
+    buckets: list[list[str]] = []
+    for path in sorted(reports_dir.glob(f"ranking_*_{days}d.csv")):
+        try:
+            with path.open(encoding="utf-8-sig") as f:
+                rows = list(csv.DictReader(f))
+        except OSError:
+            continue
+        ids = []
+        for row in rows[:per_ranking]:
+            stock_id = (row.get("stock_id") or "").strip()
+            if stock_id:
+                ids.append(stock_id)
+        if ids:
+            buckets.append(ids)
+    merged: list[str] = []
+    seen: set[str] = set()
+    for position in range(per_ranking):
+        for bucket in buckets:
+            if position < len(bucket) and bucket[position] not in seen:
+                seen.add(bucket[position])
+                merged.append(bucket[position])
+    return merged
+
+
 def top_scan_stock_ids(report_path: Path, limit: int) -> list[str]:
     if limit <= 0 or not report_path.exists():
         return []

@@ -89,27 +89,27 @@ jobs:
         continue-on-error: true
         run: python -m stock_chip.tdcc
 
-      - name: 抓取分點 Top 10（排行前 300 檔 + 自選股，MoneyDJ）
+      - name: 抓取分點 Top 10（各排行前 50 聯集 + 總分前 300 + 自選股，MoneyDJ）
         continue-on-error: true
         env:
           DAYS: ${{ github.event.inputs.days || '20' }}
           PYTHONUNBUFFERED: "1"
-        run: python -m stock_chip.branch --days "$DAYS" --top 10 --from-scan 300 --sleep 1.0 --skip-existing --retry-sleeps 3,8
+        run: python -m stock_chip.branch --days "$DAYS" --top 10 --from-rankings 50 --from-scan 300 --sleep 1.0 --skip-existing --retry-sleeps 3,8
 
-      - name: 抓取分點單日進出（排行前 100 檔 + 自選股，補齊近 20 天供連買/成本推估）
+      - name: 抓取分點單日進出（各排行前 15 聯集 + 總分前 100 + 自選股，補齊近 20 天）
         continue-on-error: true
         env:
           PYTHONUNBUFFERED: "1"
         # --only-missing：已入庫的日子自動跳過；首跑回補 20 天（~70 分鐘），
         # 之後每天只補最新一天，新進榜股票自動回補整個視窗
-        run: python -m stock_chip.branch --daily --days 20 --top 15 --from-scan 100 --only-missing --sleep 1.0 --retry-sleeps 3,8
+        run: python -m stock_chip.branch --daily --days 20 --top 15 --from-rankings 15 --from-scan 100 --only-missing --sleep 1.0 --retry-sleeps 3,8
 
       - name: 掃描 20 日與 5 日排行
         env:
           DAYS: ${{ github.event.inputs.days || '20' }}
         run: |
-          python -m stock_chip.scan --days "$DAYS" --limit 50
-          python -m stock_chip.scan --days 5 --limit 50
+          python -m stock_chip.scan --days "$DAYS" --limit 100
+          python -m stock_chip.scan --days 5 --limit 100
 
       - name: 回測統計與快照備份
         continue-on-error: true
