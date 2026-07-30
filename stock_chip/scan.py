@@ -226,10 +226,13 @@ def load_history_stats(conn: sqlite3.Connection, latest_date: str) -> dict[str, 
             current_pe = pe_history[-1]
             below = sum(1 for value in pe_history if value < current_pe)
             item["pe_percentile"] = round(below / len(pe_history) * 100, 1)
-            item["pe_median_1y"] = round(sorted(pe_history)[len(pe_history) // 2], 2)
+            median = sorted(pe_history)[len(pe_history) // 2]
+            item["pe_median_1y"] = round(median, 2)
+            item["pe_vs_median_pct"] = round((current_pe - median) / median * 100, 1) if median else None
         else:
             item["pe_percentile"] = None
             item["pe_median_1y"] = None
+            item["pe_vs_median_pct"] = None
 
         # Need at least half a year of history before calling it a 52-week level.
         if history_days >= 120:
@@ -1386,6 +1389,7 @@ def to_export_row(row: dict[str, Any], days: int) -> dict[str, Any]:
         "pe_ttm": row.get("pe_ttm"),
         "pe_percentile": row.get("pe_percentile"),
         "pe_median_1y": row.get("pe_median_1y"),
+        "pe_vs_median_pct": row.get("pe_vs_median_pct"),
         "eps_single_q": row.get("eps_single_q"),
         "eps_yoy_pct": row.get("eps_yoy_pct"),
         "operating_margin_yoy_pt": row.get("operating_margin_yoy_pt"),

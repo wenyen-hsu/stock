@@ -123,3 +123,39 @@ def test_high_ttm_alone_is_not_a_peak_flag():
     """只有 TTM 在高點但年增溫和、PE 未在極低分位 → 不算循環高峰。"""
     result = mispriced_value_breakdown(_row(eps_yoy_pct=40.0, eps_ttm_at_high=1, pe_percentile=35.0))
     assert result["mispriced_cyclical_peak"] == 0
+
+
+def test_pe_history_percentile_and_median():
+    """PE 一年分位與中位數由日線歷史算出，供「跟過去比差多少」判讀。"""
+    import sqlite3
+    import tempfile
+    from pathlib import Path
+
+    from stock_chip.official import connect_db
+    from stock_chip.scan import load_history_stats
+
+    tmp = Path(tempfile.mkdtemp()) / "pe.sqlite"
+    with connect_db(tmp) as conn:
+        # 120 個交易日：前 100 天 PE 25 倍、最後 20 天殺到 12 倍
+        dates = []
+        for i in range(120):
+            date = f"2026-{(i // 21) + 1:02d}-{(i % 21) + 1:02d}"
+            dates.append(date)
+            conn.execute(
+                "INSERT OR IGNORE INTO trading_days(date, market, price_count, institutional_count,"
+                " margin_count, updated_at) VALUES (?, 'TWSE', 1, 1, 1, 'now')",
+                (date,),
+            )
+            pe = 25.0 if i < 100 else 12.0
+            conn.execute(
+                "INSERT INTO daily_prices(date, stock_id, name, close, high, low, pe_ratio, updated_at)"
+                " VALUES (?, '2385', '群光', 100.0, 101.0, 99.0, ?, 'now')",
+                (date, pe),
+            )
+        conn.commit()
+        stats = load_history_stats(conn, dates[-1])
+        item = stats.get("2385", {})
+        # 現在 12 倍，過去 100 天都在 25 倍 → 分位極低、明顯低於中位
+        assert item["pe_percentile"] == 0.0
+        assert item["pe_median_1y"] == 25.0
+        assert item["pe_vs_median_pct"] == -52.0

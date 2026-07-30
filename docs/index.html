@@ -1195,6 +1195,7 @@
         <a href="#sec-events">重大事件</a>
         <a href="#sec-chart">K線</a>
         <a href="#sec-news">新聞</a>
+        <a href="#sec-pe">本益比</a>
         <a href="#sec-fundamentals">營收財報</a>
         <a href="#sec-margin">融資券</a>
         <a href="#sec-branch">分點</a>
@@ -1285,6 +1286,15 @@
             <div class="panel-actions"><button class="secondary single-refresh" data-section="daily">更新每日</button></div>
           </div>
           <div class="table-wrap" id="daily-table"></div>
+        </div>
+        <div class="panel" id="sec-pe">
+          <div class="panel-head">
+            <div><div class="panel-title">本益比歷史（近一年）</div><div class="muted" id="pe-note">每日本益比走勢與中位數／四分位帶，看現在的估值跟過去一年比是貴還是便宜。虛線為一年中位數，灰帶為 25%～75% 常態區間。</div></div>
+          </div>
+          <div class="panel-body">
+            <div class="revenue-chart-wrap"><canvas id="pe-chart"></canvas></div>
+            <div class="legend" id="pe-legend"></div>
+          </div>
         </div>
         <div class="panel">
           <div class="panel-head">
@@ -2358,6 +2368,107 @@
         const value = latest?.[s.key];
         return `<span class="legend-item"><span class="legend-swatch" style="background:${s.color}"></span>${esc(s.label)} ${esc(fmt(value))}</span>`;
       }).join("") + `<span class="muted">顯示 ${rows.length} / ${allRows.length} 日，滾輪可縮放</span>`;
+    }
+    function renderPeChart() {
+      const canvas = document.querySelector("#pe-chart");
+      const legend = document.querySelector("#pe-legend");
+      if (!canvas || !legend) return;
+      const rows = (state.detail?.chart || []).filter(row => Number(row.pe_ratio) > 0);
+      const wrap = canvas.parentElement;
+      const dpr = window.devicePixelRatio || 1;
+      canvas.style.width = `${wrap.clientWidth}px`;
+      canvas.style.height = `${wrap.clientHeight}px`;
+      canvas.width = Math.floor(wrap.clientWidth * dpr);
+      canvas.height = Math.floor(wrap.clientHeight * dpr);
+      const ctx = canvas.getContext("2d");
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      ctx.clearRect(0, 0, wrap.clientWidth, wrap.clientHeight);
+      if (rows.length < 20) {
+        legend.innerHTML = `<span class="muted">本益比歷史不足（需至少 20 個交易日；EPS 為負或交易所未揭露時無本益比）。</span>`;
+        return;
+      }
+      const values = rows.map(row => Number(row.pe_ratio));
+      const sorted = [...values].sort((a, b) => a - b);
+      const quantile = q => sorted[Math.min(sorted.length - 1, Math.floor(sorted.length * q))];
+      const median = quantile(0.5);
+      const q1 = quantile(0.25);
+      const q3 = quantile(0.75);
+      const current = values[values.length - 1];
+      const below = values.filter(value => value < current).length;
+      const percentile = Math.round(below / values.length * 1000) / 10;
+      const w = wrap.clientWidth;
+      const h = wrap.clientHeight;
+      const pad = { top: 16, right: 62, bottom: 32, left: 34 };
+      let min = Math.min(...values);
+      let max = Math.max(...values);
+      const span = max - min || max * 0.1 || 1;
+      min -= span * 0.1;
+      max += span * 0.1;
+      const x = idx => pad.left + (rows.length <= 1 ? 0 : idx * (w - pad.left - pad.right) / (rows.length - 1));
+      const y = value => pad.top + (max - value) * (h - pad.top - pad.bottom) / (max - min);
+      ctx.font = "12px -apple-system, BlinkMacSystemFont, Segoe UI, sans-serif";
+
+      // 四分位常態區間（灰帶）：現在的點落在帶內＝估值正常，帶下＝相對便宜
+      ctx.fillStyle = cssVar("--tint-warn-bg", "rgba(0,0,0,.04)");
+      ctx.globalAlpha = 0.55;
+      ctx.fillRect(pad.left, y(q3), w - pad.left - pad.right, Math.max(1, y(q1) - y(q3)));
+      ctx.globalAlpha = 1;
+
+      // 中位數虛線
+      ctx.strokeStyle = cssVar("--muted", "#888");
+      ctx.setLineDash([5, 4]);
+      ctx.lineWidth = 1;
+      ctx.beginPath();
+      ctx.moveTo(pad.left, y(median));
+      ctx.lineTo(w - pad.right, y(median));
+      ctx.stroke();
+      ctx.setLineDash([]);
+
+      // PE 線：低於中位數段落用綠（便宜）、高於用紅（貴），沿用台股紅漲綠跌語意
+      for (let idx = 1; idx < rows.length; idx += 1) {
+        ctx.beginPath();
+        ctx.strokeStyle = values[idx] >= median ? chartColors.up : chartColors.down;
+        ctx.lineWidth = 1.6;
+        ctx.moveTo(x(idx - 1), y(values[idx - 1]));
+        ctx.lineTo(x(idx), y(values[idx]));
+        ctx.stroke();
+      }
+
+      // 目前位置的點與標籤
+      const lastX = x(rows.length - 1);
+      const lastY = y(current);
+      ctx.fillStyle = current >= median ? chartColors.up : chartColors.down;
+      ctx.beginPath();
+      ctx.arc(lastX, lastY, 4, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.fillStyle = cssVar("--ink", "#111");
+      ctx.textAlign = "left";
+      ctx.fillText(fmt(Math.round(current * 100) / 100), Math.min(lastX + 8, w - pad.right + 2), lastY + 4);
+
+      // 座標軸標籤：中位數與四分位
+      ctx.fillStyle = cssVar("--muted", "#888");
+      ctx.textAlign = "left";
+      ctx.fillText(`中位 ${fmt(Math.round(median * 100) / 100)}`, w - pad.right + 4, y(median) + 4);
+      if (Math.abs(y(q3) - y(median)) >= 14) ctx.fillText(fmt(Math.round(q3 * 100) / 100), w - pad.right + 4, y(q3) + 4);
+      if (Math.abs(y(q1) - y(median)) >= 14) ctx.fillText(fmt(Math.round(q1 * 100) / 100), w - pad.right + 4, y(q1) + 4);
+      // 日期標籤：首尾各自靠邊對齊，避免被畫布邊緣切掉
+      const dateLabel = idx => String(rows[idx].date || "").slice(2, 10);
+      ctx.textAlign = "left";
+      ctx.fillText(dateLabel(0), pad.left - 22, h - 10);
+      ctx.textAlign = "center";
+      ctx.fillText(dateLabel(Math.floor(rows.length / 2)), x(Math.floor(rows.length / 2)), h - 10);
+      ctx.textAlign = "right";
+      ctx.fillText(dateLabel(rows.length - 1), x(rows.length - 1) + 16, h - 10);
+
+      const versusMedian = median ? Math.round((current - median) / median * 1000) / 10 : null;
+      const tone = percentile <= 25 ? "pos" : percentile >= 75 ? "neg" : "";
+      legend.innerHTML = [
+        `<span class="legend-item">目前 <strong>${fmt(Math.round(current * 100) / 100)}</strong> 倍</span>`,
+        `<span class="legend-item">一年分位 <strong class="${tone}">${fmt(percentile)}%</strong></span>`,
+        versusMedian !== null ? `<span class="legend-item">相對中位 <strong class="${cls(-versusMedian)}">${versusMedian > 0 ? "+" : ""}${fmt(versusMedian)}%</strong></span>` : "",
+        `<span class="legend-item muted">區間 ${fmt(Math.round(Math.min(...values) * 100) / 100)}–${fmt(Math.round(Math.max(...values) * 100) / 100)} 倍（${rows.length} 個交易日）</span>`,
+        percentile <= 10 ? `<span class="legend-item pos">比過去一年 ${fmt(Math.round((100 - percentile) * 10) / 10)}% 的日子都便宜</span>` : "",
+      ].filter(Boolean).join("");
     }
     function renderRevenueChart() {
       const canvas = document.querySelector("#revenue-chart");
@@ -3494,6 +3605,8 @@
       {key:"mispriced_score", label:"錯殺分", signed:true, groups:["mispriced"], tip:"獲利動能分＋便宜分－陷阱扣分；越高代表「獲利在轉強但股價被殺」的程度越明顯"},
       {key:"pe_ratio", label:"本益比", groups:["mispriced"]},
       {key:"pe_percentile", label:"PE一年分位%", groups:["mispriced"], tip:"現在 PE 落在自己過去一年的第幾百分位；10 以下＝比過去一年 90% 的日子都便宜"},
+      {key:"pe_median_1y", label:"PE一年中位", groups:["mispriced"], tip:"過去一年每日本益比的中位數，用來比較現在貴或便宜"},
+      {key:"pe_vs_median_pct", label:"PE較中位%", signed:true, groups:["mispriced"], tip:"（現在 PE − 一年中位）÷ 一年中位；負值＝比過去一年常態便宜"},
       {key:"eps_yoy_pct", label:"單季EPS年增%", signed:true, groups:["mispriced"]},
       {key:"gross_margin_streak", label:"毛利率連升季", signed:true, groups:["mispriced"]},
       {key:"revenue_yoy_pct", label:"月營收年增%", signed:true, groups:["mispriced"]},
@@ -3669,7 +3782,7 @@
           const trap = String(row.mispriced_reason || "").startsWith("⚠");
           const peak = row.mispriced_cyclical_peak === 1;
           const metrics = [
-            row.pe_ratio != null ? `<span>PE <strong>${fmt(row.pe_ratio)}</strong>${row.pe_percentile != null ? `（分位 ${fmt(row.pe_percentile)}%）` : ""}</span>` : "",
+            row.pe_ratio != null ? `<span>PE <strong>${fmt(row.pe_ratio)}</strong>${row.pe_median_1y ? `（一年中位 ${fmt(row.pe_median_1y)}）` : ""}${row.pe_percentile != null ? `（分位 ${fmt(row.pe_percentile)}%）` : ""}</span>` : "",
             row.close_vs_52w_high_pct != null ? `<span>距高點 <strong class="${cls(row.close_vs_52w_high_pct)}">${fmt(row.close_vs_52w_high_pct)}%</strong></span>` : "",
             row.eps_yoy_pct != null ? `<span>EPS年增 <strong class="${cls(row.eps_yoy_pct)}">${fmt(row.eps_yoy_pct)}%</strong></span>` : "",
             row.revenue_yoy_pct != null ? `<span>營收年增 <strong class="${cls(row.revenue_yoy_pct)}">${fmt(row.revenue_yoy_pct)}%</strong></span>` : "",
@@ -4994,6 +5107,7 @@
       renderSelectionAssist(data.selection);
       renderMyPosition(data.stock.stock_id, data.stock.close);
       renderPriceChart();
+      renderPeChart();
       renderRevenueChart();
       renderMarginChart();
       renderStockEvents();
@@ -5353,6 +5467,7 @@
       clearTimeout(window.__chartResize);
       window.__chartResize = setTimeout(() => {
         renderPriceChart();
+        renderPeChart();
         renderRevenueChart();
         renderMarginChart();
       }, 120);
