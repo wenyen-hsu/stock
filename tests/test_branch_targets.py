@@ -70,3 +70,64 @@ def test_union_ignores_other_day_windows():
         writer.writerow({"stock_id": "B1", "name": "五日榜"})
     ids = union_ranking_stock_ids(tmp, 20, 5)
     assert ids == ["A1"]
+
+
+def test_daily_max_requests_caps_one_run():
+    """新增股票要回補 days 天，名單一擴大單次執行會爆長（實測 200 檔 × 20 天
+    ≈ 66 分鐘）。上限讓回補分散到多日，每日管線時間可預期。"""
+    import datetime as dt
+    from stock_chip.branch import run_branch_daily
+    from stock_chip.official import connect_db
+
+    tmp = Path(tempfile.mkdtemp()) / "branch.sqlite"
+    with connect_db(tmp) as conn:
+        for i in range(5):
+            date = f"2026-07-{20 + i:02d}"
+            conn.execute(
+                "INSERT OR IGNORE INTO trading_days(date, market, price_count, institutional_count,"
+                " margin_count, updated_at) VALUES (?, 'TWSE', 1, 1, 1, 'now')",
+                (date,),
+            )
+            for stock_id in ("1101", "1102"):
+                conn.execute(
+                    "INSERT INTO daily_prices(date, stock_id, name, close, updated_at)"
+                    " VALUES (?, ?, ?, 10.0, 'now')",
+                    (date, stock_id, f"股{stock_id}"),
+                )
+        conn.commit()
+
+    # 上限 3：兩檔 × 五天共 10 個請求，實際只該發 3 個就收工
+    result = run_branch_daily(
+        tmp, days=5, top_n=5, stock_ids=["1101", "1102"],
+        sleep_seconds=0.0, retry_sleeps=(), max_requests=3,
+    )
+    assert result["request_count"] == 3
+    assert result["budget_exhausted"] is True
+
+
+def test_daily_without_cap_is_unbounded():
+    """未設上限時行為不變（回歸保護）。"""
+    from stock_chip.branch import run_branch_daily
+    from stock_chip.official import connect_db
+
+    tmp = Path(tempfile.mkdtemp()) / "branch2.sqlite"
+    with connect_db(tmp) as conn:
+        for i in range(2):
+            date = f"2026-07-{20 + i:02d}"
+            conn.execute(
+                "INSERT OR IGNORE INTO trading_days(date, market, price_count, institutional_count,"
+                " margin_count, updated_at) VALUES (?, 'TWSE', 1, 1, 1, 'now')",
+                (date,),
+            )
+            conn.execute(
+                "INSERT INTO daily_prices(date, stock_id, name, close, updated_at)"
+                " VALUES (?, '1101', '台泥', 10.0, 'now')",
+                (date,),
+            )
+        conn.commit()
+    result = run_branch_daily(
+        tmp, days=2, top_n=5, stock_ids=["1101"],
+        sleep_seconds=0.0, retry_sleeps=(), max_requests=0,
+    )
+    assert result["budget_exhausted"] is False
+    assert result["request_count"] == 2

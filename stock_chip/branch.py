@@ -773,6 +773,7 @@ def run_branch_daily(
     sleep_seconds: float,
     retry_sleeps: tuple[float, ...] = DEFAULT_RETRY_SLEEPS,
     only_missing: bool = False,
+    max_requests: int = 0,
 ) -> dict[str, Any]:
     with connect_db(db_path) as conn:
         dates = recent_dates(conn, days)
@@ -783,7 +784,10 @@ def run_branch_daily(
         statuses: list[FetchStatus] = []
         failures: list[dict[str, str]] = []
         request_count = 0
+        budget_exhausted = False
         for stock_id in stock_ids:
+            if budget_exhausted:
+                break
             existing_success = successful_branch_daily_dates(conn, stock_id, dates) if only_missing else set()
             for trade_date in dates:
                 if trade_date in existing_success:
@@ -802,6 +806,10 @@ def run_branch_daily(
                         )
                     )
                     continue
+                if max_requests and request_count >= max_requests:
+                    # 達單次上限即收工；未補的日期留給明日（--only-missing 會續補）
+                    budget_exhausted = True
+                    break
                 if request_count:
                     time.sleep(sleep_seconds)
                 request_count += 1
@@ -824,6 +832,7 @@ def run_branch_daily(
         "dates": dates,
         "requested_stock_count": len(stock_ids),
         "request_count": request_count,
+        "budget_exhausted": budget_exhausted,
         "row_count": len(all_rows),
         "failures": failures,
         "status_counts": {
@@ -953,6 +962,15 @@ def parse_args() -> argparse.Namespace:
              "rankings (mispriced value, volume spikes) but score poorly on chip flow.",
     )
     parser.add_argument("--reports-dir", default="reports")
+    parser.add_argument(
+        "--max-requests",
+        type=int,
+        default=0,
+        metavar="N",
+        help="For --daily, stop after N third-party requests in one run. New stocks need up to "
+             "`days` backfill requests each, so widening the target list can otherwise blow up "
+             "one run; the remainder is picked up by --only-missing on later runs.",
+    )
     parser.add_argument("--sleep", type=float, default=1.0, help="Delay between third-party requests.")
     parser.add_argument(
         "--all",
@@ -1044,9 +1062,11 @@ def main() -> None:
             sleep_seconds=args.sleep,
             retry_sleeps=retry_sleeps,
             only_missing=args.only_missing,
+            max_requests=args.max_requests,
         )
         print(f"requested stocks: {result['requested_stock_count']}")
-        print(f"daily requests: {result['request_count']}")
+        print(f"daily requests: {result['request_count']}"
+              + ("（已達單次上限，剩餘日期由後續執行續補）" if result.get("budget_exhausted") else ""))
         print(f"branch daily rows: {result['row_count']}")
         print(
             "status: "
