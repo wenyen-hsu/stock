@@ -89,12 +89,15 @@ jobs:
         continue-on-error: true
         run: python -m stock_chip.tdcc
 
-      - name: 抓取分點 Top 10（各排行前 50 聯集 + 總分前 300 + 自選股，MoneyDJ）
+      # 前 80 而非前 20-50：分點讀的是「初步掃描」的排行，最終發布的排行是後段
+      # 掃描（其間 TDCC/財報/分點資料進來使榜單組成位移）。實測爆量榜最終前 20
+      # 有 7 檔不在初步前 50，加大取樣吸收這個位移。
+      - name: 抓取分點 Top 10（各排行前 80 聯集 + 總分前 300 + 自選股，MoneyDJ）
         continue-on-error: true
         env:
           DAYS: ${{ github.event.inputs.days || '20' }}
           PYTHONUNBUFFERED: "1"
-        run: python -m stock_chip.branch --days "$DAYS" --top 10 --from-rankings 50 --from-scan 300 --sleep 1.0 --skip-existing --retry-sleeps 3,8
+        run: python -m stock_chip.branch --days "$DAYS" --top 10 --from-rankings 80 --from-scan 300 --sleep 1.0 --skip-existing --retry-sleeps 3,8
 
       - name: 抓取分點單日進出（各排行前 15 聯集 + 總分前 100 + 自選股，補齊近 20 天）
         continue-on-error: true
