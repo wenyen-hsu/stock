@@ -118,6 +118,25 @@ jobs:
         continue-on-error: true
         run: python -m stock_chip.backtest
 
+      # 個股新聞先前只有本機 GUI 按鈕會抓，發布站台無法寫入 → 線上每檔都是「無」。
+      # 這裡改由管線預抓：各排行前 50 名的交錯聯集 + 自選股（實測 412 檔）。
+      # 只取排行聯集、不用 --from-scan：完整明細只匯出排行成員（實測 648 檔），
+      # 總分前 150 有 11 檔落在其外，抓了也只會進 SQLite 而不會出現在站上。
+      # 此步驟排在最終掃描之後，讀到的是最終排行，沒有分點那種「初步榜位移」問題。
+      # 護欄：只抓 RSS 標題（不進文章頁，省 3 倍請求）、--max-requests 箝制步驟時間、
+      # --empty-streak 偵測 Yahoo 靜默限速（限速時回空 feed 而非錯誤）、
+      # --fail-tolerance 容忍零星逾時、continue-on-error 確保新聞絕不擋住行情發布。
+      - name: 抓取個股新聞（各排行前 50 聯集 + 自選股，Yahoo RSS）
+        continue-on-error: true
+        env:
+          DAYS: ${{ github.event.inputs.days || '20' }}
+          PYTHONUNBUFFERED: "1"
+        run: |
+          python -m stock_chip.news --days "$DAYS" \
+            --from-rankings 50 --include-db-watchlist \
+            --limit 8 --sleep 0.4 --max-requests 450 \
+            --empty-streak 40 --fail-tolerance 0.2
+
       - name: 同步最新美股新聞快取（自 site 分支）
         continue-on-error: true
         run: |

@@ -3014,9 +3014,32 @@ INDEX_HTML = """<!doctype html>
       const latestFetch = rows.map(row => row.fetched_at).filter(Boolean).sort().at(-1);
       note.textContent = latestFetch
         ? `${STATIC_MODE ? "靜態快取" : "本機快取"} ${rows.length} 則，最後抓取 ${latestFetch}`
-        : STATIC_MODE ? "本次匯出尚無新聞快取" : "尚未抓取；按下按鈕才會連到 Yahoo 股市抓標題與內文摘錄";
+        : STATIC_MODE ? "此檔本次無新聞" : "尚未抓取；按下按鈕才會連到 Yahoo 股市抓標題與內文摘錄";
       if (!rows.length) {
-        target.innerHTML = `<div class="empty">${STATIC_MODE ? "本次匯出尚無新聞快取。" : "尚無新聞快取。需要時按「抓取新聞」。"}</div>`;
+        if (!STATIC_MODE) {
+          target.innerHTML = `<div class="empty">尚無新聞快取。需要時按「抓取新聞」。</div>`;
+          return;
+        }
+        // 靜態站無法寫入，新聞由管線預抓；名單為各排行前段＋自選股。
+        // 直接留白會讓人以為「這檔沒新聞」，實際多半是不在抓取名單內。
+        if (state.detail?.lite) {
+          target.innerHTML =
+            `<div class="empty">此檔尚無新聞。新聞須逐檔向 Yahoo 抓取，每日名單為<strong>各排行前段 ＋ 你的自選股</strong>；`
+            + `<button class="secondary" id="news-add-watch" style="height:26px; padding:0 10px; font-size:12px; margin:0 4px;">加入自選股</button>`
+            + `後，明日管線更新起就會有這檔的新聞。</div>`;
+          document.querySelector("#news-add-watch")?.addEventListener("click", async event => {
+            try {
+              await postJSON("/api/watchlist", { stock_id: String(state.detail?.stock?.stock_id || ""), action: "add" });
+              if (state.detail?.stock) state.detail.stock.in_watchlist = true;
+              updateWatchlistButton();
+              target.innerHTML = `<div class="empty">已加入自選股，明日管線更新後即會出現這檔的新聞。</div>`;
+            } catch (err) {
+              event.target.textContent = `加入失敗：${err.message}`;
+            }
+          });
+        } else {
+          target.innerHTML = `<div class="empty">這檔已在每日新聞抓取名單內，但 Yahoo 股市近期沒有相關報導。</div>`;
+        }
         return;
       }
       target.innerHTML = `<div class="news-list">${rows.map(row => {

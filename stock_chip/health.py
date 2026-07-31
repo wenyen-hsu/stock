@@ -190,6 +190,10 @@ def collect_health(db_path: Path) -> dict[str, Any]:
                          expected=latest_published_quarter(), min_rows=300),
             check_source(conn, "ranking_snapshots", "排行快照", "ranking_snapshots", "snapshot_date",
                          expected=one_back, warn_only=True),
+            # Yahoo RSS 被限速時回空 feed 而非錯誤，步驟仍會顯示成功；
+            # 用「當日寫入列數」當外部證據，靜默失效才看得見。
+            check_source(conn, "stock_news", "個股新聞", "stock_news", "substr(fetched_at, 1, 10)",
+                         expected=one_back, min_rows=200, warn_only=True),
         ]
     failures = [source for source in sources if source["status"] == "fail"]
     return {
