@@ -126,6 +126,12 @@ jobs:
       # 護欄：只抓 RSS 標題（不進文章頁，省 3 倍請求）、--max-requests 箝制步驟時間、
       # --empty-streak 偵測 Yahoo 靜默限速（限速時回空 feed 而非錯誤）、
       # --fail-tolerance 容忍零星逾時、continue-on-error 確保新聞絕不擋住行情發布。
+      #
+      # runner 實測（2026-07-31，ubuntu-latest 美國 IP）：20 檔真實股票全部
+      # http=200／items=20，Yahoo TW RSS 沒有地域限制；連打 60 檔（sleep 0.4）
+      # 空回散落在 [3,5,6,8,9,10,14,...]（皆為不存在的代號）而非群聚在後段，
+      # 最長連續空回 4 檔 → 無限速跡象，--empty-streak 40 不會誤觸發。
+      # 68.4s／60 檔 → 412 檔約 7.8 分鐘。
       - name: 抓取個股新聞（各排行前 50 聯集 + 自選股，Yahoo RSS）
         continue-on-error: true
         env:
