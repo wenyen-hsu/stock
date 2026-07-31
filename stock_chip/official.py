@@ -970,6 +970,7 @@ def update_recent(
     include_esb: bool = True,
 ) -> list[dict[str, Any]]:
     updated: list[dict[str, Any]] = []
+    skipped: list[dict[str, str]] = []
     cursor = end_date
     # Walk back proportionally to the requested window so deep backfills
     # (e.g. 240 trading days) are reachable; 75 keeps the original behaviour
@@ -1016,6 +1017,10 @@ def update_recent(
                 price_count, institutional_count, margin_count = int(cached[0]), int(cached[1]), int(cached[2])
                 status = "cached"
             else:
+                # 靜默跳過會讓「最新交易日抓不到」完全隱形（管線照樣成功、
+                # 健康檢查也比不出來，因為 trading_days 與行情一起停住）。
+                # 2026-07-30 資料整日未進站即因此無人察覺。
+                skipped.append({"date": cursor.isoformat(), "error": str(exc)[:200]})
                 cursor -= dt.timedelta(days=1)
                 continue
         updated.append(
@@ -1028,6 +1033,13 @@ def update_recent(
             }
         )
         cursor -= dt.timedelta(days=1)
+    if skipped:
+        newest_ok = max((row["date"] for row in updated), default="")
+        for row in skipped:
+            # 比已入庫的最新日還新的跳過＝真的缺當日資料，值得注意；
+            # 比它舊的多半是假日/非交易日，屬正常。
+            marker = "!! 新於已入庫資料" if row["date"] > newest_ok else "（假日或非交易日）"
+            print(f"skipped {row['date']} {marker}: {row['error']}")
     if len(updated) < days:
         raise ProbeError(f"only updated {len(updated)} trading days; requested {days}")
     return sorted(updated, key=lambda row: row["date"])

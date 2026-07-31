@@ -127,3 +127,34 @@ def test_market_current_month_always_refetched():
         covered.discard((today.replace(day=1) - dt.timedelta(days=1)).strftime("%Y-%m"))
         assert "2026-07" not in covered
         assert "2026-06" not in covered
+
+
+def test_freshness_detects_stalled_ingest():
+    """最新交易日整天未入庫時必須被抓到——其他檢查以 trading_days 為期望，
+    行情與 trading_days 一起停住便比不出異常（2026-07-30 事故盲點）。"""
+    import datetime as dt
+
+    from stock_chip.health import check_freshness
+
+    # 週五檢查、資料到週四 → 落後 1 個平日，正常
+    assert check_freshness("2026-07-30", dt.date(2026, 7, 31))["status"] == "ok"
+    # 週五檢查、資料停在週三 → 落後 2 個平日，warn
+    warn = check_freshness("2026-07-29", dt.date(2026, 7, 31))
+    assert warn["status"] == "warn" and "落後 2 個平日" in warn["note"]
+    # 週一檢查、資料停在上週二 → 落後 4 個平日（週末不計），fail
+    fail = check_freshness("2026-07-28", dt.date(2026, 8, 3))
+    assert fail["status"] == "fail" and "很可能中斷" in fail["note"]
+    # 落後 3 個平日仍只是 warn：台股連假（例如週一補假）會造成此落差
+    assert check_freshness("2026-07-29", dt.date(2026, 8, 3))["status"] == "warn"
+    # 週一檢查、資料到上週五 → 落後 1 個平日（週末不計），正常
+    assert check_freshness("2026-07-31", dt.date(2026, 8, 3))["status"] == "ok"
+
+
+def test_weekdays_between_skips_weekend():
+    import datetime as dt
+
+    from stock_chip.health import weekdays_between
+
+    assert weekdays_between(dt.date(2026, 7, 31), dt.date(2026, 8, 3)) == 1  # 五→一
+    assert weekdays_between(dt.date(2026, 7, 29), dt.date(2026, 7, 31)) == 2  # 三→五
+    assert weekdays_between(dt.date(2026, 7, 31), dt.date(2026, 7, 31)) == 0

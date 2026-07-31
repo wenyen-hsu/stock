@@ -101,6 +101,49 @@ def check_source(
     }
 
 
+def weekdays_between(start: dt.date, end: dt.date) -> int:
+    """start（不含）到 end（含）之間的平日數。"""
+    count = 0
+    cursor = start + dt.timedelta(days=1)
+    while cursor <= end:
+        if cursor.weekday() < 5:
+            count += 1
+        cursor += dt.timedelta(days=1)
+    return count
+
+
+def check_freshness(latest_trading: str, today: dt.date | None = None) -> dict[str, Any]:
+    """資料新鮮度：最新交易日與真實日曆的落差。
+
+    其他檢查都以 trading_days 為期望基準，若「最新交易日整天沒進站」，
+    行情與 trading_days 會一起停住而比不出異常——2026-07-30 全天資料
+    未入庫卻通過所有檢查即為此盲點。此處改以系統日期為外部基準。
+
+    台股假日無法從資料推知，故用平日數分級：落後 1 個平日內為正常
+    （當日盤後尚未更新），2 個平日 warn，4 個以上 fail（連假最長約
+    9 天，屆時 note 會說明可能為假日）。
+    """
+    today = today or dt.date.today()
+    gap = weekdays_between(dt.date.fromisoformat(latest_trading), today)
+    if gap <= 1:
+        status, note = "ok", ""
+    elif gap <= 3:
+        status = "warn"
+        note = f"最新交易日落後 {gap} 個平日（可能為連假，或當日資料未入庫）"
+    else:
+        status = "fail"
+        note = f"最新交易日落後 {gap} 個平日，資料很可能中斷"
+    return {
+        "key": "data_freshness",
+        "label": "資料新鮮度",
+        "latest": latest_trading,
+        "expected": today.isoformat(),
+        "rows_at_latest": gap,
+        "status": status,
+        "note": note,
+    }
+
+
 def collect_health(db_path: Path) -> dict[str, Any]:
     with connect_db(db_path) as conn:
         latest_row = conn.execute("SELECT MAX(date) FROM trading_days").fetchone()
@@ -119,6 +162,7 @@ def collect_health(db_path: Path) -> dict[str, Any]:
         three_days_ago = (dt.date.fromisoformat(latest_trading) - dt.timedelta(days=3)).isoformat()
 
         sources = [
+            check_freshness(latest_trading),
             check_source(conn, "daily_prices", "日行情", "daily_prices", "date",
                          expected=latest_trading, min_rows=800),
             check_source(conn, "institutional_trades", "三大法人", "institutional_trades", "date",
