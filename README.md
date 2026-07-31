@@ -97,6 +97,19 @@ python3 -m stock_chip.news --watchlist 2376,2382,2324,6196 --limit 5
 
 預設只抓 Yahoo 股市 RSS 標題、連結與摘要。若要同時抓文章內文摘錄，可加上 `--content`；批次更新中心預設不抓內文。
 
+大量抓取（雲端管線用法）改以排行決定名單，並帶上護欄：
+
+```bash
+python3 -m stock_chip.news --days 20 --from-rankings 50 --include-db-watchlist \
+  --limit 8 --sleep 0.4 --max-requests 450 --empty-streak 40 --fail-tolerance 0.2
+```
+
+- `--from-rankings N`：各排行榜前 N 名的交錯聯集（各榜第 1 名 → 各榜第 2 名 → …），被 `--max-requests` 截斷時仍覆蓋每個榜的前段；自選股永遠排在最前面。
+- `--empty-streak N`：Yahoo 被限速時回的是**空 feed 而非錯誤**，連續 N 檔空回即中止並以 1 退出，避免名單後段靜默沒新聞而步驟仍顯示成功。
+- `--fail-tolerance R`：允許的失敗比例，數百檔規模下零星逾時是常態；預設 0 維持單機「一檔失敗就失敗」的行為。
+
+網站上的個股新聞就是這個步驟預抓的：靜態站沒有後端可寫入，不在名單內的個股新聞區會顯示引導而非留白。
+
 抓取 MOPS 重大事件：
 
 ```bash
@@ -202,10 +215,11 @@ Repo 內有 GitHub Actions workflow：`.github/workflows/update-taiwan-data.yml`
   2. 抓官方行情、三大法人、融資融券（20 個交易日）＋公司基本資料與產業分類
   3. 初步掃描產生排行，據此更新月營收（排行優先補缺漏＋全市場分批補齊）
   4. 更新大盤指數、期貨多空與 MOPS 重大事件
-  5. **抓分點買賣超**：排行前 300 檔＋自選股，每檔前 10 大買賣超分點（MoneyDJ 券商鏡像，最近 20 個交易日區間）
+  5. **抓分點買賣超**：各排行前 80 名聯集＋總分前 300＋自選股，每檔前 10 大買賣超分點（MoneyDJ 券商鏡像，最近 20 個交易日區間）
   6. 重算 5 日與 20 日排行（含動能、風險、估值、多因子與共振分數）
-  7. `export_static` 匯出網站資料，發布到 `site` 分支（GitHub Pages 自動重新部署），reports 提交回 main
-- 營收、大盤、MOPS 與分點等步驟設為 `continue-on-error`，個別來源暫時失效不會中斷整體更新。
+  7. **抓個股新聞**：各排行前 50 名聯集＋自選股（約 412 檔）的 Yahoo 股市 RSS 標題；排在重算排行之後，讀到的是最終排行
+  8. `export_static` 匯出網站資料，發布到 `site` 分支（GitHub Pages 自動重新部署），reports 提交回 main
+- 營收、大盤、MOPS、分點與新聞等步驟設為 `continue-on-error`，個別來源暫時失效不會中斷整體更新。
 - 不依賴也不會修改你本機的 `data/stock_chip.sqlite`。
 
 ### 分點資料來源與手動補抓
