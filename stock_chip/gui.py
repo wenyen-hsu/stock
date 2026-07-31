@@ -997,6 +997,9 @@ INDEX_HTML = """<!doctype html>
             <option value="chip_score">法人籌碼分數</option>
           </optgroup>
           <optgroup label="籌碼追蹤">
+            <option value="foreign_day_buy">外資今日買超</option>
+            <option value="foreign_day_sell">外資今日賣超</option>
+            <option value="foreign_streak_buy">外資連續買超（天天在買）</option>
             <option value="foreign_buy">外資買超</option>
             <option value="trust_buy">投信買超</option>
             <option value="inst_buy">外資 + 投信</option>
@@ -1817,6 +1820,9 @@ INDEX_HTML = """<!doctype html>
       total_score: "法人籌碼＋融資券＋營收動能的基礎綜合分，是最保守的底層排序。",
       multifactor_score: "基礎分再加動能、長線、估值、量能、大戶與獲利品質，最全面的一個排序。",
       chip_score: "只看三大法人買賣超與連續性，純籌碼流量視角。",
+      foreign_day_buy: "最新一個交易日的外資買超張數排序，等同券商 App 的「今日外資買賣超排行」。單日榜反應最快，但常混入隔日就走的過路資金，建議跟「外資連續買超」對照著看。不含 ETF（見下方說明）。",
+      foreign_day_sell: "最新一個交易日的外資賣超張數排序，用來避開外資正在調節的個股。",
+      foreign_streak_buy: "外資連續買超 3 天以上、期間累計為正且日均成交額 ≥ 0.3 億。這才是「天天都在買」——同天數時以累計張數排序，避免連買 5 天但每天只買 1 張的排在前面。",
       foreign_buy: "區間外資買超張數排序。",
       trust_buy: "區間投信買超張數排序（投信認養常有波段行情）。",
       inst_buy: "外資＋投信合計買超排序。",
@@ -3729,9 +3735,11 @@ INDEX_HTML = """<!doctype html>
       {key:"trust_net_lot", label:"投信", signed:true, groups:["chip"]},
       {key:"inst_net_lot", label:"外資+投信", signed:true, groups:["chip"]},
       {key:"foreign_net_volume_pct", label:"外資占量%", signed:true, groups:["chip","foreign"]},
-      {key:"latest_foreign_net_lot", label:"最近一日外資", signed:true, groups:["foreign"]},
+      {key:"latest_foreign_net_lot", label:"最近一日外資", signed:true, groups:["chip","foreign"]},
+      {key:"latest_trust_net_lot", label:"最近一日投信", signed:true, groups:["chip"]},
       {key:"foreign_buy_streak", label:"外資連買", groups:["foreign"]},
       {key:"foreign_sell_streak", label:"外資連賣", groups:["foreign"]},
+      {key:"close_vs_avg_pct", label:"距均價%", signed:true, groups:["foreign","chip"]},
       {key:"margin_balance_change_lot", label:"融資增減", signed:true, groups:["margin"]},
       {key:"short_balance_change_lot", label:"融券增減", signed:true, groups:["margin"]},
       {key:"avg_price", label:"均價", groups:["core"]},
@@ -3753,6 +3761,31 @@ INDEX_HTML = """<!doctype html>
     ];
     function visibleRankingCols() {
       return rankingCols.filter(col => (col.groups || ["core"]).includes(state.columnGroup));
+    }
+    // 排行的關鍵數字若不在目前欄位組裡就看不到——選「外資今日買超」卻停在
+    // 核心欄位組，最近一日外資買超那一欄根本不顯示。切榜時自動帶到對應欄位組；
+    // 使用者之後仍可手動切換（只在切榜當下套用一次）。
+    const RANKING_COLUMN_GROUP = {
+      foreign_day_buy: "foreign",
+      foreign_day_sell: "foreign",
+      foreign_streak_buy: "foreign",
+      foreign_buy: "foreign",
+      foreign_5d_revenue_growth: "foreign",
+      mispriced_value: "mispriced",
+      value_dividend: "valuation",
+      volume_expansion: "volume",
+      momentum_inst_buy: "momentum",
+      high_52w_inst_buy: "momentum",
+      trust_buy: "chip",
+      inst_buy: "chip",
+      inst_buy_volume: "chip",
+    };
+    function applyRankingColumnGroup() {
+      const ranking = document.querySelector("#ranking")?.value || "";
+      const group = RANKING_COLUMN_GROUP[ranking];
+      if (!group || group === state.columnGroup) return;
+      state.columnGroup = group;
+      renderColumnControls();
     }
     function renderColumnControls() {
       const target = document.querySelector("#ranking-columns");
@@ -5376,6 +5409,7 @@ INDEX_HTML = """<!doctype html>
     document.querySelector("#nav-back")?.addEventListener("click", () => history.back());
     document.querySelector("#refresh-sector")?.addEventListener("click", loadSector);
     document.querySelector("#ranking").addEventListener("change", () => {
+      applyRankingColumnGroup();
       updateRankingDesc();
       enforceRankingDays();
       reload();
@@ -5840,6 +5874,12 @@ def normalize_scan_row(row: dict[str, str], days: int) -> dict[str, object]:
         "foreign_sell_streak": as_float(row.get("foreign_sell_streak")),
         "trust_buy_streak": as_float(row.get("trust_buy_streak")),
         "trust_sell_streak": as_float(row.get("trust_sell_streak")),
+        # 單日法人買賣超與乖離：外資動向排行與持股警示都靠這三欄。
+        # 它們在 scan_all CSV 早就有，先前漏在白名單外 → 線上恆為 null，
+        # 連前端早就寫好的「最近一日外資」欄位也一直是空的。
+        "latest_foreign_net_lot": as_float_or_none(row.get("latest_foreign_net_lot")),
+        "latest_trust_net_lot": as_float_or_none(row.get("latest_trust_net_lot")),
+        "close_vs_avg_pct": as_float_or_none(row.get("close_vs_avg_pct")),
         "margin_balance_change_lot": as_float_or_none(row.get("margin_balance_change_lot")),
         "short_balance_change_lot": as_float_or_none(row.get("short_balance_change_lot")),
         "branch_status": row.get("branch_status") or ("已取得" if row.get("top_buy_branch_name") else "未取得"),
@@ -5863,6 +5903,9 @@ def ranking_path(days: int, ranking: str) -> Path:
         "confluence_score": "ranking_confluence_score",
         "selection_score": "ranking_selection_score",
         "foreign_buy": "ranking_foreign_buy",
+        "foreign_day_buy": "ranking_foreign_day_buy",
+        "foreign_day_sell": "ranking_foreign_day_sell",
+        "foreign_streak_buy": "ranking_foreign_streak_buy",
         "foreign_5d_revenue_growth": "ranking_foreign_5d_revenue_growth",
         "inst_buy_volume": "ranking_inst_buy_volume",
         "volume_expansion": "ranking_volume_expansion",
@@ -5887,6 +5930,9 @@ RANKING_LABELS = {
     "chip_score": "法人籌碼分數",
     "selection_score": "基礎選股分",
     "foreign_buy": "外資買超",
+    "foreign_day_buy": "外資今日買超",
+    "foreign_day_sell": "外資今日賣超",
+    "foreign_streak_buy": "外資連續買超（天天在買）",
     "foreign_5d_revenue_growth": "外資近5日買超 + 營收成長",
     "inst_buy_volume": "法人買超 + 占量",
     "volume_expansion": "成交量放大",

@@ -1473,8 +1473,10 @@ def write_csv(path: Path, rows: list[dict[str, Any]]) -> None:
         writer.writerows(rows)
 
 
-def export_rankings(output_dir: Path, rows: list[dict[str, Any]], days: int, limit: int) -> dict[str, Path]:
-    rankings = {
+def build_rankings(rows: list[dict[str, Any]], days: int) -> dict[str, list[dict[str, Any]]]:
+    """各排行的選股與排序邏輯。與 CSV 匯出分開，好讓排序規則能單獨測試
+    ——匯出列需要上百個欄位，混在一起就只能拿真實掃描結果來測。"""
+    return {
         "total_score": sorted(rows, key=lambda row: row.get("total_score", row["chip_score"]), reverse=True),
         "multifactor_score": sorted(
             rows,
@@ -1547,6 +1549,41 @@ def export_rankings(output_dir: Path, rows: list[dict[str, Any]], days: int, lim
             reverse=True,
         ),
         "foreign_buy": sorted(rows, key=lambda row: row[f"{days}d_foreign_net"], reverse=True),
+        # 當日外資買超排行：等同各家券商 App 的「今日外資買賣超排行」。
+        # 只看單日，是最快的風向球，但單日大買常常是隔日就跑的過路資金，
+        # 所以另外配一個「連續買超」榜看誰是真的天天在買。
+        "foreign_day_buy": sorted(
+            [row for row in rows if (row.get("latest_foreign_net") or 0) > 0],
+            key=lambda row: row.get("latest_foreign_net") or 0,
+            reverse=True,
+        ),
+        "foreign_day_sell": sorted(
+            [row for row in rows if (row.get("latest_foreign_net") or 0) < 0],
+            key=lambda row: row.get("latest_foreign_net") or 0,
+        ),
+        # 外資連續買超：連幾天沒有間斷地買。這才是「每日都在大買」。
+        # 排序以連買天數為主、期間累計張數為輔。
+        #
+        # 占量門檻不可省：實測 8027 鈦昇連買 12 天，20 日累計卻只有 196 張
+        # （占期間成交量 0.30%），純看天數會把它排在中華電（42,866 張、9.48%）
+        # 之前——「天天買一點」不是買盤，是雜訊。日均額門檻擋不掉這種股
+        # （鈦昇日均 7.6 億，很流動），要擋的是「買超相對成交量太小」。
+        # 0.5% 濾掉 197 → 186 檔，剛好切掉這類個案而不誤傷真正的連續買盤。
+        # 注意占量要就地由 {days}d_volume 算：foreign_net_volume_pct 只存在於
+        # CSV 匯出列，排行階段的 row 沒有這個 key，寫成 row.get(...) 會恆為
+        # None 而把整個榜濾成空的。
+        "foreign_streak_buy": sorted(
+            [
+                row
+                for row in rows
+                if (row.get("foreign_buy_streak") or 0) >= 3
+                and row[f"{days}d_foreign_net"] > 0
+                and (row.get("avg_turnover_100m") or 0) >= 0.3
+                and row[f"{days}d_foreign_net"] >= (row[f"{days}d_volume"] or 0) * 0.005
+            ],
+            key=lambda row: (row.get("foreign_buy_streak") or 0, row[f"{days}d_foreign_net"]),
+            reverse=True,
+        ),
         "trust_buy": sorted(rows, key=lambda row: row[f"{days}d_trust_net"], reverse=True),
         "inst_buy": sorted(rows, key=lambda row: row[f"{days}d_inst_net"], reverse=True),
         "foreign_trust_same_buy": sorted(
@@ -1629,6 +1666,9 @@ def export_rankings(output_dir: Path, rows: list[dict[str, Any]], days: int, lim
         ),
     }
 
+
+def export_rankings(output_dir: Path, rows: list[dict[str, Any]], days: int, limit: int) -> dict[str, Path]:
+    rankings = build_rankings(rows, days)
     paths: dict[str, Path] = {}
     for name, ranking_rows in rankings.items():
         path = output_dir / f"ranking_{name}_{days}d.csv"

@@ -97,7 +97,10 @@ jobs:
         env:
           DAYS: ${{ github.event.inputs.days || '20' }}
           PYTHONUNBUFFERED: "1"
-        run: python -m stock_chip.branch --days "$DAYS" --top 10 --from-rankings 80 --from-scan 300 --sleep 1.0 --skip-existing --retry-sleeps 3,8
+        # 80 → 65：新增 3 個外資動向排行後，各榜前 80 的聯集從 564 漲到 647 檔
+        # （+15% 步驟時間）。降到 65 讓聯集回到 569 檔，覆蓋範圍不變而不吃掉
+        # 更多管線時間。若之後再加排行，記得重新量一次聯集大小。
+        run: python -m stock_chip.branch --days "$DAYS" --top 10 --from-rankings 65 --from-scan 300 --sleep 1.0 --skip-existing --retry-sleeps 3,8
 
       - name: 抓取分點單日進出（各排行前 15 聯集 + 總分前 100 + 自選股，補齊近 20 天）
         continue-on-error: true
@@ -119,7 +122,8 @@ jobs:
         run: python -m stock_chip.backtest
 
       # 個股新聞先前只有本機 GUI 按鈕會抓，發布站台無法寫入 → 線上每檔都是「無」。
-      # 這裡改由管線預抓：各排行前 50 名的交錯聯集 + 自選股（實測 412 檔）。
+      # 這裡改由管線預抓：各排行前 50 名的交錯聯集 + 自選股（加入 3 個外資動向
+      # 排行後實測 472 檔，故上限設 500 讓名單不會被截斷）。
       # 只取排行聯集、不用 --from-scan：完整明細只匯出排行成員（實測 648 檔），
       # 總分前 150 有 11 檔落在其外，抓了也只會進 SQLite 而不會出現在站上。
       # 此步驟排在最終掃描之後，讀到的是最終排行，沒有分點那種「初步榜位移」問題。
@@ -140,7 +144,7 @@ jobs:
         run: |
           python -m stock_chip.news --days "$DAYS" \
             --from-rankings 50 --include-db-watchlist \
-            --limit 8 --sleep 0.4 --max-requests 450 \
+            --limit 8 --sleep 0.4 --max-requests 500 \
             --empty-streak 40 --fail-tolerance 0.2
 
       - name: 同步最新美股新聞快取（自 site 分支）
