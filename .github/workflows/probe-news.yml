@@ -1,7 +1,10 @@
 name: probe-news (temporary)
 
+# workflow_dispatch 需檔案存在於預設分支才可派送，改用 push 觸發
 on:
-  workflow_dispatch:
+  push:
+    branches: [claude/admiring-tesla-4fwstm]
+    paths: ['.github/workflows/probe-news.yml']
 
 jobs:
   probe:
