@@ -223,7 +223,7 @@ python3 -m stock_chip.export_static --out docs --include-all-details
 
 靜態版自選股只存於使用者自己的瀏覽器 `localStorage`。更新每日、營收、分點、新聞等按鈕會隱藏；需要重新抓資料時，請回本機 GUI 或 CLI 更新後重新匯出並 push。
 
-### 台股資料自動更新（含分點，全雲端）
+### 台股資料自動更新（全雲端）
 
 Repo 內有 GitHub Actions workflow：`.github/workflows/update-taiwan-data.yml`。整條流程在 GitHub 的雲端主機執行，**不需要任何自家電腦開機或參與**。
 
@@ -233,17 +233,41 @@ Repo 內有 GitHub Actions workflow：`.github/workflows/update-taiwan-data.yml`
   2. 抓官方行情、三大法人、融資融券（20 個交易日）＋公司基本資料與產業分類
   3. 初步掃描產生排行，據此更新月營收（排行優先補缺漏＋全市場分批補齊）
   4. 更新大盤指數、期貨多空與 MOPS 重大事件
-  5. **抓分點買賣超**：各排行前 80 名聯集＋總分前 300＋自選股，每檔前 10 大買賣超分點（MoneyDJ 券商鏡像，最近 20 個交易日區間）
-  6. 重算 5 日與 20 日排行（含動能、風險、估值、多因子與共振分數）
-  7. **抓個股新聞**：各排行前 50 名聯集＋自選股（約 412 檔）的 Yahoo 股市 RSS 標題；排在重算排行之後，讀到的是最終排行
-  8. `export_static` 匯出網站資料，發布到 `site` 分支（GitHub Pages 自動重新部署），reports 提交回 main
-- 營收、大盤、MOPS、分點與新聞等步驟設為 `continue-on-error`，個別來源暫時失效不會中斷整體更新。
+  5. 重算 5 日與 20 日排行（含動能、風險、估值、多因子與共振分數）
+  6. **抓個股新聞**：各排行前 50 名聯集＋自選股（約 472 檔）的 Yahoo 股市 RSS 標題；排在重算排行之後，讀到的是最終排行
+  7. `export_static` 匯出網站資料，發布到 `site` 分支（GitHub Pages 自動重新部署），reports 提交回 main
+- 營收、大盤、MOPS 與新聞等步驟設為 `continue-on-error`，個別來源暫時失效不會中斷整體更新。
+- **分點抓取不在這條管線裡**（見下），約 10 分鐘就發布完成。
 - 不依賴也不會修改你本機的 `data/stock_chip.sqlite`。
+
+#### 為什麼分點另外跑
+
+分點兩步曾佔每日管線 50 分鐘中的 42 分鐘。管線是「全部跑完才發布」，所以
+2026-08-06 那天斷在分點的當下，連早就抓好的行情都沒送上網站，站台停在前一日。
+
+拆開後的流程是：
+
+```text
+排程 22:30 → 每日管線（~10 分鐘）→ 行情、排行、新聞已上線
+           → workflow_run 觸發 Fetch Branch Data（~42 分鐘）
+           → 抓完存快取 → 回頭 dispatch 每日管線重新匯出（~10 分鐘）
+           → 分點資料上線，該輪掃描也吃到當日分點
+```
+
+- 分點失敗只影響分點，不再拖累行情更新。
+- 觸發用 `workflow_run` 而非另排 cron：`--from-rankings` 讀的是每日管線產出並
+  commit 回 main 的 `ranking_*.csv`，必須等它跑完才有當日榜單。
+- 迴圈防護：`Fetch Branch Data` 的 job 條件限定上游 `event == 'schedule'`。
+  它自己觸發的重新匯出 event 是 `workflow_dispatch`，不會再次觸發抓分點。
+- 快取用 `actions/cache/restore` + `actions/cache/save` 而非 `actions/cache`：
+  後者的儲存發生在 post step，也就是「觸發重新匯出」之後，被觸發的匯出會讀到
+  還沒寫入分點的舊快取，等於白抓一輪。
 
 ### 分點資料來源與手動補抓
 
 - 來源：MoneyDJ 系統的券商網站鏡像（富邦 `fubon-ebrokerdj.fbs.com.tw` 為主、元大 `jdata.yuanta.com.tw` 備援），免登入、GitHub 雲端 IP 可直連。區間主力進出提供每檔前 15 大買賣超分點（買進/賣出/買賣超張數；**無均價欄位**，均價相關欄位顯示空白、均價相關加減分自動略過）。
-- 手動補抓：Actions 頁觸發 `Fetch Branch Data`（`.github/workflows/fetch-branch.yml`），可指定「前 N 大分點」與「排行前幾檔」，抓完自動觸發重新匯出。中斷後重跑會自動續傳（`--skip-existing`）。
+- 每日自動：`Fetch Branch Data`（`.github/workflows/fetch-branch.yml`）在每日管線的排程那一輪跑完後自動接上，見上節。
+- 手動補抓：Actions 頁也可直接觸發 `Fetch Branch Data`，可指定「前 N 大分點」「各排行前 N 名聯集」與「總分前 N 名」，抓完自動觸發重新匯出。中斷後重跑會自動續傳（`--skip-existing`）。
 - 歷史沿革：原始來源 HiStock 於 2026-06 起將分點日報改為登入後才顯示，曾短暫改用自家電腦當 self-hosted runner（住宅 IP）繞過雲端 IP 封鎖，換到 MoneyDJ 後已不需要——舊的 self-hosted workflow 已移除，Mac runner 可自行解除註冊。細節見 [OPTIMIZATION.md](OPTIMIZATION.md)。
 
 ### 美股新聞自動更新

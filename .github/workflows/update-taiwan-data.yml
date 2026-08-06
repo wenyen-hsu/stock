@@ -89,27 +89,11 @@ jobs:
         continue-on-error: true
         run: python -m stock_chip.tdcc
 
-      # 前 80 而非前 20-50：分點讀的是「初步掃描」的排行，最終發布的排行是後段
-      # 掃描（其間 TDCC/財報/分點資料進來使榜單組成位移）。實測爆量榜最終前 20
-      # 有 7 檔不在初步前 50，加大取樣吸收這個位移。
-      - name: 抓取分點 Top 10（各排行前 80 聯集 + 總分前 300 + 自選股，MoneyDJ）
-        continue-on-error: true
-        env:
-          DAYS: ${{ github.event.inputs.days || '20' }}
-          PYTHONUNBUFFERED: "1"
-        # 80 → 65：新增 3 個外資動向排行後，各榜前 80 的聯集從 564 漲到 647 檔
-        # （+15% 步驟時間）。降到 65 讓聯集回到 569 檔，覆蓋範圍不變而不吃掉
-        # 更多管線時間。若之後再加排行，記得重新量一次聯集大小。
-        run: python -m stock_chip.branch --days "$DAYS" --top 10 --from-rankings 65 --from-scan 300 --sleep 1.0 --skip-existing --retry-sleeps 3,8
-
-      - name: 抓取分點單日進出（各排行前 15 聯集 + 總分前 100 + 自選股，補齊近 20 天）
-        continue-on-error: true
-        env:
-          PYTHONUNBUFFERED: "1"
-        # --only-missing：已入庫的日子自動跳過；首跑回補 20 天（~70 分鐘），
-        # 之後每天只補最新一天，新進榜股票自動回補整個視窗
-        run: python -m stock_chip.branch --daily --days 20 --top 15 --from-rankings 15 --from-scan 100 --only-missing --max-requests 600 --sleep 1.0 --retry-sleeps 3,8
-
+      # 分點抓取已移到獨立的 fetch-branch.yml：那兩步佔了本管線 50 分鐘中的 42
+      # 分鐘，2026-08-06 就是斷在分點，導致當天連已經抓好的行情都沒發布出去。
+      # 拆開後行情約 10 分鐘就上線，分點自己跑自己的，壞掉也不會擋住行情。
+      # 本管線的掃描讀的是快取裡「上一輪」的分點；分點抓完會回頭觸發本管線
+      # 重跑，屆時掃描就會吃到當日分點。
       - name: 掃描 20 日與 5 日排行
         env:
           DAYS: ${{ github.event.inputs.days || '20' }}

@@ -1,18 +1,32 @@
 name: Fetch Branch Data
 
-# 手動補抓分點資料（MoneyDJ 券商鏡像，免登入、雲端 IP 可直連）。
-# 平日的自動抓取已併入每日更新流程（update-taiwan-data.yml），
-# 這裡保留手動觸發：改參數重抓、或中斷後續傳。
+# 分點抓取（MoneyDJ 券商鏡像，免登入、雲端 IP 可直連）。
+#
+# 2026-08-07 從 update-taiwan-data.yml 拆出來。原因：分點兩步佔了每日管線
+# 50 分鐘中的 42 分鐘，而管線是「全部跑完才發布」，所以 2026-08-06 斷在分點
+# 那一刻，連早就抓好的行情都沒送上網站。拆開後：
+#   行情管線 ~10 分鐘就發布 → 本工作流慢慢抓分點 → 抓完回頭觸發重新匯出
+# 分點失敗只影響分點，不再拖累每日行情更新。
+#
+# 觸發時機用 workflow_run 而非另外排 cron：--from-rankings 讀的是每日管線
+# 產出並 commit 回 main 的 ranking_*.csv，必須等它跑完才有當日榜單。
 
 on:
+  workflow_run:
+    workflows: ["Update Taiwan Stock Data"]
+    types: [completed]
   workflow_dispatch:
     inputs:
       top:
         description: "每檔股票抓前 N 大買賣超分點"
         required: false
         default: "10"
-      scope:
-        description: "抓排行前幾檔（外加自選股）"
+      from_rankings:
+        description: "各排行前 N 名的交錯聯集"
+        required: false
+        default: "65"
+      from_scan:
+        description: "另外納入籌碼總分前 N 名"
         required: false
         default: "300"
 
@@ -27,10 +41,19 @@ concurrency:
 jobs:
   fetch-branch:
     runs-on: ubuntu-latest
-    timeout-minutes: 90
+    timeout-minutes: 120
+    # 只接在「排程」那一輪之後。每日管線被本工作流觸發重新匯出時 event 會是
+    # workflow_dispatch，若不擋掉就會變成 匯出 → 抓分點 → 匯出 → … 的無限迴圈。
+    if: >-
+      github.event_name == 'workflow_dispatch' ||
+      (github.event.workflow_run.conclusion == 'success' &&
+       github.event.workflow_run.event == 'schedule')
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          # 每日管線剛把 reports/ranking_*.csv commit 回 main，要抓那一版
+          ref: main
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -40,22 +63,49 @@ jobs:
       - name: Install dependencies
         run: pip install -r requirements.txt
 
+      # 用 restore + save 而非 actions/cache：cache action 的儲存發生在 post
+      # step，也就是「觸發重新匯出」之後。那樣被觸發的匯出會讀到還沒寫入分點
+      # 的舊快取，等於白抓一輪。這裡明確在觸發前存檔。
       - name: 還原 SQLite 快取（與每日更新共用）
-        uses: actions/cache@v4
+        uses: actions/cache/restore@v4
         with:
           path: data/stock_chip.sqlite
           key: stock-db-${{ github.run_id }}
           restore-keys: |
             stock-db-
 
-      - name: 抓取分點 Top N（排行前 N 檔 + 自選股）
+      # 前 65 而非前 20-50：分點名單取各排行的交錯聯集，只用單一 total_score
+      # 會漏掉錯殺價值、爆量這類榜的標的（實測錯殺價值榜前 20 只有 1 檔有分點）。
+      # 65 是新增 3 個外資動向排行後重新量過的值——聯集 569 檔。
+      - name: 抓取分點 Top 10（各排行前 65 聯集 + 總分前 300 + 自選股）
+        continue-on-error: true
         env:
           TOP: ${{ github.event.inputs.top || '10' }}
-          SCOPE: ${{ github.event.inputs.scope || '300' }}
+          FROM_RANKINGS: ${{ github.event.inputs.from_rankings || '65' }}
+          FROM_SCAN: ${{ github.event.inputs.from_scan || '300' }}
           PYTHONUNBUFFERED: "1"
+        # --skip-existing：中斷後重跑可續傳
         run: |
-          # --skip-existing：中斷後重跑可續傳
-          python -m stock_chip.branch --days 20 --top "$TOP" --from-scan "$SCOPE" --sleep 1.0 --skip-existing --retry-sleeps 3,8
+          python -m stock_chip.branch --days 20 --top "$TOP" \
+            --from-rankings "$FROM_RANKINGS" --from-scan "$FROM_SCAN" \
+            --sleep 1.0 --skip-existing --retry-sleeps 3,8
+
+      - name: 抓取分點單日進出（各排行前 15 聯集 + 總分前 100 + 自選股，補齊近 20 天）
+        continue-on-error: true
+        env:
+          PYTHONUNBUFFERED: "1"
+        # --only-missing：已入庫的日子自動跳過；首跑回補 20 天（~70 分鐘），
+        # 之後每天只補最新一天，新進榜股票自動回補整個視窗
+        run: |
+          python -m stock_chip.branch --daily --days 20 --top 15 \
+            --from-rankings 15 --from-scan 100 --only-missing \
+            --max-requests 600 --sleep 1.0 --retry-sleeps 3,8
+
+      - name: 儲存 SQLite 快取（必須早於觸發重新匯出）
+        uses: actions/cache/save@v4
+        with:
+          path: data/stock_chip.sqlite
+          key: stock-db-${{ github.run_id }}
 
       - name: 觸發重新匯出（把分點資料發布到網站）
         run: |
@@ -64,4 +114,4 @@ jobs:
             -H "Accept: application/vnd.github+json" \
             "https://api.github.com/repos/${{ github.repository }}/actions/workflows/update-taiwan-data.yml/dispatches" \
             -d '{"ref":"main"}'
-          echo "已觸發重新匯出，約 5-10 分鐘後網站更新分點資料"
+          echo "已觸發重新匯出；該輪的掃描會吃到本次抓到的分點資料"
