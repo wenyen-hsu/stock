@@ -7,8 +7,6 @@
 import argparse
 import csv
 import sqlite3
-import tempfile
-from pathlib import Path
 
 import pytest
 
@@ -31,7 +29,7 @@ def _args(**overrides) -> argparse.Namespace:
     return argparse.Namespace(**base)
 
 
-def _write_ranking(dir_path: Path, name: str, stock_ids: list[str]) -> None:
+def _write_ranking(dir_path, name: str, stock_ids: list[str]) -> None:
     with (dir_path / f"ranking_{name}_20d.csv").open("w", newline="", encoding="utf-8") as f:
         writer = csv.DictWriter(f, fieldnames=["stock_id", "name"])
         writer.writeheader()
@@ -39,24 +37,23 @@ def _write_ranking(dir_path: Path, name: str, stock_ids: list[str]) -> None:
             writer.writerow({"stock_id": stock_id, "name": f"股{stock_id}"})
 
 
-def test_targets_put_watchlist_first_so_budget_cuts_the_tail():
+def test_targets_put_watchlist_first_so_budget_cuts_the_tail(tmp_path):
     """--max-requests 削掉的必須是低優先標的：自選股永遠排在排行聯集之前。"""
-    tmp = Path(tempfile.mkdtemp())
+    tmp = tmp_path
     _write_ranking(tmp, "total_score", ["1001", "1002", "1003"])
     ids = news.resolve_targets(_args(watchlist="9999", from_rankings=3, reports_dir=str(tmp), max_requests=2))
     assert ids == ["9999", "1001"]
 
 
-def test_targets_dedupe_watchlist_against_rankings():
-    tmp = Path(tempfile.mkdtemp())
+def test_targets_dedupe_watchlist_against_rankings(tmp_path):
+    tmp = tmp_path
     _write_ranking(tmp, "total_score", ["1001", "1002"])
     ids = news.resolve_targets(_args(watchlist="1002", from_rankings=2, reports_dir=str(tmp)))
     assert ids == ["1002", "1001"]
 
 
-def test_targets_include_db_watchlist():
-    tmp = Path(tempfile.mkdtemp())
-    db_path = tmp / "t.sqlite"
+def test_targets_include_db_watchlist(tmp_path):
+    db_path = tmp_path / "t.sqlite"
     with sqlite3.connect(db_path) as conn:
         conn.execute("CREATE TABLE user_watchlist (stock_id TEXT)")
         conn.executemany("INSERT INTO user_watchlist VALUES (?)", [("2330",), ("2454",)])
@@ -64,10 +61,9 @@ def test_targets_include_db_watchlist():
     assert ids == ["2330", "2454"]
 
 
-def test_db_watchlist_missing_table_is_not_fatal():
+def test_db_watchlist_missing_table_is_not_fatal(tmp_path):
     """尚未用過 GUI 的環境沒有 user_watchlist；CI 不該因此整步驟失敗。"""
-    tmp = Path(tempfile.mkdtemp())
-    db_path = tmp / "empty.sqlite"
+    db_path = tmp_path / "empty.sqlite"
     sqlite3.connect(db_path).close()
     assert news.db_watchlist_ids(db_path) == []
 

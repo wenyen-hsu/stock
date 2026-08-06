@@ -86,27 +86,39 @@ def week_returns(conn: sqlite3.Connection, start: str, end: str) -> dict[str, di
     報酬用「start 當日收盤 → end 當日收盤」，等同持有整週。
     法人買賣超含 start 當日（週一買的也算這週的錢）。
     """
+    # 區間量能與法人買賣超先各自 GROUP BY 聚合再 join，而不是每檔跑三個
+    # correlated subquery。daily_prices 的 PK 是 (date, stock_id)，日期區間
+    # 掃描走 PK 一次即可，不必逐檔 seek。
     rows = conn.execute(
         """
+        WITH week_volume AS (
+            SELECT stock_id, SUM(volume) AS volume
+            FROM daily_prices WHERE date BETWEEN ? AND ? GROUP BY stock_id
+        ),
+        week_inst AS (
+            SELECT stock_id,
+                   SUM(COALESCE(foreign_net, 0)) AS foreign_net,
+                   SUM(COALESCE(trust_net, 0))   AS trust_net
+            FROM institutional_trades WHERE date BETWEEN ? AND ? GROUP BY stock_id
+        )
         SELECT
             a.stock_id,
-            COALESCE(s.name, a.name)                      AS name,
-            COALESCE(s.market, '')                        AS market,
-            b.close                                       AS start_close,
-            a.close                                       AS end_close,
-            (SELECT SUM(p.volume) FROM daily_prices p
-              WHERE p.stock_id = a.stock_id AND p.date BETWEEN ? AND ?)      AS week_volume,
-            (SELECT SUM(COALESCE(i.foreign_net, 0)) FROM institutional_trades i
-              WHERE i.stock_id = a.stock_id AND i.date BETWEEN ? AND ?)      AS foreign_net,
-            (SELECT SUM(COALESCE(i.trust_net, 0)) FROM institutional_trades i
-              WHERE i.stock_id = a.stock_id AND i.date BETWEEN ? AND ?)      AS trust_net
+            COALESCE(s.name, a.name)   AS name,
+            COALESCE(s.market, '')     AS market,
+            b.close                    AS start_close,
+            a.close                    AS end_close,
+            week_volume.volume,
+            week_inst.foreign_net,
+            week_inst.trust_net
         FROM daily_prices a
         JOIN daily_prices b ON b.stock_id = a.stock_id AND b.date = ?
         LEFT JOIN stocks s ON s.stock_id = a.stock_id
+        LEFT JOIN week_volume ON week_volume.stock_id = a.stock_id
+        LEFT JOIN week_inst ON week_inst.stock_id = a.stock_id
         WHERE a.date = ?
           AND a.close IS NOT NULL AND b.close IS NOT NULL AND b.close != 0
         """,
-        (start, end, start, end, start, end, start, end),
+        (start, end, start, end, start, end),
     ).fetchall()
     out: dict[str, dict[str, Any]] = {}
     for stock_id, name, market, start_close, end_close, volume, foreign_net, trust_net in rows:
@@ -271,17 +283,21 @@ def market_flow(conn: sqlite3.Connection, start: str, end: str) -> dict[str, Any
 
 # 只抽「具名欄位」而不是全文抓日期。實測 naive 全文正則在未來 7 天可得 1315 筆，
 # 但把「盈利警告」「停工函」誤歸成併購事件；改用欄位名錨定後降到 981 筆且幾乎沒有誤判。
-UPCOMING_FIELDS: tuple[tuple[str, str], ...] = (
-    ("法說會", r"召開法人說明會之日期"),
-    ("財報董事會", r"董事會預計召開日期"),
-    ("除權息交易日", r"除權（息）交易日"),
-    ("除權息基準日", r"除權（息）基準日"),
-    ("股利發放日", r"(?:普通股)?現金股利發放日期"),
-    ("現增認股基準日", r"現金增資認股基準日"),
+# 每筆是 (事件類型, 正則, SQL LIKE 用的字面子字串)。第三項不能從正則推導——
+# 「(?:普通股)?現金股利發放日期」裡的可選群組無法直接餵給 LIKE，取共同字面即可。
+UPCOMING_FIELDS: tuple[tuple[str, str, str], ...] = (
+    ("法說會", r"召開法人說明會之日期", "召開法人說明會之日期"),
+    ("財報董事會", r"董事會預計召開日期", "董事會預計召開日期"),
+    ("除權息交易日", r"除權（息）交易日", "除權（息）交易日"),
+    ("除權息基準日", r"除權（息）基準日", "除權（息）基準日"),
+    ("股利發放日", r"(?:普通股)?現金股利發放日期", "現金股利發放日期"),
+    ("現增認股基準日", r"現金增資認股基準日", "現金增資認股基準日"),
 )
 _FIELD_PATTERNS = tuple(
-    (label, re.compile(pattern + r"[:：]\s*(\S{0,14})")) for label, pattern in UPCOMING_FIELDS
+    (label, re.compile(pattern + r"[:：]\s*(\S{0,14})"))
+    for label, pattern, _like in UPCOMING_FIELDS
 )
+FIELD_LIKE_TERMS = tuple(like for _label, _pattern, like in UPCOMING_FIELDS)
 # 事件重要度：同一天太多筆時優先顯示法說會與財報，除權息類次之
 EVENT_PRIORITY = {"法說會": 0, "財報董事會": 1, "除權息交易日": 2, "現增認股基準日": 3,
                   "除權息基準日": 4, "股利發放日": 5}
@@ -309,13 +325,24 @@ def upcoming_events(conn: sqlite3.Connection, start: str, end: str) -> list[dict
 
     mops_events.event_date 是「發言日」不是事件日，所以未來事件只能從內文取；
     這也是現有 MOPS 頁「未來 30 天」篩選一直是空的原因。
+
+    兩個來源各自檢查資料表是否存在：早期的資料庫可能只有其中一張，
+    用單一來源的存在與否 gate 整個函式會讓行事曆被錯誤地清空。
     """
     seen: set[tuple[str, str, str]] = set()
     events: list[dict[str, Any]] = []
 
-    rows = conn.execute(
-        "SELECT stock_id, company_name, title, detail FROM mops_events WHERE detail IS NOT NULL"
-    ).fetchall()
+    # 先用 SQL 的 LIKE 縮小候選集再做 regex：mops_events 保留 183 天，
+    # 全表拉出來逐列解析在實測 10000 列（detail 合計 4.6MB）要 368ms，
+    # 而其中只有 20% 含得到我們要的欄位名。粗篩後降到 149ms。
+    rows = []
+    if table_exists(conn, "mops_events"):
+        like_clause = " OR ".join("detail LIKE ?" for _ in UPCOMING_FIELDS)
+        rows = conn.execute(
+            "SELECT stock_id, company_name, title, detail FROM mops_events "
+            f"WHERE detail IS NOT NULL AND ({like_clause})",
+            [f"%{field_name}%" for field_name in FIELD_LIKE_TERMS],
+        ).fetchall()
     for stock_id, company_name, title, detail in rows:
         for label, iso in extract_event_dates(detail):
             if not (start <= iso <= end):
@@ -335,13 +362,15 @@ def upcoming_events(conn: sqlite3.Connection, start: str, end: str) -> list[dict
             )
 
     # 上櫃除權息預告表（TPEx prepost）補上 MOPS 沒公告到的部分
-    dividend_rows = conn.execute(
-        """
-        SELECT ex_date, stock_id, name, cash_dividend, stock_dividend_per_share
-        FROM dividend_events WHERE ex_date BETWEEN ? AND ?
-        """,
-        (start, end),
-    ).fetchall()
+    dividend_rows = []
+    if table_exists(conn, "dividend_events"):
+        dividend_rows = conn.execute(
+            """
+            SELECT ex_date, stock_id, name, cash_dividend, stock_dividend_per_share
+            FROM dividend_events WHERE ex_date BETWEEN ? AND ?
+            """,
+            (start, end),
+        ).fetchall()
     for ex_date, stock_id, name, cash, stock in dividend_rows:
         key = (stock_id or "", "除權息交易日", ex_date)
         if key in seen:
@@ -436,8 +465,10 @@ def build_weekly_report(
         flows = sector_flows(perf)
         by_foreign = sorted(perf.values(), key=lambda item: item["foreign_net_lot"], reverse=True)
         by_trust = sorted(perf.values(), key=lambda item: item["trust_net_lot"], reverse=True)
-        events = upcoming_events(conn, next_start.isoformat(), next_end.isoformat()) \
-            if table_exists(conn, "mops_events") else []
+        # 不在此 gate：upcoming_events 內部逐一檢查 mops_events 與 dividend_events。
+        # 先前用 mops_events 是否存在來 gate 整段，會讓「只有除權息預告表」的
+        # 資料庫拿到空的行事曆。
+        events = upcoming_events(conn, next_start.isoformat(), next_end.isoformat())
         news = week_news(
             conn, [item["stock_id"] for item in gainers["mainstream"][:NEWS_STOCK_LIMIT]]
         ) if table_exists(conn, "stock_news") else {}

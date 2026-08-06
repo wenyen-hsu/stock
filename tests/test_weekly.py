@@ -244,6 +244,24 @@ def test_upcoming_events_filters_window_and_dedupes():
     assert out[0]["stock_id"] == "2385" and out[0]["event_type"] == "法說會"
 
 
+def test_upcoming_events_works_with_only_the_dividend_table():
+    """兩個來源要各自檢查存在與否。先前 build_weekly_report 用 mops_events
+    是否存在來 gate 整段，只有除權息預告表的資料庫會拿到空行事曆。"""
+    conn = _conn()
+    conn.execute("DROP TABLE mops_events")
+    conn.execute("INSERT INTO dividend_events VALUES ('2026-08-06','6125','廣運',0.5,0.0,'tpex_exright')")
+    out = upcoming_events(conn, "2026-08-03", "2026-08-09")
+    assert [row["stock_id"] for row in out] == ["6125"]
+
+
+def test_upcoming_events_works_with_only_the_mops_table():
+    conn = _conn()
+    conn.execute("DROP TABLE dividend_events")
+    conn.execute("INSERT INTO mops_events VALUES ('e1','2026-08-01','2385','群光','t','1.召開法人說明會之日期:115/08/07')")
+    out = upcoming_events(conn, "2026-08-03", "2026-08-09")
+    assert [row["stock_id"] for row in out] == ["2385"]
+
+
 def test_upcoming_events_merges_tpex_dividend_forecast():
     """TPEx 除權息預告表補 MOPS 沒公告到的上櫃個股。"""
     conn = _conn()

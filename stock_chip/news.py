@@ -243,11 +243,14 @@ def refresh_many_stock_news(
     got_any = False
     aborted = ""
     targets = [item.strip() for item in stock_ids if item.strip()]
+    # 整批共用一條連線：先前每檔都 connect 一次，數百檔規模下是白付的連線與
+    # lock 成本。仍逐檔 commit（在 upsert_news 內），所以被限速中止時已抓到的
+    # 部分不會遺失。
+    conn = sqlite3.connect(db_path)
     for index, stock_id in enumerate(targets):
         try:
             rows = fetch_yahoo_news(stock_id, limit=limit, fetch_content=fetch_content)
-            with sqlite3.connect(db_path) as conn:
-                upsert_news(conn, rows)
+            upsert_news(conn, rows)
             total += len(rows)
             output.append({"stock_id": stock_id, "status": "success", "fetched_count": len(rows), "error": ""})
             if rows:
@@ -263,6 +266,7 @@ def refresh_many_stock_news(
             break
         if sleep_seconds > 0:
             time.sleep(sleep_seconds)
+    conn.close()
     return {
         "stock_count": len(output),
         "requested_count": len(targets),
