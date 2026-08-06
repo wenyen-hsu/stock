@@ -52,9 +52,25 @@ await page.click("#weekly-upcoming .digest-chip");
 await page.waitForTimeout(1500);
 const afterClick = await page.evaluate(() => ({
   detailVisible: document.querySelector("#detail-view")?.style.display !== "none",
-  backLabel: document.querySelector("#nav-back")?.textContent || "",
+  title: document.querySelector("#detail-title")?.textContent || "",
 }));
 assert(afterClick.detailVisible, "點事件應切到個股頁");
+assert(afterClick.title.trim() !== "", "個股頁標題應有內容");
+
+// 行事曆的個股來自 MOPS，與掃描是不同的宇宙（含興櫃、創新板）——實測某週
+// 1017 件裡有 1 檔（7926 中華立鼎）不在匯出名單內。先前 loadDetail 沒有
+// try/catch，點它會拋未捕捉例外、頁面停在上一檔資料上。
+await page.evaluate(() => {
+  document.querySelector("#detail-stock").value = "9999999";
+  document.querySelector("#load-detail").click();
+});
+await page.waitForTimeout(1200);
+const missing = await page.evaluate(() => ({
+  subtitle: document.querySelector("#detail-subtitle")?.textContent || "",
+  detailVisible: document.querySelector("#detail-view")?.style.display !== "none",
+}));
+assert(/查無此檔資料/.test(missing.subtitle), `不存在的個股應顯示說明，實得「${missing.subtitle.slice(0, 60)}」`);
+assert(missing.detailVisible, "個股頁應仍可見（不是整頁壞掉）");
 
 assert(errors.length === 0, `不應有未捕捉的 JS 例外：${errors.join(" | ")}`);
 console.log(`OK 週報：主流 ${view.mainstreamRows} 檔、投機 ${view.speculativeRows} 檔、`

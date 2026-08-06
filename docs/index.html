@@ -5375,7 +5375,24 @@
     async function loadDetail() {
       const stock = document.querySelector("#detail-stock").value.trim() || "2376";
       const days = document.querySelector("#days").value;
-      const data = await getJSON(`/api/stock?days=${days}&stock_id=${encodeURIComponent(stock)}`);
+      let data;
+      try {
+        data = await getJSON(`/api/stock?days=${days}&stock_id=${encodeURIComponent(stock)}`);
+      } catch (err) {
+        // 週報行事曆的個股來自 MOPS，那是與掃描不同的宇宙（含興櫃、創新板），
+        // 搜尋列也可能被輸入任意代號。先前這裡沒有 try/catch，點到不在匯出名單
+        // 內的個股會拋未捕捉例外，頁面停在上一檔的資料上，看起來像整頁壞掉。
+        state.detail = null;
+        document.querySelector("#detail-title").textContent = stock;
+        document.querySelector("#detail-subtitle").innerHTML =
+          `<span class="status-pill warn">查無此檔資料</span> 可能是興櫃或創新板個股——排行與個股明細僅涵蓋上市櫃已入庫股票。`;
+        document.querySelectorAll("#detail-view .panel-body").forEach(box => {
+          box.innerHTML = `<div class="empty">此檔沒有已匯出的資料。</div>`;
+        });
+        const backButton = document.querySelector("#back-detail");
+        if (backButton) backButton.style.display = state.previousTab ? "" : "none";
+        return;
+      }
       state.detail = data;
       state.broker = data.branch_top[0]?.broker_name || "";
       const rangeSelect = document.querySelector("#chart-range");
