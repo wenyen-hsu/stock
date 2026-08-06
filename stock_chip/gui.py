@@ -997,6 +997,9 @@ INDEX_HTML = """<!doctype html>
             <option value="chip_score">法人籌碼分數</option>
           </optgroup>
           <optgroup label="籌碼追蹤">
+            <option value="foreign_day_buy">外資今日買超</option>
+            <option value="foreign_day_sell">外資今日賣超</option>
+            <option value="foreign_streak_buy">外資連續買超（天天在買）</option>
             <option value="foreign_buy">外資買超</option>
             <option value="trust_buy">投信買超</option>
             <option value="inst_buy">外資 + 投信</option>
@@ -1059,6 +1062,7 @@ INDEX_HTML = """<!doctype html>
       <button class="tab" id="nav-back" title="回到上一個畫面（同瀏覽器返回鍵）" style="padding-left:10px; padding-right:10px;">←</button>
       <button class="tab active" data-tab="ranking">排行</button>
       <button class="tab" data-tab="trend">今日趨勢</button>
+      <button class="tab" data-tab="weekly">週報</button>
       <button class="tab" data-tab="watchlist">自選股</button>
       <button class="tab" data-tab="portfolio">我的持股</button>
       <button class="tab" data-tab="sector">族群</button>
@@ -1207,6 +1211,68 @@ INDEX_HTML = """<!doctype html>
           <div><div class="panel-title">族群共振</div><div class="muted">同一族群 ≥2 檔同日爆量——資金可能正在轉進整個族群</div></div>
         </div>
         <div class="panel-body" id="trend-clusters"></div>
+      </section>
+    </section>
+    <section id="weekly-view" style="display:none;">
+      <section class="panel">
+        <div class="panel-head">
+          <div>
+            <div class="panel-title" id="weekly-title">週報</div>
+            <div class="muted" id="weekly-note">載入中…</div>
+          </div>
+        </div>
+        <div class="panel-body" id="weekly-market"></div>
+      </section>
+      <section class="panel">
+        <div class="panel-head">
+          <div>
+            <div class="panel-title">上週主流強勢股</div>
+            <div class="muted">日均成交額 ≥ 0.5 億<strong>且</strong>法人週買超為正——資金真的認同的漲。點列進個股頁。</div>
+          </div>
+        </div>
+        <div class="panel-body" id="weekly-mainstream"></div>
+      </section>
+      <section class="panel">
+        <div class="panel-head">
+          <div>
+            <div class="panel-title">上週投機飆股</div>
+            <div class="muted">漲幅雖大，但成交量不足或法人並未買超。與上表分開列，避免把飆股誤讀成主流資金流向。</div>
+          </div>
+        </div>
+        <div class="panel-body" id="weekly-speculative"></div>
+      </section>
+      <section class="panel">
+        <div class="panel-head">
+          <div><div class="panel-title">資金主要流向</div><div class="muted">族群層級的法人週買賣超（細分類優先）</div></div>
+        </div>
+        <div class="panel-body" id="weekly-sectors"></div>
+      </section>
+      <section class="panel">
+        <div class="panel-head">
+          <div><div class="panel-title">個股與 ETF 資金流</div><div class="muted">外資／投信週買超前段，與 ETF 單位數週變（申購贖回＝真實資金進出）</div></div>
+        </div>
+        <div class="panel-body" id="weekly-flows"></div>
+      </section>
+      <section class="panel">
+        <div class="panel-head">
+          <div>
+            <div class="panel-title" id="weekly-upcoming-title">下週重點行事曆</div>
+            <div class="muted">從 MOPS 公告內文抽出的未來事件日（法說會、財報董事會、除權息、股利發放）。自選股以★標示。</div>
+          </div>
+        </div>
+        <div class="panel-body" id="weekly-upcoming"></div>
+      </section>
+      <section class="panel" id="weekly-news-panel" style="display:none;">
+        <div class="panel-head">
+          <div><div class="panel-title">上週強勢股新聞</div><div class="muted">解釋「為什麼漲」；由每日管線預抓的 Yahoo 股市標題</div></div>
+        </div>
+        <div class="panel-body" id="weekly-news"></div>
+      </section>
+      <section class="panel">
+        <div class="panel-head">
+          <div><div class="panel-title">上週弱勢股</div><div class="muted">同樣套流動性門檻，冷門股跌深沒有參考價值</div></div>
+        </div>
+        <div class="panel-body" id="weekly-losers"></div>
       </section>
     </section>
     <section id="sector-view" style="display:none;">
@@ -1817,6 +1883,9 @@ INDEX_HTML = """<!doctype html>
       total_score: "法人籌碼＋融資券＋營收動能的基礎綜合分，是最保守的底層排序。",
       multifactor_score: "基礎分再加動能、長線、估值、量能、大戶與獲利品質，最全面的一個排序。",
       chip_score: "只看三大法人買賣超與連續性，純籌碼流量視角。",
+      foreign_day_buy: "最新一個交易日的外資買超張數排序，等同券商 App 的「今日外資買賣超排行」。單日榜反應最快，但常混入隔日就走的過路資金，建議跟「外資連續買超」對照著看。不含 ETF（見下方說明）。",
+      foreign_day_sell: "最新一個交易日的外資賣超張數排序，用來避開外資正在調節的個股。",
+      foreign_streak_buy: "外資連續買超 3 天以上、期間累計為正且日均成交額 ≥ 0.3 億。這才是「天天都在買」——同天數時以累計張數排序，避免連買 5 天但每天只買 1 張的排在前面。",
       foreign_buy: "區間外資買超張數排序。",
       trust_buy: "區間投信買超張數排序（投信認養常有波段行情）。",
       inst_buy: "外資＋投信合計買超排序。",
@@ -2045,6 +2114,9 @@ INDEX_HTML = """<!doctype html>
       }
       if (parsed.pathname === "/api/etf") {
         return staticData("data/etf.json");
+      }
+      if (parsed.pathname === "/api/weekly") {
+        return staticData("data/weekly.json");
       }
       if (parsed.pathname === "/api/trend") {
         return staticData(`data/trend_${days}d.json`);
@@ -3014,9 +3086,32 @@ INDEX_HTML = """<!doctype html>
       const latestFetch = rows.map(row => row.fetched_at).filter(Boolean).sort().at(-1);
       note.textContent = latestFetch
         ? `${STATIC_MODE ? "靜態快取" : "本機快取"} ${rows.length} 則，最後抓取 ${latestFetch}`
-        : STATIC_MODE ? "本次匯出尚無新聞快取" : "尚未抓取；按下按鈕才會連到 Yahoo 股市抓標題與內文摘錄";
+        : STATIC_MODE ? "此檔本次無新聞" : "尚未抓取；按下按鈕才會連到 Yahoo 股市抓標題與內文摘錄";
       if (!rows.length) {
-        target.innerHTML = `<div class="empty">${STATIC_MODE ? "本次匯出尚無新聞快取。" : "尚無新聞快取。需要時按「抓取新聞」。"}</div>`;
+        if (!STATIC_MODE) {
+          target.innerHTML = `<div class="empty">尚無新聞快取。需要時按「抓取新聞」。</div>`;
+          return;
+        }
+        // 靜態站無法寫入，新聞由管線預抓；名單為各排行前段＋自選股。
+        // 直接留白會讓人以為「這檔沒新聞」，實際多半是不在抓取名單內。
+        if (state.detail?.lite) {
+          target.innerHTML =
+            `<div class="empty">此檔尚無新聞。新聞須逐檔向 Yahoo 抓取，每日名單為<strong>各排行前段 ＋ 你的自選股</strong>；`
+            + `<button class="secondary" id="news-add-watch" style="height:26px; padding:0 10px; font-size:12px; margin:0 4px;">加入自選股</button>`
+            + `後，明日管線更新起就會有這檔的新聞。</div>`;
+          document.querySelector("#news-add-watch")?.addEventListener("click", async event => {
+            try {
+              await postJSON("/api/watchlist", { stock_id: String(state.detail?.stock?.stock_id || ""), action: "add" });
+              if (state.detail?.stock) state.detail.stock.in_watchlist = true;
+              updateWatchlistButton();
+              target.innerHTML = `<div class="empty">已加入自選股，明日管線更新後即會出現這檔的新聞。</div>`;
+            } catch (err) {
+              event.target.textContent = `加入失敗：${err.message}`;
+            }
+          });
+        } else {
+          target.innerHTML = `<div class="empty">這檔已在每日新聞抓取名單內，但 Yahoo 股市近期沒有相關報導。</div>`;
+        }
         return;
       }
       target.innerHTML = `<div class="news-list">${rows.map(row => {
@@ -3706,9 +3801,11 @@ INDEX_HTML = """<!doctype html>
       {key:"trust_net_lot", label:"投信", signed:true, groups:["chip"]},
       {key:"inst_net_lot", label:"外資+投信", signed:true, groups:["chip"]},
       {key:"foreign_net_volume_pct", label:"外資占量%", signed:true, groups:["chip","foreign"]},
-      {key:"latest_foreign_net_lot", label:"最近一日外資", signed:true, groups:["foreign"]},
+      {key:"latest_foreign_net_lot", label:"最近一日外資", signed:true, groups:["chip","foreign"]},
+      {key:"latest_trust_net_lot", label:"最近一日投信", signed:true, groups:["chip"]},
       {key:"foreign_buy_streak", label:"外資連買", groups:["foreign"]},
       {key:"foreign_sell_streak", label:"外資連賣", groups:["foreign"]},
+      {key:"close_vs_avg_pct", label:"距均價%", signed:true, groups:["foreign","chip"]},
       {key:"margin_balance_change_lot", label:"融資增減", signed:true, groups:["margin"]},
       {key:"short_balance_change_lot", label:"融券增減", signed:true, groups:["margin"]},
       {key:"avg_price", label:"均價", groups:["core"]},
@@ -3730,6 +3827,31 @@ INDEX_HTML = """<!doctype html>
     ];
     function visibleRankingCols() {
       return rankingCols.filter(col => (col.groups || ["core"]).includes(state.columnGroup));
+    }
+    // 排行的關鍵數字若不在目前欄位組裡就看不到——選「外資今日買超」卻停在
+    // 核心欄位組，最近一日外資買超那一欄根本不顯示。切榜時自動帶到對應欄位組；
+    // 使用者之後仍可手動切換（只在切榜當下套用一次）。
+    const RANKING_COLUMN_GROUP = {
+      foreign_day_buy: "foreign",
+      foreign_day_sell: "foreign",
+      foreign_streak_buy: "foreign",
+      foreign_buy: "foreign",
+      foreign_5d_revenue_growth: "foreign",
+      mispriced_value: "mispriced",
+      value_dividend: "valuation",
+      volume_expansion: "volume",
+      momentum_inst_buy: "momentum",
+      high_52w_inst_buy: "momentum",
+      trust_buy: "chip",
+      inst_buy: "chip",
+      inst_buy_volume: "chip",
+    };
+    function applyRankingColumnGroup() {
+      const ranking = document.querySelector("#ranking")?.value || "";
+      const group = RANKING_COLUMN_GROUP[ranking];
+      if (!group || group === state.columnGroup) return;
+      state.columnGroup = group;
+      renderColumnControls();
     }
     function renderColumnControls() {
       const target = document.querySelector("#ranking-columns");
@@ -3995,6 +4117,189 @@ INDEX_HTML = """<!doctype html>
           </div>`).join("")
         : `<div class="empty">今日沒有同族群多檔爆量的共振訊號。</div>`;
       clusterBox.querySelectorAll(".digest-chip").forEach(btn => btn.addEventListener("click", () => openDetail(btn.dataset.stock)));
+    }
+    const weeklyStockCols = [
+      // format: v => v 不可省——fmt() 會把 2207 顯示成 "2,207"
+      {key:"stock_id", label:"代號", sortType:"text", format: v => v},
+      {key:"name", label:"名稱", sortType:"text"},
+      {key:"week_return_pct", label:"週漲跌%", signed:true},
+      {key:"close", label:"週收盤"},
+      {key:"foreign_net_lot", label:"外資", signed:true},
+      {key:"trust_net_lot", label:"投信", signed:true},
+      {key:"avg_turnover_100m", label:"日均額(億)"},
+      {key:"industry", label:"產業", sortType:"text"},
+    ];
+    function weeklyStockTable(target, rows, emptyText) {
+      if (!target) return;
+      if (!rows || !rows.length) {
+        target.innerHTML = `<div class="empty">${esc(emptyText)}</div>`;
+        return;
+      }
+      renderTable(target, rows, weeklyStockCols, {
+        rowId: row => row.stock_id,
+        onClick: stockId => openDetail(stockId),
+      });
+    }
+    // 財報董事會佔行事曆 73%（實測某週 1017 件裡有 739 件），但每家公司在
+    // 財報期限前都必須開，知道某檔要開董事會本身沒有行動意義；除權息基準日與
+    // 股利發放日同理（真正要盯的是除權息「交易日」）。全部平鋪會出現單日 311
+    // 個 chip，把法說會這種真正的重點淹掉。
+    // 因此低訊號類型預設只顯示自選股，其餘收在「展開全部」後面。
+    const WEEKLY_KEY_EVENTS = new Set(["法說會", "除權息交易日", "現增認股基準日"]);
+    let weeklyShowAllEvents = false;
+    function renderWeeklyUpcoming(events) {
+      const target = document.querySelector("#weekly-upcoming");
+      if (!target) return;
+      if (!events.length) {
+        target.innerHTML = `<div class="empty">下週尚無已公告的事件。MOPS 公告通常在事件前 1～2 週發布，越接近週末涵蓋越完整。</div>`;
+        return;
+      }
+      const watchIds = new Set(currentWatchlistIdsForUI().map(String));
+      const isKey = item => WEEKLY_KEY_EVENTS.has(item.event_type) || watchIds.has(String(item.stock_id));
+      const shown = weeklyShowAllEvents ? events : events.filter(isKey);
+      const hidden = events.length - shown.length;
+
+      const byDate = new Map();
+      shown.forEach(item => {
+        if (!byDate.has(item.date)) byDate.set(item.date, []);
+        byDate.get(item.date).push(item);
+      });
+      const groups = [...byDate.entries()].map(([date, items]) => {
+        // 自選股排到該日最前面，其餘維持後端的事件重要度排序
+        const sorted = [...items].sort((a, b) =>
+          (watchIds.has(String(b.stock_id)) ? 1 : 0) - (watchIds.has(String(a.stock_id)) ? 1 : 0));
+        return `<div class="digest-group">
+          <div class="digest-group-title">${esc(date)}（${esc(items.length)} 件）</div>
+          <div class="digest-chips">${sorted.map(item => {
+            const star = watchIds.has(String(item.stock_id)) ? "★" : "";
+            return `<button class="digest-chip" data-stock="${esc(item.stock_id)}" title="${esc(item.event_type)}：${esc(item.title)}">${star}${esc(item.stock_id)} ${esc(item.name)}・${esc(item.event_type)}</button>`;
+          }).join("")}</div>
+        </div>`;
+      }).join("");
+
+      const toggle = hidden > 0 || weeklyShowAllEvents
+        ? `<div style="margin-top:10px;">
+             <button class="secondary" id="weekly-events-toggle" style="height:28px; padding:0 12px; font-size:12px;">
+               ${weeklyShowAllEvents ? "只看重點事件" : `展開其餘 ${fmt(hidden)} 件（財報董事會、除權息基準日、股利發放日）`}
+             </button>
+           </div>`
+        : "";
+      target.innerHTML = (groups || `<div class="empty">下週沒有法說會或除權息交易日；自選股也沒有相關事件。</div>`) + toggle;
+      target.querySelectorAll(".digest-chip").forEach(btn =>
+        btn.addEventListener("click", () => openDetail(btn.dataset.stock)));
+      document.querySelector("#weekly-events-toggle")?.addEventListener("click", () => {
+        weeklyShowAllEvents = !weeklyShowAllEvents;
+        renderWeeklyUpcoming(events);
+      });
+    }
+    function currentWatchlistIdsForUI() {
+      if (STATIC_MODE) return staticWatchlistIds();
+      return (state.rankingRows || []).filter(row => row.in_watchlist).map(row => row.stock_id);
+    }
+    async function loadWeekly() {
+      const note = document.querySelector("#weekly-note");
+      let data;
+      try {
+        data = await getJSON("/api/weekly");
+      } catch (err) {
+        if (note) note.textContent = `讀取失敗：${err.message}`;
+        return;
+      }
+      if (data.state !== "ready") {
+        if (note) note.textContent = "資料尚不足以產生週報（至少需要一個已收完的交易週）。";
+        document.querySelector("#weekly-market").innerHTML = `<div class="empty">尚無週報資料。</div>`;
+        return;
+      }
+      const title = document.querySelector("#weekly-title");
+      if (title) title.textContent = `週報 ${data.week_start} ～ ${data.week_end}`;
+      if (note) {
+        // 連假短週要說清楚，否則「這週只漲 1%」會被誤讀成一整週的表現
+        const short = data.trading_day_count < 5
+          ? `（該週僅 ${data.trading_day_count} 個交易日，可能逢連假）` : "";
+        note.textContent = `統計 ${fmt(data.stock_count)} 檔個股${short}。此為最近一個已收完的交易週，一週更新一次。`;
+      }
+
+      const flow = data.market_flow || {};
+      const metric = (label, value, hint) => `
+        <div class="metric">
+          <div class="metric-label">${esc(label)}</div>
+          <div class="metric-value ${cls(value)}">${value === null || value === undefined ? "-" : fmt(value)}</div>
+          ${hint ? `<div class="muted" style="font-size:12px;">${esc(hint)}</div>` : ""}
+        </div>`;
+      document.querySelector("#weekly-market").innerHTML = `<div class="metrics">
+        ${metric("大盤週漲跌%", flow.taiex_return_pct, `${fmt(flow.taiex_start)} → ${fmt(flow.taiex_end)}`)}
+        ${metric("外資台指未平倉週變(口)", flow.foreign_futures_oi_change, `週末 ${fmt(flow.foreign_futures_oi_end)} 口`)}
+        ${metric("全市場融資餘額週變(張)", flow.margin_balance_change_lot, "增加通常代表散戶加碼")}
+      </div>`;
+
+      weeklyStockTable(document.querySelector("#weekly-mainstream"), data.gainers?.mainstream,
+        "上週沒有同時滿足流動性與法人買超的上漲股。");
+      weeklyStockTable(document.querySelector("#weekly-speculative"), data.gainers?.speculative,
+        "上週沒有量能或法人不足的上漲股。");
+      weeklyStockTable(document.querySelector("#weekly-losers"), data.gainers?.losers,
+        "上週沒有符合流動性門檻的下跌股。");
+
+      const sectorCols = [
+        {key:"name", label:"族群", sortType:"text"},
+        {key:"member_count", label:"檔數"},
+        {key:"avg_return_pct", label:"平均週漲跌%", signed:true},
+        {key:"up_ratio_pct", label:"上漲比率%"},
+        {key:"inst_net_lot", label:"法人買賣超", signed:true},
+      ];
+      const sectors = data.sector_flows || {};
+      document.querySelector("#weekly-sectors").innerHTML = `
+        <div class="layout-2">
+          <div><div class="news-section-title">資金流入</div><div id="weekly-sector-in"></div></div>
+          <div><div class="news-section-title">資金流出</div><div id="weekly-sector-out"></div></div>
+        </div>`;
+      renderTable(document.querySelector("#weekly-sector-in"), sectors.inflow || [], sectorCols);
+      renderTable(document.querySelector("#weekly-sector-out"), sectors.outflow || [], sectorCols);
+
+      document.querySelector("#weekly-flows").innerHTML = `
+        <div class="layout-2">
+          <div><div class="news-section-title">外資週買超</div><div id="weekly-foreign"></div></div>
+          <div><div class="news-section-title">投信週買超</div><div id="weekly-trust"></div></div>
+        </div>
+        <div class="news-section-title" style="margin-top:14px;">ETF 單位數週變</div>
+        <div id="weekly-etf"></div>`;
+      const flowCols = [
+        {key:"stock_id", label:"代號", sortType:"text", format: v => v},
+        {key:"name", label:"名稱", sortType:"text"},
+        {key:"week_return_pct", label:"週漲跌%", signed:true},
+      ];
+      renderTable(document.querySelector("#weekly-foreign"), data.foreign_top || [],
+        [...flowCols, {key:"foreign_net_lot", label:"外資買超", signed:true}],
+        {rowId: row => row.stock_id, onClick: stockId => openDetail(stockId)});
+      renderTable(document.querySelector("#weekly-trust"), data.trust_top || [],
+        [...flowCols, {key:"trust_net_lot", label:"投信買超", signed:true}],
+        {rowId: row => row.stock_id, onClick: stockId => openDetail(stockId)});
+      renderTable(document.querySelector("#weekly-etf"), data.etf_flows || [], [
+        {key:"etf_id", label:"代號", sortType:"text", format: v => v},
+        {key:"name", label:"名稱", sortType:"text"},
+        {key:"category", label:"類型", sortType:"text"},
+        {key:"units_chg_5d_pct", label:"單位數週變%", signed:true},
+      ]);
+
+      const upcomingTitle = document.querySelector("#weekly-upcoming-title");
+      if (upcomingTitle) upcomingTitle.textContent = `下週重點行事曆 ${data.next_week_start} ～ ${data.next_week_end}`;
+      renderWeeklyUpcoming(data.upcoming || []);
+
+      const news = data.news || {};
+      const newsPanel = document.querySelector("#weekly-news-panel");
+      const newsIds = Object.keys(news);
+      if (newsPanel) newsPanel.style.display = newsIds.length ? "" : "none";
+      if (newsIds.length) {
+        const nameOf = {};
+        (data.gainers?.mainstream || []).forEach(row => { nameOf[row.stock_id] = row.name; });
+        document.querySelector("#weekly-news").innerHTML = newsIds.map(stockId => `
+          <div class="digest-group">
+            <div class="digest-group-title">${esc(stockId)} ${esc(nameOf[stockId] || "")}</div>
+            ${news[stockId].map(item => `<div class="news-item">
+              <a class="news-title" href="${esc(item.url)}" target="_self" rel="noreferrer">${esc(item.title)}</a>
+              <div class="news-meta">${esc(item.published_at || "")}</div>
+            </div>`).join("")}
+          </div>`).join("");
+      }
     }
     function renderRankingTable() {
       renderFocusCards();
@@ -5130,7 +5435,24 @@ INDEX_HTML = """<!doctype html>
     async function loadDetail() {
       const stock = document.querySelector("#detail-stock").value.trim() || "2376";
       const days = document.querySelector("#days").value;
-      const data = await getJSON(`/api/stock?days=${days}&stock_id=${encodeURIComponent(stock)}`);
+      let data;
+      try {
+        data = await getJSON(`/api/stock?days=${days}&stock_id=${encodeURIComponent(stock)}`);
+      } catch (err) {
+        // 週報行事曆的個股來自 MOPS，那是與掃描不同的宇宙（含興櫃、創新板），
+        // 搜尋列也可能被輸入任意代號。先前這裡沒有 try/catch，點到不在匯出名單
+        // 內的個股會拋未捕捉例外，頁面停在上一檔的資料上，看起來像整頁壞掉。
+        state.detail = null;
+        document.querySelector("#detail-title").textContent = stock;
+        document.querySelector("#detail-subtitle").innerHTML =
+          `<span class="status-pill warn">查無此檔資料</span> 可能是興櫃或創新板個股——排行與個股明細僅涵蓋上市櫃已入庫股票。`;
+        document.querySelectorAll("#detail-view .panel-body").forEach(box => {
+          box.innerHTML = `<div class="empty">此檔沒有已匯出的資料。</div>`;
+        });
+        const backButton = document.querySelector("#back-detail");
+        if (backButton) backButton.style.display = state.previousTab ? "" : "none";
+        return;
+      }
       state.detail = data;
       state.broker = data.branch_top[0]?.broker_name || "";
       const rangeSelect = document.querySelector("#chart-range");
@@ -5148,7 +5470,8 @@ INDEX_HTML = """<!doctype html>
       renderPeerStrip(data.stock);
       const backBtn = document.querySelector("#back-detail");
       backBtn.style.display = state.previousTab ? "" : "none";
-      backBtn.textContent = `返回${state.previousTab === "watchlist" ? "自選股" : state.previousTab === "coverage" ? "資料狀態" : "排行"}`;
+      const backLabels = {watchlist: "自選股", coverage: "資料狀態", weekly: "週報", trend: "今日趨勢", portfolio: "我的持股"};
+      backBtn.textContent = `返回${backLabels[state.previousTab] || "排行"}`;
       updateWatchlistButton();
       renderMetrics(document.querySelector("#detail-metrics"), [
         ["收盤", fmt(data.stock.close)],
@@ -5327,6 +5650,7 @@ INDEX_HTML = """<!doctype html>
       document.querySelector("#ranking-view").style.display = state.tab === "ranking" || state.tab === "watchlist" ? "" : "none";
       document.querySelector("#portfolio-view").style.display = state.tab === "portfolio" ? "" : "none";
       document.querySelector("#trend-view").style.display = state.tab === "trend" ? "" : "none";
+      document.querySelector("#weekly-view").style.display = state.tab === "weekly" ? "" : "none";
       document.querySelector("#sector-view").style.display = state.tab === "sector" ? "" : "none";
       document.querySelector("#detail-view").style.display = state.tab === "detail" ? "" : "none";
       document.querySelector("#market-view").style.display = state.tab === "market" ? "" : "none";
@@ -5338,6 +5662,7 @@ INDEX_HTML = """<!doctype html>
       if (state.tab === "watchlist") await loadRanking(true);
       if (state.tab === "portfolio") await loadPortfolio();
       if (state.tab === "trend") await loadTrend();
+      if (state.tab === "weekly") await loadWeekly();
       if (state.tab === "sector") await loadSector();
       if (state.tab === "detail") await loadDetail();
       if (state.tab === "market") await loadMarket();
@@ -5353,6 +5678,7 @@ INDEX_HTML = """<!doctype html>
     document.querySelector("#nav-back")?.addEventListener("click", () => history.back());
     document.querySelector("#refresh-sector")?.addEventListener("click", loadSector);
     document.querySelector("#ranking").addEventListener("change", () => {
+      applyRankingColumnGroup();
       updateRankingDesc();
       enforceRankingDays();
       reload();
@@ -5817,6 +6143,12 @@ def normalize_scan_row(row: dict[str, str], days: int) -> dict[str, object]:
         "foreign_sell_streak": as_float(row.get("foreign_sell_streak")),
         "trust_buy_streak": as_float(row.get("trust_buy_streak")),
         "trust_sell_streak": as_float(row.get("trust_sell_streak")),
+        # 單日法人買賣超與乖離：外資動向排行與持股警示都靠這三欄。
+        # 它們在 scan_all CSV 早就有，先前漏在白名單外 → 線上恆為 null，
+        # 連前端早就寫好的「最近一日外資」欄位也一直是空的。
+        "latest_foreign_net_lot": as_float_or_none(row.get("latest_foreign_net_lot")),
+        "latest_trust_net_lot": as_float_or_none(row.get("latest_trust_net_lot")),
+        "close_vs_avg_pct": as_float_or_none(row.get("close_vs_avg_pct")),
         "margin_balance_change_lot": as_float_or_none(row.get("margin_balance_change_lot")),
         "short_balance_change_lot": as_float_or_none(row.get("short_balance_change_lot")),
         "branch_status": row.get("branch_status") or ("已取得" if row.get("top_buy_branch_name") else "未取得"),
@@ -5840,6 +6172,9 @@ def ranking_path(days: int, ranking: str) -> Path:
         "confluence_score": "ranking_confluence_score",
         "selection_score": "ranking_selection_score",
         "foreign_buy": "ranking_foreign_buy",
+        "foreign_day_buy": "ranking_foreign_day_buy",
+        "foreign_day_sell": "ranking_foreign_day_sell",
+        "foreign_streak_buy": "ranking_foreign_streak_buy",
         "foreign_5d_revenue_growth": "ranking_foreign_5d_revenue_growth",
         "inst_buy_volume": "ranking_inst_buy_volume",
         "volume_expansion": "ranking_volume_expansion",
@@ -5864,6 +6199,9 @@ RANKING_LABELS = {
     "chip_score": "法人籌碼分數",
     "selection_score": "基礎選股分",
     "foreign_buy": "外資買超",
+    "foreign_day_buy": "外資今日買超",
+    "foreign_day_sell": "外資今日賣超",
+    "foreign_streak_buy": "外資連續買超（天天在買）",
     "foreign_5d_revenue_growth": "外資近5日買超 + 營收成長",
     "inst_buy_volume": "法人買超 + 占量",
     "volume_expansion": "成交量放大",
@@ -8451,6 +8789,13 @@ class GUIHandler(BaseHTTPRequestHandler):
             if parsed.path == "/api/trend":
                 days = int(params.get("days", ["20"])[0])
                 json_response(self, build_trend_report(DB_PATH, REPORTS_DIR / f"scan_all_{days}d.csv", days))
+                return
+            if parsed.path == "/api/weekly":
+                # 本機 GUI 也要能看週報。/api/etf 與 /api/dividends 當初只加了靜態
+                # 路由、漏了這個 handler，結果本機模式一直落到 404，別重蹈。
+                from stock_chip.weekly import build_weekly_report
+
+                json_response(self, build_weekly_report(DB_PATH, REPORTS_DIR / "scan_all_20d.csv"))
                 return
             if parsed.path == "/api/health":
                 json_response(self, collect_health(DB_PATH))
