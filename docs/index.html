@@ -3686,12 +3686,12 @@
       await reload();
     }
     const rankingCols = [
-      {key:"stock_id", label:"代號", sortType:"text", format: v => v, groups:["core","chip","foreign","revenue","margin","volume","valuation","momentum"]},
-      {key:"name", label:"名稱", sortType:"text", groups:["core","chip","foreign","revenue","margin","volume","valuation","momentum"]},
+      {key:"stock_id", label:"代號", sortType:"text", format: v => v, groups:["core","chip","foreign","revenue","margin","volume","valuation","momentum","mispriced"]},
+      {key:"name", label:"名稱", sortType:"text", groups:["core","chip","foreign","revenue","margin","volume","valuation","momentum","mispriced"]},
       {key:"industry", label:"產業", sortType:"text", html:true, format: (v) => v ? `<button class="industry-link" data-industry="${esc(v)}">${esc(v)}</button>` : "", groups:["core","chip","valuation","momentum"]},
       {key:"sub_industry", label:"細分類", sortType:"text", html:true, format: (v, row) => v ? `<button class="industry-link" data-industry="${esc(row.industry || "")}" data-sub="${esc(v)}">${esc(v)}</button>` : "", groups:["core","momentum"]},
       {key:"market", label:"市場", sortType:"text", groups:["core","valuation"]},
-      {key:"close", label:"收盤", groups:["core","chip","foreign","revenue","margin","volume","valuation","momentum"]},
+      {key:"close", label:"收盤", groups:["core","chip","foreign","revenue","margin","volume","valuation","momentum","mispriced"]},
       {key:"observed_days", label:"資料日", groups:["core"]},
       {key:"pe_ratio", label:"本益比", groups:["core","valuation"]},
       {key:"dividend_yield", label:"殖利率%", groups:["valuation"]},
@@ -3754,6 +3754,9 @@
       {key:"revenue_yoy_pct", label:"年增%", signed:true, groups:["revenue"]},
       {key:"base_reason", label:"亮點", sortType:"text", html:true, format: v => reasonBadges(v), groups:["core"]}
     ];
+    // 代號／名稱／收盤是「身分欄」，每個欄位組都必須包含——沒有它們就認不出
+    // 是哪一檔股票。mispriced 組當初漏掉，在切榜自動帶欄位組上線後才暴露：
+    // 選錯殺價值榜會自動跳到該組，整張表變成只有分數沒有股票名。
     const columnGroups = [
       {key:"core", label:"核心", tip:"核心：用全市場較穩定可取得的資料做快速排序，包含收盤、資料日、基礎分、法人分、營收分、融資分、成交量與均價。"},
       {key:"chip", label:"法人籌碼", tip:"法人籌碼：觀察外資、投信買賣超與外資占成交量比例。占量越高，代表法人買賣超相對當期成交量越集中。"},
