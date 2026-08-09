@@ -65,9 +65,15 @@ jobs:
           python -m stock_chip.revenue --months 24 --from-scan 200 --only-missing-month --sleep 0.4
           python -m stock_chip.revenue --months 24 --fill-market 250 --only-missing-month --sleep 0.5
 
-      - name: 更新季度財報三率與 EPS（MOPS，僅缺漏季度）
+      # 20 季（5 年）而非 8 季：8 季只有 7 季可用（MOPS 給累計數，單季值靠差分，
+      # 窗口最舊那季沒有前一季可減必為 null），連 TTM 成長都算不出來——要比較
+      # 近四季 vs 前四季就需要 8 季完整值。5 年才涵蓋得到一個景氣循環，
+      # 常態化 EPS 與循環位置判斷才有依據。
+      # 成本很低：已入庫季度會被跳過（門檻 ≥300 列），只補新增的 12 季 × 3 市場
+      # = 36 次請求，sleep 3 秒約 3-5 分鐘，之後每季增量。
+      - name: 更新季度財報三率與 EPS（MOPS，僅缺漏季度，涵蓋 5 年）
         continue-on-error: true
-        run: python -m stock_chip.financials --quarters 8 --sleep 3
+        run: python -m stock_chip.financials --quarters 20 --sleep 3
 
       - name: 更新大盤指數與期貨多空
         continue-on-error: true
