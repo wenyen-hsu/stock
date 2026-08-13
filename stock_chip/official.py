@@ -751,6 +751,58 @@ def init_schema(conn: sqlite3.Connection) -> None:
         CREATE INDEX IF NOT EXISTS idx_etf_holdings_stock
             ON etf_holdings(stock_id, data_date);
 
+        -- 當沖標的成交統計（TWSE TWTB4U）。只有上市有這份資料，上櫃沒有公開
+        -- openapi（第二輪探測把 TPEx 端點全列出來確認過），所以上櫃的可交易性
+        -- 只能用日均額 + 漲停排隊量代理。
+        CREATE TABLE IF NOT EXISTS day_trade_stats (
+            date TEXT NOT NULL,
+            stock_id TEXT NOT NULL,
+            name TEXT,
+            market TEXT,
+            day_trade_volume REAL,        -- 當日沖銷交易成交股數
+            day_trade_buy_amount REAL,
+            day_trade_sell_amount REAL,
+            suspended_note TEXT,          -- 暫停現股賣出後現款買進當沖註記
+            updated_at TEXT NOT NULL,
+            PRIMARY KEY (date, stock_id)
+        );
+
+        CREATE INDEX IF NOT EXISTS idx_day_trade_stats_stock
+            ON day_trade_stats(stock_id, date);
+
+        -- 處置股：處置期間改人工撮合（約 2 分鐘一次），當沖實務上做不了，
+        -- 必須硬排除。start_date/end_date 存 ISO 以便用日期區間判斷是否生效。
+        CREATE TABLE IF NOT EXISTS disposal_stocks (
+            stock_id TEXT NOT NULL,
+            name TEXT,
+            market TEXT NOT NULL,
+            announce_date TEXT,
+            start_date TEXT,
+            end_date TEXT,
+            reason TEXT,
+            measure TEXT,
+            source TEXT NOT NULL,
+            updated_at TEXT NOT NULL,
+            PRIMARY KEY (stock_id, start_date, source)
+        );
+
+        -- 漲停鎖死但仍有排隊買量（TPEx tpex_ceil_non_trading）。
+        -- 未成交排隊量是盤後資料裡少數直接指向「明天開盤買盤」的訊號。
+        CREATE TABLE IF NOT EXISTS ceiling_queue (
+            date TEXT NOT NULL,
+            stock_id TEXT NOT NULL,
+            name TEXT,
+            market TEXT,
+            close REAL,
+            change REAL,
+            total_volume REAL,            -- 當日總成交股數
+            ceiling_traded_volume REAL,   -- 漲停價成交股數
+            ceiling_order_volume REAL,    -- 漲停價委買股數
+            queue_volume REAL,            -- 未成交排隊量 = 委買 − 成交
+            updated_at TEXT NOT NULL,
+            PRIMARY KEY (date, stock_id)
+        );
+
         CREATE INDEX IF NOT EXISTS idx_daily_prices_stock_date
             ON daily_prices(stock_id, date);
         CREATE INDEX IF NOT EXISTS idx_institutional_stock_date

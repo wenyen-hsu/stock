@@ -1003,6 +1003,7 @@
       <button class="tab active" data-tab="ranking">排行</button>
       <button class="tab" data-tab="trend">今日趨勢</button>
       <button class="tab" data-tab="weekly">週報</button>
+      <button class="tab" data-tab="daytrade">當沖候選</button>
       <button class="tab" data-tab="watchlist">自選股</button>
       <button class="tab" data-tab="portfolio">我的持股</button>
       <button class="tab" data-tab="sector">族群</button>
@@ -1213,6 +1214,58 @@
           <div><div class="panel-title">上週弱勢股</div><div class="muted">同樣套流動性門檻，冷門股跌深沒有參考價值</div></div>
         </div>
         <div class="panel-body" id="weekly-losers"></div>
+      </section>
+    </section>
+    <section id="daytrade-view" style="display:none;">
+      <section class="panel">
+        <div class="panel-head">
+          <div>
+            <div class="panel-title" id="daytrade-title">當沖候選池</div>
+            <div class="muted" id="daytrade-note">載入中…</div>
+          </div>
+        </div>
+        <div class="panel-body">
+          <div class="empty" style="border-color:#d97706; color:var(--td-ink);">
+            <strong>這是盤前候選名單，不是進出訊號。</strong>
+            系統的資料全部是盤後的——沒有開盤價、沒有盤中價量、分點還是 T+1。
+            名單能把全市場縮到 30 檔以內，但何時進場、何時停損只能靠你看盤。
+            當沖來回成本約 0.2–0.3%（證交稅減半 + 手續費），你要先贏過這個數字才回到原點。
+          </div>
+          <div id="daytrade-gates" style="margin-top:12px;"></div>
+        </div>
+      </section>
+      <section class="panel">
+        <div class="panel-head">
+          <div>
+            <div class="panel-title">順勢追強</div>
+            <div class="muted">前一日強勢族群成員、量比放大、法人同步買超。隔日沖分點進駐者<strong>扣分</strong>——明天有賣壓。</div>
+          </div>
+        </div>
+        <div class="panel-body" id="daytrade-momentum"></div>
+      </section>
+      <section class="panel">
+        <div class="panel-head">
+          <div>
+            <div class="panel-title">逆勢接刀</div>
+            <div class="muted">昨日下跌但族群仍強、外資仍買。爆量下跌會扣分——通常還有後續賣壓。</div>
+          </div>
+        </div>
+        <div class="panel-body" id="daytrade-reversal"></div>
+      </section>
+      <section class="panel">
+        <div class="panel-head">
+          <div>
+            <div class="panel-title">隔日沖賣壓</div>
+            <div class="muted">主買分點為隔日沖券商，明天大機率有賣壓。<strong>這是雙面刃</strong>：對做空是機會，對做多是陷阱。</div>
+          </div>
+        </div>
+        <div class="panel-body" id="daytrade-pressure"></div>
+      </section>
+      <section class="panel">
+        <div class="panel-head">
+          <div><div class="panel-title">已排除：處置股</div><div class="muted">處置期間改人工撮合（約 2 分鐘一次），當沖實務上做不了</div></div>
+        </div>
+        <div class="panel-body" id="daytrade-disposal"></div>
       </section>
     </section>
     <section id="sector-view" style="display:none;">
@@ -2054,6 +2107,9 @@
       }
       if (parsed.pathname === "/api/etf") {
         return staticData("data/etf.json");
+      }
+      if (parsed.pathname === "/api/daytrade") {
+        return staticData("data/daytrade.json");
       }
       if (parsed.pathname === "/api/weekly") {
         return staticData("data/weekly.json");
@@ -4139,6 +4195,91 @@
       if (STATIC_MODE) return staticWatchlistIds();
       return (state.rankingRows || []).filter(row => row.in_watchlist).map(row => row.stock_id);
     }
+    const daytradeCols = [
+      {key:"stock_id", label:"代號", sortType:"text", format: v => v},
+      {key:"name", label:"名稱", sortType:"text"},
+      {key:"score", label:"分數", signed:true},
+      {key:"chg_1d_pct", label:"昨日漲跌%", signed:true},
+      {key:"amplitude_pct", label:"昨日振幅%"},
+      {key:"volume_ratio_1d", label:"量比"},
+      {key:"day_trade_pct", label:"當沖比率%", format: (v, row) =>
+        v === null || v === undefined ? (row.market === "TPEX" ? "—（上櫃無此資料）" : "-") : fmt(v)},
+      {key:"avg_turnover_100m", label:"日均額(億)"},
+      {key:"foreign_net_lot", label:"外資", signed:true},
+      {key:"ceiling_queue_lot", label:"漲停排隊(張)"},
+      {key:"flags", label:"標記", sortType:"text", html:true, format: (_v, row) => {
+        const tags = [];
+        if (row.in_strong_sector) tags.push('<span class="status-pill">強勢族群</span>');
+        if (row.is_day_trader_branch) tags.push('<span class="status-pill warn">隔日沖進駐</span>');
+        if (row.gate_basis === "turnover_proxy") tags.push('<span class="status-pill warn">代理門檻</span>');
+        return tags.join(" ");
+      }},
+      {key:"sub_industry", label:"族群", sortType:"text"},
+    ];
+    function renderDaytradeTable(id, rows, emptyText) {
+      const target = document.querySelector(id);
+      if (!target) return;
+      if (!rows || !rows.length) {
+        target.innerHTML = `<div class="empty">${esc(emptyText)}</div>`;
+        return;
+      }
+      renderTable(target, rows, daytradeCols, {
+        rowId: row => row.stock_id,
+        onClick: stockId => openDetail(stockId),
+      });
+    }
+    async function loadDaytrade() {
+      const note = document.querySelector("#daytrade-note");
+      let data;
+      try {
+        data = await getJSON("/api/daytrade");
+      } catch (err) {
+        if (note) note.textContent = `讀取失敗：${err.message}`;
+        return;
+      }
+      const title = document.querySelector("#daytrade-title");
+      if (title) title.textContent = `當沖候選池（資料日 ${data.trade_date || "-"}）`;
+      if (data.state !== "ready") {
+        if (note) note.textContent = "尚無候選——可能是當沖統計未入庫，或今日無標的通過門檻。";
+        ["#daytrade-momentum", "#daytrade-reversal", "#daytrade-pressure"].forEach(id => {
+          const box = document.querySelector(id);
+          if (box) box.innerHTML = `<div class="empty">尚無資料。</div>`;
+        });
+        return;
+      }
+      if (note) {
+        note.textContent = `通過硬門檻 ${fmt(data.candidate_count)} 檔`
+          + `（全市場當沖統計 ${fmt(data.day_trade_stat_count)} 檔、前一日強勢族群 ${fmt(data.strong_sector_count)} 個）`;
+      }
+      const g = data.gates || {};
+      // 上市與上櫃的門檻不是同一個標準，要並列讓人一眼看出差別
+      document.querySelector("#daytrade-gates").innerHTML = `<div class="layout-2">
+        <div class="empty" style="text-align:left;">
+          <strong>上市門檻</strong><br>
+          當沖比率 ≥ ${esc(g.twse?.day_trade_pct)}%、日均額 ≥ ${esc(g.twse?.turnover_100m)} 億<br>
+          <span class="muted">有 TWSE 當沖統計，知道當沖客是否真的在玩這檔</span>
+        </div>
+        <div class="empty" style="text-align:left;">
+          <strong>上櫃門檻</strong><br>
+          日均額 ≥ ${esc(g.tpex?.turnover_100m)} 億<span class="status-pill warn">代理指標</span><br>
+          <span class="muted">上櫃沒有公開的當沖統計，只能用成交額代理，故門檻拉高補償</span>
+        </div>
+      </div>
+      <div class="muted" style="margin-top:8px;">股價區間 ${esc(g.close_range?.[0])}–${esc(g.close_range?.[1])} 元；處置股一律排除。</div>`;
+
+      const r = data.rankings || {};
+      renderDaytradeTable("#daytrade-momentum", r.momentum, "今日沒有符合條件的追強標的。");
+      renderDaytradeTable("#daytrade-reversal", r.reversal, "今日沒有符合條件的接刀標的。");
+      renderDaytradeTable("#daytrade-pressure", r.pressure, "今日候選池中沒有隔日沖分點進駐的標的。");
+      renderTable(document.querySelector("#daytrade-disposal"), data.excluded_disposal || [], [
+        {key:"stock_id", label:"代號", sortType:"text", format: v => v},
+        {key:"name", label:"名稱", sortType:"text"},
+        {key:"market", label:"市場", sortType:"text"},
+        {key:"start_date", label:"處置起", sortType:"text"},
+        {key:"end_date", label:"處置迄", sortType:"text"},
+        {key:"reason", label:"原因", sortType:"text"},
+      ]);
+    }
     async function loadWeekly() {
       const note = document.querySelector("#weekly-note");
       let data;
@@ -5413,7 +5554,7 @@
       renderPeerStrip(data.stock);
       const backBtn = document.querySelector("#back-detail");
       backBtn.style.display = state.previousTab ? "" : "none";
-      const backLabels = {watchlist: "自選股", coverage: "資料狀態", weekly: "週報", trend: "今日趨勢", portfolio: "我的持股"};
+      const backLabels = {watchlist: "自選股", coverage: "資料狀態", weekly: "週報", daytrade: "當沖候選", trend: "今日趨勢", portfolio: "我的持股"};
       backBtn.textContent = `返回${backLabels[state.previousTab] || "排行"}`;
       updateWatchlistButton();
       renderMetrics(document.querySelector("#detail-metrics"), [
@@ -5594,6 +5735,7 @@
       document.querySelector("#portfolio-view").style.display = state.tab === "portfolio" ? "" : "none";
       document.querySelector("#trend-view").style.display = state.tab === "trend" ? "" : "none";
       document.querySelector("#weekly-view").style.display = state.tab === "weekly" ? "" : "none";
+      document.querySelector("#daytrade-view").style.display = state.tab === "daytrade" ? "" : "none";
       document.querySelector("#sector-view").style.display = state.tab === "sector" ? "" : "none";
       document.querySelector("#detail-view").style.display = state.tab === "detail" ? "" : "none";
       document.querySelector("#market-view").style.display = state.tab === "market" ? "" : "none";
@@ -5606,6 +5748,7 @@
       if (state.tab === "portfolio") await loadPortfolio();
       if (state.tab === "trend") await loadTrend();
       if (state.tab === "weekly") await loadWeekly();
+      if (state.tab === "daytrade") await loadDaytrade();
       if (state.tab === "sector") await loadSector();
       if (state.tab === "detail") await loadDetail();
       if (state.tab === "market") await loadMarket();
