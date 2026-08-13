@@ -16,80 +16,74 @@ jobs:
         with:
           python-version: "3.13"
       - run: pip install -r requirements.txt
-      - name: 探測當沖統計與注意處置股端點
+      - name: 第二輪 - 抓 TPEx openapi 清單，不猜路徑
         env:
           PYTHONUNBUFFERED: "1"
         run: |
           python - <<'PY'
-          import json, time, datetime as dt, requests
+          import json, re, time, requests
 
           HEAD = {"User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
                                 "AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0 Safari/537.36",
                   "accept": "application/json"}
-          # 用最近的交易日；週末往前挪
-          d = dt.date.today()
-          while d.weekday() >= 5:
-              d -= dt.timedelta(days=1)
-          d -= dt.timedelta(days=1)          # 保守取前一交易日，確保已公布
-          while d.weekday() >= 5:
-              d -= dt.timedelta(days=1)
-          ymd = d.strftime("%Y%m%d")
-          roc = f"{d.year-1911}/{d.month:02d}/{d.day:02d}"
-          print(f"=== 探測日期 {d} (ymd={ymd}, roc={roc}) ===\n")
 
-          def show(label, url, params=None, is_json=True):
+          # TPEx openapi 的命名不規則（tpex_disposal_information 就跟直覺不同），
+          # 所以先把 swagger 規格抓下來列出所有路徑，再用關鍵字挑。
+          SPECS = [
+              "https://www.tpex.org.tw/openapi/swagger.json",
+              "https://www.tpex.org.tw/openapi/v1/swagger.json",
+              "https://www.tpex.org.tw/www/openapi/swagger.json",
+              "https://www.tpex.org.tw/openapi/",
+          ]
+          paths = []
+          for url in SPECS:
               try:
-                  r = requests.get(url, params=params, headers=HEAD, timeout=30)
-                  ct = r.headers.get("content-type", "")[:40]
-                  print(f"--- {label}\n    {r.url[:150]}\n    http={r.status_code} bytes={len(r.content)} ct={ct}")
+                  r = requests.get(url, headers=HEAD, timeout=30)
+                  print(f"--- {url}\n    http={r.status_code} bytes={len(r.content)} ct={r.headers.get('content-type','')[:40]}")
                   if not r.ok:
-                      return
-                  if is_json:
-                      data = r.json()
-                      if isinstance(data, dict):
-                          print(f"    keys={list(data)[:12]}")
-                          if "stat" in data: print(f"    stat={data['stat']}")
-                          for fk in ("fields", "fields1"):
-                              if fk in data: print(f"    {fk}={data[fk]}")
-                          for dk in ("data", "data1", "tables"):
-                              if dk in data and data[dk]:
-                                  rows = data[dk]
-                                  if dk == "tables":
-                                      for t in rows:
-                                          print(f"    table title={t.get('title','')[:40]} fields={t.get('fields')}")
-                                          if t.get('data'): print(f"      sample={t['data'][0]}")
-                                  else:
-                                      print(f"    {dk} 列數={len(rows)} sample={rows[0]}")
-                                  break
-                      elif isinstance(data, list):
-                          print(f"    list 列數={len(data)}")
-                          if data: print(f"    sample keys={list(data[0])}\n    sample={data[0]}")
-                  else:
-                      print(f"    text head={r.text[:200]!r}")
+                      continue
+                  try:
+                      spec = r.json()
+                  except Exception:
+                      # 不是 JSON 就用正則從 HTML 撈路徑
+                      found = sorted(set(re.findall(r'/v1/([A-Za-z0-9_]+)', r.text)))
+                      print(f"    非 JSON，從內文撈到 {len(found)} 個路徑")
+                      paths.extend(found)
+                      continue
+                  if isinstance(spec, dict) and "paths" in spec:
+                      keys = sorted(spec["paths"])
+                      print(f"    swagger paths 共 {len(keys)} 個")
+                      paths.extend(k.strip("/").split("/")[-1] for k in keys)
+                      break
               except Exception as exc:
-                  print(f"--- {label}\n    EXC {type(exc).__name__}: {str(exc)[:180]}")
-              print()
-              time.sleep(2)
+                  print(f"    EXC {type(exc).__name__}: {str(exc)[:120]}")
+              time.sleep(1)
 
-          print("########## 1. TWSE 每日當沖交易個股成交統計 ##########\n")
-          show("TWSE TWTB4U (rwd)", "https://www.twse.com.tw/rwd/zh/afterTrading/TWTB4U",
-               {"date": ymd, "selectType": "All", "response": "json"})
-          show("TWSE TWTB4U (舊路徑)", "https://www.twse.com.tw/exchangeReport/TWTB4U",
-               {"date": ymd, "selectType": "All", "response": "json"})
-          show("TWSE TWTBAL (當沖總量)", "https://www.twse.com.tw/rwd/zh/afterTrading/TWTBAL",
-               {"date": ymd, "response": "json"})
+          paths = sorted(set(p for p in paths if p))
+          print(f"\n=== TPEx 端點共 {len(paths)} 個 ===")
+          KEYS = ("day", "trad", "attention", "notice", "warn", "punish", "dispos", "sbl", "margin", "short")
+          hits = [p for p in paths if any(k in p.lower() for k in KEYS)]
+          print(f"\n--- 關鍵字命中 {len(hits)} 個 ---")
+          for p in hits:
+              print(f"    {p}")
+          print(f"\n--- 全部路徑 ---")
+          for i in range(0, len(paths), 4):
+              print("    " + "  ".join(f"{p:38}" for p in paths[i:i+4]))
 
-          print("########## 2. TPEx 當沖統計 ##########\n")
-          for path in ("tpex_daytrading", "tpex_day_trading", "tpex_disposal_information"):
-              show(f"TPEx openapi {path}", f"https://www.tpex.org.tw/openapi/v1/{path}")
-
-          print("########## 3. 注意股 / 處置股 ##########\n")
-          show("TWSE 處置股 (rwd punish)", "https://www.twse.com.tw/rwd/zh/announcement/punish",
-               {"response": "json"})
-          show("TWSE 注意股 (rwd notice)", "https://www.twse.com.tw/rwd/zh/announcement/notice",
-               {"response": "json"})
-          show("TWSE openapi 處置", "https://openapi.twse.com.tw/v1/announcement/punish")
-          show("TWSE openapi 注意", "https://openapi.twse.com.tw/v1/announcement/notice")
-          for path in ("tpex_disposal_information", "tpex_attention_information"):
-              show(f"TPEx openapi {path}", f"https://www.tpex.org.tw/openapi/v1/{path}")
+          # 對命中的端點各打一次，看實際欄位
+          print("\n=== 命中端點的實際內容 ===")
+          for p in hits[:12]:
+              url = f"https://www.tpex.org.tw/openapi/v1/{p}"
+              try:
+                  r = requests.get(url, headers=HEAD, timeout=30)
+                  ok = r.headers.get("content-type", "").startswith("application/json")
+                  print(f"--- {p}  http={r.status_code} bytes={len(r.content)} json={ok}")
+                  if ok:
+                      data = r.json()
+                      if isinstance(data, list) and data:
+                          print(f"    列數={len(data)}  keys={list(data[0])}")
+                          print(f"    sample={json.dumps(data[0], ensure_ascii=False)[:260]}")
+              except Exception as exc:
+                  print(f"--- {p}  EXC {type(exc).__name__}: {str(exc)[:100]}")
+              time.sleep(1.5)
           PY
