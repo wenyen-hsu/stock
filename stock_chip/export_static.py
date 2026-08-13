@@ -30,6 +30,7 @@ from stock_chip.scan import recent_dates
 from stock_chip.backtest import backtest_payload, build_daily_digest
 from stock_chip.trend import build_trend_report
 from stock_chip.weekly import build_weekly_report
+from stock_chip.daytrade import build_daytrade_report
 from stock_chip.health import collect_health
 from stock_chip.mops import load_mops_events
 from stock_chip.us_news import load_cached_us_news
@@ -158,6 +159,12 @@ def export_static(out_dir: Path, days_values: list[int], include_all_details: bo
         if ci_news_payload is None:
             ci_news_payload = {"rows": load_cached_us_news(conn, limit=200)}
         write_json(data_dir / "ci_us_news.json", ci_news_payload)
+    # 當沖候選池：盤前名單，不是進出訊號（資料全是盤後的）。
+    write_json(
+        data_dir / "daytrade.json",
+        build_daytrade_report(DB_PATH, REPORTS_DIR / f"scan_all_{max(days_values)}d.csv"),
+    )
+
     # 週報：最近一個完整交易週的表現、資金流向與下週事件行事曆。
     # 讀 20 日掃描帶產業別與日均額；不新增任何抓取步驟。
     write_json(

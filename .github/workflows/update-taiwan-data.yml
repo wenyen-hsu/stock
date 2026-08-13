@@ -95,6 +95,14 @@ jobs:
         continue-on-error: true
         run: python -m stock_chip.tdcc
 
+      # 當沖候選池的三組資料，端點與欄位皆經探測 workflow 實測（2026-08）：
+      # TWSE TWTB4U（當沖標的成交量值，只有上市有）、TWSE/TPEx 處置股
+      # （處置期間人工撮合、當沖做不了，是硬排除條件）、TPEx 漲停排隊量。
+      # 一天四個請求，成本可忽略。
+      - name: 抓取當沖統計、處置股與漲停排隊量
+        continue-on-error: true
+        run: python -m stock_chip.daytrade
+
       # 分點抓取已移到獨立的 fetch-branch.yml：那兩步佔了本管線 50 分鐘中的 42
       # 分鐘，2026-08-06 就是斷在分點，導致當天連已經抓好的行情都沒發布出去。
       # 拆開後行情約 10 分鐘就上線，分點自己跑自己的，壞掉也不會擋住行情。
