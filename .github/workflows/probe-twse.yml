@@ -25,7 +25,9 @@ jobs:
           H = {"User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 "
                              "(KHTML, like Gecko) Chrome/124.0 Safari/537.36",
                "accept": "application/json"}
-          YMD = "20260814"
+          # openapi STOCK_DAY_ALL 回的是「最近一個交易日」，實測是 8/13；
+          # 當沖量必須抓同一天，否則分子分母錯開，會算出 >100% 的假比率。
+          YMD = "20260813"
 
           def num(v):
               t = str(v or "").replace(",", "").strip()
@@ -53,6 +55,8 @@ jobs:
           print("STOCK_DAY_ALL ct=", r.headers.get("content-type"), "len=", len(r.text))
           px_rows = r.json()
           print("STOCK_DAY_ALL 首列:", px_rows[0])
+          dates = {str(r.get("Date")) for r in px_rows}
+          print("STOCK_DAY_ALL 涵蓋日期:", sorted(dates), "→ 必須等於", YMD)
           px = {}
           for row in px_rows:
               px[str(row.get("Code") or "").strip()] = (
