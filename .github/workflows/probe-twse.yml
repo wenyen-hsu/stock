@@ -47,16 +47,17 @@ jobs:
                   for r in tb["data"]:
                       day[str(r[i_id]).strip()] = num(r[i_v])
 
-          px_payload = requests.get("https://www.twse.com.tw/exchangeReport/STOCK_DAY_ALL",
-                                    headers=H, timeout=60).json()
-          tb = px_payload["tables"][0] if "tables" in px_payload else px_payload
-          f = tb["fields"]
-          print("STOCK_DAY_ALL fields:", f)
-          i_id = f.index("證券代號"); i_vol = f.index("成交股數")
-          i_amt = f.index("成交金額"); i_close = f.index("收盤價")
+          # 全市場日行情走 openapi（www 那邊的 /exchangeReport/STOCK_DAY_ALL 也是 404）
+          r = requests.get("https://openapi.twse.com.tw/v1/exchangeReport/STOCK_DAY_ALL",
+                           headers=H, timeout=60)
+          print("STOCK_DAY_ALL ct=", r.headers.get("content-type"), "len=", len(r.text))
+          px_rows = r.json()
+          print("STOCK_DAY_ALL 首列:", px_rows[0])
           px = {}
-          for r in tb["data"]:
-              px[str(r[i_id]).strip()] = (num(r[i_vol]), num(r[i_amt]), num(r[i_close]))
+          for row in px_rows:
+              px[str(row.get("Code") or "").strip()] = (
+                  num(row.get("TradeVolume")), num(row.get("TradeValue")),
+                  num(row.get("ClosingPrice")))
 
           tot_dt = sum(v for v in day.values() if v)
           tot_vol = sum(v[0] for v in px.values() if v[0])
