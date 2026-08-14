@@ -1,0 +1,87 @@
+name: Probe TWSE day-trade endpoint
+
+# 臨時探測：管線裡 TWTB4U 連兩天回非 JSON（Expecting value: line 1 column 1），
+# 但單獨探測時可用。要分辨的是「端點改版」還是「被限速」——所以先冷打一次，
+# 再灌 40 次 TWSE 請求模擬管線負載後重打，兩者結果不同就是限速。
+on:
+  push:
+    branches: [claude/admiring-tesla-4fwstm]
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - run: pip install requests
+      - name: 探測
+        run: |
+          python - <<'PY'
+          import datetime as dt, time, requests
+
+          UA = ("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 "
+                "(KHTML, like Gecko) Chrome/124.0 Safari/537.36")
+          H_NOW = {"User-Agent": UA, "accept": "application/json"}
+          H_REF = {**H_NOW, "Referer": "https://www.twse.com.tw/zh/trading/day-trading.html",
+                   "accept": "application/json, text/javascript, */*; q=0.01",
+                   "X-Requested-With": "XMLHttpRequest"}
+
+          def show(label, url, params=None, headers=H_NOW):
+              try:
+                  r = requests.get(url, params=params, headers=headers, timeout=60)
+                  body = r.text
+                  ct = r.headers.get("content-type", "")
+                  print(f"--- {label}\n    HTTP {r.status_code} ct={ct!r} len={len(body)}")
+                  print(f"    body[:220]={body[:220]!r}")
+                  try:
+                      j = r.json()
+                      if isinstance(j, dict):
+                          print(f"    JSON keys={list(j)[:12]} stat={j.get('stat')!r}")
+                          for tb in (j.get("tables") or [])[:4]:
+                              print(f"      table title={str(tb.get('title'))[:40]!r} "
+                                    f"rows={len(tb.get('data') or [])} fields={tb.get('fields')}")
+                      else:
+                          print(f"    JSON list len={len(j)}")
+                  except Exception as e:
+                      print(f"    JSON-FAIL {type(e).__name__}: {str(e)[:100]}")
+              except Exception as exc:
+                  print(f"--- {label}\n    EXC {type(exc).__name__}: {str(exc)[:160]}")
+              print(flush=True)
+
+          # 用資料庫裡那天：2026-08-14
+          for ymd in ("20260814", "20260813"):
+              print(f"########## 冷打 date={ymd} ##########")
+              show("A 現行參數 rwd", "https://www.twse.com.tw/rwd/zh/afterTrading/TWTB4U",
+                   {"date": ymd, "selectType": "All", "response": "json"})
+              show("B 不帶 response=json", "https://www.twse.com.tw/rwd/zh/afterTrading/TWTB4U",
+                   {"date": ymd, "selectType": "All"})
+              show("C 只帶 date", "https://www.twse.com.tw/rwd/zh/afterTrading/TWTB4U",
+                   {"date": ymd})
+              show("D 帶 Referer/XHR", "https://www.twse.com.tw/rwd/zh/afterTrading/TWTB4U",
+                   {"date": ymd, "selectType": "All", "response": "json"}, H_REF)
+              show("E 舊路徑 exchangeReport", "https://www.twse.com.tw/exchangeReport/TWTB4U",
+                   {"date": ymd, "selectType": "All", "response": "json"})
+              time.sleep(3)
+
+          print("########## openapi 處置股（另一個 host）##########")
+          show("F openapi punish", "https://openapi.twse.com.tw/v1/announcement/punish")
+
+          print("########## 灌 40 次 www.twse.com.tw 後重打（模擬管線負載）##########")
+          ok = 0
+          for i in range(40):
+              try:
+                  r = requests.get("https://www.twse.com.tw/rwd/zh/afterTrading/STOCK_DAY_ALL",
+                                   headers=H_NOW, timeout=30)
+                  ok += 1 if r.status_code == 200 and r.text.strip().startswith(("{", "[")) else 0
+              except Exception:
+                  pass
+              time.sleep(0.2)
+          print(f"    暖機 40 次，其中 {ok} 次拿到 JSON\n", flush=True)
+          show("G 負載後 現行參數", "https://www.twse.com.tw/rwd/zh/afterTrading/TWTB4U",
+               {"date": "20260814", "selectType": "All", "response": "json"})
+          show("H 負載後 帶 Referer", "https://www.twse.com.tw/rwd/zh/afterTrading/TWTB4U",
+               {"date": "20260814", "selectType": "All", "response": "json"}, H_REF)
+          PY
