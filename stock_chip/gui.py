@@ -4272,6 +4272,7 @@ INDEX_HTML = """<!doctype html>
         if (row.in_strong_sector) tags.push('<span class="status-pill">強勢族群</span>');
         if (row.is_day_trader_branch) tags.push('<span class="status-pill warn">隔日沖進駐</span>');
         if (row.gate_basis === "turnover_proxy") tags.push('<span class="status-pill warn">代理門檻</span>');
+        if (row.gate_basis === "turnover_proxy_fallback") tags.push('<span class="status-pill warn">代理門檻（統計缺漏）</span>');
         return tags.join(" ");
       }},
       {key:"sub_industry", label:"族群", sortType:"text"},
@@ -4309,15 +4310,24 @@ INDEX_HTML = """<!doctype html>
       }
       if (note) {
         note.textContent = `通過硬門檻 ${fmt(data.candidate_count)} 檔`
-          + `（全市場當沖統計 ${fmt(data.day_trade_stat_count)} 檔、前一日強勢族群 ${fmt(data.strong_sector_count)} 個）`;
+          + `（全市場當沖統計 ${fmt(data.day_trade_stat_count)} 檔、前一日強勢族群 ${fmt(data.strong_sector_count)} 個）`
+          + (data.day_trade_stats_available === false
+             ? "；⚠ 今日當沖統計缺漏，上市門檻已降級為日均額代理" : "");
       }
       const g = data.gates || {};
+      // 當沖統計抓失敗時上市會降級成代理門檻。這件事一定要說出來，否則畫面
+      // 看起來一切正常，實際上兩邊用的是不同標準（甚至可能整個上市都不見）。
+      const degraded = data.day_trade_stats_available === false;
+      const twseGate = degraded
+        ? `日均額 ≥ ${esc(g.twse?.turnover_100m)} 億<span class="status-pill warn">降級為代理</span><br>
+           <span class="muted">今日 TWSE 當沖統計未取得，上市改用與上櫃相同的代理門檻</span>`
+        : `當沖比率 ≥ ${esc(g.twse?.day_trade_pct)}%、日均額 ≥ ${esc(g.twse?.turnover_100m)} 億<br>
+           <span class="muted">有 TWSE 當沖統計，知道當沖客是否真的在玩這檔</span>`;
       // 上市與上櫃的門檻不是同一個標準，要並列讓人一眼看出差別
       document.querySelector("#daytrade-gates").innerHTML = `<div class="layout-2">
         <div class="empty" style="text-align:left;">
           <strong>上市門檻</strong><br>
-          當沖比率 ≥ ${esc(g.twse?.day_trade_pct)}%、日均額 ≥ ${esc(g.twse?.turnover_100m)} 億<br>
-          <span class="muted">有 TWSE 當沖統計，知道當沖客是否真的在玩這檔</span>
+          ${twseGate}
         </div>
         <div class="empty" style="text-align:left;">
           <strong>上櫃門檻</strong><br>

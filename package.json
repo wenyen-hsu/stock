@@ -3,7 +3,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "e2e": "node tests/e2e/portfolio.test.mjs && node tests/e2e/sync.test.mjs && node tests/e2e/race.test.mjs && node tests/e2e/weekly.test.mjs && node tests/e2e/daytrade.test.mjs"
+    "e2e": "node tests/e2e/portfolio.test.mjs && node tests/e2e/sync.test.mjs && node tests/e2e/race.test.mjs && node tests/e2e/weekly.test.mjs && node tests/e2e/daytrade.test.mjs && node tests/e2e/daytrade_degraded.test.mjs"
   },
   "devDependencies": {
     "playwright-core": "^1.45.0"
