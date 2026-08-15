@@ -218,3 +218,67 @@ def test_rankings_share_one_pool():
     ids = {r["stock_id"] for name in out for r in out[name]}
     assert ids <= {c["stock_id"] for c in pool}
     assert all(len(out[name]) <= dt_mod.TOP_N for name in out)
+
+
+# ---------- 當沖統計整份缺漏時的降級 ----------
+# 2026-08-13/14 兩晚的真實事故：TWTB4U 的路徑寫成 /rwd/zh/afterTrading/，
+# TWSE 對不存在的路徑回「HTTP 200 + text/html 的 404 頁」，raise_for_status()
+# 擋不住，錯誤到 .json() 才炸，被 continue-on-error 吞掉。結果 ratios 全空，
+# `ratio is None` 對每檔上市股都成立，整個上市市場從榜單無聲消失——頁面看起來
+# 完全正常，只是 54 檔候選全是上櫃。
+
+class _FakeResponse:
+    def __init__(self, body, content_type, status=200, url="https://x/y"):
+        self.text = body
+        self.headers = {"content-type": content_type}
+        self.status_code = status
+        self.url = url
+
+    def json(self):
+        import json as _json
+        return _json.loads(self.text)
+
+
+def test_html_404_with_status_200_is_named_not_left_as_json_error():
+    """狀態碼是 200，錯誤訊息必須自己說出「這是 404 頁、路徑可能錯了」。"""
+    body = '<!DOCTYPE html>\n<html lang="zh-Hant-tw"><head><title>404</title>'
+    with pytest.raises(RuntimeError) as err:
+        dt_mod.parse_twse_json(_FakeResponse(body, "text/html"), "TWTB4U")
+    message = str(err.value)
+    assert "404" in message and "路徑" in message
+    assert "text/html" in message
+
+
+def test_stat_not_ok_is_rejected():
+    response = _FakeResponse('{"stat":"很抱歉，沒有符合條件的資料!"}', "application/json")
+    with pytest.raises(RuntimeError, match="stat="):
+        dt_mod.parse_twse_json(response, "TWTB4U")
+
+
+def test_valid_payload_passes_through():
+    response = _FakeResponse('{"stat":"OK","tables":[]}', "application/json;charset=UTF-8")
+    assert dt_mod.parse_twse_json(response, "TWTB4U")["stat"] == "OK"
+
+
+def test_twse_survives_missing_stats_instead_of_vanishing():
+    """統計缺漏時上市不能整批消失——改用代理門檻，且標成 fallback。"""
+    rows = [_row("2330", turnover=8.0), _row("6488", market="TPEX", turnover=8.0)]
+    out = _build(rows, ratios={})
+    assert {r["stock_id"] for r in out} == {"2330", "6488"}
+    basis = {r["stock_id"]: r["gate_basis"] for r in out}
+    assert basis["2330"] == "turnover_proxy_fallback"
+    assert basis["6488"] == "turnover_proxy"
+
+
+def test_fallback_uses_the_higher_proxy_threshold():
+    """降級後上市套的是代理門檻（較高的那個），不是原本的上市日均額門檻。"""
+    assert dt_mod.MIN_TURNOVER_TWSE < 4.0 < dt_mod.MIN_TURNOVER_TPEX
+    assert _build([_row("2330", turnover=4.0)], ratios={}) == []
+
+
+def test_normal_path_is_unaffected_by_the_fallback():
+    """只要統計有資料，上市仍走當沖比率——降級不能把正常路徑一起放寬。"""
+    out = _build([_row("2330", turnover=30.0), _row("2412", turnover=30.0)],
+                 ratios={"2330": 35.0, "2412": 3.0})
+    assert [r["stock_id"] for r in out] == ["2330"]
+    assert out[0]["gate_basis"] == "day_trade_pct"

@@ -26,7 +26,12 @@ from stock_chip.official import connect_db
 # 日均額 + 漲停排隊量代理——這在 payload 與頁面都必須標示清楚，
 # 否則會被當成跟上市同一個標準（PE 分位用 1 年窗口就是這樣被誤讀的）。
 
-TWSE_DAY_TRADE_URL = "https://www.twse.com.tw/rwd/zh/afterTrading/TWTB4U"
+# 路徑必須是 /exchangeReport/，不是 /rwd/zh/afterTrading/。後者不存在，而 TWSE
+# 的 404 頁面是用 **HTTP 200 + text/html** 送的（747 bytes 的 <title>404</title>），
+# 所以 raise_for_status() 完全擋不住，錯誤要到 .json() 才炸成
+# 「Expecting value: line 1 column 1」——2026-08-13 與 08-14 兩晚就是這樣整個上市
+# 市場從當沖榜消失。任何 TWSE 端點都要驗 content-type 或 stat，不能只看狀態碼。
+TWSE_DAY_TRADE_URL = "https://www.twse.com.tw/exchangeReport/TWTB4U"
 TWSE_PUNISH_URL = "https://openapi.twse.com.tw/v1/announcement/punish"
 TPEX_DISPOSAL_URL = "https://www.tpex.org.tw/openapi/v1/tpex_disposal_information"
 TPEX_CEILING_URL = "https://www.tpex.org.tw/openapi/v1/tpex_ceil_non_trading"
@@ -77,6 +82,27 @@ def parse_period(text: str | None) -> tuple[str | None, str | None]:
     return parse_roc(parts[0]), parse_roc(parts[1])
 
 
+def parse_twse_json(response: requests.Response, label: str) -> dict[str, Any]:
+    """TWSE 回應 → dict，把「200 的 404」與「stat 非 OK」翻成看得懂的錯誤。
+
+    TWSE 找不到路徑時回 HTTP 200 + text/html 的 404 頁，狀態碼與例外訊息都不會
+    提到路徑錯了。這裡先看 content-type 再看 stat，錯誤訊息直接指出是哪一種。
+    """
+    content_type = response.headers.get("content-type", "")
+    if "json" not in content_type.lower():
+        snippet = response.text[:80].replace("\n", " ")
+        raise RuntimeError(
+            f"{label} 回應不是 JSON（content-type={content_type!r}，"
+            f"HTTP {response.status_code}）——TWSE 的 404 頁就長這樣，"
+            f"多半是路徑錯了：{response.url}｜body 開頭：{snippet!r}"
+        )
+    payload = response.json()
+    stat = payload.get("stat")
+    if stat and stat != "OK":
+        raise RuntimeError(f"{label} stat={stat!r}（{response.url}）")
+    return payload
+
+
 def fetch_twse_day_trade(date: dt.date, timeout: int = 60) -> list[dict[str, Any]]:
     """TWSE 當沖標的成交統計。回 tables 結構，需逐張表找含當沖欄位的那張。"""
     response = requests.get(
@@ -86,7 +112,7 @@ def fetch_twse_day_trade(date: dt.date, timeout: int = 60) -> list[dict[str, Any
         timeout=timeout,
     )
     response.raise_for_status()
-    payload = response.json()
+    payload = parse_twse_json(response, "TWTB4U")
     iso = date.isoformat()
     rows: list[dict[str, Any]] = []
     for table in payload.get("tables") or []:
@@ -272,7 +298,19 @@ if __name__ == "__main__":
 
 MIN_TURNOVER_TWSE = 3.0        # 上市：日均成交額（億）
 MIN_TURNOVER_TPEX = 5.0        # 上櫃：沒有當沖比率，門檻拉高補償
-MIN_DAY_TRADE_PCT = 15.0       # 上市：當沖成交佔總量比率（%）
+# 15% 原本是憑經驗訂的，2026-08-13 收盤資料實測後改成 25%。
+# 量法：TWTB4U 的當沖成交股數 ÷ 同一天 STOCK_DAY_ALL 的成交股數（兩者日期必須
+# 對齊，錯開一天會算出 >100% 的假比率）。套上本模組的價格與成交額門檻後 n=213：
+#   p25=19.5  p50=34.6  p75=46.6  max=77.8
+#   通過檔數：≥15% 有 180、≥20% 有 158、≥25% 有 139、≥30% 有 123、≥40% 有 85
+# 15% 只濾掉 33 檔（15%），幾乎不構成門檻；25% 濾掉 74 檔且仍低於中位數，
+# 是「當沖客明顯在玩這檔」與「別把可交易標的洗掉」之間的折衷。
+# 注意這是單一交易日的分布，累積幾週後應該再看一次是否穩定。
+#
+# 另註：TWSE 自己公布的全市場當沖占比（22.99%）與我們用 STOCK_DAY_ALL 加總
+# 算出的 30.84% 對不起來，因為官方分母涵蓋權證等本表沒有的標的。個股層級的
+# 分子分母是同一檔股票、同一天，不受這個差異影響。
+MIN_DAY_TRADE_PCT = 25.0       # 上市：當沖成交佔總量比率（%）
 MIN_CLOSE = 10.0               # 低價股跳動一檔的成本佔比太高
 MAX_CLOSE = 500.0              # 高價股單張資金效率差
 TOP_N = 30
@@ -337,9 +375,16 @@ def build_candidates(
     strong_sectors: set[str],
 ) -> list[dict[str, Any]]:
     """套硬門檻產生候選池。門檻分市場：上市有當沖比率、上櫃只能用日均額代理，
-    每列帶 gate_basis 說明自己是用哪個標準過關的。"""
+    每列帶 gate_basis 說明自己是用哪個標準過關的。
+
+    當沖統計整份缺漏時（抓取失敗、或當日尚未公布）不能照原路走：`ratio is None`
+    對每一檔上市股都成立，整個上市市場會無聲消失，榜單看起來正常卻只剩上櫃。
+    2026-08-13/14 兩晚就是這樣。所以這裡改成降級——上市改用與上櫃相同的日均額
+    代理門檻，並把 gate_basis 標成 fallback，讓頁面說得出「今天上市這半邊是代理」。
+    """
     from stock_chip.trend import _csv_float
 
+    stats_available = bool(ratios)
     out: list[dict[str, Any]] = []
     for row in scan_rows:
         stock_id = (row.get("stock_id") or "").strip()
@@ -352,10 +397,15 @@ def build_candidates(
             continue
 
         ratio = ratios.get(stock_id)
-        if market == "TWSE":
+        if market == "TWSE" and stats_available:
             if ratio is None or ratio < MIN_DAY_TRADE_PCT or turnover < MIN_TURNOVER_TWSE:
                 continue
             basis = "day_trade_pct"
+        elif market == "TWSE":
+            # 當沖統計缺漏：降級成代理門檻，寧可標示不準，也不要整個市場消失
+            if turnover < MIN_TURNOVER_TPEX:
+                continue
+            basis = "turnover_proxy_fallback"
         else:
             # 上櫃沒有當沖統計，只能用日均額代理，門檻拉高補償
             if turnover < MIN_TURNOVER_TPEX:
@@ -503,11 +553,17 @@ def build_daytrade_report(db_path: Path, scan_csv_path: Path) -> dict[str, Any]:
         "candidate_count": len(candidates),
         "strong_sector_count": len(strong_sectors),
         "gates": {
-            "twse": {"day_trade_pct": MIN_DAY_TRADE_PCT, "turnover_100m": MIN_TURNOVER_TWSE},
+            "twse": (
+                {"day_trade_pct": MIN_DAY_TRADE_PCT, "turnover_100m": MIN_TURNOVER_TWSE}
+                if ratios
+                else {"turnover_100m": MIN_TURNOVER_TPEX,
+                      "note": "當沖統計缺漏，上市本日改用日均額代理"}
+            ),
             "tpex": {"turnover_100m": MIN_TURNOVER_TPEX, "note": "上櫃無當沖統計，以日均額代理"},
             "close_range": [MIN_CLOSE, MAX_CLOSE],
         },
         "day_trade_stat_count": len(ratios),
+        "day_trade_stats_available": bool(ratios),
         "rankings": rank_candidates(candidates),
         "excluded_disposal": [
             {"stock_id": r[0], "name": r[1], "market": r[2],
