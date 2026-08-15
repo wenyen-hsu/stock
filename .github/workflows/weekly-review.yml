@@ -1,0 +1,193 @@
+name: Weekly Review
+
+# 每週對專案做一次完整檢視，找出可持續優化的部分並實作價值最高的那一件。
+#
+# 為什麼用 GitHub Actions 而不是對話內的排程：對話 session 存在暫存容器裡，
+# 閒置就被回收，排程跟著消失。這裡跑在 GitHub 的機器上，與任何 session 無關。
+#
+# 週日 09:13（台北）＝ 01:13 UTC。選週日是因為週五收盤後資料才完整，
+# 且週末不會跟每日管線搶 update-taiwan-data 那個 concurrency group。
+
+on:
+  schedule:
+    - cron: "13 1 * * 0"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+  issues: write
+
+concurrency:
+  group: weekly-review
+  cancel-in-progress: false
+
+jobs:
+  review:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt -r requirements-dev.txt
+
+      # 讓檢視能實際跑 e2e：與 ci.yml 的 e2e job 同一套前置作業。
+      # docs/data 取自 site 分支的真實發布資料——檢視的重點之一就是看那份
+      # 資料有沒有整欄 null 或整個市場缺席，用本機空資料庫產的檔案看不出來。
+      - name: Fetch published data from site branch
+        run: |
+          git fetch origin site --depth 1
+          git archive origin/site docs/data | tar -x
+
+      - name: Generate static index.html
+        run: |
+          python3 -c "
+          from stock_chip.gui import INDEX_HTML
+          html = INDEX_HTML.replace('window.STOCK_CHIP_STATIC = false;', 'window.STOCK_CHIP_STATIC = true;')
+          open('docs/index.html', 'w').write(html)
+          "
+
+      - name: Install Playwright
+        run: |
+          npm install --no-save playwright
+          npx playwright install --with-deps chromium
+
+      - name: 每週檢視與優化
+        uses: anthropics/claude-code-action@v1
+        with:
+          anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
+          claude_args: |
+            --max-turns 80
+            --allowedTools Read,Edit,Write,Glob,Grep,Bash
+          prompt: |
+            你在 wenyen-hsu/stock 這個台股籌碼分析專案上，做每週一次的完整檢視並實作優化。
+            這是排程自動觸發的，沒有人在旁邊——請自己查證、自己決定、自己動手，不要問問題。
+            全程用繁體中文。
+
+            ## 專案背景
+
+            Python 管線每個交易日 22:30（台北）跑 update-taiwan-data.yml，抓官方行情／
+            三大法人／融資融券／月營收／財報／MOPS／除權息／ETF／TDCC／當沖統計，掃描出
+            各種排行，匯出靜態 JSON 到 site 分支，GitHub Pages 供應。前端是內嵌在
+            stock_chip/gui.py 裡的單檔 HTML/JS（INDEX_HTML），同一份程式碼同時支援本機
+            Python server 與靜態匯出兩種模式。分點抓取因為太慢已拆成獨立的 fetch-branch.yml。
+
+            這個 runner 連得到台灣的金融網站，可以直接用 python + requests 探測端點驗證
+            假設——但要節制，不要對同一個來源連續猛打。
+
+            site 分支的真實發布資料已經放在 docs/ 底下了，直接讀 docs/data/*.json。
+
+            ## 第一步：查證現況
+
+            先花力氣查證，再決定做什麼。至少涵蓋：
+
+            1. 靜默失效——本專案最高價值的一類問題，優先找。特徵是：管線顯示成功、頁面
+               看起來正常，但資料其實是錯的或整批消失。已經發生過兩次：
+               - normalize_scan_row 是白名單，沒登記的欄位在匯出時靜靜變成 null，導致
+                 兩條持股警示規則從上線起就沒觸發過
+               - TWSE 對不存在的路徑回「HTTP 200 + text/html 的 404 頁」，
+                 raise_for_status() 擋不住，整個上市市場從當沖榜消失兩天而畫面完全正常
+               用同樣的眼光掃一遍：continue-on-error 的步驟失敗後會不會被當成沒事、
+               有沒有「空集合」被當成「合法的空結果」、健檢有沒有涵蓋每個關鍵資料表。
+               實際去讀 docs/data/*.json，找整欄 null、整個市場缺席、筆數異常掉落。
+
+            2. 憑經驗訂但沒量測過的參數。找出還沒用真實資料校準過的門檻，說明該怎麼量。
+               已知待辦：MIN_DAY_TRADE_PCT 目前 25%，只根據 2026-08-13 單一交易日的
+               分布訂的，累積數週後應重看分布是否穩定。
+
+            3. 已知技術債。已知待辦：本益比百分位仍只用 252 天窗口計算，5 年日線資料
+               已在 SQLite 快取裡卻沒被使用；要把 HISTORY_TRADING_DAYS 從 252 拉到
+               1250，必須先把百分位改成 SQL 端計算，否則約 290 萬列會被載進 Python。
+
+            4. 管線健康度。看最近一週的 workflow 執行紀錄與 docs/data/health.json：
+               反覆失敗或反覆誤報的步驟、耗時惡化、長期落後期望值的資料來源。
+               （已知 broker_branch_topn 的健檢期望值可能設錯，分點來源本身就落後一天。）
+
+            5. 使用者體驗。從「要用這個網站做決策的人」的角度看：資訊密度、排行之間切換
+               的順暢度、代理指標與真實指標有沒有標示清楚、手機能不能用、載入速度、
+               有沒有哪個頁面做出來了但實際上沒人會用。
+
+            6. 有沒有更好的做法：新的資料來源、既有來源更完整的端點、業界慣用但這裡
+               還沒採用的演算法或呈現方式。
+
+            ## 第二步：挑一件事做掉
+
+            從查證結果裡挑價值最高的一件實作。一次只做一件，範圍小到能在一個 PR 裡說清楚
+            ——寧可做完一件小的，不要做一半三件大的。
+
+            在 claude/weekly-YYYY-MM-DD 分支上開發，用 gh 開 PR。
+
+            ### 合併前一定要自己跑測試
+
+            這個 workflow 用 GITHUB_TOKEN 建立的 PR **不會觸發 ci.yml**（GitHub 不讓
+            workflow 遞迴觸發 workflow）。所以不要等 PR 上的 CI，自己在這裡跑：
+
+                python -m pytest tests/ -q
+                npm run e2e
+
+            兩個都過才可以合併。環境已經備妥（Python 相依、Playwright、site 分支的
+            真實資料），直接跑即可。
+
+            ### 可以自己合併的
+
+            同時滿足下列全部才可以自己 merge：
+
+            - 有測試，而且你驗證過那個測試在修好之前會失敗（本專案出過恆真測試：
+              正則沒對上導致迴圈空轉，測試照樣綠）
+            - 上面兩個測試指令都在本次執行裡實際跑過且通過
+            - 不屬於下面那份高風險清單
+
+            ### 只開 PR、不要自己合併的
+
+            留在 PR 讓人決定，並在 PR 內文說明為什麼你沒有自己合：
+
+            - 改變使用者看到的選股結果：排行的定義、分數公式、任何門檻常數
+            - 改動發布流程：workflow 的觸發條件、concurrency group、site 分支的發布
+              步驟、快取的 key 或存取方式
+            - 大範圍重構，或跨越三個以上模組的改動
+            - 你自己覺得沒把握的
+
+            只能合併你自己在這次執行裡建立的 PR，不要碰其他人開的 PR。
+
+            ### 絕對不要做的
+
+            - 不要碰任何 secret、token、憑證，不要把它們寫進檔案、log 或 PR 內文
+            - 不要 force push 到 main，不要改寫 main 的歷史
+            - 不要提交 docs/ 的任何內容。這個 job 為了跑 e2e 已經把 site 分支的資料
+              解到 docs/ 底下了，那些是產出不是原始碼；本機跑 export_static 更會產生
+              1500 個以上的檔案。commit 前一定要確認 git status 裡沒有 docs/，
+              必要時 git checkout -- docs && git clean -fd docs
+            - 不要提交任何合成或模擬的資料當成真實資料。測試需要 fixture 就寫進暫存
+              目錄，不要進版控
+
+            ## 第三步：留下紀錄
+
+            先用 gh issue list 看有沒有還開著的檢視 issue，不要重複已經提過的內容——
+            上週提過而還沒處理的，只用一行帶過並標註「仍未處理」。
+
+            用 gh issue create 開一則「每週檢視 YYYY-MM-DD」，內容：
+
+            - 這週做了什麼（PR 連結、有沒有合併、沒合的原因）
+            - 發現但沒動手的項目，依價值排序，最重要的在最前面，不要按上面的分類順序流水帳
+            - 每一項要有具體證據：檔案路徑加行號、實際的 JSON 數值、workflow run id。
+              不要泛泛而論
+            - 每一項標註預估工作量與風險
+            - 明確區分「確認過的問題」與「還需要驗證的猜測」。沒實測過的一律標成待驗證，
+              不要寫得像事實
+
+            如果這週查下來沒有值得做的事，不要硬做也不要開 issue，直接在 log 裡說明
+            檢視過但沒有新發現。
+
+            最後提醒：合併到 main 不會立刻反映在網站上，要等下一輪排程管線重新匯出才會
+            生效。若改動需要盡快上線，在 issue 裡註明，不要自己觸發全量管線。
