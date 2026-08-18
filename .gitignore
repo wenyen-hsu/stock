@@ -14,3 +14,6 @@ venv/
 obsidian/
 node_modules/
 package-lock.json
+
+# Branch batch leftovers. branch.py can still write these locally.
+reports/*_all_offset*
