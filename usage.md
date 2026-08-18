@@ -3,13 +3,14 @@
 本機 GUI、CLI、GitHub Actions 與 GitHub Pages 的操作方式見 [README.md](README.md)。  
 指標與資料源沿革見 [OPTIMIZATION.md](OPTIMIZATION.md)。
 
-## 整理計畫（尚未實作）
+## 整理計畫（執行中）
 
-[REFACTOR_PLAN.md](REFACTOR_PLAN.md) 規劃三件事：抽出 `gui.py` 內嵌 HTML、根目錄舊腳本移到 `legacy/`、刪除 `reports/` 裡無人讀取的 `*_all_offset*` 過程檔。
+[REFACTOR_PLAN.md](REFACTOR_PLAN.md) 的約束不變：只搬家、不改行為。
 
-約束：**不改現有功能。** 分數、API、頁面 `id`、靜態 JSON 路徑、Actions 管線都不動。只搬家，不改行為。舊缺口也不順便修。
-
-執行順序：先加契約測試（第 0 階段），再抽出 HTML（第 1 階段）。其餘可延後。每一階段單獨 PR，測試紅就停。
+- **第 0 階段（已做）：** `tests/test_gui_contract.py` 凍結本機路由、`data-tab`、靜態 JSON 路徑，以及 `export_static` 從 `stock_chip.gui` 取用的名稱。
+- **第 1 階段：** 抽出 `INDEX_HTML`（位元組級相同）。
+- **第 2 階段：** 延後（Python 拆檔）。
+- **第 3、4 階段：** 舊腳本移到 `legacy/`；只刪 `reports/*_all_offset*`。
 
 ## 日常指令（現況，整理後不變）
 
