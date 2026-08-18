@@ -3,7 +3,11 @@
 本機 GUI、CLI、GitHub Actions 與 GitHub Pages 的操作方式見 [README.md](README.md)。  
 指標與資料源沿革見 [OPTIMIZATION.md](OPTIMIZATION.md)。
 
-## 整理計畫（執行中）
+## 本機 API 接線（已做）
+
+[LOCAL_API_PLAN.md](LOCAL_API_PLAN.md)：本機 GUI 的 `/api/etf`、`/api/dividends`、`/api/daytrade` 已接上 `export_static` 同一組函式。前端、分數、管線未改。
+
+## 整理計畫（已合併）
 
 [REFACTOR_PLAN.md](REFACTOR_PLAN.md) 的約束不變：只搬家、不改行為。
 
