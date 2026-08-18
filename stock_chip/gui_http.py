@@ -266,9 +266,24 @@ class GUIHandler(BaseHTTPRequestHandler):
                 days = int(params.get("days", ["20"])[0])
                 json_response(self, build_trend_report(DB_PATH, REPORTS_DIR / f"scan_all_{days}d.csv", days))
                 return
+            if parsed.path == "/api/etf":
+                from stock_chip.etf import load_etf_flows
+
+                with connect_db(DB_PATH) as conn:
+                    json_response(self, load_etf_flows(conn))
+                return
+            if parsed.path == "/api/dividends":
+                from stock_chip.dividends import load_dividend_events
+
+                with connect_db(DB_PATH) as conn:
+                    json_response(self, load_dividend_events(conn, days=400))
+                return
+            if parsed.path == "/api/daytrade":
+                from stock_chip.daytrade import build_daytrade_report
+
+                json_response(self, build_daytrade_report(DB_PATH, REPORTS_DIR / "scan_all_20d.csv"))
+                return
             if parsed.path == "/api/weekly":
-                # 本機 GUI 也要能看週報。/api/etf 與 /api/dividends 當初只加了靜態
-                # 路由、漏了這個 handler，結果本機模式一直落到 404，別重蹈。
                 from stock_chip.weekly import build_weekly_report
 
                 json_response(self, build_weekly_report(DB_PATH, REPORTS_DIR / "scan_all_20d.csv"))

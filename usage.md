@@ -3,9 +3,9 @@
 本機 GUI、CLI、GitHub Actions 與 GitHub Pages 的操作方式見 [README.md](README.md)。  
 指標與資料源沿革見 [OPTIMIZATION.md](OPTIMIZATION.md)。
 
-## 本機 API 接線（尚未實作）
+## 本機 API 接線（已做）
 
-[LOCAL_API_PLAN.md](LOCAL_API_PLAN.md)：本機 GUI 補 `/api/etf`、`/api/dividends`、`/api/daytrade`，只呼叫 `export_static` 已在用的函式。不改前端、分數、管線。
+[LOCAL_API_PLAN.md](LOCAL_API_PLAN.md)：本機 GUI 的 `/api/etf`、`/api/dividends`、`/api/daytrade` 已接上 `export_static` 同一組函式。前端、分數、管線未改。
 
 ## 整理計畫（已合併）
 

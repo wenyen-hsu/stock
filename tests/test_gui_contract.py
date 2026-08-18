@@ -36,6 +36,9 @@ FROZEN_GET = {
     "/api/digest",
     "/api/suggest",
     "/api/trend",
+    "/api/etf",
+    "/api/dividends",
+    "/api/daytrade",
     "/api/weekly",
     "/api/health",
     "/api/update-tasks",
@@ -57,9 +60,6 @@ FROZEN_POST = {
     "/api/static/export",
     "/api/static/publish",
 }
-
-# 本機 handler 現況沒有這些路徑；靜態版走 JSON。不要為了對稱去加。
-ABSENT_LOCAL_GET = {"/api/etf", "/api/dividends", "/api/daytrade"}
 
 FROZEN_TABS = {
     "ranking",
@@ -135,10 +135,16 @@ def test_post_routes_match_frozen_list():
     assert _handler_paths("do_POST") == FROZEN_POST
 
 
-def test_local_handler_still_omits_static_only_routes():
-    get_paths = _handler_paths("do_GET")
-    extra = ABSENT_LOCAL_GET & get_paths
-    assert not extra, f"本機 GET 不應新增這些路徑（現況凍結）：{sorted(extra)}"
+def test_local_get_uses_export_static_loaders():
+    source = inspect.getsource(GUIHandler.do_GET)
+    required = {
+        "/api/etf": "load_etf_flows",
+        "/api/dividends": "load_dividend_events",
+        "/api/daytrade": "build_daytrade_report",
+    }
+    for path, loader in required.items():
+        assert path in source, f"do_GET 缺少 {path}"
+        assert loader in source, f"{path} 必須呼叫 {loader}，不要另寫一套計算"
 
 
 def test_index_html_keeps_static_mode_flag():
