@@ -9,7 +9,7 @@
 
 - **第 0 階段（已做）：** `tests/test_gui_contract.py` 凍結本機路由、`data-tab`、靜態 JSON 路徑，以及 `export_static` 從 `stock_chip.gui` 取用的名稱。
 - **第 1 階段（已做）：** `INDEX_HTML` 改從 `stock_chip/static/index.html` 讀取，內容與抽出前位元組級相同。
-- **第 2 階段：** 延後（Python 拆檔）。
+- **第 2 階段（已做）：** Python 後端拆成 `gui_data.py` / `gui_jobs.py` / `gui_http.py`；`gui.py` 只 re-export，呼叫端 import 不變。
 - **第 3 階段（已做）：** 舊腳本移到 `legacy/`，內容未改。
 - **第 4 階段（已做）：** 刪除 `reports/*_all_offset*`；`.gitignore` 忽略之後再產生的過程檔。`ranking_*.csv`、`scan_all_*.csv` 等管線報表保留。
 

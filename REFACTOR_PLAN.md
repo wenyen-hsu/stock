@@ -1,7 +1,7 @@
 # 整理計畫（凍結功能、只搬家）
 
 目標：降低維護成本，**不改任何現有功能、畫面、分數、管線或資料契約**。
-執行進度：第 0、1、3、4 階段已做；第 2 階段（拆 Python）依計畫延後。每一階段都要能獨立還原。
+執行進度：第 0–4 階段都已做完。每一階段都要能獨立還原。
 
 原則：**只搬家、不改行為。** 發現舊缺口（例如本機 GUI 沒有 `/api/etf`、`/api/dividends`、`/api/daytrade` handler）也**不要順便修**，那是行為變更，不屬於本計畫。
 
@@ -110,9 +110,9 @@ python -m pytest tests/test_ranking_columns.py tests/test_scan_row_contract.py t
 
 **完成定義：** `INDEX_HTML` 位元組級相同；本機與靜態頁看起來與現在無差別。
 
-### 第 2 階段：Python 後端拆檔（可選，頁面無感）
+### 第 2 階段：Python 後端拆檔（已做）
 
-只在第 1 階段穩定後做。新模組（名稱可再定）只搬函式，**不改函式簽名與回傳**：
+只在第 1 階段穩定後做。新模組只搬函式，**不改函式簽名與回傳**：
 
 - `stock_chip/gui_http.py`：`GUIHandler`、`json_response`、`main`
 - `stock_chip/gui_data.py`：`normalize_scan_row`、`stock_detail`、`ranking_path`、`db_meta` 等讀取函式
