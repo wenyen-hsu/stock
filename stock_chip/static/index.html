@@ -1230,6 +1230,11 @@
             系統的資料全部是盤後的——沒有開盤價、沒有盤中價量、分點還是 T+1。
             名單能把全市場縮到 30 檔以內，但何時進場、何時停損只能靠你看盤。
             當沖來回成本約 0.2–0.3%（證交稅減半 + 手續費），你要先贏過這個數字才回到原點。
+            <br><br>
+            <strong>三欄對應的動作：</strong>
+            追強不要追昨收，等今開回檔再決定；
+            接刀等弱開後再接，不是昨收隔夜單；
+            賣壓在開盤附近賣或避，不是整天放空。
           </div>
           <div id="daytrade-gates" style="margin-top:12px;"></div>
         </div>
@@ -1238,7 +1243,7 @@
         <div class="panel-head">
           <div>
             <div class="panel-title">順勢追強</div>
-            <div class="muted">前一日強勢族群成員、量比放大、法人同步買超。隔日沖分點進駐者<strong>扣分</strong>——明天有賣壓。</div>
+            <div class="muted">只收昨日上漲。前一日強勢族群、量比放大、法人買超。隔日沖分點進駐<strong>扣分</strong>。近漲停標「昨過熱」。<strong>不要追昨收，等今開回檔再決定。</strong></div>
           </div>
         </div>
         <div class="panel-body" id="daytrade-momentum"></div>
@@ -1247,7 +1252,7 @@
         <div class="panel-head">
           <div>
             <div class="panel-title">逆勢接刀</div>
-            <div class="muted">昨日下跌但族群仍強、外資仍買。爆量下跌會扣分——通常還有後續賣壓。</div>
+            <div class="muted">只收昨日下跌。族群仍強、外資仍買加分；爆量下跌扣分。<strong>弱開後再接，不是昨收隔夜單。</strong></div>
           </div>
         </div>
         <div class="panel-body" id="daytrade-reversal"></div>
@@ -1256,7 +1261,7 @@
         <div class="panel-head">
           <div>
             <div class="panel-title">隔日沖賣壓</div>
-            <div class="muted">主買分點為隔日沖券商，明天大機率有賣壓。<strong>這是雙面刃</strong>：對做空是機會，對做多是陷阱。</div>
+            <div class="muted">主買分點為隔日沖券商（清單檔數少，<strong>僅供參考</strong>），明天大機率有賣壓。<strong>開盤附近賣或避，不是整天放空。</strong></div>
           </div>
         </div>
         <div class="panel-body" id="daytrade-pressure"></div>
@@ -4210,6 +4215,7 @@
       {key:"flags", label:"標記", sortType:"text", html:true, format: (_v, row) => {
         const tags = [];
         if (row.in_strong_sector) tags.push('<span class="status-pill">強勢族群</span>');
+        if (row.yesterday_overheated) tags.push('<span class="status-pill warn">昨過熱</span>');
         if (row.is_day_trader_branch) tags.push('<span class="status-pill warn">隔日沖進駐</span>');
         if (row.gate_basis === "turnover_proxy") tags.push('<span class="status-pill warn">代理門檻</span>');
         if (row.gate_basis === "turnover_proxy_fallback") tags.push('<span class="status-pill warn">代理門檻（統計缺漏）</span>');
