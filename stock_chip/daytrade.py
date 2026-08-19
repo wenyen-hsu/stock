@@ -314,6 +314,9 @@ MIN_DAY_TRADE_PCT = 25.0       # 上市：當沖成交佔總量比率（%）
 MIN_CLOSE = 10.0               # 低價股跳動一檔的成本佔比太高
 MAX_CLOSE = 500.0              # 高價股單張資金效率差
 TOP_N = 30
+# 昨日漲幅接近漲停（台股 ±10%）時標「昨過熱」：仍可上追強榜，但不該追昨收。
+# 只做標記、不改分數——樣本還不足以另訂權重。
+OVERHEAT_CHG_PCT = 9.0
 
 
 def disposal_ids(conn: sqlite3.Connection, on_date: str) -> set[str]:
@@ -447,11 +450,18 @@ def _num(value: Any) -> float:
 
 def rank_candidates(candidates: list[dict[str, Any]]) -> dict[str, list[dict[str, Any]]]:
     """三種風格共用候選池，只有排序不同。同一檔在三個榜的排名會完全不同——
-    這正是分開做的價值，例如隔日沖旗標在追強榜是扣分、在賣壓榜是主要條件。"""
+    這正是分開做的價值，例如隔日沖旗標在追強榜是扣分、在賣壓榜是主要條件。
+
+    追強只收昨日上漲、接刀只收昨日下跌；平盤兩邊都不進。近漲停另標
+    yesterday_overheated，不改分數。
+    """
 
     def momentum_score(row: dict[str, Any]) -> float:
+        chg = _num(row.get("chg_1d_pct"))
+        if chg <= 0:
+            return -999                     # 只收昨日上漲的——與接刀只收下跌對稱
         score = _num(row.get("volume_ratio_1d")) * 2 + _num(row.get("amplitude_pct"))
-        score += _num(row.get("chg_1d_pct")) * 1.5
+        score += chg * 1.5
         if row.get("in_strong_sector"):
             score += 8
         if _num(row.get("foreign_net_lot")) + _num(row.get("trust_net_lot")) > 0:
@@ -483,7 +493,11 @@ def rank_candidates(candidates: list[dict[str, Any]]) -> dict[str, list[dict[str
         return score
 
     def top(scorer, key: str) -> list[dict[str, Any]]:
-        scored = [{**row, "score": round(scorer(row), 2)} for row in candidates]
+        scored = []
+        for row in candidates:
+            item = {**row, "score": round(scorer(row), 2)}
+            item["yesterday_overheated"] = _num(row.get("chg_1d_pct")) >= OVERHEAT_CHG_PCT
+            scored.append(item)
         kept = [row for row in scored if row["score"] > -900]
         kept.sort(key=lambda row: row["score"], reverse=True)
         return kept[:TOP_N]

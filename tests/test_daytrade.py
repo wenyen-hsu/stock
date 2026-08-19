@@ -194,6 +194,28 @@ def test_reversal_only_takes_yesterday_losers():
     assert [r["stock_id"] for r in out["reversal"]] == ["1001"]
 
 
+def test_momentum_only_takes_yesterday_winners():
+    """追強與接刀對稱：只收昨日上漲。平盤、下跌都不該出現——2026-08-18
+    名單裡 1815／5351／6182 就是昨跌或平卻進了追強榜。"""
+    out = dt_mod.rank_candidates([
+        _cand("1815", chg_1d_pct=-1.2, volume_ratio_1d=9, amplitude_pct=8),
+        _cand("5351", chg_1d_pct=0.0, volume_ratio_1d=9, amplitude_pct=8),
+        _cand("2330", chg_1d_pct=2.5, volume_ratio_1d=2, amplitude_pct=3),
+    ])
+    assert [r["stock_id"] for r in out["momentum"]] == ["2330"]
+
+
+def test_momentum_marks_yesterday_overheated_without_dropping():
+    """近漲停只標「昨過熱」，不踢出榜、也不另訂權重。"""
+    hot = _cand("2359", chg_1d_pct=9.5, volume_ratio_1d=2, amplitude_pct=10)
+    warm = _cand("2330", chg_1d_pct=3.0, volume_ratio_1d=2, amplitude_pct=4)
+    out = dt_mod.rank_candidates([hot, warm])
+    by_id = {r["stock_id"]: r for r in out["momentum"]}
+    assert set(by_id) == {"2359", "2330"}
+    assert by_id["2359"]["yesterday_overheated"] is True
+    assert by_id["2330"]["yesterday_overheated"] is False
+
+
 def test_reversal_penalises_high_volume_selloff():
     """爆量下跌通常還有後續賣壓，不是接刀的好對象。"""
     quiet = _cand("1001", chg_1d_pct=-6.0, volume_ratio_1d=1.0)
