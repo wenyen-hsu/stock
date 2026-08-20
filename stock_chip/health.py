@@ -9,7 +9,7 @@ import urllib.request
 from pathlib import Path
 from typing import Any
 
-from stock_chip.official import connect_db
+from stock_chip.official import connect_db, unresolved_fetch_failures
 from stock_chip.revenue import expected_revenue_month
 
 
@@ -144,6 +144,39 @@ def check_freshness(latest_trading: str, today: dt.date | None = None) -> dict[s
     }
 
 
+def check_fetch_failures(conn: sqlite3.Connection) -> dict[str, Any]:
+    """抓取端自己回報的失敗，是這裡唯一不必靠日曆猜的訊號。
+
+    其他檢查都在問「資料多久沒動了」，而那個問法分不出「今天是假日」與
+    「今天抓失敗了」——2026-08-18 TWSE 逾時整天沒進站，freshness 因為
+    「落後一天算正常」而放行，就是這個盲點。抓取端其實分得出來（official.py
+    會標「!! 新於已入庫資料」、daytrade.py 知道哪個來源掛了），這裡直接讀那個結論。
+
+    處置股尤其只能靠這條：它沒有「當日應有幾筆」的概念，安靜的一天筆數本來
+    就不會動，但它是當沖候選池的硬排除條件，漏掉會讓做不了當沖的股票進榜。
+    """
+    if not table_exists(conn, "fetch_failures"):
+        return {"key": "fetch_failures", "label": "抓取失敗紀錄", "latest": None,
+                "expected": "0 筆", "rows_at_latest": 0,
+                "status": "not_deployed", "note": "資料表尚未建立"}
+    rows = unresolved_fetch_failures(conn)
+    if not rows:
+        return {"key": "fetch_failures", "label": "抓取失敗紀錄", "latest": None,
+                "expected": "0 筆", "rows_at_latest": 0, "status": "ok", "note": ""}
+    detail = "；".join(f"{r['source']}@{r['target_date']}：{r['error'][:80]}" for r in rows[:4])
+    if len(rows) > 4:
+        detail += f"（另有 {len(rows) - 4} 筆）"
+    return {
+        "key": "fetch_failures",
+        "label": "抓取失敗紀錄",
+        "latest": max(r["target_date"] for r in rows),
+        "expected": "0 筆",
+        "rows_at_latest": len(rows),
+        "status": "fail",
+        "note": detail,
+    }
+
+
 def collect_health(db_path: Path) -> dict[str, Any]:
     with connect_db(db_path) as conn:
         latest_row = conn.execute("SELECT MAX(date) FROM trading_days").fetchone()
@@ -190,6 +223,17 @@ def collect_health(db_path: Path) -> dict[str, Any]:
                          expected=latest_published_quarter(), min_rows=300),
             check_source(conn, "ranking_snapshots", "排行快照", "ranking_snapshots", "snapshot_date",
                          expected=one_back, warn_only=True),
+            # 抓取端自己回報的失敗。放在這裡而不是靠日期落差判斷，是因為
+            # 「多久沒更新」分不出假日與抓失敗——2026-08-18 就是這樣被放行的。
+            check_fetch_failures(conn),
+            # 期貨多空餵市場情緒（gui_data 有 5 處讀它），與大盤指數同一步驟抓，
+            # 但先前只有大盤指數被盯著，期貨那半靜靜停掉不會有人知道。
+            check_source(conn, "futures_institution_oi", "期貨多空", "futures_institution_oi", "date",
+                         expected=one_back),
+            # ETF 成分股。etf_universe 有檢查而 holdings 沒有，但頁面上的
+            # 持股明細讀的是 holdings——來源改版時空的是這半邊。
+            check_source(conn, "etf_holdings", "ETF 成分股", "etf_holdings", "data_date",
+                         expected=two_weeks_ago, min_rows=100, warn_only=True),
             # TWSE 找不到路徑時回「HTTP 200 + 404 HTML」，抓取失敗被 continue-on-error
             # 吞掉後，當沖榜只是安靜地少掉整個上市市場。這裡用列數當外部證據：
             # 實測單日約 1,200 檔，設 500 是為了容忍冷門日，不是容忍抓取失敗。

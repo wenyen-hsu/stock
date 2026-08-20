@@ -803,6 +803,27 @@ def init_schema(conn: sqlite3.Connection) -> None:
             PRIMARY KEY (date, stock_id)
         );
 
+        -- 抓取失敗的外部證據。
+        --
+        -- 本專案已經三次踩到同一個形狀：抓取失敗 → 被 continue-on-error 吞掉 →
+        -- 管線報成功 → 資料悄悄缺一塊而頁面完全正常。最近一次是 2026-08-18，
+        -- TWSE 逾時讓整個交易日沒進站，健檢卻因為「落後一天算正常」而放行。
+        --
+        -- 關鍵在於：抓取端其實**知道**自己失敗了（official.py 分得出「這天比已
+        -- 入庫的新但抓不到」與「這天是假日」；daytrade.py 也印得出哪個來源掛了），
+        -- 只是把訊息 print 掉就算了。這張表把那個訊號留下來給健檢讀，
+        -- 於是偵測不必再靠日曆猜「幾天沒更新算異常」。
+        --
+        -- 自癒：同一個 (source, target_date) 之後抓成功時必須刪除該列，
+        -- 否則一次逾時會讓健檢永遠紅著。
+        CREATE TABLE IF NOT EXISTS fetch_failures (
+            source TEXT NOT NULL,         -- 例如 official / daytrade_disposal
+            target_date TEXT NOT NULL,    -- 抓不到的那一天（無日期概念者用當日）
+            error TEXT,
+            updated_at TEXT NOT NULL,
+            PRIMARY KEY (source, target_date)
+        );
+
         CREATE INDEX IF NOT EXISTS idx_daily_prices_stock_date
             ON daily_prices(stock_id, date);
         CREATE INDEX IF NOT EXISTS idx_institutional_stock_date
@@ -842,6 +863,40 @@ def ensure_column(conn: sqlite3.Connection, table: str, column: str, column_type
     columns = {row[1] for row in conn.execute(f"PRAGMA table_info({table})").fetchall()}
     if column not in columns:
         conn.execute(f"ALTER TABLE {table} ADD COLUMN {column} {column_type}")
+
+
+def record_fetch_failure(
+    conn: sqlite3.Connection, source: str, target_date: str, error: str
+) -> None:
+    """記下一次抓取失敗，供健檢當作外部證據。錯誤訊息截斷避免撐大資料庫。"""
+    conn.execute(
+        """
+        INSERT INTO fetch_failures (source, target_date, error, updated_at)
+        VALUES (?, ?, ?, ?)
+        ON CONFLICT(source, target_date) DO UPDATE SET
+            error = excluded.error, updated_at = excluded.updated_at
+        """,
+        (source, target_date, str(error)[:300], dt.datetime.now().isoformat(timespec="seconds")),
+    )
+
+
+def clear_fetch_failure(conn: sqlite3.Connection, source: str, target_date: str) -> None:
+    """抓成功就把先前的失敗紀錄清掉——沒有這步，一次逾時會讓健檢永遠紅著。"""
+    conn.execute(
+        "DELETE FROM fetch_failures WHERE source = ? AND target_date = ?",
+        (source, target_date),
+    )
+
+
+def unresolved_fetch_failures(conn: sqlite3.Connection) -> list[dict[str, str]]:
+    rows = conn.execute(
+        "SELECT source, target_date, error, updated_at FROM fetch_failures"
+        " ORDER BY target_date DESC, source"
+    ).fetchall()
+    return [
+        {"source": r[0], "target_date": r[1], "error": r[2] or "", "updated_at": r[3]}
+        for r in rows
+    ]
 
 
 def upsert_prices(conn: sqlite3.Connection, rows: list[PriceRow]) -> None:
@@ -1085,13 +1140,21 @@ def update_recent(
             }
         )
         cursor -= dt.timedelta(days=1)
+    # 成功抓到的日期把先前的失敗紀錄清掉，讓下一輪重跑能自癒。
+    for row in updated:
+        clear_fetch_failure(conn, "official", row["date"])
     if skipped:
         newest_ok = max((row["date"] for row in updated), default="")
         for row in skipped:
             # 比已入庫的最新日還新的跳過＝真的缺當日資料，值得注意；
             # 比它舊的多半是假日/非交易日，屬正常。
-            marker = "!! 新於已入庫資料" if row["date"] > newest_ok else "（假日或非交易日）"
+            missing_day = row["date"] > newest_ok
+            marker = "!! 新於已入庫資料" if missing_day else "（假日或非交易日）"
             print(f"skipped {row['date']} {marker}: {row['error']}")
+            # 只記「!!」那一類：假日跳過是正常的，記下來只會製造噪音。
+            if missing_day:
+                record_fetch_failure(conn, "official", row["date"], row["error"])
+    conn.commit()
     if len(updated) < days:
         raise ProbeError(f"only updated {len(updated)} trading days; requested {days}")
     return sorted(updated, key=lambda row: row["date"])

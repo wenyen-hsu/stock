@@ -9,7 +9,11 @@ from typing import Any
 
 import requests
 
-from stock_chip.official import connect_db
+from stock_chip.official import (
+    clear_fetch_failure,
+    connect_db,
+    record_fetch_failure,
+)
 
 # 當沖候選池的資料來源。三組資料、四個端點，全部經 2026-08 的探測 workflow 實測：
 #
@@ -144,9 +148,16 @@ def fetch_twse_day_trade(date: dt.date, timeout: int = 60) -> list[dict[str, Any
     return rows
 
 
-def fetch_disposals(timeout: int = 60) -> list[dict[str, Any]]:
-    """上市＋上櫃處置股。任一來源失敗不影響另一邊。"""
+def fetch_disposals(timeout: int = 60) -> tuple[list[dict[str, Any]], list[str]]:
+    """上市＋上櫃處置股。任一來源失敗不影響另一邊。
+
+    回 (資料, 失敗的來源清單)。失敗清單是必要的：只看資料筆數分不出「上市掛了
+    但上櫃正常」——那種情況筆數仍是正的，處置股卻少了一半，而處置是當沖候選池的
+    硬排除條件（處置期間人工撮合，當沖做不了）。漏掉的那半會混進候選名單，
+    而頁面上的排除清單看起來仍然合理。
+    """
     out: list[dict[str, Any]] = []
+    failed: list[str] = []
 
     try:
         response = requests.get(TWSE_PUNISH_URL, headers=HEADERS, timeout=timeout)
@@ -171,6 +182,7 @@ def fetch_disposals(timeout: int = 60) -> list[dict[str, Any]]:
             )
     except Exception as exc:
         print(f"[daytrade] TWSE 處置股抓取失敗：{exc}")
+        failed.append(f"twse_punish: {exc}")
 
     try:
         response = requests.get(TPEX_DISPOSAL_URL, headers=HEADERS, timeout=timeout)
@@ -195,8 +207,9 @@ def fetch_disposals(timeout: int = 60) -> list[dict[str, Any]]:
             )
     except Exception as exc:
         print(f"[daytrade] TPEx 處置股抓取失敗：{exc}")
+        failed.append(f"tpex_disposal: {exc}")
 
-    return out
+    return out, failed
 
 
 def fetch_tpex_ceiling(timeout: int = 60) -> list[dict[str, Any]]:
@@ -253,24 +266,38 @@ def run_daytrade(db_path: Path, date: dt.date | None = None) -> None:
         target = dt.date.fromisoformat(latest) if latest else today
         summary: list[str] = []
 
+        iso = target.isoformat()
+
         try:
             rows = fetch_twse_day_trade(target)
             upsert(conn, "day_trade_stats", rows, ["date", "stock_id"])
+            clear_fetch_failure(conn, "daytrade_stats", iso)
             summary.append(f"當沖統計 {len(rows)} 檔")
         except Exception as exc:
             print(f"[daytrade] TWSE 當沖統計抓取失敗：{exc}")
+            record_fetch_failure(conn, "daytrade_stats", iso, str(exc))
 
-        disposals = fetch_disposals()
+        # 處置股沒有「當日應有幾筆」的概念，安靜的一天筆數本來就可能不動，
+        # 所以不能用筆數或日期落差判斷健康——只能看抓取端自己回報的失敗。
+        disposals, disposal_failures = fetch_disposals()
         if disposals:
             upsert(conn, "disposal_stocks", disposals, ["stock_id", "start_date", "source"])
             summary.append(f"處置股 {len(disposals)} 檔")
+        if disposal_failures:
+            record_fetch_failure(conn, "daytrade_disposal", iso, "；".join(disposal_failures))
+        else:
+            clear_fetch_failure(conn, "daytrade_disposal", iso)
 
         try:
             ceiling = fetch_tpex_ceiling()
             upsert(conn, "ceiling_queue", ceiling, ["date", "stock_id"])
+            clear_fetch_failure(conn, "daytrade_ceiling", iso)
             summary.append(f"漲停排隊 {len(ceiling)} 檔")
         except Exception as exc:
             print(f"[daytrade] TPEx 漲停排隊抓取失敗：{exc}")
+            record_fetch_failure(conn, "daytrade_ceiling", iso, str(exc))
+
+        conn.commit()
 
     print(f"[daytrade] {target} 更新完成：{'、'.join(summary) or '無資料'}")
 
