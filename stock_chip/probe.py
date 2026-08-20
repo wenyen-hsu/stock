@@ -35,6 +35,16 @@ class ProbeError(RuntimeError):
     pass
 
 
+class NoTradingDataError(ProbeError):
+    """來源明確回答「這一天沒有資料」——假日、非交易日、或尚未公布。
+
+    與「拿不到回答」（逾時、連線失敗、改版導致解析不出來）必須分開：
+    前者是正常的，後者是要告警的。用日曆判斷做不到這件事——台股國定假日
+    無法從星期幾推知，週一放假時「週一 > 上週五」看起來就跟抓失敗一樣。
+    來源自己的回答才是唯一可靠的判別依據。
+    """
+
+
 @dataclass
 class DailyPrice:
     date: str
