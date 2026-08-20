@@ -2013,16 +2013,23 @@
       if (parsed.pathname === "/api/ranking") {
         const ranking = parsed.searchParams.get("ranking") || "total_score";
         const q = parsed.searchParams.get("q") || "";
+        // 「外資近5日買超」是 5 日窗口專屬的排行：它的篩選條件寫死 row.days == 5，
+        // 在 20 日掃描裡永遠篩不到任何一列，所以 20d 的檔案結構上必為空。
+        // 本機 server 早就有這個 override（gui_http.py），靜態站漏了，導致在 20 日
+        // 分頁選這個排行會拿到空清單——同一份程式碼兩種模式行為不一致。
+        const rankingDays = ranking === "foreign_5d_revenue_growth" ? "5" : days;
         let source;
         try {
           source = q
-            ? await staticData(`data/rankings/${days}d/search_index.json`)
-            : await staticData(`data/rankings/${days}d/${ranking}.json`);
+            ? await staticData(`data/rankings/${rankingDays}d/search_index.json`)
+            : await staticData(`data/rankings/${rankingDays}d/${ranking}.json`);
         } catch (_err) {
-          return { title: `${days} 日排行：${ranking}（本次匯出不含此排行，請在本機重新執行靜態匯出）`, rows: [] };
+          // 用 rankingDays 而非 days：這個排行實際請求的是 5d 檔案，
+          // 訊息若寫 20 日會把找不到檔案的人指向錯的路徑。
+          return { title: `${rankingDays} 日排行：${ranking}（本次匯出不含此排行，請在本機重新執行靜態匯出）`, rows: [] };
         }
         return {
-          title: `${days} 日排行：${ranking}`,
+          title: `${rankingDays} 日排行：${ranking}`,
           rows: staticFilterRows(source.rows || source, parsed.searchParams.get("market") || "", q, parsed.searchParams.get("limit") || 50, parsed.searchParams.get("min_volume") || 0, parsed.searchParams.get("industry") || ""),
         };
       }

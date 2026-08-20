@@ -1090,7 +1090,12 @@ def confluence_breakdown(row: dict[str, Any]) -> dict[str, Any]:
     buy_net_lot = row.get("top_buy_branch_net_lot") or 0
     close_vs_avg_pct = row.get("close_vs_avg_pct")
     close = row.get("close")
-    buy_avg = row.get("top_buy_branch_avg_price")
+    # 與 branch_score_row 用同一個回退：MoneyDJ 區間表沒有均價欄位，
+    # top_buy_branch_avg_price 結構上永遠是 None，均價要用每日明細推估的成本。
+    # 少了這個回退，close_vs_branch_avg 恆為 None，下面那段加減分與
+    # 「收盤距分點均價」的理由字串從上線起就沒生效過，
+    # close_vs_top_buy_avg_pct 也在每一份排行 JSON 裡整欄是 null。
+    buy_avg = row.get("top_buy_branch_avg_price") or row.get("top_buy_branch_est_cost")
 
     if volume <= 0 or inst_net <= 0 or buy_net_lot <= 0:
         empty["selection_reason"] = revenue_reason(row) or empty["selection_reason"]
