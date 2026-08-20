@@ -2024,7 +2024,9 @@
             ? await staticData(`data/rankings/${rankingDays}d/search_index.json`)
             : await staticData(`data/rankings/${rankingDays}d/${ranking}.json`);
         } catch (_err) {
-          return { title: `${days} 日排行：${ranking}（本次匯出不含此排行，請在本機重新執行靜態匯出）`, rows: [] };
+          // 用 rankingDays 而非 days：這個排行實際請求的是 5d 檔案，
+          // 訊息若寫 20 日會把找不到檔案的人指向錯的路徑。
+          return { title: `${rankingDays} 日排行：${ranking}（本次匯出不含此排行，請在本機重新執行靜態匯出）`, rows: [] };
         }
         return {
           title: `${rankingDays} 日排行：${ranking}`,

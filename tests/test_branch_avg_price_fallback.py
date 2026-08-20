@@ -4,7 +4,6 @@
 結構上永遠不會有值——所以沒有人會發現它壞了。跟先前的 normalize_scan_row
 白名單、TWSE 的「200 版 404」是同一類。
 """
-import json
 import re
 from pathlib import Path
 
