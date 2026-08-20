@@ -117,21 +117,95 @@ def test_the_2026_08_18_blind_spot_is_now_covered(conn):
     assert health.check_fetch_failures(conn)["status"] == "fail"
 
 
-def test_holidays_do_not_create_noise(conn):
-    """假日跳過不該被記錄——只有『比已入庫的新卻抓不到』才算異常。
+# ---------- 週末與假日不能製造噪音（行為測試，不是抓字串）----------
+# 這一節原本是用 inspect.getsource() 找 "if missing_day:" 這個字串。
+# Copilot 指出那是結構性脆弱測試：改個變數名就誤報，而且根本沒驗到行為——
+# 它確實沒抓到真正的 bug。原本的判斷只看「日期比已入庫的新」，於是：
+#   週六手動跑    → 週六 > 上週五 → 記成抓取失敗
+#   週一國定假日  → 週一 > 上週五 → 記成抓取失敗
+# 排除週末也修不好第二種，因為台股假日推不出來。真正的判別依據是來源自己
+# 的回答：NoTradingDataError（明確說這天沒資料）vs 其他例外（拿不到回答）。
 
-    這條釘住 official.py 的判斷條件：若哪天改成無差別記錄，
-    每逢週末健檢就會紅，然後大家開始忽略它。
-    """
-    import inspect
-
+def _run_update(tmp_path, monkeypatch, end_date, failures):
+    """跑 update_recent，用 failures 指定哪些日期要丟出哪種例外。"""
     from stock_chip import official
+    from stock_chip.official import connect_db
 
-    source = inspect.getsource(official.update_recent)
-    assert "if missing_day:" in source, (
-        "record_fetch_failure 必須只在 missing_day 成立時呼叫，"
-        "否則假日跳過也會被記成失敗"
-    )
+    db = tmp_path / "u.sqlite"
+    seeded = {}
+
+    def fake_update_day(conn, date, **kwargs):
+        iso = date.isoformat()
+        if iso in failures:
+            raise failures[iso]
+        seeded[iso] = True
+        official.mark_trading_day(conn, date, 2000, 1800, 1800)
+        return 2000, 1800, 1800
+
+    monkeypatch.setattr(official, "update_day", fake_update_day)
+    with connect_db(db) as c:
+        try:
+            official.update_recent(c, 2, end_date)
+        except official.ProbeError:
+            pass          # 天數不足不是這裡要驗的
+        c.commit()
+    return db
+
+
+def test_weekend_run_does_not_record_a_failure(tmp_path, monkeypatch):
+    """週六手動跑：週六與週日都會被跳過，但它們不是抓取失敗。
+
+    我在 2026-08-15（週六）手動觸發過管線，正是這個情境。
+    """
+    from stock_chip.official import NoTradingDataError, connect_db
+
+    saturday = dt.date(2026, 8, 15)
+    db = _run_update(tmp_path, monkeypatch, saturday, {
+        "2026-08-15": NoTradingDataError("TWSE price response is not OK: 很抱歉，沒有符合條件的資料!"),
+    })
+    with connect_db(db) as c:
+        assert unresolved_fetch_failures(c) == [], "週末被跳過不該記成抓取失敗"
+        assert health.check_fetch_failures(c)["status"] == "ok"
+
+
+def test_public_holiday_does_not_record_a_failure(tmp_path, monkeypatch):
+    """國定假日：日期比已入庫的新，但來源明確說沒有資料。
+
+    這是「只排除週末」修不好的那一半——台股假日無法從星期幾推知。
+    """
+    from stock_chip.official import NoTradingDataError, connect_db
+
+    monday = dt.date(2026, 8, 17)   # 平日，假設當天休市
+    db = _run_update(tmp_path, monkeypatch, monday, {
+        "2026-08-17": NoTradingDataError("very sorry, no data"),
+    })
+    with connect_db(db) as c:
+        assert unresolved_fetch_failures(c) == [], "平日的休市日也不該記成抓取失敗"
+
+
+def test_a_real_fetch_failure_is_still_recorded(tmp_path, monkeypatch):
+    """逾時＝拿不到回答，必須記錄。這是 2026-08-18 的情境。"""
+    from stock_chip.official import connect_db
+
+    tuesday = dt.date(2026, 8, 18)
+    db = _run_update(tmp_path, monkeypatch, tuesday, {
+        "2026-08-18": TimeoutError("HTTPSConnectionPool: Read timed out"),
+    })
+    with connect_db(db) as c:
+        rows = unresolved_fetch_failures(c)
+        assert [r["target_date"] for r in rows] == ["2026-08-18"]
+        assert health.check_fetch_failures(c)["status"] == "fail"
+
+
+def test_backfilling_old_gaps_is_not_an_alert(tmp_path, monkeypatch):
+    """比已入庫的最新日還舊的失敗不告警——那是在補歷史，不是當日缺料。"""
+    from stock_chip.official import connect_db
+
+    db = _run_update(tmp_path, monkeypatch, dt.date(2026, 8, 19), {
+        "2026-08-17": TimeoutError("timed out"),
+    })
+    with connect_db(db) as c:
+        assert unresolved_fetch_failures(c) == []
 
 
 # ---------- 接線：run_daytrade 真的會記錄與清除 ----------

@@ -15,6 +15,7 @@ import requests
 from stock_chip.probe import (
     TWSE_INST_URL,
     TWSE_PRICE_URL,
+    NoTradingDataError,
     ProbeError,
     clean_float,
     clean_number,
@@ -100,7 +101,7 @@ def fetch_twse_prices_all(date: dt.date, stock_only: bool = True) -> list[PriceR
         {"date": twse_date(date), "type": "ALLBUT0999", "response": "json"},
     )
     if data.get("stat") not in (None, "OK") and not data.get("tables"):
-        raise ProbeError(f"TWSE price response is not OK: {data.get('stat')}")
+        raise NoTradingDataError(f"TWSE price response is not OK: {data.get('stat')}")
 
     valuations = fetch_twse_valuations_all(date)
     rows: list[PriceRow] = []
@@ -174,7 +175,7 @@ def fetch_twse_institutional_all(date: dt.date, stock_only: bool = True) -> list
         {"date": twse_date(date), "selectType": "ALLBUT0999", "response": "json"},
     )
     if data.get("stat") != "OK":
-        raise ProbeError(f"TWSE institutional response is not OK: {data.get('stat')}")
+        raise NoTradingDataError(f"TWSE institutional response is not OK: {data.get('stat')}")
 
     fields = data.get("fields") or []
     field_index = {name: idx for idx, name in enumerate(fields)}
@@ -250,7 +251,9 @@ def fetch_tpex_prices_all(date: dt.date, stock_only: bool = True) -> list[PriceR
     )
     response_date = str(data.get("date") or "")
     if response_date != date.strftime("%Y%m%d"):
-        raise ProbeError(
+        # TPEx 對非交易日會回「最近一個交易日」而不是報錯，所以日期不符
+        # 等同於「這天沒有資料」，不是抓取失敗。
+        raise NoTradingDataError(
             f"TPEX price response date mismatch: requested {date.isoformat()}, got {response_date or 'empty'}"
         )
     valuations = fetch_tpex_valuations_all(date)
@@ -353,7 +356,7 @@ def fetch_twse_margin_all(date: dt.date, stock_only: bool = True) -> list[Margin
         {"date": twse_date(date), "response": "json", "selectType": "ALL"},
     )
     if data.get("stat") != "OK":
-        raise ProbeError(f"TWSE margin response is not OK: {data.get('stat')}")
+        raise NoTradingDataError(f"TWSE margin response is not OK: {data.get('stat')}")
 
     rows: list[MarginRow] = []
     for table in data.get("tables", []):
@@ -396,7 +399,7 @@ def fetch_tpex_margin_all(date: dt.date, stock_only: bool = True) -> list[Margin
     )
     response_date = str(data.get("date") or "")
     if response_date and response_date != date.strftime("%Y%m%d"):
-        raise ProbeError(
+        raise NoTradingDataError(
             f"TPEX margin response date mismatch: requested {date.isoformat()}, got {response_date}"
         )
 
@@ -1059,7 +1062,7 @@ def update_day(
         *fetch_tpex_margin_all(date, stock_only=stock_only),
     ]
     if not prices or not institutional:
-        raise ProbeError(f"{date.isoformat()} has no usable official data")
+        raise NoTradingDataError(f"{date.isoformat()} has no usable official data")
     upsert_prices(conn, prices)
     upsert_institutional(conn, institutional)
     upsert_margin(conn, margin)
@@ -1127,7 +1130,14 @@ def update_recent(
                 # 靜默跳過會讓「最新交易日抓不到」完全隱形（管線照樣成功、
                 # 健康檢查也比不出來，因為 trading_days 與行情一起停住）。
                 # 2026-07-30 資料整日未進站即因此無人察覺。
-                skipped.append({"date": cursor.isoformat(), "error": str(exc)[:200]})
+                skipped.append({
+                    "date": cursor.isoformat(),
+                    "error": str(exc)[:200],
+                    # 來源說「這天沒資料」（假日／非交易日／尚未公布）不是失敗。
+                    # 用日曆判斷做不到：台股國定假日推不出來，週一放假時
+                    # 「週一 > 上週五」看起來就跟抓失敗一模一樣。
+                    "no_data": isinstance(exc, NoTradingDataError),
+                })
                 cursor -= dt.timedelta(days=1)
                 continue
         updated.append(
@@ -1148,10 +1158,12 @@ def update_recent(
         for row in skipped:
             # 比已入庫的最新日還新的跳過＝真的缺當日資料，值得注意；
             # 比它舊的多半是假日/非交易日，屬正常。
-            missing_day = row["date"] > newest_ok
+            # 兩個條件都要成立才算「真的缺當日資料」：
+            #   1. 比已入庫的最新日還新（不是在補歷史）
+            #   2. 來源沒有明確說這天沒資料（否則就是假日／非交易日）
+            missing_day = row["date"] > newest_ok and not row["no_data"]
             marker = "!! 新於已入庫資料" if missing_day else "（假日或非交易日）"
             print(f"skipped {row['date']} {marker}: {row['error']}")
-            # 只記「!!」那一類：假日跳過是正常的，記下來只會製造噪音。
             if missing_day:
                 record_fetch_failure(conn, "official", row["date"], row["error"])
     conn.commit()
