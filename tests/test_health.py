@@ -158,3 +158,67 @@ def test_weekdays_between_skips_weekend():
     assert weekdays_between(dt.date(2026, 7, 31), dt.date(2026, 8, 3)) == 1  # 五→一
     assert weekdays_between(dt.date(2026, 7, 29), dt.date(2026, 7, 31)) == 2  # 三→五
     assert weekdays_between(dt.date(2026, 7, 31), dt.date(2026, 7, 31)) == 0
+
+
+# ---------- 分點排行的期望值必須配合架構 ----------
+# 2026-08-06（commit 9712b17d）把分點抓取拆成獨立 workflow 後，它在主管線之後
+# 才跑、要兩小時。健檢執行的當下分點必然落後兩個交易日，但期望值還留在 one_back，
+# 於是每個交易日都必定 fail 一次、開一則 issue，再由分點跑完後的重新匯出關掉。
+# 實測 #7(8/14)、#15(8/19)、#19(8/27) 唯一的 fail 都是這項；拆分前的 #3(7/24) 正常。
+
+def _db_with_branch_topn(as_of: str) -> Path:
+    """在 make_db 的基礎上補一批分點排行資料。"""
+    db = make_db()
+    with connect_db(db) as conn:
+        for i in range(150):
+            conn.execute(
+                "INSERT INTO broker_branch_topn(as_of_date, from_date, to_date,"
+                " window_days, stock_id, name, rank_side, rank_no, broker_name,"
+                " buy_lot, sell_lot, net_lot, source, source_url, updated_at)"
+                " VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,'now')",
+                (as_of, as_of, as_of, 20, f"{1000 + i}", "x", "buy", i + 1,
+                 "某分點", 10.0, 0.0, 10.0, "moneydj", "http://x"),
+            )
+        conn.commit()
+    return db
+
+
+def _branch_status(as_of: str) -> str:
+    payload = collect_health(_db_with_branch_topn(as_of))
+    return {s["key"]: s for s in payload["sources"]}["broker_branch_topn"]["status"]
+
+
+def _trading_day_back(steps: int) -> str:
+    """從 DB 實際的最新交易日回推，不把 make_db() 的日期區間寫死在測試裡。"""
+    with connect_db(make_db()) as conn:
+        latest = conn.execute("SELECT MAX(date) FROM trading_days").fetchone()[0]
+        return trading_days_back(conn, latest, steps)
+
+
+def test_branch_topn_ok_when_two_trading_days_behind():
+    """主管線跑健檢的當下就是這個狀態——不能因此每晚開一則 issue。"""
+    assert _branch_status(_trading_day_back(2)) == "ok", (
+        "落後兩個交易日是拆分後的正常狀態；若這裡是 fail，"
+        "每個交易日都會開一則自動關閉的 issue，久了沒人會看告警"
+    )
+
+
+def test_branch_topn_still_fails_when_genuinely_stale():
+    """放寬一天不能放棄偵測：分點真的斷一天就要抓到。"""
+    assert _branch_status(_trading_day_back(3)) == "fail"
+
+
+def test_branch_topn_and_daily_share_the_same_lag_assumption():
+    """兩者由同一個 workflow 產出，期望值不該一鬆一緊。
+
+    先前 daily 用 two_back、topn 用 one_back，兩張表實際上總是同一天——
+    差異純粹是拆分時漏改，不是刻意的設計。
+
+    比對 payload 裡的 expected 而不是讀原始碼：這裡原本用 inspect.getsource()
+    抓字串，換個引號或抽出 helper 就會無關地壞掉，而且驗的是寫法不是行為。
+    """
+    payload = collect_health(_db_with_branch_topn(_trading_day_back(2)))
+    by_key = {s["key"]: s for s in payload["sources"]}
+    assert by_key["broker_branch_topn"]["expected"] == by_key["broker_branch_daily"]["expected"], (
+        "分點排行與分點每日明細由同一個 workflow 產出，期望的資料日必須一致"
+    )
