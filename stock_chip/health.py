@@ -207,8 +207,16 @@ def collect_health(db_path: Path) -> dict[str, Any]:
                          date_filter_sql="WHERE index_code = 'TAIEX'"),
             check_source(conn, "monthly_revenues", "月營收", "monthly_revenues", "revenue_month",
                          expected=expected_revenue_month(), min_rows=100),
+            # two_back 而非 one_back：分點抓取自 2026-08-06 起是獨立 workflow
+            # （commit 9712b17d），它在主管線之後才跑、要兩小時。所以健檢執行的
+            # 當下，分點資料必然落後兩個交易日；期望 one_back 等於每個交易日
+            # 都必定失敗一次，再由分點跑完後的重新匯出把 issue 關掉。
+            # 實測 #7(8/14)、#15(8/19)、#19(8/27) 三次健檢 issue，唯一的 fail
+            # 都是這一項，且都在 1~1.5 小時後自動關閉——拆分前的 #3(7/24) 則正常。
+            # 這種每晚固定開關的告警只會訓練人忽略它，比沒有告警更糟。
+            # 放寬一天仍保有偵測力：分點真的斷一天就會落到 three_back 而觸發。
             check_source(conn, "broker_branch_topn", "分點排行", "broker_branch_topn", "as_of_date",
-                         expected=one_back, min_rows=100),
+                         expected=two_back, min_rows=100),
             check_source(conn, "broker_branch_daily", "分點每日明細", "broker_branch_daily", "trade_date",
                          expected=two_back, warn_only=True),
             check_source(conn, "mops_events", "MOPS 重大事件", "mops_events", "event_date",
