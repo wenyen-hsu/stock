@@ -28,13 +28,15 @@
 
 頁面補上三欄對應的動作：追強等今開回檔、接刀等弱開再接、賣壓在開盤附近賣或避。賣壓榜來源是 `day_traders.json`，檔數少，頁面標「僅供參考」。
 
-## 每日更新監測（台北 03:00）
+## 每日更新監測（台北 03:00，固定執行）
 
-雲端 Agent 每天 **03:00 Asia/Taipei** 檢查前一晚管線是否完成；沒過就修到過。步驟見 [`.cursor/skills/monitor-daily-update/SKILL.md`](.cursor/skills/monitor-daily-update/SKILL.md)。
+這則 Cloud Agent 對話每天 **03:00 Asia/Taipei**（UTC `0 19 * * *`）檢查前一晚管線；沒過就修到過。每次醒來結束前會**先退訂再重訂**同一支 timer，把 7 天到期往後推，不必再下指令。
 
-要獨立於這則對話、改走 Cursor Automation：到 [cursor.com/automations](https://cursor.com/automations)，repo 選 `wenyen-hsu/stock`，cron `0 3 * * *`、時區 `Asia/Taipei`，指示寫「照 `.cursor/skills/monitor-daily-update/SKILL.md` 執行」。
+步驟見 [`.cursor/skills/monitor-daily-update/SKILL.md`](.cursor/skills/monitor-daily-update/SKILL.md)。
 
 成功條件摘要：當日（或上週五）的 `Update Taiwan Stock Data` **schedule** 成功、`site` 的 `meta.json` `latest_date` 對、`health.json` 無 fail、Pages `built`。分點另查 `Fetch Branch Data`。
+
+若這則對話被封存，監測會停。要完全獨立於對話，到 [cursor.com/automations](https://cursor.com/automations) 建 cron `0 3 * * *`、時區台北，指示寫「照 monitor-daily-update skill」。
 
 ## 日常指令（現況，整理後不變）
 

@@ -73,4 +73,12 @@ description: >-
 
 ## 過了怎麼回
 
-三行就夠：`D`、schedule run id、`meta.latest_date` / `exported_at`、health ok。然後等下一次 03:00。
+三行就夠：`D`、schedule run id、`meta.latest_date` / `exported_at`、health ok。
+
+然後**必須續訂**，否則 7 天後計時器會過期、監測中斷：
+
+1. `cursor-subscriptions-list_subscriptions`
+2. 若已有 `daily-update-monitor-0300-taipei`，先 `unsubscribe`
+3. 再 `subscribe_timer`：name 同上，cron `0 19 * * *`（UTC＝台北 03:00），prompt 寫「照本 skill 檢查；沒過就修到過；結束前再續訂同一支 timer」
+
+這是固定排程，不要等使用者再說一次。對話還在就一直續。
