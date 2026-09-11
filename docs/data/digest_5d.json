@@ -1,0 +1,367 @@
+{
+  "days": 5,
+  "new_entrants": {
+    "big_holder_increase": [
+      {
+        "name": "晶宏",
+        "rank_no": 1,
+        "score": 31.92,
+        "stock_id": "3141"
+      },
+      {
+        "name": "中探針",
+        "rank_no": 8,
+        "score": 8.85,
+        "stock_id": "6217"
+      },
+      {
+        "name": "四維航",
+        "rank_no": 11,
+        "score": 40.15,
+        "stock_id": "5608"
+      },
+      {
+        "name": "順德",
+        "rank_no": 13,
+        "score": 54.73,
+        "stock_id": "2351"
+      },
+      {
+        "name": "聯陽",
+        "rank_no": 19,
+        "score": 57.06,
+        "stock_id": "3014"
+      }
+    ],
+    "momentum_inst_buy": [
+      {
+        "name": "全友",
+        "rank_no": 3,
+        "score": 65.29,
+        "stock_id": "2305"
+      },
+      {
+        "name": "瑞祺電通",
+        "rank_no": 4,
+        "score": 43.42,
+        "stock_id": "6416"
+      },
+      {
+        "name": "茂綸",
+        "rank_no": 5,
+        "score": 88.03,
+        "stock_id": "6227"
+      },
+      {
+        "name": "惠特",
+        "rank_no": 6,
+        "score": 47.92,
+        "stock_id": "6706"
+      },
+      {
+        "name": "中砂",
+        "rank_no": 8,
+        "score": 108.17,
+        "stock_id": "1560"
+      },
+      {
+        "name": "華經",
+        "rank_no": 9,
+        "score": 20.79,
+        "stock_id": "2468"
+      },
+      {
+        "name": "創泓科技",
+        "rank_no": 10,
+        "score": 64.68,
+        "stock_id": "7714"
+      },
+      {
+        "name": "運錩",
+        "rank_no": 13,
+        "score": 47.26,
+        "stock_id": "2069"
+      },
+      {
+        "name": "和亞智慧",
+        "rank_no": 15,
+        "score": 35.3,
+        "stock_id": "7825"
+      },
+      {
+        "name": "玉山金",
+        "rank_no": 16,
+        "score": 76.35,
+        "stock_id": "2884"
+      },
+      {
+        "name": "彰銀",
+        "rank_no": 18,
+        "score": 54.58,
+        "stock_id": "2801"
+      },
+      {
+        "name": "中再保",
+        "rank_no": 19,
+        "score": 71.38,
+        "stock_id": "2851"
+      },
+      {
+        "name": "臺企銀",
+        "rank_no": 20,
+        "score": 73.07,
+        "stock_id": "2834"
+      }
+    ],
+    "multifactor_score": [
+      {
+        "name": "中砂",
+        "rank_no": 2,
+        "score": 108.17,
+        "stock_id": "1560"
+      },
+      {
+        "name": "長榮",
+        "rank_no": 3,
+        "score": 105.72,
+        "stock_id": "2603"
+      },
+      {
+        "name": "兆豐金",
+        "rank_no": 6,
+        "score": 97.82,
+        "stock_id": "2886"
+      },
+      {
+        "name": "永裕",
+        "rank_no": 7,
+        "score": 90.7,
+        "stock_id": "1323"
+      },
+      {
+        "name": "統一證",
+        "rank_no": 8,
+        "score": 89.94,
+        "stock_id": "2855"
+      },
+      {
+        "name": "凱基金",
+        "rank_no": 9,
+        "score": 89.78,
+        "stock_id": "2883"
+      },
+      {
+        "name": "茂綸",
+        "rank_no": 11,
+        "score": 88.03,
+        "stock_id": "6227"
+      },
+      {
+        "name": "聯詠",
+        "rank_no": 14,
+        "score": 86.47,
+        "stock_id": "3034"
+      },
+      {
+        "name": "明基材",
+        "rank_no": 15,
+        "score": 83.61,
+        "stock_id": "8215"
+      },
+      {
+        "name": "台新新光金",
+        "rank_no": 16,
+        "score": 83.57,
+        "stock_id": "2887"
+      },
+      {
+        "name": "飛捷",
+        "rank_no": 18,
+        "score": 82.83,
+        "stock_id": "6206"
+      },
+      {
+        "name": "長榮航",
+        "rank_no": 19,
+        "score": 82.81,
+        "stock_id": "2618"
+      },
+      {
+        "name": "晟鈦",
+        "rank_no": 20,
+        "score": 82.78,
+        "stock_id": "3229"
+      }
+    ]
+  },
+  "ranking_labels": {
+    "big_holder_increase": "大戶增持 + 法人買超",
+    "momentum_inst_buy": "動能 + 法人買超",
+    "multifactor_score": "多因子綜合分"
+  },
+  "signals": {
+    "big_holder": [
+      {
+        "name": "中砂",
+        "stock_id": "1560",
+        "value": 0.75
+      },
+      {
+        "name": "統一證",
+        "stock_id": "2855",
+        "value": 0.71
+      },
+      {
+        "name": "聯詠",
+        "stock_id": "3034",
+        "value": 1.24
+      },
+      {
+        "name": "精材",
+        "stock_id": "3374",
+        "value": 6.15
+      },
+      {
+        "name": "合庫金",
+        "stock_id": "5880",
+        "value": 0.3
+      },
+      {
+        "name": "欣興",
+        "stock_id": "3037",
+        "value": 0.47
+      },
+      {
+        "name": "亞通",
+        "stock_id": "6179",
+        "value": 0.83
+      },
+      {
+        "name": "安普新",
+        "stock_id": "6743",
+        "value": 0.3
+      },
+      {
+        "name": "全新",
+        "stock_id": "2455",
+        "value": 3.67
+      },
+      {
+        "name": "台灣精材",
+        "stock_id": "3467",
+        "value": 0.64
+      }
+    ],
+    "branch_streak": [],
+    "day_trader": [],
+    "margin_down": [
+      {
+        "name": "茂綸",
+        "stock_id": "6227",
+        "value": -2
+      },
+      {
+        "name": "精材",
+        "stock_id": "3374",
+        "value": -2
+      },
+      {
+        "name": "安普新",
+        "stock_id": "6743",
+        "value": -3
+      },
+      {
+        "name": "台驊控股",
+        "stock_id": "2636",
+        "value": -3
+      },
+      {
+        "name": "方土霖",
+        "stock_id": "4527",
+        "value": -2
+      },
+      {
+        "name": "明安",
+        "stock_id": "8938",
+        "value": -3
+      },
+      {
+        "name": "敦陽科",
+        "stock_id": "2480",
+        "value": -3
+      },
+      {
+        "name": "精誠",
+        "stock_id": "6214",
+        "value": -2
+      },
+      {
+        "name": "伊雲谷",
+        "stock_id": "6689",
+        "value": -2
+      },
+      {
+        "name": "新至陞",
+        "stock_id": "3679",
+        "value": -2
+      }
+    ],
+    "margin_up": [
+      {
+        "name": "中砂",
+        "stock_id": "1560",
+        "value": 7
+      },
+      {
+        "name": "永裕",
+        "stock_id": "1323",
+        "value": 3
+      },
+      {
+        "name": "台灣大",
+        "stock_id": "3045",
+        "value": 2
+      },
+      {
+        "name": "聯詠",
+        "stock_id": "3034",
+        "value": 3
+      },
+      {
+        "name": "明基材",
+        "stock_id": "8215",
+        "value": 2
+      },
+      {
+        "name": "晟鈦",
+        "stock_id": "3229",
+        "value": 3
+      },
+      {
+        "name": "陽明",
+        "stock_id": "2609",
+        "value": 2
+      },
+      {
+        "name": "欣興",
+        "stock_id": "3037",
+        "value": 4
+      },
+      {
+        "name": "世界",
+        "stock_id": "5347",
+        "value": 3
+      },
+      {
+        "name": "台翰",
+        "stock_id": "1336",
+        "value": 2
+      }
+    ]
+  },
+  "snapshot_dates": [
+    "2026-09-11",
+    "2026-09-10"
+  ],
+  "state": "ready"
+}

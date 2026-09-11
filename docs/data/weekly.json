@@ -1,0 +1,3439 @@
+{
+  "etf_flows": [
+    {
+      "aum": 138347759760.0,
+      "category": "高股息",
+      "etf_id": "00918",
+      "name": "大華優利高填息30 ETF",
+      "units_chg_5d_pct": 8.3
+    },
+    {
+      "aum": 147625938180.0,
+      "category": "科技",
+      "etf_id": "00929",
+      "name": "復華台灣科技優息",
+      "units_chg_5d_pct": 2.11
+    },
+    {
+      "aum": 602670784800.0,
+      "category": "高股息",
+      "etf_id": "00919",
+      "name": "群益台灣精選高息",
+      "units_chg_5d_pct": 1.54
+    },
+    {
+      "aum": 279612552960.0,
+      "category": "主動式",
+      "etf_id": "00981A",
+      "name": "主動統一台股增長",
+      "units_chg_5d_pct": 0.07
+    },
+    {
+      "aum": 457878894000.0,
+      "category": "市值型",
+      "etf_id": "006208",
+      "name": "富邦台50",
+      "units_chg_5d_pct": 0.0
+    },
+    {
+      "aum": 89419405380.0,
+      "category": "市值型",
+      "etf_id": "00922",
+      "name": "國泰台灣領袖50 ETF基金",
+      "units_chg_5d_pct": 0.0
+    },
+    {
+      "aum": 107715716200.0,
+      "category": "高股息",
+      "etf_id": "00713",
+      "name": "元大台灣高息低波",
+      "units_chg_5d_pct": -0.03
+    },
+    {
+      "aum": 148551213880.0,
+      "category": "科技",
+      "etf_id": "00881",
+      "name": "國泰台灣科技龍頭",
+      "units_chg_5d_pct": -0.05
+    },
+    {
+      "aum": 777409280200.0,
+      "category": "高股息",
+      "etf_id": "0056",
+      "name": "元大高股息",
+      "units_chg_5d_pct": -0.07
+    },
+    {
+      "aum": 56544416000.0,
+      "category": "ESG",
+      "etf_id": "00692",
+      "name": "富邦公司治理",
+      "units_chg_5d_pct": -0.08
+    }
+  ],
+  "foreign_top": [
+    {
+      "avg_turnover_100m": 13.095,
+      "close": 37.3,
+      "foreign_net_lot": 83230,
+      "industry": "金融保險業",
+      "market": "TWSE",
+      "multifactor_score": 92.22,
+      "name": "第一金",
+      "start_close": 35.3,
+      "stock_id": "2892",
+      "sub_industry": "金控",
+      "trust_net_lot": 4899,
+      "week_return_pct": 5.67,
+      "week_volume_lot": 233130
+    },
+    {
+      "avg_turnover_100m": 69.716,
+      "close": 26.8,
+      "foreign_net_lot": 77581,
+      "industry": "光電業",
+      "market": "TWSE",
+      "multifactor_score": 46.38,
+      "name": "友達",
+      "start_close": 26.65,
+      "stock_id": "2409",
+      "sub_industry": "面板",
+      "trust_net_lot": -2333,
+      "week_return_pct": 0.56,
+      "week_volume_lot": 986176
+    },
+    {
+      "avg_turnover_100m": 14.838,
+      "close": 49.55,
+      "foreign_net_lot": 76498,
+      "industry": "金融保險業",
+      "market": "TWSE",
+      "multifactor_score": 84.38,
+      "name": "兆豐金",
+      "start_close": 48.55,
+      "stock_id": "2886",
+      "sub_industry": "金控",
+      "trust_net_lot": 2760,
+      "week_return_pct": 2.06,
+      "week_volume_lot": 168223
+    },
+    {
+      "avg_turnover_100m": 24.717,
+      "close": 41.5,
+      "foreign_net_lot": 62965,
+      "industry": "金融保險業",
+      "market": "TWSE",
+      "multifactor_score": 84.05,
+      "name": "台新新光金",
+      "start_close": 38.55,
+      "stock_id": "2887",
+      "sub_industry": "金控",
+      "trust_net_lot": 22073,
+      "week_return_pct": 7.65,
+      "week_volume_lot": 489614
+    },
+    {
+      "avg_turnover_100m": 26.605,
+      "close": 69.8,
+      "foreign_net_lot": 62679,
+      "industry": "塑膠工業",
+      "market": "TWSE",
+      "multifactor_score": 62.63,
+      "name": "台化",
+      "start_close": 68.3,
+      "stock_id": "1326",
+      "sub_industry": "",
+      "trust_net_lot": 139,
+      "week_return_pct": 2.2,
+      "week_volume_lot": 376925
+    },
+    {
+      "avg_turnover_100m": 5.349,
+      "close": 26.65,
+      "foreign_net_lot": 62576,
+      "industry": "金融保險業",
+      "market": "TWSE",
+      "multifactor_score": 93.68,
+      "name": "合庫金",
+      "start_close": 25.55,
+      "stock_id": "5880",
+      "sub_industry": "金控",
+      "trust_net_lot": -5799,
+      "week_return_pct": 4.31,
+      "week_volume_lot": 150870
+    },
+    {
+      "avg_turnover_100m": 16.264,
+      "close": 36.7,
+      "foreign_net_lot": 57592,
+      "industry": "金融保險業",
+      "market": "TWSE",
+      "multifactor_score": 100.96,
+      "name": "凱基金",
+      "start_close": 33.85,
+      "stock_id": "2883",
+      "sub_industry": "金控",
+      "trust_net_lot": 1901,
+      "week_return_pct": 8.42,
+      "week_volume_lot": 318357
+    },
+    {
+      "avg_turnover_100m": 2.887,
+      "close": 19.35,
+      "foreign_net_lot": 54208,
+      "industry": "金融保險業",
+      "market": "TWSE",
+      "multifactor_score": 62.86,
+      "name": "台中銀",
+      "start_close": 19.05,
+      "stock_id": "2812",
+      "sub_industry": "",
+      "trust_net_lot": -6245,
+      "week_return_pct": 1.57,
+      "week_volume_lot": 110158
+    },
+    {
+      "avg_turnover_100m": 8.399,
+      "close": 44.0,
+      "foreign_net_lot": 51159,
+      "industry": "金融保險業",
+      "market": "TWSE",
+      "multifactor_score": 67.26,
+      "name": "華南金",
+      "start_close": 41.35,
+      "stock_id": "2880",
+      "sub_industry": "金控",
+      "trust_net_lot": -11299,
+      "week_return_pct": 6.41,
+      "week_volume_lot": 123831
+    },
+    {
+      "avg_turnover_100m": 2.703,
+      "close": 16.6,
+      "foreign_net_lot": 47347,
+      "industry": "金融保險業",
+      "market": "TWSE",
+      "multifactor_score": 60.46,
+      "name": "國票金",
+      "start_close": 15.95,
+      "stock_id": "2889",
+      "sub_industry": "",
+      "trust_net_lot": 0,
+      "week_return_pct": 4.08,
+      "week_volume_lot": 136099
+    },
+    {
+      "avg_turnover_100m": 2.263,
+      "close": 13.65,
+      "foreign_net_lot": 46849,
+      "industry": "金融保險業",
+      "market": "TWSE",
+      "multifactor_score": 64.93,
+      "name": "遠東銀",
+      "start_close": 13.5,
+      "stock_id": "2845",
+      "sub_industry": "",
+      "trust_net_lot": 5696,
+      "week_return_pct": 1.11,
+      "week_volume_lot": 151843
+    },
+    {
+      "avg_turnover_100m": 21.495,
+      "close": 66.0,
+      "foreign_net_lot": 46123,
+      "industry": "塑膠工業",
+      "market": "TWSE",
+      "multifactor_score": 60.04,
+      "name": "台塑",
+      "start_close": 66.2,
+      "stock_id": "1301",
+      "sub_industry": "",
+      "trust_net_lot": -1546,
+      "week_return_pct": -0.3,
+      "week_volume_lot": 265615
+    },
+    {
+      "avg_turnover_100m": 34.623,
+      "close": 41.6,
+      "foreign_net_lot": 45572,
+      "industry": "電腦及週邊設備業",
+      "market": "TWSE",
+      "multifactor_score": -35.01,
+      "name": "仁寶",
+      "start_close": 40.35,
+      "stock_id": "2324",
+      "sub_industry": "AI伺服器/組裝",
+      "trust_net_lot": -1303,
+      "week_return_pct": 3.1,
+      "week_volume_lot": 397746
+    },
+    {
+      "avg_turnover_100m": 16.055,
+      "close": 69.8,
+      "foreign_net_lot": 41988,
+      "industry": "金融保險業",
+      "market": "TWSE",
+      "multifactor_score": 34.72,
+      "name": "元大金",
+      "start_close": 65.4,
+      "stock_id": "2885",
+      "sub_industry": "金控",
+      "trust_net_lot": -1641,
+      "week_return_pct": 6.73,
+      "week_volume_lot": 153115
+    },
+    {
+      "avg_turnover_100m": 10.753,
+      "close": 42.85,
+      "foreign_net_lot": 38145,
+      "industry": "金融保險業",
+      "market": "TWSE",
+      "multifactor_score": 89.54,
+      "name": "永豐金",
+      "start_close": 41.1,
+      "stock_id": "2890",
+      "sub_industry": "金控",
+      "trust_net_lot": 10840,
+      "week_return_pct": 4.26,
+      "week_volume_lot": 167130
+    }
+  ],
+  "gainers": {
+    "losers": [
+      {
+        "avg_turnover_100m": 113.42,
+        "close": 2565.0,
+        "foreign_net_lot": -6098,
+        "industry": "電腦及週邊設備業",
+        "market": "TWSE",
+        "multifactor_score": -47.48,
+        "name": "緯穎",
+        "start_close": 7095.0,
+        "stock_id": "6669",
+        "sub_industry": "",
+        "trust_net_lot": 608,
+        "week_return_pct": -63.85,
+        "week_volume_lot": 25162
+      },
+      {
+        "avg_turnover_100m": 1.184,
+        "close": 42.0,
+        "foreign_net_lot": 693,
+        "industry": "光電業",
+        "market": "TWSE",
+        "multifactor_score": 48.32,
+        "name": "吉祥全",
+        "start_close": 50.8,
+        "stock_id": "2491",
+        "sub_industry": "",
+        "trust_net_lot": 0,
+        "week_return_pct": -17.32,
+        "week_volume_lot": 18774
+      },
+      {
+        "avg_turnover_100m": 1.651,
+        "close": 44.7,
+        "foreign_net_lot": -396,
+        "industry": "光電業",
+        "market": "TWSE",
+        "multifactor_score": -13.6,
+        "name": "州巧",
+        "start_close": 53.3,
+        "stock_id": "3543",
+        "sub_industry": "",
+        "trust_net_lot": 0,
+        "week_return_pct": -16.14,
+        "week_volume_lot": 27233
+      },
+      {
+        "avg_turnover_100m": 16.698,
+        "close": 118.0,
+        "foreign_net_lot": -2872,
+        "industry": "電子零組件業",
+        "market": "TWSE",
+        "multifactor_score": -11.51,
+        "name": "宏致",
+        "start_close": 139.0,
+        "stock_id": "3605",
+        "sub_industry": "",
+        "trust_net_lot": 434,
+        "week_return_pct": -15.11,
+        "week_volume_lot": 90594
+      },
+      {
+        "avg_turnover_100m": 146.305,
+        "close": 1055.0,
+        "foreign_net_lot": -2659,
+        "industry": "電子零組件業",
+        "market": "TWSE",
+        "multifactor_score": 9.91,
+        "name": "南電",
+        "start_close": 1230.0,
+        "stock_id": "8046",
+        "sub_industry": "PCB",
+        "trust_net_lot": -4871,
+        "week_return_pct": -14.23,
+        "week_volume_lot": 88547
+      },
+      {
+        "avg_turnover_100m": 0.582,
+        "close": 625.0,
+        "foreign_net_lot": 0,
+        "industry": "光電業",
+        "market": "ESB",
+        "multifactor_score": 6.58,
+        "name": "中華立鼎",
+        "start_close": 719.0,
+        "stock_id": "7926",
+        "sub_industry": "",
+        "trust_net_lot": 0,
+        "week_return_pct": -13.07,
+        "week_volume_lot": 918
+      },
+      {
+        "avg_turnover_100m": 3.889,
+        "close": 32.0,
+        "foreign_net_lot": 5768,
+        "industry": "其他業",
+        "market": "TPEX",
+        "multifactor_score": 73.01,
+        "name": "世紀*",
+        "start_close": 36.0,
+        "stock_id": "5314",
+        "sub_industry": "",
+        "trust_net_lot": 27,
+        "week_return_pct": -11.11,
+        "week_volume_lot": 28596
+      },
+      {
+        "avg_turnover_100m": 2.408,
+        "close": 52.5,
+        "foreign_net_lot": 232,
+        "industry": "電子零組件業",
+        "market": "TWSE",
+        "multifactor_score": 41.66,
+        "name": "柏承",
+        "start_close": 58.9,
+        "stock_id": "6141",
+        "sub_industry": "",
+        "trust_net_lot": 0,
+        "week_return_pct": -10.87,
+        "week_volume_lot": 20342
+      },
+      {
+        "avg_turnover_100m": 1.0,
+        "close": 112.5,
+        "foreign_net_lot": -573,
+        "industry": "生技醫療業",
+        "market": "TPEX",
+        "multifactor_score": -69.8,
+        "name": "大江",
+        "start_close": 126.0,
+        "stock_id": "8436",
+        "sub_industry": "",
+        "trust_net_lot": -255,
+        "week_return_pct": -10.71,
+        "week_volume_lot": 5904
+      },
+      {
+        "avg_turnover_100m": 91.948,
+        "close": 1045.0,
+        "foreign_net_lot": -6648,
+        "industry": "電子零組件業",
+        "market": "TWSE",
+        "multifactor_score": 2.18,
+        "name": "金像電",
+        "start_close": 1165.0,
+        "stock_id": "2368",
+        "sub_industry": "PCB",
+        "trust_net_lot": 3322,
+        "week_return_pct": -10.3,
+        "week_volume_lot": 58903
+      }
+    ],
+    "mainstream": [
+      {
+        "avg_turnover_100m": 6.281,
+        "close": 300.0,
+        "foreign_net_lot": 2198,
+        "industry": "電子零組件業",
+        "market": "TPEX",
+        "multifactor_score": 30.05,
+        "name": "倉和",
+        "start_close": 205.5,
+        "stock_id": "6538",
+        "sub_industry": "",
+        "trust_net_lot": 0,
+        "week_return_pct": 45.99,
+        "week_volume_lot": 14320
+      },
+      {
+        "avg_turnover_100m": 1.248,
+        "close": 68.8,
+        "foreign_net_lot": 1297,
+        "industry": "其他電子業",
+        "market": "TPEX",
+        "multifactor_score": -3.65,
+        "name": "匯鑽科",
+        "start_close": 53.6,
+        "stock_id": "8431",
+        "sub_industry": "",
+        "trust_net_lot": 0,
+        "week_return_pct": 28.36,
+        "week_volume_lot": 23226
+      },
+      {
+        "avg_turnover_100m": 4.696,
+        "close": 102.5,
+        "foreign_net_lot": 3489,
+        "industry": "半導體業",
+        "market": "TPEX",
+        "multifactor_score": 51.99,
+        "name": "晶宏",
+        "start_close": 82.3,
+        "stock_id": "3141",
+        "sub_industry": "",
+        "trust_net_lot": 0,
+        "week_return_pct": 24.54,
+        "week_volume_lot": 67691
+      },
+      {
+        "avg_turnover_100m": 13.736,
+        "close": 1820.0,
+        "foreign_net_lot": 160,
+        "industry": "綠能環保",
+        "market": "TWSE",
+        "multifactor_score": 52.72,
+        "name": "聯友金屬-創",
+        "start_close": 1505.0,
+        "stock_id": "7610",
+        "sub_industry": "",
+        "trust_net_lot": 0,
+        "week_return_pct": 20.93,
+        "week_volume_lot": 3060
+      },
+      {
+        "avg_turnover_100m": 40.887,
+        "close": 1485.0,
+        "foreign_net_lot": 6128,
+        "industry": "其他電子業",
+        "market": "TPEX",
+        "multifactor_score": 55.64,
+        "name": "雙鴻",
+        "start_close": 1250.0,
+        "stock_id": "3324",
+        "sub_industry": "散熱",
+        "trust_net_lot": 430,
+        "week_return_pct": 18.8,
+        "week_volume_lot": 32628
+      },
+      {
+        "avg_turnover_100m": 8.956,
+        "close": 632.0,
+        "foreign_net_lot": 641,
+        "industry": "電腦及週邊設備業",
+        "market": "TWSE",
+        "multifactor_score": 28.66,
+        "name": "永擎",
+        "start_close": 535.0,
+        "stock_id": "7711",
+        "sub_industry": "",
+        "trust_net_lot": 0,
+        "week_return_pct": 18.13,
+        "week_volume_lot": 10649
+      },
+      {
+        "avg_turnover_100m": 33.903,
+        "close": 211.0,
+        "foreign_net_lot": 11072,
+        "industry": "其他電子業",
+        "market": "TWSE",
+        "multifactor_score": 27.23,
+        "name": "盟立",
+        "start_close": 180.0,
+        "stock_id": "2464",
+        "sub_industry": "",
+        "trust_net_lot": 452,
+        "week_return_pct": 17.22,
+        "week_volume_lot": 125472
+      },
+      {
+        "avg_turnover_100m": 2.349,
+        "close": 107.5,
+        "foreign_net_lot": 1174,
+        "industry": "生技醫療業",
+        "market": "TPEX",
+        "multifactor_score": 24.16,
+        "name": "漢達",
+        "start_close": 92.9,
+        "stock_id": "6620",
+        "sub_industry": "",
+        "trust_net_lot": 0,
+        "week_return_pct": 15.72,
+        "week_volume_lot": 18562
+      },
+      {
+        "avg_turnover_100m": 2.327,
+        "close": 46.5,
+        "foreign_net_lot": 3024,
+        "industry": "半導體業",
+        "market": "TWSE",
+        "multifactor_score": 40.55,
+        "name": "聯傑",
+        "start_close": 40.5,
+        "stock_id": "3094",
+        "sub_industry": "",
+        "trust_net_lot": 0,
+        "week_return_pct": 14.81,
+        "week_volume_lot": 43058
+      },
+      {
+        "avg_turnover_100m": 14.628,
+        "close": 597.0,
+        "foreign_net_lot": 272,
+        "industry": "其他電子業",
+        "market": "TWSE",
+        "multifactor_score": 7.79,
+        "name": "汎銓",
+        "start_close": 520.0,
+        "stock_id": "6830",
+        "sub_industry": "",
+        "trust_net_lot": 12,
+        "week_return_pct": 14.81,
+        "week_volume_lot": 18475
+      },
+      {
+        "avg_turnover_100m": 363.133,
+        "close": 4415.0,
+        "foreign_net_lot": -468,
+        "industry": "半導體業",
+        "market": "TWSE",
+        "multifactor_score": 35.08,
+        "name": "聯發科",
+        "start_close": 3925.0,
+        "stock_id": "2454",
+        "sub_industry": "IC設計",
+        "trust_net_lot": 1314,
+        "week_return_pct": 12.48,
+        "week_volume_lot": 54283
+      },
+      {
+        "avg_turnover_100m": 3.271,
+        "close": 81.4,
+        "foreign_net_lot": 3711,
+        "industry": "半導體業",
+        "market": "TWSE",
+        "multifactor_score": -1.5,
+        "name": "威盛",
+        "start_close": 72.7,
+        "stock_id": "2388",
+        "sub_industry": "",
+        "trust_net_lot": 0,
+        "week_return_pct": 11.97,
+        "week_volume_lot": 29969
+      },
+      {
+        "avg_turnover_100m": 11.385,
+        "close": 237.0,
+        "foreign_net_lot": 6522,
+        "industry": "半導體業",
+        "market": "TWSE",
+        "multifactor_score": 45.02,
+        "name": "同欣電",
+        "start_close": 212.0,
+        "stock_id": "6271",
+        "sub_industry": "",
+        "trust_net_lot": -578,
+        "week_return_pct": 11.79,
+        "week_volume_lot": 39685
+      },
+      {
+        "avg_turnover_100m": 8.144,
+        "close": 206.0,
+        "foreign_net_lot": 2076,
+        "industry": "通信網路業",
+        "market": "TPEX",
+        "multifactor_score": 58.54,
+        "name": "光環",
+        "start_close": 185.0,
+        "stock_id": "3234",
+        "sub_industry": "",
+        "trust_net_lot": 372,
+        "week_return_pct": 11.35,
+        "week_volume_lot": 26095
+      },
+      {
+        "avg_turnover_100m": 99.986,
+        "close": 198.0,
+        "foreign_net_lot": 30392,
+        "industry": "電腦及週邊設備業",
+        "market": "TWSE",
+        "multifactor_score": 22.57,
+        "name": "緯創",
+        "start_close": 178.0,
+        "stock_id": "3231",
+        "sub_industry": "AI伺服器/組裝",
+        "trust_net_lot": 26919,
+        "week_return_pct": 11.24,
+        "week_volume_lot": 331138
+      },
+      {
+        "avg_turnover_100m": 2.48,
+        "close": 317.0,
+        "foreign_net_lot": 2168,
+        "industry": "電腦及週邊設備業",
+        "market": "TWSE",
+        "multifactor_score": 59.18,
+        "name": "AMAX-KY",
+        "start_close": 286.0,
+        "stock_id": "6933",
+        "sub_industry": "",
+        "trust_net_lot": 0,
+        "week_return_pct": 10.84,
+        "week_volume_lot": 9053
+      },
+      {
+        "avg_turnover_100m": 62.712,
+        "close": 528.0,
+        "foreign_net_lot": 8340,
+        "industry": "通信網路業",
+        "market": "TWSE",
+        "multifactor_score": 61.39,
+        "name": "全新",
+        "start_close": 477.0,
+        "stock_id": "2455",
+        "sub_industry": "",
+        "trust_net_lot": 4073,
+        "week_return_pct": 10.69,
+        "week_volume_lot": 139990
+      },
+      {
+        "avg_turnover_100m": 0.826,
+        "close": 56.8,
+        "foreign_net_lot": 1916,
+        "industry": "航運業",
+        "market": "TWSE",
+        "multifactor_score": 60.09,
+        "name": "遠雄港",
+        "start_close": 51.6,
+        "stock_id": "5607",
+        "sub_industry": "",
+        "trust_net_lot": -1,
+        "week_return_pct": 10.08,
+        "week_volume_lot": 8087
+      },
+      {
+        "avg_turnover_100m": 7.754,
+        "close": 238.0,
+        "foreign_net_lot": 1091,
+        "industry": "電機機械",
+        "market": "TWSE",
+        "multifactor_score": 61.77,
+        "name": "大銀微系統",
+        "start_close": 216.5,
+        "stock_id": "4576",
+        "sub_industry": "",
+        "trust_net_lot": 0,
+        "week_return_pct": 9.93,
+        "week_volume_lot": 24835
+      },
+      {
+        "avg_turnover_100m": 9.637,
+        "close": 663.0,
+        "foreign_net_lot": 2070,
+        "industry": "電腦及週邊設備業",
+        "market": "TPEX",
+        "multifactor_score": 60.44,
+        "name": "營邦",
+        "start_close": 604.0,
+        "stock_id": "3693",
+        "sub_industry": "",
+        "trust_net_lot": 0,
+        "week_return_pct": 9.77,
+        "week_volume_lot": 10529
+      }
+    ],
+    "speculative": [
+      {
+        "avg_turnover_100m": 5.838,
+        "close": 802.0,
+        "foreign_net_lot": 0,
+        "industry": "生技醫療業",
+        "market": "ESB",
+        "multifactor_score": -4.45,
+        "name": "捷立康",
+        "start_close": 520.0,
+        "stock_id": "7686",
+        "sub_industry": "",
+        "trust_net_lot": 0,
+        "week_return_pct": 54.23,
+        "week_volume_lot": 5145
+      },
+      {
+        "avg_turnover_100m": 17.702,
+        "close": 145.5,
+        "foreign_net_lot": 0,
+        "industry": "生技醫療業",
+        "market": "ESB",
+        "multifactor_score": -5.25,
+        "name": "仁新*",
+        "start_close": 95.6,
+        "stock_id": "6696",
+        "sub_industry": "",
+        "trust_net_lot": 0,
+        "week_return_pct": 52.2,
+        "week_volume_lot": 113292
+      },
+      {
+        "avg_turnover_100m": 0.044,
+        "close": 60.2,
+        "foreign_net_lot": 0,
+        "industry": "生技醫療業",
+        "market": "ESB",
+        "multifactor_score": 38.95,
+        "name": "元樟生技",
+        "start_close": 40.0,
+        "stock_id": "6864",
+        "sub_industry": "",
+        "trust_net_lot": 0,
+        "week_return_pct": 50.5,
+        "week_volume_lot": 308
+      },
+      {
+        "avg_turnover_100m": 0.964,
+        "close": 118.5,
+        "foreign_net_lot": 0,
+        "industry": "半導體業",
+        "market": "ESB",
+        "multifactor_score": 9.63,
+        "name": "勵威",
+        "start_close": 79.7,
+        "stock_id": "5246",
+        "sub_industry": "",
+        "trust_net_lot": 0,
+        "week_return_pct": 48.68,
+        "week_volume_lot": 6648
+      },
+      {
+        "avg_turnover_100m": 0.164,
+        "close": 18.55,
+        "foreign_net_lot": 0,
+        "industry": "生技醫療業",
+        "market": "ESB",
+        "multifactor_score": 13.12,
+        "name": "微邦",
+        "start_close": 13.5,
+        "stock_id": "3184",
+        "sub_industry": "",
+        "trust_net_lot": 0,
+        "week_return_pct": 37.41,
+        "week_volume_lot": 2533
+      },
+      {
+        "avg_turnover_100m": 0.052,
+        "close": 18.55,
+        "foreign_net_lot": 33,
+        "industry": "生技醫療業",
+        "market": "TPEX",
+        "multifactor_score": 33.31,
+        "name": "浩宇生醫",
+        "start_close": 14.15,
+        "stock_id": "6872",
+        "sub_industry": "",
+        "trust_net_lot": 0,
+        "week_return_pct": 31.1,
+        "week_volume_lot": 806
+      },
+      {
+        "avg_turnover_100m": 2.542,
+        "close": 461.5,
+        "foreign_net_lot": 0,
+        "industry": "電機機械",
+        "market": "ESB",
+        "multifactor_score": 14.7,
+        "name": "東佑達",
+        "start_close": 354.0,
+        "stock_id": "7942",
+        "sub_industry": "",
+        "trust_net_lot": 0,
+        "week_return_pct": 30.37,
+        "week_volume_lot": 4133
+      },
+      {
+        "avg_turnover_100m": 0.37,
+        "close": 52.8,
+        "foreign_net_lot": 0,
+        "industry": "半導體業",
+        "market": "ESB",
+        "multifactor_score": 37.53,
+        "name": "眾智",
+        "start_close": 40.9,
+        "stock_id": "6819",
+        "sub_industry": "",
+        "trust_net_lot": 0,
+        "week_return_pct": 29.1,
+        "week_volume_lot": 3139
+      },
+      {
+        "avg_turnover_100m": 2.926,
+        "close": 194.5,
+        "foreign_net_lot": 0,
+        "industry": "生技醫療業",
+        "market": "ESB",
+        "multifactor_score": 18.3,
+        "name": "泰合",
+        "start_close": 154.0,
+        "stock_id": "6467",
+        "sub_industry": "",
+        "trust_net_lot": 0,
+        "week_return_pct": 26.3,
+        "week_volume_lot": 11419
+      },
+      {
+        "avg_turnover_100m": 0.062,
+        "close": 55.0,
+        "foreign_net_lot": 0,
+        "industry": "光電業",
+        "market": "ESB",
+        "multifactor_score": 4.98,
+        "name": "龍翩",
+        "start_close": 44.35,
+        "stock_id": "5267",
+        "sub_industry": "",
+        "trust_net_lot": 0,
+        "week_return_pct": 24.01,
+        "week_volume_lot": 1402
+      }
+    ]
+  },
+  "market_flow": {
+    "foreign_futures_oi_change": 581,
+    "foreign_futures_oi_end": -82389,
+    "foreign_futures_oi_start": -82970,
+    "margin_balance_change_lot": 4,
+    "margin_balance_end_lot": 8634,
+    "margin_balance_start_lot": 8630,
+    "taiex_end": 46551.13,
+    "taiex_return_pct": 0.92,
+    "taiex_start": 46128.47
+  },
+  "news": {
+    "2388": [
+      {
+        "published_at": "2026-09-07 18:13:24",
+        "title": "【公告】威盛買回庫藏股執行完畢",
+        "url": "https://tw.stock.yahoo.com/news/%E5%85%AC%E5%91%8A-%E5%A8%81%E7%9B%9B%E8%B2%B7%E5%9B%9E%E5%BA%AB%E8%97%8F%E8%82%A1%E5%9F%B7%E8%A1%8C%E5%AE%8C%E7%95%A2-101324204.html"
+      },
+      {
+        "published_at": "2026-09-07 17:59:00",
+        "title": "威盛 公告本公司買回庫藏股執行完畢",
+        "url": "https://tw.stock.yahoo.com/news/%E5%A8%81%E7%9B%9B-%E5%85%AC%E5%91%8A%E6%9C%AC%E5%85%AC%E5%8F%B8%E8%B2%B7%E5%9B%9E%E5%BA%AB%E8%97%8F%E8%82%A1%E5%9F%B7%E8%A1%8C%E5%AE%8C%E7%95%A2-095900799.html"
+      },
+      {
+        "published_at": "2026-09-03 14:47:53",
+        "title": "【公告】威盛買回股份之⾦額達新台幣三億元以上",
+        "url": "https://tw.stock.yahoo.com/news/%E5%85%AC%E5%91%8A-%E5%A8%81%E7%9B%9B%E8%B2%B7%E5%9B%9E%E8%82%A1%E4%BB%BD%E4%B9%8B-%E9%A1%8D%E9%81%94%E6%96%B0%E5%8F%B0%E5%B9%A3%E4%B8%89%E5%84%84%E5%85%83%E4%BB%A5%E4%B8%8A-064753695.html"
+      }
+    ],
+    "2454": [
+      {
+        "published_at": "2026-09-11 18:09:00",
+        "title": "聯發科 代子公司MediaTek Singapore Pte Ltd依公開發行公司資金貸與及背書保證處理準則第二十二條第一項第二款、第三款公告",
+        "url": "https://tw.stock.yahoo.com/news/%E8%81%AF%E7%99%BC%E7%A7%91-%E4%BB%A3%E5%AD%90%E5%85%AC%E5%8F%B8mediatek-singapore-pte-ltd%E4%BE%9D%E5%85%AC%E9%96%8B%E7%99%BC%E8%A1%8C%E5%85%AC%E5%8F%B8%E8%B3%87%E9%87%91%E8%B2%B8%E8%88%87%E5%8F%8A%E8%83%8C%E6%9B%B8%E4%BF%9D%E8%AD%89%E8%99%95%E7%90%86%E6%BA%96%E5%89%87%E7%AC%AC%E4%BA%8C%E5%8D%81%E4%BA%8C%E6%A2%9D%E7%AC%AC-100900881.html"
+      },
+      {
+        "published_at": "2026-09-11 17:24:06",
+        "title": "AI財報榮景變現 台積電.聯發科豪發百億分紅",
+        "url": "https://tw.stock.yahoo.com/news/ai%E8%B2%A1%E5%A0%B1%E6%A6%AE%E6%99%AF%E8%AE%8A%E7%8F%BE-%E5%8F%B0%E7%A9%8D%E9%9B%BB-%E8%81%AF%E7%99%BC%E7%A7%91%E8%B1%AA%E7%99%BC%E7%99%BE%E5%84%84%E5%88%86%E7%B4%85-092406589.html"
+      },
+      {
+        "published_at": "2026-09-11 17:01:51",
+        "title": "全球前十大IC設計Q2營收年增73% AMD擠進前三名",
+        "url": "https://tw.stock.yahoo.com/news/%E5%85%A8%E7%90%83%E5%89%8D%E5%8D%81%E5%A4%A7ic%E8%A8%AD%E8%A8%88q2%E7%87%9F%E6%94%B6%E5%B9%B4%E5%A2%9E73-amd%E6%93%A0%E9%80%B2%E5%89%8D%E4%B8%89%E5%90%8D-090151097.html"
+      }
+    ],
+    "2455": [
+      {
+        "published_at": "2026-09-04 15:06:47",
+        "title": "【公告】全新可轉換公司債全新二(代號:24552)近期達公布注意交易資訊標準，故公告相關訊息，以利投資人區別瞭解",
+        "url": "https://tw.stock.yahoo.com/news/%E5%85%AC%E5%91%8A-%E5%85%A8%E6%96%B0%E5%8F%AF%E8%BD%89%E6%8F%9B%E5%85%AC%E5%8F%B8%E5%82%B5%E5%85%A8%E6%96%B0%E4%BA%8C-%E4%BB%A3%E8%99%9F-24552-%E8%BF%91%E6%9C%9F%E9%81%94%E5%85%AC%E5%B8%83%E6%B3%A8%E6%84%8F%E4%BA%A4%E6%98%93%E8%B3%87%E8%A8%8A%E6%A8%99%E6%BA%96-070647029.html"
+      },
+      {
+        "published_at": "2026-09-03 14:44:39",
+        "title": "【公告】全新 2026年8月合併營收4.71億元 年增71.16%",
+        "url": "https://tw.stock.yahoo.com/news/%E5%85%AC%E5%91%8A-%E5%85%A8%E6%96%B0-2026%E5%B9%B48%E6%9C%88%E5%90%88%E4%BD%B5%E7%87%9F%E6%94%B64-71%E5%84%84%E5%85%83-%E5%B9%B4%E5%A2%9E71-064439929.html"
+      },
+      {
+        "published_at": "2026-09-02 14:58:54",
+        "title": "【公告】全新可轉換公司債全新三(代號:24553)近期達公布注意交易資訊標準，故公告相關訊息，以利投資人區別瞭解",
+        "url": "https://tw.stock.yahoo.com/news/%E5%85%AC%E5%91%8A-%E5%85%A8%E6%96%B0%E5%8F%AF%E8%BD%89%E6%8F%9B%E5%85%AC%E5%8F%B8%E5%82%B5%E5%85%A8%E6%96%B0%E4%B8%89-%E4%BB%A3%E8%99%9F-24553-%E8%BF%91%E6%9C%9F%E9%81%94%E5%85%AC%E5%B8%83%E6%B3%A8%E6%84%8F%E4%BA%A4%E6%98%93%E8%B3%87%E8%A8%8A%E6%A8%99%E6%BA%96-065854929.html"
+      }
+    ],
+    "2464": [
+      {
+        "published_at": "2026-09-09 15:37:42",
+        "title": "【公告】盟立 2026年8月合併營收9.28億元 年增73.71%",
+        "url": "https://tw.stock.yahoo.com/news/%E5%85%AC%E5%91%8A-%E7%9B%9F%E7%AB%8B-2026%E5%B9%B48%E6%9C%88%E5%90%88%E4%BD%B5%E7%87%9F%E6%94%B69-28%E5%84%84%E5%85%83-%E5%B9%B4%E5%A2%9E73-073742408.html"
+      },
+      {
+        "published_at": "2026-09-08 15:15:57",
+        "title": "【公告】盟立國內第三次無擔保轉換公司債轉換價格調整",
+        "url": "https://tw.stock.yahoo.com/news/%E5%85%AC%E5%91%8A-%E7%9B%9F%E7%AB%8B%E5%9C%8B%E5%85%A7%E7%AC%AC%E4%B8%89%E6%AC%A1%E7%84%A1%E6%93%94%E4%BF%9D%E8%BD%89%E6%8F%9B%E5%85%AC%E5%8F%B8%E5%82%B5%E8%BD%89%E6%8F%9B%E5%83%B9%E6%A0%BC%E8%AA%BF%E6%95%B4-071557887.html"
+      },
+      {
+        "published_at": "2026-09-07 14:25:52",
+        "title": "【公告】盟立國內第三次無擔保轉換公司債轉換價格調整",
+        "url": "https://tw.stock.yahoo.com/news/%E5%85%AC%E5%91%8A-%E7%9B%9F%E7%AB%8B%E5%9C%8B%E5%85%A7%E7%AC%AC%E4%B8%89%E6%AC%A1%E7%84%A1%E6%93%94%E4%BF%9D%E8%BD%89%E6%8F%9B%E5%85%AC%E5%8F%B8%E5%82%B5%E8%BD%89%E6%8F%9B%E5%83%B9%E6%A0%BC%E8%AA%BF%E6%95%B4-062552880.html"
+      }
+    ],
+    "3094": [
+      {
+        "published_at": "2026-09-07 17:02:00",
+        "title": "【公告】聯傑 2026年8月合併營收2069.8萬元 年增30.21%",
+        "url": "https://tw.stock.yahoo.com/news/%E5%85%AC%E5%91%8A-%E8%81%AF%E5%82%91-2026%E5%B9%B48%E6%9C%88%E5%90%88%E4%BD%B5%E7%87%9F%E6%94%B62069-8%E8%90%AC%E5%85%83-%E5%B9%B4%E5%A2%9E30-090200486.html"
+      },
+      {
+        "published_at": "2026-08-07 13:54:26",
+        "title": "【公告】聯傑董事會通過115年第二季合併財務報告",
+        "url": "https://tw.stock.yahoo.com/news/%E5%85%AC%E5%91%8A-%E8%81%AF%E5%82%91%E8%91%A3%E4%BA%8B%E6%9C%83%E9%80%9A%E9%81%8E115%E5%B9%B4%E7%AC%AC%E4%BA%8C%E5%AD%A3%E5%90%88%E4%BD%B5%E8%B2%A1%E5%8B%99%E5%A0%B1%E5%91%8A-055426097.html"
+      },
+      {
+        "published_at": "2026-08-06 13:52:07",
+        "title": "【公告】聯傑 2026年7月合併營收2183.6萬元 年增32.13%",
+        "url": "https://tw.stock.yahoo.com/news/%E5%85%AC%E5%91%8A-%E8%81%AF%E5%82%91-2026%E5%B9%B47%E6%9C%88%E5%90%88%E4%BD%B5%E7%87%9F%E6%94%B62183-6%E8%90%AC%E5%85%83-%E5%B9%B4%E5%A2%9E32-055207872.html"
+      }
+    ],
+    "3141": [
+      {
+        "published_at": "2026-09-08 15:44:01",
+        "title": "【公告】晶宏有價證券近期多次達公布注意交易資訊標準，故公告相關訊息，以利投資人區別瞭解。",
+        "url": "https://tw.stock.yahoo.com/news/%E5%85%AC%E5%91%8A-%E6%99%B6%E5%AE%8F%E6%9C%89%E5%83%B9%E8%AD%89%E5%88%B8%E8%BF%91%E6%9C%9F%E5%A4%9A%E6%AC%A1%E9%81%94%E5%85%AC%E5%B8%83%E6%B3%A8%E6%84%8F%E4%BA%A4%E6%98%93%E8%B3%87%E8%A8%8A%E6%A8%99%E6%BA%96-%E6%95%85%E5%85%AC%E5%91%8A%E7%9B%B8%E9%97%9C%E8%A8%8A%E6%81%AF-%E4%BB%A5%E5%88%A9%E6%8A%95%E8%B3%87%E4%BA%BA%E5%8D%80%E5%88%A5%E7%9E%AD%E8%A7%A3-074401206.html"
+      },
+      {
+        "published_at": "2026-09-03 19:13:43",
+        "title": "【公告】晶宏 2026年8月合併營收2.42億元 年增79.77%",
+        "url": "https://tw.stock.yahoo.com/news/%E5%85%AC%E5%91%8A-%E6%99%B6%E5%AE%8F-2026%E5%B9%B48%E6%9C%88%E5%90%88%E4%BD%B5%E7%87%9F%E6%94%B62-42%E5%84%84%E5%85%83-%E5%B9%B4%E5%A2%9E79-111343105.html"
+      },
+      {
+        "published_at": "2026-09-02 19:52:36",
+        "title": "【公告】晶宏國內第五次無擔保轉換公司債轉換價格及轉換溢價率",
+        "url": "https://tw.stock.yahoo.com/news/%E5%85%AC%E5%91%8A-%E6%99%B6%E5%AE%8F%E5%9C%8B%E5%85%A7%E7%AC%AC%E4%BA%94%E6%AC%A1%E7%84%A1%E6%93%94%E4%BF%9D%E8%BD%89%E6%8F%9B%E5%85%AC%E5%8F%B8%E5%82%B5%E8%BD%89%E6%8F%9B%E5%83%B9%E6%A0%BC%E5%8F%8A%E8%BD%89%E6%8F%9B%E6%BA%A2%E5%83%B9%E7%8E%87-115236972.html"
+      }
+    ],
+    "3231": [
+      {
+        "published_at": "2026-09-11 15:44:00",
+        "title": "9/11上市投信賣超排行前20名",
+        "url": "https://tw.stock.yahoo.com/news/9-11%E4%B8%8A%E5%B8%82%E6%8A%95%E4%BF%A1%E8%B3%A3%E8%B6%85%E6%8E%92%E8%A1%8C%E5%89%8D20%E5%90%8D-074400130.html"
+      },
+      {
+        "published_at": "2026-09-11 13:23:40",
+        "title": "〈焦點股〉緯創無懼外資減碼逾3萬張 抗空力守紅盤",
+        "url": "https://tw.stock.yahoo.com/news/%E7%84%A6%E9%BB%9E%E8%82%A1-%E7%B7%AF%E5%89%B5%E7%84%A1%E6%87%BC%E5%A4%96%E8%B3%87%E6%B8%9B%E7%A2%BC%E9%80%BE3%E8%90%AC%E5%BC%B5-%E6%8A%97%E7%A9%BA%E5%8A%9B%E5%AE%88%E7%B4%85%E7%9B%A4-052340755.html"
+      },
+      {
+        "published_at": "2026-09-10 17:32:17",
+        "title": "【公告】智晶 2026年8月合併營收7761.5萬元 年增46.66%",
+        "url": "https://tw.stock.yahoo.com/news/%E5%85%AC%E5%91%8A-%E6%99%BA%E6%99%B6-2026%E5%B9%B48%E6%9C%88%E5%90%88%E4%BD%B5%E7%87%9F%E6%94%B67761-5%E8%90%AC%E5%85%83-%E5%B9%B4%E5%A2%9E46-093217161.html"
+      }
+    ],
+    "3234": [
+      {
+        "published_at": "2026-09-11 16:00:28",
+        "title": "【公告】光環115年現金增資股款催繳公告",
+        "url": "https://tw.stock.yahoo.com/news/%E5%85%AC%E5%91%8A-%E5%85%89%E7%92%B0115%E5%B9%B4%E7%8F%BE%E9%87%91%E5%A2%9E%E8%B3%87%E8%82%A1%E6%AC%BE%E5%82%AC%E7%B9%B3%E5%85%AC%E5%91%8A-080028315.html"
+      },
+      {
+        "published_at": "2026-09-07 16:22:29",
+        "title": "【公告】光環 2026年8月合併營收1.09億元 年增110.13%",
+        "url": "https://tw.stock.yahoo.com/news/%E5%85%AC%E5%91%8A-%E5%85%89%E7%92%B0-2026%E5%B9%B48%E6%9C%88%E5%90%88%E4%BD%B5%E7%87%9F%E6%94%B61-09%E5%84%84%E5%85%83-%E5%B9%B4%E5%A2%9E110-082229593.html"
+      },
+      {
+        "published_at": "2026-08-19 15:25:26",
+        "title": "【公告】光環115年現金增資認股基準日等相關事宜(補充公告發行價格)",
+        "url": "https://tw.stock.yahoo.com/news/%E5%85%AC%E5%91%8A-%E5%85%89%E7%92%B0115%E5%B9%B4%E7%8F%BE%E9%87%91%E5%A2%9E%E8%B3%87%E8%AA%8D%E8%82%A1%E5%9F%BA%E6%BA%96%E6%97%A5%E7%AD%89%E7%9B%B8%E9%97%9C%E4%BA%8B%E5%AE%9C-%E8%A3%9C%E5%85%85%E5%85%AC%E5%91%8A%E7%99%BC%E8%A1%8C%E5%83%B9%E6%A0%BC-072526429.html"
+      }
+    ],
+    "3324": [
+      {
+        "published_at": "2026-09-08 15:27:15",
+        "title": "雙鴻8月營收31.41億元年增67% 歷史第3高",
+        "url": "https://tw.stock.yahoo.com/news/%E9%9B%99%E9%B4%BB8%E6%9C%88%E7%87%9F%E6%94%B631-41%E5%84%84%E5%85%83%E5%B9%B4%E5%A2%9E67-%E6%AD%B7%E5%8F%B2%E7%AC%AC3%E9%AB%98-072715884.html"
+      },
+      {
+        "published_at": "2026-09-08 14:32:36",
+        "title": "【公告】雙鴻 2026年8月合併營收31.41億元 年增67.18%",
+        "url": "https://tw.stock.yahoo.com/news/%E5%85%AC%E5%91%8A-%E9%9B%99%E9%B4%BB-2026%E5%B9%B48%E6%9C%88%E5%90%88%E4%BD%B5%E7%87%9F%E6%94%B631-41%E5%84%84%E5%85%83-%E5%B9%B4%E5%A2%9E67-063236830.html"
+      },
+      {
+        "published_at": "2026-09-03 15:24:15",
+        "title": "雙鴻自結7月獲利年增1.2倍 單月每股賺6.47元",
+        "url": "https://tw.stock.yahoo.com/news/%E9%9B%99%E9%B4%BB%E8%87%AA%E7%B5%907%E6%9C%88%E7%8D%B2%E5%88%A9%E5%B9%B4%E5%A2%9E1-2%E5%80%8D-%E5%96%AE%E6%9C%88%E6%AF%8F%E8%82%A1%E8%B3%BA6-47%E5%85%83-072415394.html"
+      }
+    ],
+    "3693": [
+      {
+        "published_at": "2026-09-07 17:51:57",
+        "title": "【公告】營邦 2026年8月合併營收12.67億元 年增171.01%",
+        "url": "https://tw.stock.yahoo.com/news/%E5%85%AC%E5%91%8A-%E7%87%9F%E9%82%A6-2026%E5%B9%B48%E6%9C%88%E5%90%88%E4%BD%B5%E7%87%9F%E6%94%B612-67%E5%84%84%E5%85%83-%E5%B9%B4%E5%A2%9E171-095157160.html"
+      },
+      {
+        "published_at": "2026-08-12 17:35:54",
+        "title": "【公告】營邦董事會通過115年第2季合併財務報告",
+        "url": "https://tw.stock.yahoo.com/news/%E5%85%AC%E5%91%8A-%E7%87%9F%E9%82%A6%E8%91%A3%E4%BA%8B%E6%9C%83%E9%80%9A%E9%81%8E115%E5%B9%B4%E7%AC%AC2%E5%AD%A3%E5%90%88%E4%BD%B5%E8%B2%A1%E5%8B%99%E5%A0%B1%E5%91%8A-093554849.html"
+      },
+      {
+        "published_at": "2026-08-12 17:35:52",
+        "title": "【公告】營邦董事會決議除息基準日",
+        "url": "https://tw.stock.yahoo.com/news/%E5%85%AC%E5%91%8A-%E7%87%9F%E9%82%A6%E8%91%A3%E4%BA%8B%E6%9C%83%E6%B1%BA%E8%AD%B0%E9%99%A4%E6%81%AF%E5%9F%BA%E6%BA%96%E6%97%A5-093552217.html"
+      }
+    ],
+    "4576": [
+      {
+        "published_at": "2026-09-04 14:12:24",
+        "title": "【公告】大銀微系統 2026年8月合併營收4.27億元 年增98.05%",
+        "url": "https://tw.stock.yahoo.com/news/%E5%85%AC%E5%91%8A-%E5%A4%A7%E9%8A%80%E5%BE%AE%E7%B3%BB%E7%B5%B1-2026%E5%B9%B48%E6%9C%88%E5%90%88%E4%BD%B5%E7%87%9F%E6%94%B64-27%E5%84%84%E5%85%83-%E5%B9%B4%E5%A2%9E98-061224429.html"
+      },
+      {
+        "published_at": "2026-09-02 12:44:08",
+        "title": "大銀微系統：矽光子檢測設備放量 能見度到明年第2季",
+        "url": "https://tw.stock.yahoo.com/news/%E5%A4%A7%E9%8A%80%E5%BE%AE%E7%B3%BB%E7%B5%B1-%E7%9F%BD%E5%85%89%E5%AD%90%E6%AA%A2%E6%B8%AC%E8%A8%AD%E5%82%99%E6%94%BE%E9%87%8F-%E8%83%BD%E8%A6%8B%E5%BA%A6%E5%88%B0%E6%98%8E%E5%B9%B4%E7%AC%AC2%E5%AD%A3-044408723.html"
+      },
+      {
+        "published_at": "2026-08-06 14:23:02",
+        "title": "【公告】大銀微系統 2026年7月合併營收3.67億元 年增60.14%",
+        "url": "https://tw.stock.yahoo.com/news/%E5%85%AC%E5%91%8A-%E5%A4%A7%E9%8A%80%E5%BE%AE%E7%B3%BB%E7%B5%B1-2026%E5%B9%B47%E6%9C%88%E5%90%88%E4%BD%B5%E7%87%9F%E6%94%B63-67%E5%84%84%E5%85%83-%E5%B9%B4%E5%A2%9E60-062302997.html"
+      }
+    ],
+    "5607": [
+      {
+        "published_at": "2026-09-09 15:42:48",
+        "title": "【公告】遠雄港 2026年8月合併營收4.86億元 年增33.5%",
+        "url": "https://tw.stock.yahoo.com/news/%E5%85%AC%E5%91%8A-%E9%81%A0%E9%9B%84%E6%B8%AF-2026%E5%B9%B48%E6%9C%88%E5%90%88%E4%BD%B5%E7%87%9F%E6%94%B64-86%E5%84%84%E5%85%83-%E5%B9%B4%E5%A2%9E33-074248949.html"
+      },
+      {
+        "published_at": "2026-08-26 15:34:30",
+        "title": "【公告】遠雄港訂於115年08月27日發放現金股利，如因颱風影響部分地區之現金股利發放將順延至下一個營業日",
+        "url": "https://tw.stock.yahoo.com/news/%E5%85%AC%E5%91%8A-%E9%81%A0%E9%9B%84%E6%B8%AF%E8%A8%82%E6%96%BC115%E5%B9%B408%E6%9C%8827%E6%97%A5%E7%99%BC%E6%94%BE%E7%8F%BE%E9%87%91%E8%82%A1%E5%88%A9-%E5%A6%82%E5%9B%A0%E9%A2%B1%E9%A2%A8%E5%BD%B1%E9%9F%BF%E9%83%A8%E5%88%86%E5%9C%B0%E5%8D%80%E4%B9%8B%E7%8F%BE%E9%87%91%E8%82%A1%E5%88%A9%E7%99%BC%E6%94%BE%E5%B0%87%E9%A0%86%E5%BB%B6%E8%87%B3%E4%B8%8B-%E5%80%8B%E7%87%9F%E6%A5%AD%E6%97%A5-073430487.html"
+      },
+      {
+        "published_at": "2026-08-12 13:55:10",
+        "title": "【公告】遠雄港董事會通過115年第二季合併財務報告",
+        "url": "https://tw.stock.yahoo.com/news/%E5%85%AC%E5%91%8A-%E9%81%A0%E9%9B%84%E6%B8%AF%E8%91%A3%E4%BA%8B%E6%9C%83%E9%80%9A%E9%81%8E115%E5%B9%B4%E7%AC%AC%E4%BA%8C%E5%AD%A3%E5%90%88%E4%BD%B5%E8%B2%A1%E5%8B%99%E5%A0%B1%E5%91%8A-055510918.html"
+      }
+    ],
+    "6271": [
+      {
+        "published_at": "2026-09-10 15:02:46",
+        "title": "【公告】同欣電代子公司TONG HSING ELECTRONICS PHILS. INC.公告董事會決議辦理現金增資相關事宜",
+        "url": "https://tw.stock.yahoo.com/news/%E5%85%AC%E5%91%8A-%E5%90%8C%E6%AC%A3%E9%9B%BB%E4%BB%A3%E5%AD%90%E5%85%AC%E5%8F%B8tong-hsing-electronics-phils-070246099.html"
+      },
+      {
+        "published_at": "2026-09-09 14:42:07",
+        "title": "【公告】民國115年度8月份同欣電合併營收淨額",
+        "url": "https://tw.stock.yahoo.com/news/%E5%85%AC%E5%91%8A-%E6%B0%91%E5%9C%8B115%E5%B9%B4%E5%BA%A68%E6%9C%88%E4%BB%BD%E5%90%8C%E6%AC%A3%E9%9B%BB%E5%90%88%E4%BD%B5%E7%87%9F%E6%94%B6%E6%B7%A8%E9%A1%8D-064207056.html"
+      },
+      {
+        "published_at": "2026-09-09 14:23:34",
+        "title": "【公告】同欣電 2026年8月合併營收11.74億元 年增23.09%",
+        "url": "https://tw.stock.yahoo.com/news/%E5%85%AC%E5%91%8A-%E5%90%8C%E6%AC%A3%E9%9B%BB-2026%E5%B9%B48%E6%9C%88%E5%90%88%E4%BD%B5%E7%87%9F%E6%94%B611-74%E5%84%84%E5%85%83-%E5%B9%B4%E5%A2%9E23-062334799.html"
+      }
+    ],
+    "6538": [
+      {
+        "published_at": "2026-09-09 15:25:43",
+        "title": "【公告】倉和辦理庫藏股註銷暨可轉換公司債轉換普通股變更登記完成",
+        "url": "https://tw.stock.yahoo.com/news/%E5%85%AC%E5%91%8A-%E5%80%89%E5%92%8C%E8%BE%A6%E7%90%86%E5%BA%AB%E8%97%8F%E8%82%A1%E8%A8%BB%E9%8A%B7%E6%9A%A8%E5%8F%AF%E8%BD%89%E6%8F%9B%E5%85%AC%E5%8F%B8%E5%82%B5%E8%BD%89%E6%8F%9B%E6%99%AE%E9%80%9A%E8%82%A1%E8%AE%8A%E6%9B%B4%E7%99%BB%E8%A8%98%E5%AE%8C%E6%88%90-072543982.html"
+      },
+      {
+        "published_at": "2026-09-08 15:24:31",
+        "title": "【公告】倉和有價證券近期多次達公布注意交易資訊標準，故公告相關訊息，以利投資人區別瞭解",
+        "url": "https://tw.stock.yahoo.com/news/%E5%85%AC%E5%91%8A-%E5%80%89%E5%92%8C%E6%9C%89%E5%83%B9%E8%AD%89%E5%88%B8%E8%BF%91%E6%9C%9F%E5%A4%9A%E6%AC%A1%E9%81%94%E5%85%AC%E5%B8%83%E6%B3%A8%E6%84%8F%E4%BA%A4%E6%98%93%E8%B3%87%E8%A8%8A%E6%A8%99%E6%BA%96-%E6%95%85%E5%85%AC%E5%91%8A%E7%9B%B8%E9%97%9C%E8%A8%8A%E6%81%AF-%E4%BB%A5%E5%88%A9%E6%8A%95%E8%B3%87%E4%BA%BA%E5%8D%80%E5%88%A5%E7%9E%AD%E8%A7%A3-072431303.html"
+      },
+      {
+        "published_at": "2026-09-04 15:57:52",
+        "title": "【公告】倉和可轉換公司債倉和一(代號：65381)達公布注意交易資訊標準，故公告相關訊息，以利投資人區別瞭解。",
+        "url": "https://tw.stock.yahoo.com/news/%E5%85%AC%E5%91%8A-%E5%80%89%E5%92%8C%E5%8F%AF%E8%BD%89%E6%8F%9B%E5%85%AC%E5%8F%B8%E5%82%B5%E5%80%89%E5%92%8C-%E4%BB%A3%E8%99%9F-65381-%E9%81%94%E5%85%AC%E5%B8%83%E6%B3%A8%E6%84%8F%E4%BA%A4%E6%98%93%E8%B3%87%E8%A8%8A%E6%A8%99%E6%BA%96-075752054.html"
+      }
+    ],
+    "6620": [
+      {
+        "published_at": "2026-09-10 17:22:45",
+        "title": "【公告】漢達 2026年8月合併營收6669.5萬元 年增-79.92%",
+        "url": "https://tw.stock.yahoo.com/news/%E5%85%AC%E5%91%8A-%E6%BC%A2%E9%81%94-2026%E5%B9%B48%E6%9C%88%E5%90%88%E4%BD%B5%E7%87%9F%E6%94%B66669-5%E8%90%AC%E5%85%83-%E5%B9%B4%E5%A2%9E-092245581.html"
+      },
+      {
+        "published_at": "2026-09-10 17:17:18",
+        "title": "【公告】漢達(補充公告115/08/06重大訊息)公告新任商務長",
+        "url": "https://tw.stock.yahoo.com/news/%E5%85%AC%E5%91%8A-%E6%BC%A2%E9%81%94-%E8%A3%9C%E5%85%85%E5%85%AC%E5%91%8A115-08-06%E9%87%8D%E5%A4%A7%E8%A8%8A%E6%81%AF-091718290.html"
+      },
+      {
+        "published_at": "2026-09-09 15:06:55",
+        "title": "【公告】漢達因近期股價價格異常，應櫃買中心要求公布相關資訊，俾便投資人暸解",
+        "url": "https://tw.stock.yahoo.com/news/%E5%85%AC%E5%91%8A-%E6%BC%A2%E9%81%94%E5%9B%A0%E8%BF%91%E6%9C%9F%E8%82%A1%E5%83%B9%E5%83%B9%E6%A0%BC%E7%95%B0%E5%B8%B8-%E6%87%89%E6%AB%83%E8%B2%B7%E4%B8%AD%E5%BF%83%E8%A6%81%E6%B1%82%E5%85%AC%E5%B8%83%E7%9B%B8%E9%97%9C%E8%B3%87%E8%A8%8A-%E4%BF%BE%E4%BE%BF%E6%8A%95%E8%B3%87%E4%BA%BA%E6%9A%B8%E8%A7%A3-070655624.html"
+      }
+    ],
+    "6933": [
+      {
+        "published_at": "2026-09-09 14:42:40",
+        "title": "【公告】AMAX-KY 2026年8月合併營收13.57億元 年增191.26%",
+        "url": "https://tw.stock.yahoo.com/news/%E5%85%AC%E5%91%8A-amax-ky-2026%E5%B9%B48%E6%9C%88%E5%90%88%E4%BD%B5%E7%87%9F%E6%94%B613-57%E5%84%84%E5%85%83-064240494.html"
+      },
+      {
+        "published_at": "2026-09-08 16:02:45",
+        "title": "【公告】AMAX-KY受邀參加中信證券舉辦之法人說明會",
+        "url": "https://tw.stock.yahoo.com/news/%E5%85%AC%E5%91%8A-amax-ky%E5%8F%97%E9%82%80%E5%8F%83%E5%8A%A0%E4%B8%AD%E4%BF%A1%E8%AD%89%E5%88%B8%E8%88%89%E8%BE%A6%E4%B9%8B%E6%B3%95%E4%BA%BA%E8%AA%AA%E6%98%8E%E6%9C%83-080245309.html"
+      },
+      {
+        "published_at": "2026-09-02 14:52:29",
+        "title": "【公告】係因AMAX-KY有價證券於集中交易市場達公布注意交易資訊標準，故公布相關財務業務等重大訊息，以利投資人區別瞭解。",
+        "url": "https://tw.stock.yahoo.com/news/%E5%85%AC%E5%91%8A-%E4%BF%82%E5%9B%A0amax-ky%E6%9C%89%E5%83%B9%E8%AD%89%E5%88%B8%E6%96%BC%E9%9B%86%E4%B8%AD%E4%BA%A4%E6%98%93%E5%B8%82%E5%A0%B4%E9%81%94%E5%85%AC%E5%B8%83%E6%B3%A8%E6%84%8F%E4%BA%A4%E6%98%93%E8%B3%87%E8%A8%8A%E6%A8%99%E6%BA%96-%E6%95%85%E5%85%AC%E5%B8%83%E7%9B%B8%E9%97%9C%E8%B2%A1%E5%8B%99%E6%A5%AD%E5%8B%99%E7%AD%89%E9%87%8D%E5%A4%A7%E8%A8%8A%E6%81%AF-%E4%BB%A5%E5%88%A9%E6%8A%95%E8%B3%87%E4%BA%BA%E5%8D%80%E5%88%A5%E7%9E%AD%E8%A7%A3-065229887.html"
+      }
+    ],
+    "7610": [
+      {
+        "published_at": "2026-09-09 16:24:38",
+        "title": "【公告】聯友金屬-創 2026年8月合併營收11.34億元 年增852.63%",
+        "url": "https://tw.stock.yahoo.com/news/%E5%85%AC%E5%91%8A-%E8%81%AF%E5%8F%8B%E9%87%91%E5%B1%AC-%E5%89%B5-2026%E5%B9%B48%E6%9C%88%E5%90%88%E4%BD%B5%E7%87%9F%E6%94%B611-34%E5%84%84%E5%85%83-082438444.html"
+      },
+      {
+        "published_at": "2026-09-08 15:36:32",
+        "title": "【公告】聯友金屬-創可轉換公司聯友金屬一創(代號:76101)近期達公布注意交易資訊標準，故公告相關訊息，以利投資人區別瞭解",
+        "url": "https://tw.stock.yahoo.com/news/%E5%85%AC%E5%91%8A-%E8%81%AF%E5%8F%8B%E9%87%91%E5%B1%AC-%E5%89%B5%E5%8F%AF%E8%BD%89%E6%8F%9B%E5%85%AC%E5%8F%B8%E8%81%AF%E5%8F%8B%E9%87%91%E5%B1%AC-%E5%89%B5-%E4%BB%A3%E8%99%9F-073632670.html"
+      },
+      {
+        "published_at": "2026-09-01 15:12:26",
+        "title": "【公告】聯友金屬-創代重要子公司聯友先進材料股份有限公司公告現金增資收足股款暨增資基準日",
+        "url": "https://tw.stock.yahoo.com/news/%E5%85%AC%E5%91%8A-%E8%81%AF%E5%8F%8B%E9%87%91%E5%B1%AC-%E5%89%B5%E4%BB%A3%E9%87%8D%E8%A6%81%E5%AD%90%E5%85%AC%E5%8F%B8%E8%81%AF%E5%8F%8B%E5%85%88%E9%80%B2%E6%9D%90%E6%96%99%E8%82%A1%E4%BB%BD%E6%9C%89%E9%99%90%E5%85%AC%E5%8F%B8%E5%85%AC%E5%91%8A%E7%8F%BE%E9%87%91%E5%A2%9E%E8%B3%87%E6%94%B6%E8%B6%B3%E8%82%A1%E6%AC%BE%E6%9A%A8%E5%A2%9E%E8%B3%87%E5%9F%BA%E6%BA%96%E6%97%A5-071226459.html"
+      }
+    ],
+    "7711": [
+      {
+        "published_at": "2026-09-02 10:14:00",
+        "title": "永擎B300/GB300放量，Vera平台明年挹注營運",
+        "url": "https://tw.stock.yahoo.com/news/%E6%B0%B8%E6%93%8Eb300-gb300%E6%94%BE%E9%87%8F-vera%E5%B9%B3%E5%8F%B0%E6%98%8E%E5%B9%B4%E6%8C%B9%E6%B3%A8%E7%87%9F%E9%81%8B-021400164.html"
+      },
+      {
+        "published_at": "2026-09-01 15:36:03",
+        "title": "【公告】永擎受群益金鼎證券股份有限公司邀請召開法人說明會。",
+        "url": "https://tw.stock.yahoo.com/news/%E5%85%AC%E5%91%8A-%E6%B0%B8%E6%93%8E%E5%8F%97%E7%BE%A4%E7%9B%8A%E9%87%91%E9%BC%8E%E8%AD%89%E5%88%B8%E8%82%A1%E4%BB%BD%E6%9C%89%E9%99%90%E5%85%AC%E5%8F%B8%E9%82%80%E8%AB%8B%E5%8F%AC%E9%96%8B%E6%B3%95%E4%BA%BA%E8%AA%AA%E6%98%8E%E6%9C%83-073603199.html"
+      },
+      {
+        "published_at": "2026-08-11 15:24:46",
+        "title": "【公告】係因永擎有價證券於集中交易市場達公布注意交易資訊標準，故公布相關財務業務等重大訊息，以利投資人區別瞭解",
+        "url": "https://tw.stock.yahoo.com/news/%E5%85%AC%E5%91%8A-%E4%BF%82%E5%9B%A0%E6%B0%B8%E6%93%8E%E6%9C%89%E5%83%B9%E8%AD%89%E5%88%B8%E6%96%BC%E9%9B%86%E4%B8%AD%E4%BA%A4%E6%98%93%E5%B8%82%E5%A0%B4%E9%81%94%E5%85%AC%E5%B8%83%E6%B3%A8%E6%84%8F%E4%BA%A4%E6%98%93%E8%B3%87%E8%A8%8A%E6%A8%99%E6%BA%96-%E6%95%85%E5%85%AC%E5%B8%83%E7%9B%B8%E9%97%9C%E8%B2%A1%E5%8B%99%E6%A5%AD%E5%8B%99%E7%AD%89%E9%87%8D%E5%A4%A7%E8%A8%8A%E6%81%AF-%E4%BB%A5%E5%88%A9%E6%8A%95%E8%B3%87%E4%BA%BA%E5%8D%80%E5%88%A5%E7%9E%AD%E8%A7%A3-072446802.html"
+      }
+    ],
+    "8431": [
+      {
+        "published_at": "2026-08-27 17:53:17",
+        "title": "【公告】匯鑽科辦理第二次無擔保轉換公司債經中國證監會公示予以備案",
+        "url": "https://tw.stock.yahoo.com/news/%E5%85%AC%E5%91%8A-%E5%8C%AF%E9%91%BD%E7%A7%91%E8%BE%A6%E7%90%86%E7%AC%AC%E4%BA%8C%E6%AC%A1%E7%84%A1%E6%93%94%E4%BF%9D%E8%BD%89%E6%8F%9B%E5%85%AC%E5%8F%B8%E5%82%B5%E7%B6%93%E4%B8%AD%E5%9C%8B%E8%AD%89%E7%9B%A3%E6%9C%83%E5%85%AC%E7%A4%BA%E4%BA%88%E4%BB%A5%E5%82%99%E6%A1%88-095317087.html"
+      },
+      {
+        "published_at": "2026-08-13 17:13:32",
+        "title": "【公告】匯鑽科董事會通過115年第二季合併財務報告",
+        "url": "https://tw.stock.yahoo.com/news/%E5%85%AC%E5%91%8A-%E5%8C%AF%E9%91%BD%E7%A7%91%E8%91%A3%E4%BA%8B%E6%9C%83%E9%80%9A%E9%81%8E115%E5%B9%B4%E7%AC%AC%E4%BA%8C%E5%AD%A3%E5%90%88%E4%BD%B5%E8%B2%A1%E5%8B%99%E5%A0%B1%E5%91%8A-091332443.html"
+      },
+      {
+        "published_at": "2026-08-11 20:10:16",
+        "title": "【公告】(更正)公告匯鑽科115年第二季合併財務報告董事會預計召開日期",
+        "url": "https://tw.stock.yahoo.com/news/%E5%85%AC%E5%91%8A-%E6%9B%B4%E6%AD%A3-%E5%85%AC%E5%91%8A%E5%8C%AF%E9%91%BD%E7%A7%91115%E5%B9%B4%E7%AC%AC%E4%BA%8C%E5%AD%A3%E5%90%88%E4%BD%B5%E8%B2%A1%E5%8B%99%E5%A0%B1%E5%91%8A%E8%91%A3%E4%BA%8B%E6%9C%83%E9%A0%90%E8%A8%88%E5%8F%AC%E9%96%8B%E6%97%A5%E6%9C%9F-121016741.html"
+      }
+    ]
+  },
+  "next_week_end": "2026-09-13",
+  "next_week_start": "2026-09-07",
+  "sector_flows": {
+    "inflow": [
+      {
+        "avg_return_pct": 5.78,
+        "industry": "金融保險業",
+        "inst_net_lot": 599307,
+        "is_sub": true,
+        "member_count": 12,
+        "name": "金控",
+        "up_count": 12,
+        "up_ratio_pct": 100.0
+      },
+      {
+        "avg_return_pct": 2.53,
+        "industry": "金融保險業",
+        "inst_net_lot": 209066,
+        "is_sub": false,
+        "member_count": 33,
+        "name": "金融保險業",
+        "up_count": 27,
+        "up_ratio_pct": 81.8
+      },
+      {
+        "avg_return_pct": 3.58,
+        "industry": "電腦及週邊設備業",
+        "inst_net_lot": 186909,
+        "is_sub": true,
+        "member_count": 7,
+        "name": "AI伺服器/組裝",
+        "up_count": 7,
+        "up_ratio_pct": 100.0
+      },
+      {
+        "avg_return_pct": -2.28,
+        "industry": "塑膠工業",
+        "inst_net_lot": 129242,
+        "is_sub": false,
+        "member_count": 25,
+        "name": "塑膠工業",
+        "up_count": 4,
+        "up_ratio_pct": 16.0
+      },
+      {
+        "avg_return_pct": -1.75,
+        "industry": "光電業",
+        "inst_net_lot": 50203,
+        "is_sub": true,
+        "member_count": 3,
+        "name": "面板",
+        "up_count": 1,
+        "up_ratio_pct": 33.3
+      },
+      {
+        "avg_return_pct": 0.55,
+        "industry": "通信網路業",
+        "inst_net_lot": 43467,
+        "is_sub": false,
+        "member_count": 91,
+        "name": "通信網路業",
+        "up_count": 42,
+        "up_ratio_pct": 46.2
+      },
+      {
+        "avg_return_pct": 1.02,
+        "industry": "其他電子業",
+        "inst_net_lot": 23162,
+        "is_sub": false,
+        "member_count": 104,
+        "name": "其他電子業",
+        "up_count": 52,
+        "up_ratio_pct": 50.0
+      },
+      {
+        "avg_return_pct": -1.43,
+        "industry": "電腦及週邊設備業",
+        "inst_net_lot": 20909,
+        "is_sub": false,
+        "member_count": 110,
+        "name": "電腦及週邊設備業",
+        "up_count": 49,
+        "up_ratio_pct": 44.5
+      }
+    ],
+    "outflow": [
+      {
+        "avg_return_pct": -5.42,
+        "industry": "半導體業",
+        "inst_net_lot": -161242,
+        "is_sub": true,
+        "member_count": 4,
+        "name": "記憶體",
+        "up_count": 0,
+        "up_ratio_pct": 0.0
+      },
+      {
+        "avg_return_pct": -1.54,
+        "industry": "半導體業",
+        "inst_net_lot": -89514,
+        "is_sub": true,
+        "member_count": 4,
+        "name": "晶圓代工",
+        "up_count": 2,
+        "up_ratio_pct": 50.0
+      },
+      {
+        "avg_return_pct": 1.62,
+        "industry": "半導體業",
+        "inst_net_lot": -65894,
+        "is_sub": false,
+        "member_count": 213,
+        "name": "半導體業",
+        "up_count": 114,
+        "up_ratio_pct": 53.5
+      },
+      {
+        "avg_return_pct": -0.32,
+        "industry": "生技醫療業",
+        "inst_net_lot": -52536,
+        "is_sub": false,
+        "member_count": 236,
+        "name": "生技醫療業",
+        "up_count": 80,
+        "up_ratio_pct": 33.9
+      },
+      {
+        "avg_return_pct": 0.72,
+        "industry": "半導體業",
+        "inst_net_lot": -46586,
+        "is_sub": true,
+        "member_count": 4,
+        "name": "封測",
+        "up_count": 3,
+        "up_ratio_pct": 75.0
+      },
+      {
+        "avg_return_pct": -0.31,
+        "industry": "光電業",
+        "inst_net_lot": -43481,
+        "is_sub": false,
+        "member_count": 125,
+        "name": "光電業",
+        "up_count": 48,
+        "up_ratio_pct": 38.4
+      },
+      {
+        "avg_return_pct": -2.65,
+        "industry": "電子通路業",
+        "inst_net_lot": -34484,
+        "is_sub": false,
+        "member_count": 40,
+        "name": "電子通路業",
+        "up_count": 20,
+        "up_ratio_pct": 50.0
+      },
+      {
+        "avg_return_pct": -0.4,
+        "industry": "電子零組件業",
+        "inst_net_lot": -31320,
+        "is_sub": false,
+        "member_count": 200,
+        "name": "電子零組件業",
+        "up_count": 77,
+        "up_ratio_pct": 38.5
+      }
+    ]
+  },
+  "state": "ready",
+  "stock_count": 2272,
+  "trading_day_count": 5,
+  "trust_top": [
+    {
+      "avg_turnover_100m": 99.986,
+      "close": 198.0,
+      "foreign_net_lot": 30392,
+      "industry": "電腦及週邊設備業",
+      "market": "TWSE",
+      "multifactor_score": 22.57,
+      "name": "緯創",
+      "start_close": 178.0,
+      "stock_id": "3231",
+      "sub_industry": "AI伺服器/組裝",
+      "trust_net_lot": 26919,
+      "week_return_pct": 11.24,
+      "week_volume_lot": 331138
+    },
+    {
+      "avg_turnover_100m": 24.717,
+      "close": 41.5,
+      "foreign_net_lot": 62965,
+      "industry": "金融保險業",
+      "market": "TWSE",
+      "multifactor_score": 84.05,
+      "name": "台新新光金",
+      "start_close": 38.55,
+      "stock_id": "2887",
+      "sub_industry": "金控",
+      "trust_net_lot": 22073,
+      "week_return_pct": 7.65,
+      "week_volume_lot": 489614
+    },
+    {
+      "avg_turnover_100m": 21.323,
+      "close": 68.4,
+      "foreign_net_lot": 14927,
+      "industry": "金融保險業",
+      "market": "TWSE",
+      "multifactor_score": 42.93,
+      "name": "中信金",
+      "start_close": 64.7,
+      "stock_id": "2891",
+      "sub_industry": "金控",
+      "trust_net_lot": 21701,
+      "week_return_pct": 5.72,
+      "week_volume_lot": 193303
+    },
+    {
+      "avg_turnover_100m": 21.026,
+      "close": 43.55,
+      "foreign_net_lot": 27418,
+      "industry": "金融保險業",
+      "market": "TWSE",
+      "multifactor_score": 68.77,
+      "name": "玉山金",
+      "start_close": 39.75,
+      "stock_id": "2884",
+      "sub_industry": "金控",
+      "trust_net_lot": 17232,
+      "week_return_pct": 9.56,
+      "week_volume_lot": 321371
+    },
+    {
+      "avg_turnover_100m": 24.849,
+      "close": 115.0,
+      "foreign_net_lot": 3018,
+      "industry": "金融保險業",
+      "market": "TWSE",
+      "multifactor_score": 43.83,
+      "name": "國泰金",
+      "start_close": 110.5,
+      "stock_id": "2882",
+      "sub_industry": "金控",
+      "trust_net_lot": 14016,
+      "week_return_pct": 4.07,
+      "week_volume_lot": 164548
+    },
+    {
+      "avg_turnover_100m": 3.987,
+      "close": 48.55,
+      "foreign_net_lot": -2905,
+      "industry": "建材營造業",
+      "market": "TWSE",
+      "multifactor_score": 107.4,
+      "name": "興富發",
+      "start_close": 46.65,
+      "stock_id": "2542",
+      "sub_industry": "",
+      "trust_net_lot": 11625,
+      "week_return_pct": 4.07,
+      "week_volume_lot": 35229
+    },
+    {
+      "avg_turnover_100m": 7.866,
+      "close": 50.2,
+      "foreign_net_lot": -5335,
+      "industry": "鋼鐵工業",
+      "market": "TWSE",
+      "multifactor_score": 73.46,
+      "name": "大成鋼",
+      "start_close": 48.8,
+      "stock_id": "2027",
+      "sub_industry": "",
+      "trust_net_lot": 11300,
+      "week_return_pct": 2.87,
+      "week_volume_lot": 65258
+    },
+    {
+      "avg_turnover_100m": 8.691,
+      "close": 42.5,
+      "foreign_net_lot": 7797,
+      "industry": "航運業",
+      "market": "TWSE",
+      "multifactor_score": 69.22,
+      "name": "長榮航",
+      "start_close": 42.0,
+      "stock_id": "2618",
+      "sub_industry": "航空",
+      "trust_net_lot": 10933,
+      "week_return_pct": 1.19,
+      "week_volume_lot": 98692
+    },
+    {
+      "avg_turnover_100m": 5.748,
+      "close": 26.6,
+      "foreign_net_lot": 9412,
+      "industry": "金融保險業",
+      "market": "TWSE",
+      "multifactor_score": 82.93,
+      "name": "彰銀",
+      "start_close": 25.15,
+      "stock_id": "2801",
+      "sub_industry": "",
+      "trust_net_lot": 10907,
+      "week_return_pct": 5.77,
+      "week_volume_lot": 155036
+    },
+    {
+      "avg_turnover_100m": 10.753,
+      "close": 42.85,
+      "foreign_net_lot": 38145,
+      "industry": "金融保險業",
+      "market": "TWSE",
+      "multifactor_score": 89.54,
+      "name": "永豐金",
+      "start_close": 41.1,
+      "stock_id": "2890",
+      "sub_industry": "金控",
+      "trust_net_lot": 10840,
+      "week_return_pct": 4.26,
+      "week_volume_lot": 167130
+    },
+    {
+      "avg_turnover_100m": 210.021,
+      "close": 225.5,
+      "foreign_net_lot": -9236,
+      "industry": "塑膠工業",
+      "market": "TWSE",
+      "multifactor_score": 54.27,
+      "name": "南亞",
+      "start_close": 242.5,
+      "stock_id": "1303",
+      "sub_industry": "",
+      "trust_net_lot": 8665,
+      "week_return_pct": -7.01,
+      "week_volume_lot": 602626
+    },
+    {
+      "avg_turnover_100m": 218.556,
+      "close": 130.0,
+      "foreign_net_lot": -43201,
+      "industry": "半導體業",
+      "market": "TWSE",
+      "multifactor_score": 51.55,
+      "name": "聯電",
+      "start_close": 129.0,
+      "stock_id": "2303",
+      "sub_industry": "晶圓代工",
+      "trust_net_lot": 8416,
+      "week_return_pct": 0.78,
+      "week_volume_lot": 859737
+    },
+    {
+      "avg_turnover_100m": 81.18,
+      "close": 249.5,
+      "foreign_net_lot": 6302,
+      "industry": "電子零組件業",
+      "market": "TWSE",
+      "multifactor_score": 22.9,
+      "name": "華通",
+      "start_close": 248.5,
+      "stock_id": "2313",
+      "sub_industry": "PCB",
+      "trust_net_lot": 7893,
+      "week_return_pct": 0.4,
+      "week_volume_lot": 230177
+    },
+    {
+      "avg_turnover_100m": 4.065,
+      "close": 29.15,
+      "foreign_net_lot": 798,
+      "industry": "紡織纖維",
+      "market": "TWSE",
+      "multifactor_score": 66.14,
+      "name": "遠東新",
+      "start_close": 28.35,
+      "stock_id": "1402",
+      "sub_industry": "",
+      "trust_net_lot": 7815,
+      "week_return_pct": 2.82,
+      "week_volume_lot": 54598
+    },
+    {
+      "avg_turnover_100m": 51.381,
+      "close": 430.0,
+      "foreign_net_lot": 7068,
+      "industry": "半導體業",
+      "market": "TPEX",
+      "multifactor_score": 52.77,
+      "name": "精材",
+      "start_close": 422.5,
+      "stock_id": "3374",
+      "sub_industry": "",
+      "trust_net_lot": 7749,
+      "week_return_pct": 1.78,
+      "week_volume_lot": 76328
+    }
+  ],
+  "upcoming": [
+    {
+      "date": "2026-09-07",
+      "event_type": "法說會",
+      "name": "中砂",
+      "stock_id": "1560",
+      "title": "本公司受邀參加Daiwa Capital Markets Europe Ltd舉辦Daiwa Asia Mini-Conference 2026之法人說明會"
+    },
+    {
+      "date": "2026-09-07",
+      "event_type": "法說會",
+      "name": "巧新",
+      "stock_id": "1563",
+      "title": "本公司受邀參加麥格理證券舉辦之Macquarie Asia Technology Conference 2026"
+    },
+    {
+      "date": "2026-09-07",
+      "event_type": "法說會",
+      "name": "世紀風電",
+      "stock_id": "2072",
+      "title": "本公司受邀參加永豐金證券主辦之SinoPac Taiwan Corporate Access Day"
+    },
+    {
+      "date": "2026-09-07",
+      "event_type": "法說會",
+      "name": "光寶科",
+      "stock_id": "2301",
+      "title": "受邀參加 Macquarie NEXT INNOVATIONS Tech Conference 2026"
+    },
+    {
+      "date": "2026-09-07",
+      "event_type": "法說會",
+      "name": "強茂",
+      "stock_id": "2481",
+      "title": "本公司受邀參加麥格理證券舉辦之投資論壇"
+    },
+    {
+      "date": "2026-09-07",
+      "event_type": "法說會",
+      "name": "台新新光金",
+      "stock_id": "2887",
+      "title": "公告本公司受邀赴歐洲於115年9月7日至9月9日會晤當地投資機構，說明營運概況"
+    },
+    {
+      "date": "2026-09-07",
+      "event_type": "法說會",
+      "name": "力旺",
+      "stock_id": "3529",
+      "title": "本公司受邀參加Macquarie舉辦之海外法人說明會"
+    },
+    {
+      "date": "2026-09-07",
+      "event_type": "法說會",
+      "name": "環宇-KY",
+      "stock_id": "4991",
+      "title": "本公司受邀參加麥格理證券舉辦之Macquarie Asia Technology Conference 2026: Next Innovations"
+    },
+    {
+      "date": "2026-09-07",
+      "event_type": "法說會",
+      "name": "信驊",
+      "stock_id": "5274",
+      "title": "本公司受邀參加永豐金證券舉辦之2026倫敦Corporate Access Day"
+    },
+    {
+      "date": "2026-09-07",
+      "event_type": "法說會",
+      "name": "聖暉*",
+      "stock_id": "5536",
+      "title": "本公司受邀參加法人說明會"
+    },
+    {
+      "date": "2026-09-07",
+      "event_type": "法說會",
+      "name": "矽力*-KY",
+      "stock_id": "6415",
+      "title": "本公司受邀參加Macquarie NEXT INNOVATIONS Tech conference 2026"
+    },
+    {
+      "date": "2026-09-07",
+      "event_type": "法說會",
+      "name": "精測",
+      "stock_id": "6510",
+      "title": "本公司受邀參加麥格理證券舉辦之「Macquarie NEXT INNOVATIONS Tech Conference 2026」"
+    },
+    {
+      "date": "2026-09-07",
+      "event_type": "法說會",
+      "name": "新代",
+      "stock_id": "7750",
+      "title": "本公司受邀參加麥格理證券舉辦之Macquarie Asia Technology Conference 2026"
+    },
+    {
+      "date": "2026-09-07",
+      "event_type": "法說會",
+      "name": "東方風能",
+      "stock_id": "7786",
+      "title": "本公司受邀參加永豐金證券主辦之SinoPac Taiwan Corporate Access Day"
+    },
+    {
+      "date": "2026-09-07",
+      "event_type": "法說會",
+      "name": "鈺祥",
+      "stock_id": "7909",
+      "title": "本公司受邀參加麥格理證券舉辦之香港NEXT INNOVATIONS Tech Conference"
+    },
+    {
+      "date": "2026-09-07",
+      "event_type": "除權息交易日",
+      "name": "主動國泰動能高息",
+      "stock_id": "00400A",
+      "title": "現金股利 0.12元"
+    },
+    {
+      "date": "2026-09-07",
+      "event_type": "除權息交易日",
+      "name": "京城樂富R1",
+      "stock_id": "01010T",
+      "title": "現金股利 0.09872元"
+    },
+    {
+      "date": "2026-09-07",
+      "event_type": "除權息交易日",
+      "name": "漢來美食",
+      "stock_id": "1268",
+      "title": "公告本公司除息基準日相關事宜"
+    },
+    {
+      "date": "2026-09-07",
+      "event_type": "除權息交易日",
+      "name": "聚隆",
+      "stock_id": "1466",
+      "title": "公告本公司資本公積發放現金基準日"
+    },
+    {
+      "date": "2026-09-07",
+      "event_type": "除權息交易日",
+      "name": "欣訊科技",
+      "stock_id": "5254",
+      "title": "公告本公司董事會決議除息基準日"
+    },
+    {
+      "date": "2026-09-07",
+      "event_type": "除權息交易日",
+      "name": "晶心科",
+      "stock_id": "6533",
+      "title": "現金股利 0元、配股 0.031935股"
+    },
+    {
+      "date": "2026-09-07",
+      "event_type": "除權息交易日",
+      "name": "東聯互動",
+      "stock_id": "7738",
+      "title": "公告本公司除息基準日相關事宜"
+    },
+    {
+      "date": "2026-09-07",
+      "event_type": "除權息交易日",
+      "name": "大世科",
+      "stock_id": "8099",
+      "title": "公告本公司股東常會授權董事長訂定除息基準日相關事宜"
+    },
+    {
+      "date": "2026-09-07",
+      "event_type": "現增認股基準日",
+      "name": "大甲",
+      "stock_id": "2221",
+      "title": "代重要子公司大川研科技股份有限公司公告 現金增資基準日"
+    },
+    {
+      "date": "2026-09-07",
+      "event_type": "現增認股基準日",
+      "name": "智微",
+      "stock_id": "4925",
+      "title": "公告本公司訂定現金增資發行新股認股基準日等相關事宜"
+    },
+    {
+      "date": "2026-09-07",
+      "event_type": "現增認股基準日",
+      "name": "眾達-KY",
+      "stock_id": "4977",
+      "title": "公告本公司訂定115年現金增資認股基準日等相關事宜"
+    },
+    {
+      "date": "2026-09-07",
+      "event_type": "現增認股基準日",
+      "name": "世界",
+      "stock_id": "5347",
+      "title": "本公司代重要子公司VisionPower Semiconductor Manufacturing Company Pte. Ltd.公告現金增資基準日"
+    },
+    {
+      "date": "2026-09-07",
+      "event_type": "現增認股基準日",
+      "name": "鐳洋科技",
+      "stock_id": "6980",
+      "title": "公告本公司調整115年現金增資認股基準日等相關事宜"
+    },
+    {
+      "date": "2026-09-07",
+      "event_type": "除權息基準日",
+      "name": "興泰",
+      "stock_id": "1235",
+      "title": "代重要子公司泰宇網通(股)公司公告除權基準日等相關事宜"
+    },
+    {
+      "date": "2026-09-07",
+      "event_type": "除權息基準日",
+      "name": "毛寶",
+      "stock_id": "1732",
+      "title": "公告本公司董事會決議除息基準日"
+    },
+    {
+      "date": "2026-09-07",
+      "event_type": "除權息基準日",
+      "name": "和康生",
+      "stock_id": "1783",
+      "title": "公告本公司決定除息基準日相關事宜"
+    },
+    {
+      "date": "2026-09-07",
+      "event_type": "除權息基準日",
+      "name": "萬企",
+      "stock_id": "2701",
+      "title": "公告本公司董事會決議配息基準日"
+    },
+    {
+      "date": "2026-09-07",
+      "event_type": "除權息基準日",
+      "name": "國票金",
+      "stock_id": "2889",
+      "title": "公告本公司115年分配現金股利暨盈餘轉增資發行新股 基準日"
+    },
+    {
+      "date": "2026-09-07",
+      "event_type": "除權息基準日",
+      "name": "中信金",
+      "stock_id": "2891",
+      "title": "代子公司LH Financial Group Public Company Limited 公告115年上半年度現金股利分派事項"
+    },
+    {
+      "date": "2026-09-07",
+      "event_type": "除權息基準日",
+      "name": "夆典",
+      "stock_id": "3052",
+      "title": "公告本公司董事會決議除息基準日"
+    },
+    {
+      "date": "2026-09-07",
+      "event_type": "除權息基準日",
+      "name": "僑威",
+      "stock_id": "3078",
+      "title": "本公司董事會決議訂定除息基準日"
+    },
+    {
+      "date": "2026-09-07",
+      "event_type": "除權息基準日",
+      "name": "凌航",
+      "stock_id": "3135",
+      "title": "公告本公司董事會決議除權息基準日及國內轉換 公司債停止轉換期間"
+    },
+    {
+      "date": "2026-09-07",
+      "event_type": "除權息基準日",
+      "name": "融程電",
+      "stock_id": "3416",
+      "title": "公告本公司115年除權基準日及國內轉換公司債停止轉換 期間"
+    },
+    {
+      "date": "2026-09-07",
+      "event_type": "除權息基準日",
+      "name": "由田",
+      "stock_id": "3455",
+      "title": "公告本公司董事會決議現金股利及資本公積發放現金基準日。"
+    },
+    {
+      "date": "2026-09-07",
+      "event_type": "除權息基準日",
+      "name": "勤凱科技",
+      "stock_id": "4760",
+      "title": "公告本公司董事會決議除權基準日"
+    },
+    {
+      "date": "2026-09-07",
+      "event_type": "除權息基準日",
+      "name": "立端",
+      "stock_id": "6245",
+      "title": "公告本公司董事會授權董事長訂定除息基準日相關事宜"
+    },
+    {
+      "date": "2026-09-07",
+      "event_type": "除權息基準日",
+      "name": "正瀚-創",
+      "stock_id": "6534",
+      "title": "公告本公司訂定115年上半年度現金股利除息基準日及調整配息率"
+    },
+    {
+      "date": "2026-09-07",
+      "event_type": "除權息基準日",
+      "name": "合水先進",
+      "stock_id": "7857",
+      "title": "公告本公司訂定盈餘暨資本公積轉增資發行新股除權基準日 相關事宜"
+    },
+    {
+      "date": "2026-09-07",
+      "event_type": "除權息基準日",
+      "name": "宏捷科",
+      "stock_id": "8086",
+      "title": "公告本公司董事會通過決議除息基準日"
+    },
+    {
+      "date": "2026-09-07",
+      "event_type": "除權息基準日",
+      "name": "大江",
+      "stock_id": "8436",
+      "title": "公告本公司決定除息基準日相關事宜"
+    },
+    {
+      "date": "2026-09-07",
+      "event_type": "除權息基準日",
+      "name": "裕融",
+      "stock_id": "9941",
+      "title": "公告本公司普通股股利除權息基準日 及國內轉換公司債停止轉換期間"
+    },
+    {
+      "date": "2026-09-07",
+      "event_type": "股利發放日",
+      "name": "樂斯科",
+      "stock_id": "6662",
+      "title": "公告本公司董事會決議配息基準日暨現金發放日"
+    },
+    {
+      "date": "2026-09-07",
+      "event_type": "股利發放日",
+      "name": "意德士科技",
+      "stock_id": "7556",
+      "title": "代重要子公司大鐿先端科技(股)公司公告115年上半年度 盈餘分派除息基準日"
+    },
+    {
+      "date": "2026-09-07",
+      "event_type": "股利發放日",
+      "name": "邁達康",
+      "stock_id": "9960",
+      "title": "公告本公司115年除息基準日相關事宜及調整配息率"
+    },
+    {
+      "date": "2026-09-08",
+      "event_type": "法說會",
+      "name": "岱宇",
+      "stock_id": "1598",
+      "title": "本公司受邀參加統一證券舉辦之法說會"
+    },
+    {
+      "date": "2026-09-08",
+      "event_type": "法說會",
+      "name": "台積電",
+      "stock_id": "2330",
+      "title": "本公司受邀參加機構投資人說明會"
+    },
+    {
+      "date": "2026-09-08",
+      "event_type": "法說會",
+      "name": "神腦",
+      "stock_id": "2450",
+      "title": "本公司受邀參加由台新證券舉辦之線上法人說明會"
+    },
+    {
+      "date": "2026-09-08",
+      "event_type": "法說會",
+      "name": "欣興",
+      "stock_id": "3037",
+      "title": "本公司受邀參加宏遠證券舉辦之2026年趨勢產業論壇"
+    },
+    {
+      "date": "2026-09-08",
+      "event_type": "法說會",
+      "name": "創意",
+      "stock_id": "3443",
+      "title": "本公司受邀參加宏遠證券投資論壇"
+    },
+    {
+      "date": "2026-09-08",
+      "event_type": "法說會",
+      "name": "振大環球",
+      "stock_id": "4441",
+      "title": "本公司受邀參加國票證券舉辦之法人說明會"
+    },
+    {
+      "date": "2026-09-08",
+      "event_type": "法說會",
+      "name": "達明",
+      "stock_id": "4585",
+      "title": "本公司受邀參加元大證券舉辦之線上法人說明會"
+    },
+    {
+      "date": "2026-09-08",
+      "event_type": "法說會",
+      "name": "信驊",
+      "stock_id": "5274",
+      "title": "本公司受邀參加花旗證券舉辦之2026 GEMs Conference"
+    },
+    {
+      "date": "2026-09-08",
+      "event_type": "法說會",
+      "name": "jpp-KY",
+      "stock_id": "5284",
+      "title": "受邀參加宏遠證券舉辦之產業趨勢論壇"
+    },
+    {
+      "date": "2026-09-08",
+      "event_type": "法說會",
+      "name": "中租-KY",
+      "stock_id": "5871",
+      "title": "本公司受邀參加CLSA UK證券舉辦歐洲NDR"
+    },
+    {
+      "date": "2026-09-08",
+      "event_type": "法說會",
+      "name": "仁新*",
+      "stock_id": "6696",
+      "title": "代重要子公司Belite Bio, Inc公告受邀參加Wells Fargo 投資銀行舉辦之第21屆醫療年會(Wells Fargo 21st Annual Healthcare Conference)"
+    },
+    {
+      "date": "2026-09-08",
+      "event_type": "法說會",
+      "name": "松川精密",
+      "stock_id": "7788",
+      "title": "本公司受邀參加元大證券舉辦之法人說明會"
+    },
+    {
+      "date": "2026-09-08",
+      "event_type": "法說會",
+      "name": "鼎晉生技",
+      "stock_id": "7876",
+      "title": "公告本公司受邀參加玉山證券舉辦之實體法人說明會"
+    },
+    {
+      "date": "2026-09-08",
+      "event_type": "法說會",
+      "name": "明曜科技",
+      "stock_id": "7890",
+      "title": "本公司召開法人說明會事宜"
+    },
+    {
+      "date": "2026-09-08",
+      "event_type": "法說會",
+      "name": "群聯",
+      "stock_id": "8299",
+      "title": "公告本公司受邀參加Horizon證券舉辦之投資論壇"
+    },
+    {
+      "date": "2026-09-08",
+      "event_type": "法說會",
+      "name": "豐泰",
+      "stock_id": "9910",
+      "title": "本公司參加國票證券舉辦之線上法人說明會"
+    },
+    {
+      "date": "2026-09-08",
+      "event_type": "法說會",
+      "name": "中保科",
+      "stock_id": "9917",
+      "title": "本公司受邀參加元大證券所舉辦之線上法人說明會"
+    },
+    {
+      "date": "2026-09-08",
+      "event_type": "除權息交易日",
+      "name": "元大台灣價值高息",
+      "stock_id": "00940",
+      "title": "現金股利 0.055元"
+    },
+    {
+      "date": "2026-09-08",
+      "event_type": "除權息交易日",
+      "name": "瑞昱",
+      "stock_id": "2379",
+      "title": "公告本公司115年除息基準日"
+    },
+    {
+      "date": "2026-09-08",
+      "event_type": "除權息交易日",
+      "name": "新美齊",
+      "stock_id": "2442",
+      "title": "公告本公司董事會決議增資配股暨現金股利配發相關事宜"
+    },
+    {
+      "date": "2026-09-08",
+      "event_type": "除權息交易日",
+      "name": "第一店",
+      "stock_id": "2706",
+      "title": "公告本公司董事會決議分派現金股利基準日"
+    },
+    {
+      "date": "2026-09-08",
+      "event_type": "除權息交易日",
+      "name": "山富",
+      "stock_id": "2743",
+      "title": "公告本公司董事會決議除息基準日及相關事宜"
+    },
+    {
+      "date": "2026-09-08",
+      "event_type": "除權息交易日",
+      "name": "弘憶股",
+      "stock_id": "3312",
+      "title": "公告本公司董事會決議除息基準日、現金股利發放日事宜"
+    },
+    {
+      "date": "2026-09-08",
+      "event_type": "除權息交易日",
+      "name": "洋華",
+      "stock_id": "3622",
+      "title": "公告本公司115年除息基準日"
+    },
+    {
+      "date": "2026-09-08",
+      "event_type": "除權息交易日",
+      "name": "桓達",
+      "stock_id": "4549",
+      "title": "公告本公司董事會決議訂定除權基準日"
+    },
+    {
+      "date": "2026-09-08",
+      "event_type": "除權息交易日",
+      "name": "南俊國際",
+      "stock_id": "6584",
+      "title": "公告本公司訂定除息基準日及調整配息率"
+    },
+    {
+      "date": "2026-09-08",
+      "event_type": "除權息交易日",
+      "name": "普鴻",
+      "stock_id": "6590",
+      "title": "公告本公司決議除權基準日及調整配股率等相關事宜"
+    },
+    {
+      "date": "2026-09-08",
+      "event_type": "除權息交易日",
+      "name": "山林水",
+      "stock_id": "8473",
+      "title": "公告本公司董事會決議除權息基準日"
+    },
+    {
+      "date": "2026-09-08",
+      "event_type": "除權息交易日",
+      "name": "中鼎",
+      "stock_id": "9933",
+      "title": "公告本公司除權除息基準日"
+    },
+    {
+      "date": "2026-09-08",
+      "event_type": "現增認股基準日",
+      "name": "盟立",
+      "stock_id": "2464",
+      "title": "公告本公司115年現金增資認股基準日相關事宜"
+    },
+    {
+      "date": "2026-09-08",
+      "event_type": "現增認股基準日",
+      "name": "中信金",
+      "stock_id": "2891",
+      "title": "代子公司中國信託綜合證券公告現金增資基準日"
+    },
+    {
+      "date": "2026-09-08",
+      "event_type": "除權息基準日",
+      "name": "茂生農經",
+      "stock_id": "1240",
+      "title": "公告本公司董事會決議訂定除權基準日"
+    },
+    {
+      "date": "2026-09-08",
+      "event_type": "除權息基準日",
+      "name": "勤美",
+      "stock_id": "1532",
+      "title": "本公司代重要子公司China Metal International Holdings Inc.公告董事會決議股利配發基準日 及除息交易日等相關日期"
+    },
+    {
+      "date": "2026-09-08",
+      "event_type": "除權息基準日",
+      "name": "盟立",
+      "stock_id": "2464",
+      "title": "公告本公司現金股利分派基準日及調整配息率"
+    },
+    {
+      "date": "2026-09-08",
+      "event_type": "除權息基準日",
+      "name": "日勝生",
+      "stock_id": "2547",
+      "title": "代子公司京站投資控股企業(股)公司公告董事會決議 除息基準日"
+    },
+    {
+      "date": "2026-09-08",
+      "event_type": "除權息基準日",
+      "name": "遠東銀",
+      "stock_id": "2845",
+      "title": "公告本行現金股利及股票股利分派及其除權息基準日"
+    },
+    {
+      "date": "2026-09-08",
+      "event_type": "除權息基準日",
+      "name": "鼎固-KY",
+      "stock_id": "2923",
+      "title": "公告本公司董事會決議訂定配息基準日"
+    },
+    {
+      "date": "2026-09-08",
+      "event_type": "除權息基準日",
+      "name": "晟銘電",
+      "stock_id": "3013",
+      "title": "公告本公司訂定除權基準日及轉換公司債停止轉換期間"
+    },
+    {
+      "date": "2026-09-08",
+      "event_type": "除權息基準日",
+      "name": "麗清",
+      "stock_id": "3346",
+      "title": "公告本公司董事會決議除息基準日及轉換公司債停止轉換期間"
+    },
+    {
+      "date": "2026-09-08",
+      "event_type": "除權息基準日",
+      "name": "廣越",
+      "stock_id": "4438",
+      "title": "公告本公司決議股利配發基準日及轉換公司債停止轉換期間"
+    },
+    {
+      "date": "2026-09-08",
+      "event_type": "除權息基準日",
+      "name": "統新",
+      "stock_id": "6426",
+      "title": "公告本公司董事長訂定除息基準日"
+    },
+    {
+      "date": "2026-09-08",
+      "event_type": "除權息基準日",
+      "name": "普惠醫工",
+      "stock_id": "6543",
+      "title": "公告本公司訂定一一五年上半年度現金股利分派相關事宜"
+    },
+    {
+      "date": "2026-09-08",
+      "event_type": "除權息基準日",
+      "name": "緯穎",
+      "stock_id": "6669",
+      "title": "公告本公司115年除權基準日"
+    },
+    {
+      "date": "2026-09-08",
+      "event_type": "除權息基準日",
+      "name": "龍德造船",
+      "stock_id": "6753",
+      "title": "公告本公司除息基準日及調整配息率等相關事宜"
+    },
+    {
+      "date": "2026-09-08",
+      "event_type": "除權息基準日",
+      "name": "拉法醫",
+      "stock_id": "6848",
+      "title": "公告本公司董事會授權董事長訂定資本公積發放現金基準日 相關事宜"
+    },
+    {
+      "date": "2026-09-08",
+      "event_type": "除權息基準日",
+      "name": "伍豐",
+      "stock_id": "8076",
+      "title": "公告本公司決議除息基準日"
+    },
+    {
+      "date": "2026-09-08",
+      "event_type": "股利發放日",
+      "name": "海悅",
+      "stock_id": "2348",
+      "title": "公告本公司董事會決議普通股除權除息基準日、現金股利 發放日事宜"
+    },
+    {
+      "date": "2026-09-09",
+      "event_type": "法說會",
+      "name": "亞德客-KY",
+      "stock_id": "1590",
+      "title": "公告本公司受邀參加大和國泰證券(股)公司舉辦之法人說明會"
+    },
+    {
+      "date": "2026-09-09",
+      "event_type": "法說會",
+      "name": "光寶科",
+      "stock_id": "2301",
+      "title": "受邀參加元大 2026 第三季投資論壇"
+    },
+    {
+      "date": "2026-09-09",
+      "event_type": "法說會",
+      "name": "鴻海",
+      "stock_id": "2317",
+      "title": "公告本公司參與投資人說明會"
+    },
+    {
+      "date": "2026-09-09",
+      "event_type": "法說會",
+      "name": "順德",
+      "stock_id": "2351",
+      "title": "本公司受邀參加元大證券舉辦之投資人說明會"
+    },
+    {
+      "date": "2026-09-09",
+      "event_type": "法說會",
+      "name": "瑞昱",
+      "stock_id": "2379",
+      "title": "公告本公司參加Daiwa和BofA舉辦之投資論壇"
+    },
+    {
+      "date": "2026-09-09",
+      "event_type": "法說會",
+      "name": "廣達",
+      "stock_id": "2382",
+      "title": "本公司受邀參加大和國泰證券所舉辦之投資論壇"
+    },
+    {
+      "date": "2026-09-09",
+      "event_type": "法說會",
+      "name": "嘉里大榮",
+      "stock_id": "2608",
+      "title": "公告本公司召開115年上半年業績發表會"
+    },
+    {
+      "date": "2026-09-09",
+      "event_type": "法說會",
+      "name": "慧洋-KY",
+      "stock_id": "2637",
+      "title": "本公司受邀參加元大證券舉辦之2026年第三季投資論壇"
+    },
+    {
+      "date": "2026-09-09",
+      "event_type": "法說會",
+      "name": "中信金",
+      "stock_id": "2891",
+      "title": "本公司參加第一金證券舉辦之投資人說明會"
+    },
+    {
+      "date": "2026-09-09",
+      "event_type": "法說會",
+      "name": "上詮",
+      "stock_id": "3363",
+      "title": "本公司受邀參加元大證券2026第三季投資論壇"
+    },
+    {
+      "date": "2026-09-09",
+      "event_type": "法說會",
+      "name": "京鼎",
+      "stock_id": "3413",
+      "title": "本公司受邀參加元大證券辦理2026第三季投資論壇"
+    },
+    {
+      "date": "2026-09-09",
+      "event_type": "法說會",
+      "name": "嘉澤",
+      "stock_id": "3533",
+      "title": "本公司受邀參加大和國泰證券舉辦之法人說明會"
+    },
+    {
+      "date": "2026-09-09",
+      "event_type": "法說會",
+      "name": "兆利",
+      "stock_id": "3548",
+      "title": "本公司受邀參加國票綜合證券舉辦之法人座談會"
+    },
+    {
+      "date": "2026-09-09",
+      "event_type": "法說會",
+      "name": "閎康",
+      "stock_id": "3587",
+      "title": "公告本公司受邀參加元大證券舉辦之法人說明會"
+    },
+    {
+      "date": "2026-09-09",
+      "event_type": "法說會",
+      "name": "定穎投控",
+      "stock_id": "3715",
+      "title": "本公司受邀參加元大證券舉辦之2026第三季投資論壇"
+    },
+    {
+      "date": "2026-09-09",
+      "event_type": "法說會",
+      "name": "康普",
+      "stock_id": "4739",
+      "title": "本公司召開法人說明會"
+    },
+    {
+      "date": "2026-09-09",
+      "event_type": "法說會",
+      "name": "上品",
+      "stock_id": "4770",
+      "title": "公告本公司受邀參加元大證券所舉辦之「2026年第三季投資論壇」"
+    },
+    {
+      "date": "2026-09-09",
+      "event_type": "法說會",
+      "name": "台特化",
+      "stock_id": "4772",
+      "title": "本公司受邀參加元大證券辦理之第三季投資論壇"
+    },
+    {
+      "date": "2026-09-09",
+      "event_type": "法說會",
+      "name": "臻鼎-KY",
+      "stock_id": "4958",
+      "title": "本公司受邀參加元大證券舉辦之2026第三季投資論壇"
+    },
+    {
+      "date": "2026-09-09",
+      "event_type": "法說會",
+      "name": "譜瑞-KY",
+      "stock_id": "4966",
+      "title": "公告本公司受邀參加宏遠證券舉辦之2026年趨勢產業論壇"
+    },
+    {
+      "date": "2026-09-09",
+      "event_type": "法說會",
+      "name": "頎邦",
+      "stock_id": "6147",
+      "title": "本公司受邀參加宏遠證券舉辦之投資論壇"
+    },
+    {
+      "date": "2026-09-09",
+      "event_type": "法說會",
+      "name": "達發",
+      "stock_id": "6526",
+      "title": "公告本公司參與機構投資人說明會"
+    },
+    {
+      "date": "2026-09-09",
+      "event_type": "法說會",
+      "name": "南俊國際",
+      "stock_id": "6584",
+      "title": "公告本公司受邀參加由元大證券舉辦之2026元大證券第三季投資論壇"
+    },
+    {
+      "date": "2026-09-09",
+      "event_type": "法說會",
+      "name": "朋億*",
+      "stock_id": "6613",
+      "title": "本公司與母公司聖暉工程科技(股)公司及子公司銳澤實業(股)公司，受邀參加元大證券舉辦之第三季投資論壇"
+    },
+    {
+      "date": "2026-09-09",
+      "event_type": "法說會",
+      "name": "竹陞科技",
+      "stock_id": "6739",
+      "title": "公告本公司受邀參加元大證券舉辦之法人說明會"
+    },
+    {
+      "date": "2026-09-09",
+      "event_type": "法說會",
+      "name": "來億-KY",
+      "stock_id": "6890",
+      "title": "本公司受邀參加元大證券辦理之2026年第三季投資論壇"
+    },
+    {
+      "date": "2026-09-09",
+      "event_type": "法說會",
+      "name": "GOGOLOOK",
+      "stock_id": "6902",
+      "title": "公告本公司受邀參加宏遠證券舉辦之「2026年趨勢產業論壇」"
+    },
+    {
+      "date": "2026-09-09",
+      "event_type": "法說會",
+      "name": "天虹",
+      "stock_id": "6937",
+      "title": "本公司受邀參加元大證券舉辦之「2026 年第三季投資論壇」"
+    },
+    {
+      "date": "2026-09-09",
+      "event_type": "法說會",
+      "name": "元澄半導體",
+      "stock_id": "7415",
+      "title": "本公司受邀參加宏遠證券舉辦之「2026年趨勢產業論壇」"
+    },
+    {
+      "date": "2026-09-09",
+      "event_type": "法說會",
+      "name": "銳澤",
+      "stock_id": "7703",
+      "title": "本公司及母公司朋億(股)公司與聖暉工程科技(股)公司， 受邀參加元大證券辦理之投資論壇"
+    },
+    {
+      "date": "2026-09-09",
+      "event_type": "法說會",
+      "name": "頌勝科技",
+      "stock_id": "7768",
+      "title": "受邀參加元大證券辦理之第三季投資論壇"
+    },
+    {
+      "date": "2026-09-09",
+      "event_type": "法說會",
+      "name": "東方風能",
+      "stock_id": "7786",
+      "title": ":本公司受邀參加Daiwa Securities主辦之法人說明會"
+    },
+    {
+      "date": "2026-09-09",
+      "event_type": "法說會",
+      "name": "禾榮科",
+      "stock_id": "7799",
+      "title": "本公司受邀參加由富邦證券舉辦之法人說明會"
+    },
+    {
+      "date": "2026-09-09",
+      "event_type": "法說會",
+      "name": "宏捷科",
+      "stock_id": "8086",
+      "title": "本公司受邀參加2026年元大證券第三季投資論壇"
+    },
+    {
+      "date": "2026-09-09",
+      "event_type": "除權息交易日",
+      "name": "三地開發",
+      "stock_id": "1438",
+      "title": "公告本公司董事會決議除權息基準日及 國內轉換公司債停止轉換期間等相關事宜。"
+    },
+    {
+      "date": "2026-09-09",
+      "event_type": "除權息交易日",
+      "name": "富喬",
+      "stock_id": "1815",
+      "title": "公告本公司除權息基準日暨調整配股息率等相關事宜。"
+    },
+    {
+      "date": "2026-09-09",
+      "event_type": "除權息交易日",
+      "name": "國揚",
+      "stock_id": "2505",
+      "title": "代子公司神揚建設股份有限公司公告114年度現金股利除息基準日"
+    },
+    {
+      "date": "2026-09-09",
+      "event_type": "除權息交易日",
+      "name": "華晶科",
+      "stock_id": "3059",
+      "title": "公告本公司訂定除息基準日相關事宜"
+    },
+    {
+      "date": "2026-09-09",
+      "event_type": "除權息交易日",
+      "name": "神達",
+      "stock_id": "3706",
+      "title": "公告本公司董事會訂定除權息基準日暨 海外無擔保轉換公司債之停止轉換期間"
+    },
+    {
+      "date": "2026-09-09",
+      "event_type": "除權息交易日",
+      "name": "訊聯基因",
+      "stock_id": "4160",
+      "title": "公告本公司訂定盈餘轉增資配股基準日"
+    },
+    {
+      "date": "2026-09-09",
+      "event_type": "除權息交易日",
+      "name": "金橋",
+      "stock_id": "6133",
+      "title": "公告本公司董事會決議除息基準日"
+    },
+    {
+      "date": "2026-09-09",
+      "event_type": "除權息交易日",
+      "name": "華電網",
+      "stock_id": "6163",
+      "title": "公告本公司訂定除息基準日"
+    },
+    {
+      "date": "2026-09-09",
+      "event_type": "除權息交易日",
+      "name": "富強鑫",
+      "stock_id": "6603",
+      "title": "公告本公司訂定除息基準日相關事宜"
+    },
+    {
+      "date": "2026-09-09",
+      "event_type": "除權息交易日",
+      "name": "惠民實業",
+      "stock_id": "6971",
+      "title": "公告本公司訂定現金股利除息基準日"
+    },
+    {
+      "date": "2026-09-09",
+      "event_type": "除權息交易日",
+      "name": "擎亞",
+      "stock_id": "8096",
+      "title": "公告本公司董事會決議現金股利除息基準日"
+    },
+    {
+      "date": "2026-09-09",
+      "event_type": "除權息基準日",
+      "name": "好德",
+      "stock_id": "3114",
+      "title": "公告本公司現金及股票股利配發基準日及調整配股配息率"
+    },
+    {
+      "date": "2026-09-09",
+      "event_type": "除權息基準日",
+      "name": "崧騰",
+      "stock_id": "3484",
+      "title": "本公司115年除息基準日"
+    },
+    {
+      "date": "2026-09-09",
+      "event_type": "除權息基準日",
+      "name": "耕興",
+      "stock_id": "6146",
+      "title": "公告本公司訂定配息基準日"
+    },
+    {
+      "date": "2026-09-09",
+      "event_type": "除權息基準日",
+      "name": "倍力",
+      "stock_id": "6874",
+      "title": "公告本公司董事長訂定除息基準日"
+    },
+    {
+      "date": "2026-09-09",
+      "event_type": "除權息基準日",
+      "name": "大研生醫*",
+      "stock_id": "7780",
+      "title": "公告本公司115年第一季現金股利除息基準日相關事宜"
+    },
+    {
+      "date": "2026-09-09",
+      "event_type": "除權息基準日",
+      "name": "美吉吉-KY",
+      "stock_id": "8466",
+      "title": "公告本公司115年度資本公積配發現金除息基準日等相關事宜"
+    },
+    {
+      "date": "2026-09-09",
+      "event_type": "股利發放日",
+      "name": "雋揚",
+      "stock_id": "1439",
+      "title": "公告本公司董事長訂定除息基準日等相關事宜"
+    },
+    {
+      "date": "2026-09-09",
+      "event_type": "股利發放日",
+      "name": "老四川",
+      "stock_id": "2741",
+      "title": "公告本公司訂定配息基準日等相關事宜"
+    },
+    {
+      "date": "2026-09-09",
+      "event_type": "股利發放日",
+      "name": "台中銀",
+      "stock_id": "2812",
+      "title": "本公司董事會決議114年度股利之除息除權基準日。"
+    },
+    {
+      "date": "2026-09-09",
+      "event_type": "股利發放日",
+      "name": "光隆精密-KY",
+      "stock_id": "4581",
+      "title": "公告本公司現金股利配息基準日"
+    },
+    {
+      "date": "2026-09-09",
+      "event_type": "股利發放日",
+      "name": "瀚醫生技",
+      "stock_id": "6999",
+      "title": "公告本公司訂定除權息基準日等相關事宜"
+    },
+    {
+      "date": "2026-09-09",
+      "event_type": "股利發放日",
+      "name": "智生活",
+      "stock_id": "7836",
+      "title": "公告本公司董事會決議除息基準日相關事宜"
+    },
+    {
+      "date": "2026-09-10",
+      "event_type": "法說會",
+      "name": "漢來美食",
+      "stock_id": "1268",
+      "title": "本公司受邀參加由凱基證券舉辦之線上法人說明會"
+    },
+    {
+      "date": "2026-09-10",
+      "event_type": "法說會",
+      "name": "集盛",
+      "stock_id": "1455",
+      "title": "本公司受邀參加統一證券舉辦之法說明會"
+    },
+    {
+      "date": "2026-09-10",
+      "event_type": "法說會",
+      "name": "聚陽",
+      "stock_id": "1477",
+      "title": "本公司受邀參加凱基證券舉辦之法人說明會"
+    },
+    {
+      "date": "2026-09-10",
+      "event_type": "法說會",
+      "name": "士電",
+      "stock_id": "1503",
+      "title": "公告本公司召開115年度法人說明會"
+    },
+    {
+      "date": "2026-09-10",
+      "event_type": "法說會",
+      "name": "百達-KY",
+      "stock_id": "2236",
+      "title": "本公司受邀參加兆豐證券舉辦之法人說明會"
+    },
+    {
+      "date": "2026-09-10",
+      "event_type": "法說會",
+      "name": "聯電",
+      "stock_id": "2303",
+      "title": "本公司受邀參與法人說明會相關資訊"
+    },
+    {
+      "date": "2026-09-10",
+      "event_type": "法說會",
+      "name": "研華",
+      "stock_id": "2395",
+      "title": "本公司將受邀參加凱基證券舉辦之「2026年第三季投資論壇」"
+    },
+    {
+      "date": "2026-09-10",
+      "event_type": "法說會",
+      "name": "強茂",
+      "stock_id": "2481",
+      "title": "本公司受邀參加凱基證券舉辦之投資論壇"
+    },
+    {
+      "date": "2026-09-10",
+      "event_type": "法說會",
+      "name": "世界健身-KY",
+      "stock_id": "2762",
+      "title": "本公司受邀請參加富邦證券舉辦之線上法人說明會"
+    },
+    {
+      "date": "2026-09-10",
+      "event_type": "法說會",
+      "name": "聯陽",
+      "stock_id": "3014",
+      "title": "本公司受邀參加宏遠證券股份有限公司所舉辦之2026年趨勢產業論壇"
+    },
+    {
+      "date": "2026-09-10",
+      "event_type": "法說會",
+      "name": "奇鋐",
+      "stock_id": "3017",
+      "title": "受邀參加第三季凱基投資論壇"
+    },
+    {
+      "date": "2026-09-10",
+      "event_type": "法說會",
+      "name": "晶技",
+      "stock_id": "3042",
+      "title": "本公司受邀參加凱基證券2026年第三季投資論壇"
+    },
+    {
+      "date": "2026-09-10",
+      "event_type": "法說會",
+      "name": "蔚華科",
+      "stock_id": "3055",
+      "title": "本公司受邀參加宏遠證券舉辦之「2026年趨勢產業論壇」"
+    },
+    {
+      "date": "2026-09-10",
+      "event_type": "法說會",
+      "name": "千如",
+      "stock_id": "3236",
+      "title": "公告本公司召開法人說明會"
+    },
+    {
+      "date": "2026-09-10",
+      "event_type": "法說會",
+      "name": "展達",
+      "stock_id": "3447",
+      "title": "公告本公司受邀參加元大證券舉辦之法人說明會"
+    },
+    {
+      "date": "2026-09-10",
+      "event_type": "法說會",
+      "name": "力旺",
+      "stock_id": "3529",
+      "title": "本公司受邀參加凱基證券舉辦之法人說明會"
+    },
+    {
+      "date": "2026-09-10",
+      "event_type": "法說會",
+      "name": "凌嘉科",
+      "stock_id": "3644",
+      "title": "凌嘉科受邀參加凱基證券主辦之2026Q3凱基證券投資論壇"
+    },
+    {
+      "date": "2026-09-10",
+      "event_type": "法說會",
+      "name": "桂盟",
+      "stock_id": "5306",
+      "title": "本公司受邀參加凱基證券於台北舉辦的\"2026年第三季投資論壇\""
+    },
+    {
+      "date": "2026-09-10",
+      "event_type": "法說會",
+      "name": "台林",
+      "stock_id": "5353",
+      "title": "本公司受邀參加台新綜合證券主辦之線上法說會"
+    },
+    {
+      "date": "2026-09-10",
+      "event_type": "法說會",
+      "name": "富爾特",
+      "stock_id": "6136",
+      "title": "公告本公司召開法人說明會相關資訊"
+    },
+    {
+      "date": "2026-09-10",
+      "event_type": "法說會",
+      "name": "信昌電",
+      "stock_id": "6173",
+      "title": "本公司受邀參加宏遠證券舉辦之「2026年趨勢產業論壇」。"
+    },
+    {
+      "date": "2026-09-10",
+      "event_type": "法說會",
+      "name": "矽力*-KY",
+      "stock_id": "6415",
+      "title": "本公司受邀參加凱基證券投資論壇"
+    },
+    {
+      "date": "2026-09-10",
+      "event_type": "法說會",
+      "name": "光聖",
+      "stock_id": "6442",
+      "title": "本公司受邀參加凱基證券2026年第三季投資論壇"
+    },
+    {
+      "date": "2026-09-10",
+      "event_type": "法說會",
+      "name": "藥華藥",
+      "stock_id": "6446",
+      "title": "本公司受邀參加Wells Fargo舉辦之法說會「21st Annual Healthcare Conference」"
+    },
+    {
+      "date": "2026-09-10",
+      "event_type": "法說會",
+      "name": "儒億",
+      "stock_id": "6604",
+      "title": "本公司將於115年09月10日舉辦上櫃前業績發表會"
+    },
+    {
+      "date": "2026-09-10",
+      "event_type": "法說會",
+      "name": "緯穎",
+      "stock_id": "6669",
+      "title": "本公司受邀參加凱基證券舉辦之2026年第三季投資論壇"
+    },
+    {
+      "date": "2026-09-10",
+      "event_type": "法說會",
+      "name": "睿生光電",
+      "stock_id": "6861",
+      "title": "本公司受邀參加福邦證券舉辦之法人說明會"
+    },
+    {
+      "date": "2026-09-10",
+      "event_type": "法說會",
+      "name": "雅特力-KY",
+      "stock_id": "6907",
+      "title": "公告本公司受邀參加宏遠證券2026年趨勢產業論壇"
+    },
+    {
+      "date": "2026-09-10",
+      "event_type": "法說會",
+      "name": "中傑-KY",
+      "stock_id": "6965",
+      "title": "本公司受邀參加由中信證券舉辦之線上座談會"
+    },
+    {
+      "date": "2026-09-10",
+      "event_type": "法說會",
+      "name": "熙特爾-創",
+      "stock_id": "7740",
+      "title": "本公司受邀參加富邦證券舉辦之法人說明會"
+    },
+    {
+      "date": "2026-09-10",
+      "event_type": "法說會",
+      "name": "創新服務",
+      "stock_id": "7828",
+      "title": "本公司受邀參加凱基證券2026年第三季投資論壇"
+    },
+    {
+      "date": "2026-09-10",
+      "event_type": "法說會",
+      "name": "昇陽半導體",
+      "stock_id": "8028",
+      "title": "本公司受邀參加凱基證券舉辦之投資論壇"
+    },
+    {
+      "date": "2026-09-10",
+      "event_type": "法說會",
+      "name": "光隆",
+      "stock_id": "8916",
+      "title": "本公司受邀參加台新證券舉辦之法人座談會"
+    },
+    {
+      "date": "2026-09-10",
+      "event_type": "法說會",
+      "name": "巨大",
+      "stock_id": "9921",
+      "title": "本公司受邀參加凱基證券於台北舉辦的 \"2026年第三季投資論壇\""
+    },
+    {
+      "date": "2026-09-10",
+      "event_type": "除權息交易日",
+      "name": "橋椿",
+      "stock_id": "2062",
+      "title": "公告本公司董事長決定除息基準日"
+    },
+    {
+      "date": "2026-09-10",
+      "event_type": "除權息交易日",
+      "name": "聯德控股-KY",
+      "stock_id": "4912",
+      "title": "公告本公司115年第2季除息基準日"
+    },
+    {
+      "date": "2026-09-10",
+      "event_type": "除權息交易日",
+      "name": "華容",
+      "stock_id": "5328",
+      "title": "公告本公司115年配發114年度現金股利相關事宜"
+    },
+    {
+      "date": "2026-09-10",
+      "event_type": "除權息交易日",
+      "name": "台南-KY",
+      "stock_id": "5906",
+      "title": "公告本公司董事會決議除權息基準日"
+    },
+    {
+      "date": "2026-09-10",
+      "event_type": "除權息交易日",
+      "name": "南六",
+      "stock_id": "6504",
+      "title": "公告本公司民國一一五年配息基準日"
+    },
+    {
+      "date": "2026-09-10",
+      "event_type": "除權息交易日",
+      "name": "新漢",
+      "stock_id": "8234",
+      "title": "公告本公司除息基準日相關事宜"
+    },
+    {
+      "date": "2026-09-10",
+      "event_type": "除權息交易日",
+      "name": "鈺齊-KY",
+      "stock_id": "9802",
+      "title": "本公司訂定2025年下半年之現金股利除息交易日"
+    },
+    {
+      "date": "2026-09-10",
+      "event_type": "除權息交易日",
+      "name": "欣巴巴",
+      "stock_id": "9906",
+      "title": "公告本公司董事會決議除權基準日相關事宜"
+    },
+    {
+      "date": "2026-09-10",
+      "event_type": "現增認股基準日",
+      "name": "新鼎",
+      "stock_id": "5209",
+      "title": "代子公司萬鼎工程服務股份有限公司公告董事會決議 辦理現金增資發行新股"
+    },
+    {
+      "date": "2026-09-10",
+      "event_type": "除權息基準日",
+      "name": "味王",
+      "stock_id": "1203",
+      "title": "訂定本公司發放114年度現金股利暨配息基準日等相關事宜"
+    },
+    {
+      "date": "2026-09-10",
+      "event_type": "除權息基準日",
+      "name": "六角",
+      "stock_id": "2732",
+      "title": "公告本公司經董事會授權董事長訂定除息基準日"
+    },
+    {
+      "date": "2026-09-10",
+      "event_type": "除權息基準日",
+      "name": "盛達",
+      "stock_id": "3027",
+      "title": "代重要子公司盛齊綠能股份有限公司公告 現金股利配息基準日"
+    },
+    {
+      "date": "2026-09-10",
+      "event_type": "除權息基準日",
+      "name": "倍利創投",
+      "stock_id": "7882",
+      "title": "公告本公司董事會決議除權息基準日相關事宜"
+    },
+    {
+      "date": "2026-09-10",
+      "event_type": "除權息基準日",
+      "name": "欣雄",
+      "stock_id": "8908",
+      "title": "公告本公司董事會決議訂定除權基準日暨調整配股率相關事宜"
+    },
+    {
+      "date": "2026-09-10",
+      "event_type": "股利發放日",
+      "name": "華經",
+      "stock_id": "2468",
+      "title": "公告本公司董事會決議配息基準日"
+    },
+    {
+      "date": "2026-09-10",
+      "event_type": "股利發放日",
+      "name": "鉅祥",
+      "stock_id": "2476",
+      "title": "公告本公司115年現金股利暨資本公積發放 現金除息基準日、發放日及國內第二次無擔保 轉換公司債停止轉換期間"
+    },
+    {
+      "date": "2026-09-10",
+      "event_type": "股利發放日",
+      "name": "亞洲藏壽司",
+      "stock_id": "2754",
+      "title": "公告本公司訂定除息基準日等相關事宜"
+    },
+    {
+      "date": "2026-09-10",
+      "event_type": "股利發放日",
+      "name": "大立光",
+      "stock_id": "3008",
+      "title": "本公司訂定115年上半年度之現金股利除息基準日"
+    },
+    {
+      "date": "2026-09-10",
+      "event_type": "股利發放日",
+      "name": "亞帝歐",
+      "stock_id": "3516",
+      "title": "公告本公司董事長訂定除息基準日等相關事宜暨本公司國內 第一次有擔保轉換公司債停止轉換期間"
+    },
+    {
+      "date": "2026-09-10",
+      "event_type": "股利發放日",
+      "name": "銘旺實",
+      "stock_id": "4432",
+      "title": "公告本公司董事會決議除息基準日等相關事宜"
+    },
+    {
+      "date": "2026-09-10",
+      "event_type": "股利發放日",
+      "name": "六方科-KY",
+      "stock_id": "4569",
+      "title": "公告本公司訂定除息基準日"
+    },
+    {
+      "date": "2026-09-10",
+      "event_type": "股利發放日",
+      "name": "亞通",
+      "stock_id": "6179",
+      "title": "公告本公司配發現金股利除息基準日訂定(重新訂定)"
+    },
+    {
+      "date": "2026-09-10",
+      "event_type": "股利發放日",
+      "name": "廣明",
+      "stock_id": "6188",
+      "title": "公告本公司董事會決議115年上半年度現金股利分配之配息基準日"
+    },
+    {
+      "date": "2026-09-10",
+      "event_type": "股利發放日",
+      "name": "晶采",
+      "stock_id": "8049",
+      "title": "公告本公司董事會決議除息基準日"
+    },
+    {
+      "date": "2026-09-10",
+      "event_type": "股利發放日",
+      "name": "鉅明",
+      "stock_id": "8928",
+      "title": "公告本公司現金股利分派除息基準日"
+    },
+    {
+      "date": "2026-09-11",
+      "event_type": "法說會",
+      "name": "愛之味",
+      "stock_id": "1217",
+      "title": "公告本公司將於115年09月11日召開第1次法人說明會"
+    },
+    {
+      "date": "2026-09-11",
+      "event_type": "法說會",
+      "name": "大統益",
+      "stock_id": "1232",
+      "title": "本公司受邀參加統一證券舉辦之線上法說會，說明公司營運概況。"
+    },
+    {
+      "date": "2026-09-11",
+      "event_type": "法說會",
+      "name": "南亞",
+      "stock_id": "1303",
+      "title": "本公司受邀參加群益證券舉辦之法人說明會"
+    },
+    {
+      "date": "2026-09-11",
+      "event_type": "法說會",
+      "name": "中石化",
+      "stock_id": "1314",
+      "title": "公告本公司將於115年9月11日召開法人說明會。"
+    },
+    {
+      "date": "2026-09-11",
+      "event_type": "法說會",
+      "name": "中釉",
+      "stock_id": "1809",
+      "title": "本公司受邀參加福邦證券所舉辦之線上法人說明會"
+    },
+    {
+      "date": "2026-09-11",
+      "event_type": "法說會",
+      "name": "南帝",
+      "stock_id": "2108",
+      "title": "公告本公司召開法人說明會"
+    },
+    {
+      "date": "2026-09-11",
+      "event_type": "法說會",
+      "name": "國巨*",
+      "stock_id": "2327",
+      "title": "本公司受邀參加由合作金庫證券舉辦之投資人說明會"
+    },
+    {
+      "date": "2026-09-11",
+      "event_type": "法說會",
+      "name": "英業達",
+      "stock_id": "2356",
+      "title": "公告本公司參與投資人說明會(線上)"
+    },
+    {
+      "date": "2026-09-11",
+      "event_type": "法說會",
+      "name": "大車隊",
+      "stock_id": "2640",
+      "title": "本公司受邀參加中國信託綜合證券股份有限公司舉辦之法人說明會。"
+    },
+    {
+      "date": "2026-09-11",
+      "event_type": "法說會",
+      "name": "三商",
+      "stock_id": "2905",
+      "title": "本公司受邀參加宏遠證券舉辦之線上法人說明會"
+    },
+    {
+      "date": "2026-09-11",
+      "event_type": "法說會",
+      "name": "訊舟",
+      "stock_id": "3047",
+      "title": "公告本公司受邀參加永豐金證券舉辦之法人說明會"
+    },
+    {
+      "date": "2026-09-11",
+      "event_type": "法說會",
+      "name": "群益證",
+      "stock_id": "6005",
+      "title": "公告本公司召開法人說明會相關資訊"
+    },
+    {
+      "date": "2026-09-11",
+      "event_type": "法說會",
+      "name": "科定",
+      "stock_id": "6655",
+      "title": "公告本公司受邀參加中國信託證券舉辦之法人說明會"
+    },
+    {
+      "date": "2026-09-11",
+      "event_type": "法說會",
+      "name": "仁新*",
+      "stock_id": "6696",
+      "title": "代重要子公司Belite Bio, Inc公告受邀參加Cantor Fitzgerald 投資銀行舉辦之全球醫療論壇(Global Healthcare Conference)"
+    },
+    {
+      "date": "2026-09-11",
+      "event_type": "法說會",
+      "name": "信實",
+      "stock_id": "6721",
+      "title": "公告本公司將於115年09月11日舉行法人說明會"
+    },
+    {
+      "date": "2026-09-11",
+      "event_type": "法說會",
+      "name": "恆勁科技",
+      "stock_id": "6920",
+      "title": "本公司受邀參加元大證券舉辦之線上法人說明會"
+    },
+    {
+      "date": "2026-09-11",
+      "event_type": "法說會",
+      "name": "東方風能",
+      "stock_id": "7786",
+      "title": "本公司受邀參加JP Morgan主辦之法人說明會"
+    },
+    {
+      "date": "2026-09-11",
+      "event_type": "法說會",
+      "name": "康全電訊",
+      "stock_id": "8089",
+      "title": "公告本公司受邀參加永豐金證券舉辦之法人說明會"
+    },
+    {
+      "date": "2026-09-11",
+      "event_type": "除權息交易日",
+      "name": "晶宏",
+      "stock_id": "3141",
+      "title": "公告本公司除息基準日相關事宜"
+    },
+    {
+      "date": "2026-09-11",
+      "event_type": "現增認股基準日",
+      "name": "力麗店",
+      "stock_id": "5364",
+      "title": "代重要子公司愷森能源股份有限公司公告董事會決議辦理 現金增資案及增資基準日"
+    },
+    {
+      "date": "2026-09-11",
+      "event_type": "現增認股基準日",
+      "name": "竟天",
+      "stock_id": "6917",
+      "title": "本公司115年度現金增資發行新股認股基準日暨相關作業事宜"
+    },
+    {
+      "date": "2026-09-11",
+      "event_type": "除權息基準日",
+      "name": "志信",
+      "stock_id": "2611",
+      "title": "代重要子公司美麗信酒店(股)公司公告決議除息基準日"
+    },
+    {
+      "date": "2026-09-11",
+      "event_type": "除權息基準日",
+      "name": "聯發國際",
+      "stock_id": "2756",
+      "title": "公告本公司董事會決議除息基準日等相關事宜"
+    },
+    {
+      "date": "2026-09-11",
+      "event_type": "除權息基準日",
+      "name": "世芯-KY",
+      "stock_id": "3661",
+      "title": "公告本公司董事會決議配息基準日"
+    },
+    {
+      "date": "2026-09-11",
+      "event_type": "除權息基準日",
+      "name": "信音",
+      "stock_id": "6126",
+      "title": "公告本公司除息基準日及國內轉換公司債停止轉換期間"
+    },
+    {
+      "date": "2026-09-11",
+      "event_type": "除權息基準日",
+      "name": "高僑",
+      "stock_id": "6234",
+      "title": "公告本公司董事會決議除息基準日相關事宜"
+    },
+    {
+      "date": "2026-09-11",
+      "event_type": "除權息基準日",
+      "name": "富威電力",
+      "stock_id": "6994",
+      "title": "代重要子公司智電系統(股)公司公告現金股利配息基準日"
+    },
+    {
+      "date": "2026-09-11",
+      "event_type": "除權息基準日",
+      "name": "皇田",
+      "stock_id": "9951",
+      "title": "公告本公司訂定除息基準日及調整配息率"
+    },
+    {
+      "date": "2026-09-11",
+      "event_type": "股利發放日",
+      "name": "光寶科",
+      "stock_id": "2301",
+      "title": "公告本公司115年第二季配息基準日"
+    },
+    {
+      "date": "2026-09-11",
+      "event_type": "股利發放日",
+      "name": "鈺德",
+      "stock_id": "3050",
+      "title": "公告本公司訂定除息基準日相關事宜"
+    },
+    {
+      "date": "2026-09-11",
+      "event_type": "股利發放日",
+      "name": "昇銳",
+      "stock_id": "3128",
+      "title": "代子公司車威視科技股份有限公司公告董事會決議除息基準日"
+    },
+    {
+      "date": "2026-09-11",
+      "event_type": "股利發放日",
+      "name": "晟德",
+      "stock_id": "4123",
+      "title": "本公司董事會決議除權除息基準日、調整配股配息率暨 可轉換公司債停止轉換期間公告"
+    },
+    {
+      "date": "2026-09-11",
+      "event_type": "股利發放日",
+      "name": "耀億",
+      "stock_id": "4430",
+      "title": "公告本公司董事會決議現金股利除息基準日"
+    },
+    {
+      "date": "2026-09-11",
+      "event_type": "股利發放日",
+      "name": "聚恆-創",
+      "stock_id": "4582",
+      "title": "公告本公司現金股利配發基準日及調整配息率"
+    },
+    {
+      "date": "2026-09-11",
+      "event_type": "股利發放日",
+      "name": "智冠",
+      "stock_id": "5478",
+      "title": "公告子公司智龍創業投資(股)公司訂定115年除權息 基準日及發放日案"
+    },
+    {
+      "date": "2026-09-11",
+      "event_type": "股利發放日",
+      "name": "康舒",
+      "stock_id": "6282",
+      "title": "公告資本公積發放現金基準日"
+    },
+    {
+      "date": "2026-09-11",
+      "event_type": "股利發放日",
+      "name": "機光科技",
+      "stock_id": "6729",
+      "title": "公告本公司現金股利及資本公積除息基準日及發放日"
+    },
+    {
+      "date": "2026-09-13",
+      "event_type": "現增認股基準日",
+      "name": "欣技",
+      "stock_id": "6160",
+      "title": "公告本公司現金增資發行新股認股基準日等相關事宜"
+    },
+    {
+      "date": "2026-09-13",
+      "event_type": "現增認股基準日",
+      "name": "晶心科",
+      "stock_id": "6533",
+      "title": "公告本公司現金增資認股基準日及相關事宜"
+    },
+    {
+      "date": "2026-09-13",
+      "event_type": "除權息基準日",
+      "name": "漢來美食",
+      "stock_id": "1268",
+      "title": "公告本公司除息基準日相關事宜"
+    },
+    {
+      "date": "2026-09-13",
+      "event_type": "除權息基準日",
+      "name": "聚隆",
+      "stock_id": "1466",
+      "title": "公告本公司資本公積發放現金基準日"
+    },
+    {
+      "date": "2026-09-13",
+      "event_type": "除權息基準日",
+      "name": "欣訊科技",
+      "stock_id": "5254",
+      "title": "公告本公司董事會決議除息基準日"
+    },
+    {
+      "date": "2026-09-13",
+      "event_type": "除權息基準日",
+      "name": "東聯互動",
+      "stock_id": "7738",
+      "title": "公告本公司除息基準日相關事宜"
+    },
+    {
+      "date": "2026-09-13",
+      "event_type": "除權息基準日",
+      "name": "大世科",
+      "stock_id": "8099",
+      "title": "公告本公司股東常會授權董事長訂定除息基準日相關事宜"
+    }
+  ],
+  "week_end": "2026-09-04",
+  "week_start": "2026-08-31"
+}
