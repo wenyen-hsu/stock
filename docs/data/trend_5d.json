@@ -1,0 +1,432 @@
+{
+  "clusters": [
+    {
+      "name": "數位雲端",
+      "peers": [
+        {
+          "chg_1d_pct": 8.05,
+          "multifactor_score": 95.6,
+          "name": "騰雲",
+          "stock_id": "6870"
+        },
+        {
+          "chg_1d_pct": 1.21,
+          "multifactor_score": 65.54,
+          "name": "宏碁資訊",
+          "stock_id": "6811"
+        },
+        {
+          "chg_1d_pct": 1.04,
+          "multifactor_score": 63.23,
+          "name": "達人網",
+          "stock_id": "7839"
+        },
+        {
+          "chg_1d_pct": 0.97,
+          "multifactor_score": 62.35,
+          "name": "大車隊",
+          "stock_id": "2640"
+        },
+        {
+          "chg_1d_pct": -2.73,
+          "multifactor_score": 59.49,
+          "name": "創泓科技",
+          "stock_id": "7714"
+        },
+        {
+          "chg_1d_pct": -0.14,
+          "multifactor_score": 51.03,
+          "name": "愛爾達-創",
+          "stock_id": "8487"
+        },
+        {
+          "chg_1d_pct": 0.0,
+          "multifactor_score": 50.53,
+          "name": "威聯通",
+          "stock_id": "7805"
+        },
+        {
+          "chg_1d_pct": -1.22,
+          "multifactor_score": 37.1,
+          "name": "富邦媒",
+          "stock_id": "8454"
+        }
+      ],
+      "spike_members": [
+        {
+          "chg_1d_pct": -2.08,
+          "foreign_net_lot": -52.0,
+          "industry": "數位雲端",
+          "latest_volume_lot": 2000.03,
+          "multifactor_score": -3.55,
+          "name": "中華資安",
+          "stock_id": "7765",
+          "sub_industry": "",
+          "trust_net_lot": 0.0,
+          "volume_ratio_1d": 3.53
+        },
+        {
+          "chg_1d_pct": -2.39,
+          "foreign_net_lot": -73.03,
+          "industry": "數位雲端",
+          "latest_volume_lot": 2249.0,
+          "multifactor_score": 25.43,
+          "name": "安碁資訊",
+          "stock_id": "6690",
+          "sub_industry": "",
+          "trust_net_lot": 0.0,
+          "volume_ratio_1d": 3.4
+        },
+        {
+          "chg_1d_pct": -1.7,
+          "foreign_net_lot": -153.0,
+          "industry": "數位雲端",
+          "latest_volume_lot": 7763.17,
+          "multifactor_score": 21.07,
+          "name": "伊雲谷",
+          "stock_id": "6689",
+          "sub_industry": "",
+          "trust_net_lot": 0.0,
+          "volume_ratio_1d": 3.34
+        }
+      ]
+    },
+    {
+      "name": "資訊服務業",
+      "peers": [
+        {
+          "chg_1d_pct": 1.33,
+          "multifactor_score": 90.48,
+          "name": "精誠",
+          "stock_id": "6214"
+        },
+        {
+          "chg_1d_pct": 2.22,
+          "multifactor_score": 71.86,
+          "name": "敦陽科",
+          "stock_id": "2480"
+        },
+        {
+          "chg_1d_pct": 0.47,
+          "multifactor_score": 57.42,
+          "name": "上奇",
+          "stock_id": "6123"
+        },
+        {
+          "chg_1d_pct": -0.11,
+          "multifactor_score": 56.12,
+          "name": "中菲",
+          "stock_id": "5403"
+        },
+        {
+          "chg_1d_pct": -0.3,
+          "multifactor_score": 52.38,
+          "name": "大塚",
+          "stock_id": "3570"
+        },
+        {
+          "chg_1d_pct": 9.92,
+          "multifactor_score": 46.04,
+          "name": "普鴻",
+          "stock_id": "6590"
+        },
+        {
+          "chg_1d_pct": 0.18,
+          "multifactor_score": 35.45,
+          "name": "寶碩",
+          "stock_id": "5210"
+        },
+        {
+          "chg_1d_pct": 4.35,
+          "multifactor_score": 33.44,
+          "name": "威睿",
+          "stock_id": "8298"
+        }
+      ],
+      "spike_members": [
+        {
+          "chg_1d_pct": -4.84,
+          "foreign_net_lot": -541.76,
+          "industry": "資訊服務業",
+          "latest_volume_lot": 21595.49,
+          "multifactor_score": 18.43,
+          "name": "邁達特",
+          "stock_id": "6112",
+          "sub_industry": "",
+          "trust_net_lot": 0.0,
+          "volume_ratio_1d": 3.14
+        },
+        {
+          "chg_1d_pct": 1.57,
+          "foreign_net_lot": 79.0,
+          "industry": "資訊服務業",
+          "latest_volume_lot": 1987.25,
+          "multifactor_score": 3.55,
+          "name": "資通",
+          "stock_id": "2471",
+          "sub_industry": "",
+          "trust_net_lot": 0.0,
+          "volume_ratio_1d": 3.03
+        }
+      ]
+    }
+  ],
+  "days": 5,
+  "prev_date": "2026-09-14",
+  "state": "ready",
+  "strong_sectors": [
+    {
+      "avg_chg_1d_pct": 1.23,
+      "avg_multifactor": 9.18,
+      "industry": "資訊服務業",
+      "inst_net_lot": -423,
+      "is_sub": false,
+      "member_count": 57,
+      "name": "資訊服務業",
+      "up_count": 33,
+      "up_ratio_pct": 57.9
+    },
+    {
+      "avg_chg_1d_pct": 0.87,
+      "avg_multifactor": -13.2,
+      "industry": "91",
+      "inst_net_lot": -946,
+      "is_sub": false,
+      "member_count": 3,
+      "name": "91",
+      "up_count": 2,
+      "up_ratio_pct": 66.7
+    },
+    {
+      "avg_chg_1d_pct": 0.46,
+      "avg_multifactor": -16.89,
+      "industry": "電腦及週邊設備業",
+      "inst_net_lot": -2288,
+      "is_sub": true,
+      "member_count": 3,
+      "name": "電源供應器",
+      "up_count": 1,
+      "up_ratio_pct": 33.3
+    },
+    {
+      "avg_chg_1d_pct": 0.39,
+      "avg_multifactor": -0.03,
+      "industry": "油電燃氣業",
+      "inst_net_lot": -3991,
+      "is_sub": false,
+      "member_count": 13,
+      "name": "油電燃氣業",
+      "up_count": 4,
+      "up_ratio_pct": 30.8
+    },
+    {
+      "avg_chg_1d_pct": 0.37,
+      "avg_multifactor": 7.98,
+      "industry": "數位雲端",
+      "inst_net_lot": -1139,
+      "is_sub": false,
+      "member_count": 46,
+      "name": "數位雲端",
+      "up_count": 13,
+      "up_ratio_pct": 28.3
+    },
+    {
+      "avg_chg_1d_pct": 0.29,
+      "avg_multifactor": -4.17,
+      "industry": "運動休閒",
+      "inst_net_lot": 2499,
+      "is_sub": false,
+      "member_count": 31,
+      "name": "運動休閒",
+      "up_count": 15,
+      "up_ratio_pct": 48.4
+    },
+    {
+      "avg_chg_1d_pct": 0.16,
+      "avg_multifactor": -3.62,
+      "industry": "貿易百貨業",
+      "inst_net_lot": -780,
+      "is_sub": false,
+      "member_count": 17,
+      "name": "貿易百貨業",
+      "up_count": 5,
+      "up_ratio_pct": 29.4
+    },
+    {
+      "avg_chg_1d_pct": 0.03,
+      "avg_multifactor": 39.19,
+      "industry": "電腦及週邊設備業",
+      "inst_net_lot": 831,
+      "is_sub": true,
+      "member_count": 4,
+      "name": "工業電腦",
+      "up_count": 2,
+      "up_ratio_pct": 50.0
+    }
+  ],
+  "trade_date": "2026-09-15",
+  "volume_spikes": [
+    {
+      "chg_1d_pct": -2.08,
+      "foreign_net_lot": -52.0,
+      "industry": "數位雲端",
+      "latest_volume_lot": 2000.03,
+      "multifactor_score": -3.55,
+      "name": "中華資安",
+      "stock_id": "7765",
+      "sub_industry": "",
+      "trust_net_lot": 0.0,
+      "volume_ratio_1d": 3.53
+    },
+    {
+      "chg_1d_pct": -2.39,
+      "foreign_net_lot": -73.03,
+      "industry": "數位雲端",
+      "latest_volume_lot": 2249.0,
+      "multifactor_score": 25.43,
+      "name": "安碁資訊",
+      "stock_id": "6690",
+      "sub_industry": "",
+      "trust_net_lot": 0.0,
+      "volume_ratio_1d": 3.4
+    },
+    {
+      "chg_1d_pct": -1.7,
+      "foreign_net_lot": -153.0,
+      "industry": "數位雲端",
+      "latest_volume_lot": 7763.17,
+      "multifactor_score": 21.07,
+      "name": "伊雲谷",
+      "stock_id": "6689",
+      "sub_industry": "",
+      "trust_net_lot": 0.0,
+      "volume_ratio_1d": 3.34
+    },
+    {
+      "chg_1d_pct": 7.45,
+      "foreign_net_lot": 266.4,
+      "industry": "其他電子業",
+      "latest_volume_lot": 1114.0,
+      "multifactor_score": 64.27,
+      "name": "友威科",
+      "stock_id": "3580",
+      "sub_industry": "",
+      "trust_net_lot": 0.0,
+      "volume_ratio_1d": 3.15
+    },
+    {
+      "chg_1d_pct": -4.84,
+      "foreign_net_lot": -541.76,
+      "industry": "資訊服務業",
+      "latest_volume_lot": 21595.49,
+      "multifactor_score": 18.43,
+      "name": "邁達特",
+      "stock_id": "6112",
+      "sub_industry": "",
+      "trust_net_lot": 0.0,
+      "volume_ratio_1d": 3.14
+    },
+    {
+      "chg_1d_pct": 1.57,
+      "foreign_net_lot": 79.0,
+      "industry": "資訊服務業",
+      "latest_volume_lot": 1987.25,
+      "multifactor_score": 3.55,
+      "name": "資通",
+      "stock_id": "2471",
+      "sub_industry": "",
+      "trust_net_lot": 0.0,
+      "volume_ratio_1d": 3.03
+    }
+  ],
+  "weak_sectors": [
+    {
+      "avg_chg_1d_pct": -4.83,
+      "avg_multifactor": -3.97,
+      "industry": "半導體業",
+      "inst_net_lot": -551,
+      "is_sub": true,
+      "member_count": 4,
+      "name": "矽智財",
+      "up_count": 0,
+      "up_ratio_pct": 0.0
+    },
+    {
+      "avg_chg_1d_pct": -4.52,
+      "avg_multifactor": -25.4,
+      "industry": "通信網路業",
+      "inst_net_lot": -1590,
+      "is_sub": true,
+      "member_count": 4,
+      "name": "光通訊",
+      "up_count": 0,
+      "up_ratio_pct": 0.0
+    },
+    {
+      "avg_chg_1d_pct": -4.48,
+      "avg_multifactor": 34.66,
+      "industry": "電子零組件業",
+      "inst_net_lot": 731,
+      "is_sub": true,
+      "member_count": 5,
+      "name": "散熱",
+      "up_count": 0,
+      "up_ratio_pct": 0.0
+    },
+    {
+      "avg_chg_1d_pct": -4.26,
+      "avg_multifactor": -3.83,
+      "industry": "化學工業",
+      "inst_net_lot": -8492,
+      "is_sub": false,
+      "member_count": 50,
+      "name": "化學工業",
+      "up_count": 12,
+      "up_ratio_pct": 24.0
+    },
+    {
+      "avg_chg_1d_pct": -3.69,
+      "avg_multifactor": -43.18,
+      "industry": "航運業",
+      "inst_net_lot": -361,
+      "is_sub": true,
+      "member_count": 3,
+      "name": "軍工航太",
+      "up_count": 0,
+      "up_ratio_pct": 0.0
+    },
+    {
+      "avg_chg_1d_pct": -3.62,
+      "avg_multifactor": -4.81,
+      "industry": "綠能環保",
+      "inst_net_lot": -480,
+      "is_sub": false,
+      "member_count": 71,
+      "name": "綠能環保",
+      "up_count": 14,
+      "up_ratio_pct": 19.7
+    },
+    {
+      "avg_chg_1d_pct": -3.51,
+      "avg_multifactor": -12.62,
+      "industry": "觀光餐旅",
+      "inst_net_lot": -392,
+      "is_sub": false,
+      "member_count": 60,
+      "name": "觀光餐旅",
+      "up_count": 16,
+      "up_ratio_pct": 26.7
+    },
+    {
+      "avg_chg_1d_pct": -3.08,
+      "avg_multifactor": 0.11,
+      "industry": "其他業",
+      "inst_net_lot": 706,
+      "is_sub": false,
+      "member_count": 110,
+      "name": "其他業",
+      "up_count": 32,
+      "up_ratio_pct": 29.1
+    }
+  ]
+}
