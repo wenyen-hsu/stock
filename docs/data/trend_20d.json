@@ -1,0 +1,1211 @@
+{
+  "clusters": [
+    {
+      "name": "光電業",
+      "peers": [
+        {
+          "chg_1d_pct": 10.0,
+          "multifactor_score": 93.92,
+          "name": "高僑",
+          "stock_id": "6234"
+        },
+        {
+          "chg_1d_pct": 4.09,
+          "multifactor_score": 73.05,
+          "name": "弘凱",
+          "stock_id": "5244"
+        },
+        {
+          "chg_1d_pct": 9.9,
+          "multifactor_score": 60.75,
+          "name": "宏齊",
+          "stock_id": "6168"
+        },
+        {
+          "chg_1d_pct": 6.52,
+          "multifactor_score": 59.09,
+          "name": "台表科",
+          "stock_id": "6278"
+        },
+        {
+          "chg_1d_pct": 0.0,
+          "multifactor_score": 50.81,
+          "name": "智晶",
+          "stock_id": "5245"
+        },
+        {
+          "chg_1d_pct": 4.49,
+          "multifactor_score": 48.15,
+          "name": "哲固",
+          "stock_id": "3434"
+        },
+        {
+          "chg_1d_pct": -0.35,
+          "multifactor_score": 45.57,
+          "name": "眾福科",
+          "stock_id": "3168"
+        },
+        {
+          "chg_1d_pct": 9.89,
+          "multifactor_score": 44.14,
+          "name": "雷笛克光學",
+          "stock_id": "5230"
+        }
+      ],
+      "spike_members": [
+        {
+          "chg_1d_pct": 6.75,
+          "foreign_net_lot": -1560.77,
+          "industry": "光電業",
+          "latest_volume_lot": 9800.78,
+          "multifactor_score": 50.84,
+          "name": "佰鴻",
+          "stock_id": "3031",
+          "sub_industry": "",
+          "trust_net_lot": 0.0,
+          "volume_ratio_1d": 7.18
+        },
+        {
+          "chg_1d_pct": 4.09,
+          "foreign_net_lot": -4326.15,
+          "industry": "光電業",
+          "latest_volume_lot": 19107.98,
+          "multifactor_score": 12.17,
+          "name": "誠美材",
+          "stock_id": "4960",
+          "sub_industry": "",
+          "trust_net_lot": 0.0,
+          "volume_ratio_1d": 6.29
+        },
+        {
+          "chg_1d_pct": 6.84,
+          "foreign_net_lot": -391.67,
+          "industry": "光電業",
+          "latest_volume_lot": 4060.13,
+          "multifactor_score": 9.75,
+          "name": "澤米",
+          "stock_id": "6742",
+          "sub_industry": "",
+          "trust_net_lot": 0.0,
+          "volume_ratio_1d": 5.75
+        },
+        {
+          "chg_1d_pct": 1.3,
+          "foreign_net_lot": -669.71,
+          "industry": "光電業",
+          "latest_volume_lot": 6504.4,
+          "multifactor_score": 17.52,
+          "name": "明基材",
+          "stock_id": "8215",
+          "sub_industry": "",
+          "trust_net_lot": 0.0,
+          "volume_ratio_1d": 5.39
+        },
+        {
+          "chg_1d_pct": 9.94,
+          "foreign_net_lot": -634.25,
+          "industry": "光電業",
+          "latest_volume_lot": 23944.98,
+          "multifactor_score": 19.71,
+          "name": "光鋐",
+          "stock_id": "4956",
+          "sub_industry": "",
+          "trust_net_lot": 0.0,
+          "volume_ratio_1d": 4.9
+        },
+        {
+          "chg_1d_pct": 5.65,
+          "foreign_net_lot": 327.32,
+          "industry": "光電業",
+          "latest_volume_lot": 7953.0,
+          "multifactor_score": 67.65,
+          "name": "李洲",
+          "stock_id": "3066",
+          "sub_industry": "",
+          "trust_net_lot": 0.0,
+          "volume_ratio_1d": 4.42
+        },
+        {
+          "chg_1d_pct": 4.22,
+          "foreign_net_lot": 2494.52,
+          "industry": "光電業",
+          "latest_volume_lot": 129839.9,
+          "multifactor_score": 54.29,
+          "name": "光鼎",
+          "stock_id": "6226",
+          "sub_industry": "",
+          "trust_net_lot": 0.0,
+          "volume_ratio_1d": 4.35
+        }
+      ]
+    },
+    {
+      "name": "半導體業",
+      "peers": [
+        {
+          "chg_1d_pct": 1.38,
+          "multifactor_score": 97.0,
+          "name": "天鈺",
+          "stock_id": "4961"
+        },
+        {
+          "chg_1d_pct": 1.5,
+          "multifactor_score": 90.3,
+          "name": "聯陽",
+          "stock_id": "3014"
+        },
+        {
+          "chg_1d_pct": 5.86,
+          "multifactor_score": 88.04,
+          "name": "意德士",
+          "stock_id": "7556"
+        },
+        {
+          "chg_1d_pct": 9.95,
+          "multifactor_score": 81.75,
+          "name": "力士",
+          "stock_id": "4923"
+        },
+        {
+          "chg_1d_pct": 9.82,
+          "multifactor_score": 79.77,
+          "name": "欣銓",
+          "stock_id": "3264"
+        },
+        {
+          "chg_1d_pct": 10.0,
+          "multifactor_score": 79.07,
+          "name": "聯傑",
+          "stock_id": "3094"
+        },
+        {
+          "chg_1d_pct": 8.14,
+          "multifactor_score": 77.23,
+          "name": "巨有科技",
+          "stock_id": "8227"
+        },
+        {
+          "chg_1d_pct": 8.63,
+          "multifactor_score": 75.44,
+          "name": "群聯",
+          "stock_id": "8299"
+        }
+      ],
+      "spike_members": [
+        {
+          "chg_1d_pct": 6.51,
+          "foreign_net_lot": 21.55,
+          "industry": "半導體業",
+          "latest_volume_lot": 1709.0,
+          "multifactor_score": 5.39,
+          "name": "耀穎",
+          "stock_id": "7772",
+          "sub_industry": "",
+          "trust_net_lot": 0.0,
+          "volume_ratio_1d": 5.93
+        },
+        {
+          "chg_1d_pct": 9.98,
+          "foreign_net_lot": 2308.0,
+          "industry": "半導體業",
+          "latest_volume_lot": 16536.57,
+          "multifactor_score": 44.12,
+          "name": "華東",
+          "stock_id": "8110",
+          "sub_industry": "",
+          "trust_net_lot": 0.0,
+          "volume_ratio_1d": 4.43
+        },
+        {
+          "chg_1d_pct": 9.86,
+          "foreign_net_lot": 668.07,
+          "industry": "半導體業",
+          "latest_volume_lot": 2751.71,
+          "multifactor_score": 64.23,
+          "name": "達發",
+          "stock_id": "6526",
+          "sub_industry": "",
+          "trust_net_lot": -1.0,
+          "volume_ratio_1d": 4.35
+        },
+        {
+          "chg_1d_pct": 9.89,
+          "foreign_net_lot": 13229.17,
+          "industry": "半導體業",
+          "latest_volume_lot": 36727.86,
+          "multifactor_score": 81.41,
+          "name": "矽格",
+          "stock_id": "6257",
+          "sub_industry": "",
+          "trust_net_lot": 23.0,
+          "volume_ratio_1d": 3.81
+        },
+        {
+          "chg_1d_pct": 6.6,
+          "foreign_net_lot": 44.09,
+          "industry": "半導體業",
+          "latest_volume_lot": 3329.21,
+          "multifactor_score": 32.49,
+          "name": "鴻勁",
+          "stock_id": "7769",
+          "sub_industry": "",
+          "trust_net_lot": 2.35,
+          "volume_ratio_1d": 3.69
+        }
+      ]
+    },
+    {
+      "name": "其他電子業",
+      "peers": [
+        {
+          "chg_1d_pct": 4.65,
+          "multifactor_score": 77.92,
+          "name": "帆宣",
+          "stock_id": "6196"
+        },
+        {
+          "chg_1d_pct": 0.36,
+          "multifactor_score": 64.17,
+          "name": "玖鼎電力",
+          "stock_id": "4588"
+        },
+        {
+          "chg_1d_pct": 9.91,
+          "multifactor_score": 63.99,
+          "name": "倚強科",
+          "stock_id": "3219"
+        },
+        {
+          "chg_1d_pct": -0.9,
+          "multifactor_score": 57.99,
+          "name": "鴻準",
+          "stock_id": "2354"
+        },
+        {
+          "chg_1d_pct": 0.34,
+          "multifactor_score": 51.85,
+          "name": "安普新",
+          "stock_id": "6743"
+        },
+        {
+          "chg_1d_pct": 0.18,
+          "multifactor_score": 51.08,
+          "name": "精星",
+          "stock_id": "8183"
+        },
+        {
+          "chg_1d_pct": 9.75,
+          "multifactor_score": 50.19,
+          "name": "盟立",
+          "stock_id": "2464"
+        },
+        {
+          "chg_1d_pct": 1.0,
+          "multifactor_score": 49.55,
+          "name": "達明",
+          "stock_id": "4585"
+        }
+      ],
+      "spike_members": [
+        {
+          "chg_1d_pct": -7.59,
+          "foreign_net_lot": -47.0,
+          "industry": "其他電子業",
+          "latest_volume_lot": 309.0,
+          "multifactor_score": -3.49,
+          "name": "光焱科技",
+          "stock_id": "7728",
+          "sub_industry": "",
+          "trust_net_lot": 0.0,
+          "volume_ratio_1d": 6.2
+        },
+        {
+          "chg_1d_pct": 9.85,
+          "foreign_net_lot": 501.06,
+          "industry": "其他電子業",
+          "latest_volume_lot": 1457.0,
+          "multifactor_score": 63.55,
+          "name": "信紘科",
+          "stock_id": "6667",
+          "sub_industry": "",
+          "trust_net_lot": 0.0,
+          "volume_ratio_1d": 4.36
+        },
+        {
+          "chg_1d_pct": 8.31,
+          "foreign_net_lot": 391.4,
+          "industry": "其他電子業",
+          "latest_volume_lot": 1514.0,
+          "multifactor_score": 65.97,
+          "name": "安葆",
+          "stock_id": "7792",
+          "sub_industry": "",
+          "trust_net_lot": 0.0,
+          "volume_ratio_1d": 3.65
+        }
+      ]
+    },
+    {
+      "name": "電腦及週邊設備業",
+      "peers": [
+        {
+          "chg_1d_pct": 0.68,
+          "multifactor_score": 93.2,
+          "name": "廣積",
+          "stock_id": "8050"
+        },
+        {
+          "chg_1d_pct": 10.0,
+          "multifactor_score": 84.59,
+          "name": "廣寰科",
+          "stock_id": "3287"
+        },
+        {
+          "chg_1d_pct": 0.42,
+          "multifactor_score": 79.74,
+          "name": "神基",
+          "stock_id": "3005"
+        },
+        {
+          "chg_1d_pct": 1.09,
+          "multifactor_score": 73.52,
+          "name": "承啟",
+          "stock_id": "2425"
+        },
+        {
+          "chg_1d_pct": 8.1,
+          "multifactor_score": 72.55,
+          "name": "全友",
+          "stock_id": "2305"
+        },
+        {
+          "chg_1d_pct": -1.39,
+          "multifactor_score": 69.67,
+          "name": "宏碁",
+          "stock_id": "2353"
+        },
+        {
+          "chg_1d_pct": 1.0,
+          "multifactor_score": 67.94,
+          "name": "營邦",
+          "stock_id": "3693"
+        },
+        {
+          "chg_1d_pct": -1.01,
+          "multifactor_score": 64.11,
+          "name": "AMAX-KY",
+          "stock_id": "6933"
+        }
+      ],
+      "spike_members": [
+        {
+          "chg_1d_pct": 2.43,
+          "foreign_net_lot": 229.55,
+          "industry": "電腦及週邊設備業",
+          "latest_volume_lot": 15854.73,
+          "multifactor_score": 74.36,
+          "name": "事欣科",
+          "stock_id": "4916",
+          "sub_industry": "",
+          "trust_net_lot": 0.0,
+          "volume_ratio_1d": 6.81
+        },
+        {
+          "chg_1d_pct": 6.73,
+          "foreign_net_lot": 522.04,
+          "industry": "電腦及週邊設備業",
+          "latest_volume_lot": 5164.0,
+          "multifactor_score": 36.3,
+          "name": "濱川",
+          "stock_id": "1569",
+          "sub_industry": "",
+          "trust_net_lot": 0.0,
+          "volume_ratio_1d": 5.01
+        }
+      ]
+    },
+    {
+      "name": "電機機械",
+      "peers": [
+        {
+          "chg_1d_pct": 4.43,
+          "multifactor_score": 87.18,
+          "name": "永彰",
+          "stock_id": "4523"
+        },
+        {
+          "chg_1d_pct": -0.19,
+          "multifactor_score": 78.21,
+          "name": "擎邦",
+          "stock_id": "6122"
+        },
+        {
+          "chg_1d_pct": 2.08,
+          "multifactor_score": 66.23,
+          "name": "大量",
+          "stock_id": "3167"
+        },
+        {
+          "chg_1d_pct": 0.27,
+          "multifactor_score": 65.28,
+          "name": "豐祥-KY",
+          "stock_id": "5288"
+        },
+        {
+          "chg_1d_pct": 3.67,
+          "multifactor_score": 63.66,
+          "name": "大銀微系統",
+          "stock_id": "4576"
+        },
+        {
+          "chg_1d_pct": -0.16,
+          "multifactor_score": 61.39,
+          "name": "精湛",
+          "stock_id": "2070"
+        },
+        {
+          "chg_1d_pct": 0.26,
+          "multifactor_score": 60.13,
+          "name": "瀧澤科",
+          "stock_id": "6609"
+        },
+        {
+          "chg_1d_pct": 1.9,
+          "multifactor_score": 56.48,
+          "name": "富田-創",
+          "stock_id": "4590"
+        }
+      ],
+      "spike_members": [
+        {
+          "chg_1d_pct": 2.33,
+          "foreign_net_lot": -61.08,
+          "industry": "電機機械",
+          "latest_volume_lot": 8914.0,
+          "multifactor_score": 26.22,
+          "name": "富強鑫",
+          "stock_id": "6603",
+          "sub_industry": "",
+          "trust_net_lot": 0.0,
+          "volume_ratio_1d": 5.38
+        },
+        {
+          "chg_1d_pct": 9.94,
+          "foreign_net_lot": -314.12,
+          "industry": "電機機械",
+          "latest_volume_lot": 6133.92,
+          "multifactor_score": 93.95,
+          "name": "中砂",
+          "stock_id": "1560",
+          "sub_industry": "",
+          "trust_net_lot": 298.0,
+          "volume_ratio_1d": 4.0
+        }
+      ]
+    },
+    {
+      "name": "電子零組件業",
+      "peers": [
+        {
+          "chg_1d_pct": 9.9,
+          "multifactor_score": 76.1,
+          "name": "勝德",
+          "stock_id": "3296"
+        },
+        {
+          "chg_1d_pct": 8.87,
+          "multifactor_score": 68.56,
+          "name": "天二科技",
+          "stock_id": "6834"
+        },
+        {
+          "chg_1d_pct": 9.9,
+          "multifactor_score": 68.09,
+          "name": "晟鈦",
+          "stock_id": "3229"
+        },
+        {
+          "chg_1d_pct": 3.58,
+          "multifactor_score": 66.29,
+          "name": "台翰",
+          "stock_id": "1336"
+        },
+        {
+          "chg_1d_pct": 9.81,
+          "multifactor_score": 65.5,
+          "name": "富世達",
+          "stock_id": "6805"
+        },
+        {
+          "chg_1d_pct": 1.66,
+          "multifactor_score": 65.26,
+          "name": "迅德",
+          "stock_id": "6292"
+        },
+        {
+          "chg_1d_pct": 2.68,
+          "multifactor_score": 62.93,
+          "name": "博大",
+          "stock_id": "8109"
+        },
+        {
+          "chg_1d_pct": 2.9,
+          "multifactor_score": 62.2,
+          "name": "騰輝電子-KY",
+          "stock_id": "6672"
+        }
+      ],
+      "spike_members": [
+        {
+          "chg_1d_pct": -6.78,
+          "foreign_net_lot": 75.68,
+          "industry": "電子零組件業",
+          "latest_volume_lot": 9889.46,
+          "multifactor_score": 42.68,
+          "name": "揚博",
+          "stock_id": "2493",
+          "sub_industry": "",
+          "trust_net_lot": 0.0,
+          "volume_ratio_1d": 5.3
+        },
+        {
+          "chg_1d_pct": 5.37,
+          "foreign_net_lot": 11.64,
+          "industry": "電子零組件業",
+          "latest_volume_lot": 12821.65,
+          "multifactor_score": 55.85,
+          "name": "金橋",
+          "stock_id": "6133",
+          "sub_industry": "",
+          "trust_net_lot": 0.0,
+          "volume_ratio_1d": 4.93
+        }
+      ]
+    },
+    {
+      "name": "航運業",
+      "peers": [
+        {
+          "chg_1d_pct": -0.19,
+          "multifactor_score": 68.07,
+          "name": "榮運",
+          "stock_id": "2607"
+        },
+        {
+          "chg_1d_pct": -0.45,
+          "multifactor_score": 59.5,
+          "name": "台航",
+          "stock_id": "2617"
+        },
+        {
+          "chg_1d_pct": -0.95,
+          "multifactor_score": 57.74,
+          "name": "中航",
+          "stock_id": "2612"
+        },
+        {
+          "chg_1d_pct": 0.19,
+          "multifactor_score": 44.28,
+          "name": "遠雄港",
+          "stock_id": "5607"
+        },
+        {
+          "chg_1d_pct": 0.42,
+          "multifactor_score": 35.14,
+          "name": "台驊控股",
+          "stock_id": "2636"
+        },
+        {
+          "chg_1d_pct": -0.16,
+          "multifactor_score": 34.16,
+          "name": "捷迅",
+          "stock_id": "2643"
+        },
+        {
+          "chg_1d_pct": 0.86,
+          "multifactor_score": 29.19,
+          "name": "昱臺國際",
+          "stock_id": "7716"
+        },
+        {
+          "chg_1d_pct": -0.12,
+          "multifactor_score": 21.63,
+          "name": "建新國際",
+          "stock_id": "8367"
+        }
+      ],
+      "spike_members": [
+        {
+          "chg_1d_pct": -6.03,
+          "foreign_net_lot": -10745.2,
+          "industry": "航運業",
+          "latest_volume_lot": 23990.31,
+          "multifactor_score": -41.34,
+          "name": "益航",
+          "stock_id": "2601",
+          "sub_industry": "",
+          "trust_net_lot": 0.0,
+          "volume_ratio_1d": 5.19
+        },
+        {
+          "chg_1d_pct": -1.15,
+          "foreign_net_lot": -9178.68,
+          "industry": "航運業",
+          "latest_volume_lot": 18318.01,
+          "multifactor_score": 6.4,
+          "name": "台灣高鐵",
+          "stock_id": "2633",
+          "sub_industry": "",
+          "trust_net_lot": 999.61,
+          "volume_ratio_1d": 4.72
+        }
+      ]
+    }
+  ],
+  "days": 20,
+  "prev_date": "2026-09-17",
+  "state": "ready",
+  "strong_sectors": [
+    {
+      "avg_chg_1d_pct": 7.49,
+      "avg_multifactor": 22.46,
+      "industry": "半導體業",
+      "inst_net_lot": 892,
+      "is_sub": true,
+      "member_count": 4,
+      "name": "矽智財",
+      "up_count": 4,
+      "up_ratio_pct": 100.0
+    },
+    {
+      "avg_chg_1d_pct": 6.16,
+      "avg_multifactor": 54.04,
+      "industry": "電子零組件業",
+      "inst_net_lot": 909,
+      "is_sub": true,
+      "member_count": 5,
+      "name": "散熱",
+      "up_count": 5,
+      "up_ratio_pct": 100.0
+    },
+    {
+      "avg_chg_1d_pct": 5.4,
+      "avg_multifactor": 44.38,
+      "industry": "半導體業",
+      "inst_net_lot": 33293,
+      "is_sub": true,
+      "member_count": 4,
+      "name": "封測",
+      "up_count": 4,
+      "up_ratio_pct": 100.0
+    },
+    {
+      "avg_chg_1d_pct": 5.38,
+      "avg_multifactor": 52.5,
+      "industry": "半導體業",
+      "inst_net_lot": 92119,
+      "is_sub": true,
+      "member_count": 4,
+      "name": "記憶體",
+      "up_count": 4,
+      "up_ratio_pct": 100.0
+    },
+    {
+      "avg_chg_1d_pct": 4.45,
+      "avg_multifactor": 10.43,
+      "industry": "通信網路業",
+      "inst_net_lot": 1143,
+      "is_sub": true,
+      "member_count": 4,
+      "name": "光通訊",
+      "up_count": 4,
+      "up_ratio_pct": 100.0
+    },
+    {
+      "avg_chg_1d_pct": 3.77,
+      "avg_multifactor": 75.35,
+      "industry": "半導體業",
+      "inst_net_lot": 137144,
+      "is_sub": true,
+      "member_count": 4,
+      "name": "晶圓代工",
+      "up_count": 4,
+      "up_ratio_pct": 100.0
+    },
+    {
+      "avg_chg_1d_pct": 3.77,
+      "avg_multifactor": 32.85,
+      "industry": "半導體業",
+      "inst_net_lot": 43,
+      "is_sub": true,
+      "member_count": 4,
+      "name": "半導體設備",
+      "up_count": 4,
+      "up_ratio_pct": 100.0
+    },
+    {
+      "avg_chg_1d_pct": 3.64,
+      "avg_multifactor": 29.11,
+      "industry": "電子零組件業",
+      "inst_net_lot": 10109,
+      "is_sub": true,
+      "member_count": 5,
+      "name": "被動元件",
+      "up_count": 5,
+      "up_ratio_pct": 100.0
+    }
+  ],
+  "trade_date": "2026-09-18",
+  "volume_spikes": [
+    {
+      "chg_1d_pct": 3.35,
+      "foreign_net_lot": -637.81,
+      "industry": "通信網路業",
+      "latest_volume_lot": 3756.4,
+      "multifactor_score": -19.93,
+      "name": "耀登",
+      "stock_id": "3138",
+      "sub_industry": "",
+      "trust_net_lot": 0.0,
+      "volume_ratio_1d": 9.08
+    },
+    {
+      "chg_1d_pct": 9.61,
+      "foreign_net_lot": 4855.3,
+      "industry": "汽車工業",
+      "latest_volume_lot": 16980.05,
+      "multifactor_score": 63.74,
+      "name": "聯嘉投控",
+      "stock_id": "3717",
+      "sub_industry": "",
+      "trust_net_lot": 0.0,
+      "volume_ratio_1d": 8.15
+    },
+    {
+      "chg_1d_pct": 6.75,
+      "foreign_net_lot": -1560.77,
+      "industry": "光電業",
+      "latest_volume_lot": 9800.78,
+      "multifactor_score": 50.84,
+      "name": "佰鴻",
+      "stock_id": "3031",
+      "sub_industry": "",
+      "trust_net_lot": 0.0,
+      "volume_ratio_1d": 7.18
+    },
+    {
+      "chg_1d_pct": 2.43,
+      "foreign_net_lot": 229.55,
+      "industry": "電腦及週邊設備業",
+      "latest_volume_lot": 15854.73,
+      "multifactor_score": 74.36,
+      "name": "事欣科",
+      "stock_id": "4916",
+      "sub_industry": "",
+      "trust_net_lot": 0.0,
+      "volume_ratio_1d": 6.81
+    },
+    {
+      "chg_1d_pct": 9.91,
+      "foreign_net_lot": -12070.32,
+      "industry": "其他業",
+      "latest_volume_lot": 123120.0,
+      "multifactor_score": 38.13,
+      "name": "世紀*",
+      "stock_id": "5314",
+      "sub_industry": "",
+      "trust_net_lot": -14.0,
+      "volume_ratio_1d": 6.68
+    },
+    {
+      "chg_1d_pct": 4.09,
+      "foreign_net_lot": -4326.15,
+      "industry": "光電業",
+      "latest_volume_lot": 19107.98,
+      "multifactor_score": 12.17,
+      "name": "誠美材",
+      "stock_id": "4960",
+      "sub_industry": "",
+      "trust_net_lot": 0.0,
+      "volume_ratio_1d": 6.29
+    },
+    {
+      "chg_1d_pct": -7.59,
+      "foreign_net_lot": -47.0,
+      "industry": "其他電子業",
+      "latest_volume_lot": 309.0,
+      "multifactor_score": -3.49,
+      "name": "光焱科技",
+      "stock_id": "7728",
+      "sub_industry": "",
+      "trust_net_lot": 0.0,
+      "volume_ratio_1d": 6.2
+    },
+    {
+      "chg_1d_pct": 6.51,
+      "foreign_net_lot": 21.55,
+      "industry": "半導體業",
+      "latest_volume_lot": 1709.0,
+      "multifactor_score": 5.39,
+      "name": "耀穎",
+      "stock_id": "7772",
+      "sub_industry": "",
+      "trust_net_lot": 0.0,
+      "volume_ratio_1d": 5.93
+    },
+    {
+      "chg_1d_pct": 6.84,
+      "foreign_net_lot": -391.67,
+      "industry": "光電業",
+      "latest_volume_lot": 4060.13,
+      "multifactor_score": 9.75,
+      "name": "澤米",
+      "stock_id": "6742",
+      "sub_industry": "",
+      "trust_net_lot": 0.0,
+      "volume_ratio_1d": 5.75
+    },
+    {
+      "chg_1d_pct": 1.3,
+      "foreign_net_lot": -669.71,
+      "industry": "光電業",
+      "latest_volume_lot": 6504.4,
+      "multifactor_score": 17.52,
+      "name": "明基材",
+      "stock_id": "8215",
+      "sub_industry": "",
+      "trust_net_lot": 0.0,
+      "volume_ratio_1d": 5.39
+    },
+    {
+      "chg_1d_pct": 2.33,
+      "foreign_net_lot": -61.08,
+      "industry": "電機機械",
+      "latest_volume_lot": 8914.0,
+      "multifactor_score": 26.22,
+      "name": "富強鑫",
+      "stock_id": "6603",
+      "sub_industry": "",
+      "trust_net_lot": 0.0,
+      "volume_ratio_1d": 5.38
+    },
+    {
+      "chg_1d_pct": -6.78,
+      "foreign_net_lot": 75.68,
+      "industry": "電子零組件業",
+      "latest_volume_lot": 9889.46,
+      "multifactor_score": 42.68,
+      "name": "揚博",
+      "stock_id": "2493",
+      "sub_industry": "",
+      "trust_net_lot": 0.0,
+      "volume_ratio_1d": 5.3
+    },
+    {
+      "chg_1d_pct": -6.03,
+      "foreign_net_lot": -10745.2,
+      "industry": "航運業",
+      "latest_volume_lot": 23990.31,
+      "multifactor_score": -41.34,
+      "name": "益航",
+      "stock_id": "2601",
+      "sub_industry": "",
+      "trust_net_lot": 0.0,
+      "volume_ratio_1d": 5.19
+    },
+    {
+      "chg_1d_pct": 6.73,
+      "foreign_net_lot": 522.04,
+      "industry": "電腦及週邊設備業",
+      "latest_volume_lot": 5164.0,
+      "multifactor_score": 36.3,
+      "name": "濱川",
+      "stock_id": "1569",
+      "sub_industry": "",
+      "trust_net_lot": 0.0,
+      "volume_ratio_1d": 5.01
+    },
+    {
+      "chg_1d_pct": 5.37,
+      "foreign_net_lot": 11.64,
+      "industry": "電子零組件業",
+      "latest_volume_lot": 12821.65,
+      "multifactor_score": 55.85,
+      "name": "金橋",
+      "stock_id": "6133",
+      "sub_industry": "",
+      "trust_net_lot": 0.0,
+      "volume_ratio_1d": 4.93
+    },
+    {
+      "chg_1d_pct": 9.94,
+      "foreign_net_lot": -634.25,
+      "industry": "光電業",
+      "latest_volume_lot": 23944.98,
+      "multifactor_score": 19.71,
+      "name": "光鋐",
+      "stock_id": "4956",
+      "sub_industry": "",
+      "trust_net_lot": 0.0,
+      "volume_ratio_1d": 4.9
+    },
+    {
+      "chg_1d_pct": 0.0,
+      "foreign_net_lot": 3440.8,
+      "industry": "塑膠工業",
+      "latest_volume_lot": 151096.13,
+      "multifactor_score": 39.97,
+      "name": "中石化",
+      "stock_id": "1314",
+      "sub_industry": "",
+      "trust_net_lot": 0.0,
+      "volume_ratio_1d": 4.83
+    },
+    {
+      "chg_1d_pct": 6.53,
+      "foreign_net_lot": 208.15,
+      "industry": "綠能環保",
+      "latest_volume_lot": 1455.0,
+      "multifactor_score": 53.7,
+      "name": "世禾",
+      "stock_id": "3551",
+      "sub_industry": "",
+      "trust_net_lot": 0.0,
+      "volume_ratio_1d": 4.74
+    },
+    {
+      "chg_1d_pct": -1.15,
+      "foreign_net_lot": -9178.68,
+      "industry": "航運業",
+      "latest_volume_lot": 18318.01,
+      "multifactor_score": 6.4,
+      "name": "台灣高鐵",
+      "stock_id": "2633",
+      "sub_industry": "",
+      "trust_net_lot": 999.61,
+      "volume_ratio_1d": 4.72
+    },
+    {
+      "chg_1d_pct": 3.1,
+      "foreign_net_lot": 1016.83,
+      "industry": "建材營造業",
+      "latest_volume_lot": 4428.03,
+      "multifactor_score": 14.49,
+      "name": "華固",
+      "stock_id": "2548",
+      "sub_industry": "",
+      "trust_net_lot": 0.0,
+      "volume_ratio_1d": 4.44
+    },
+    {
+      "chg_1d_pct": 9.98,
+      "foreign_net_lot": 2308.0,
+      "industry": "半導體業",
+      "latest_volume_lot": 16536.57,
+      "multifactor_score": 44.12,
+      "name": "華東",
+      "stock_id": "8110",
+      "sub_industry": "",
+      "trust_net_lot": 0.0,
+      "volume_ratio_1d": 4.43
+    },
+    {
+      "chg_1d_pct": 5.65,
+      "foreign_net_lot": 327.32,
+      "industry": "光電業",
+      "latest_volume_lot": 7953.0,
+      "multifactor_score": 67.65,
+      "name": "李洲",
+      "stock_id": "3066",
+      "sub_industry": "",
+      "trust_net_lot": 0.0,
+      "volume_ratio_1d": 4.42
+    },
+    {
+      "chg_1d_pct": 9.85,
+      "foreign_net_lot": 501.06,
+      "industry": "其他電子業",
+      "latest_volume_lot": 1457.0,
+      "multifactor_score": 63.55,
+      "name": "信紘科",
+      "stock_id": "6667",
+      "sub_industry": "",
+      "trust_net_lot": 0.0,
+      "volume_ratio_1d": 4.36
+    },
+    {
+      "chg_1d_pct": 9.86,
+      "foreign_net_lot": 668.07,
+      "industry": "半導體業",
+      "latest_volume_lot": 2751.71,
+      "multifactor_score": 64.23,
+      "name": "達發",
+      "stock_id": "6526",
+      "sub_industry": "",
+      "trust_net_lot": -1.0,
+      "volume_ratio_1d": 4.35
+    },
+    {
+      "chg_1d_pct": 4.22,
+      "foreign_net_lot": 2494.52,
+      "industry": "光電業",
+      "latest_volume_lot": 129839.9,
+      "multifactor_score": 54.29,
+      "name": "光鼎",
+      "stock_id": "6226",
+      "sub_industry": "",
+      "trust_net_lot": 0.0,
+      "volume_ratio_1d": 4.35
+    },
+    {
+      "chg_1d_pct": 9.93,
+      "foreign_net_lot": -75.47,
+      "industry": "資訊服務業",
+      "latest_volume_lot": 9048.0,
+      "multifactor_score": 41.3,
+      "name": "驊宏資",
+      "stock_id": "6148",
+      "sub_industry": "",
+      "trust_net_lot": 0.0,
+      "volume_ratio_1d": 4.03
+    },
+    {
+      "chg_1d_pct": 9.94,
+      "foreign_net_lot": -314.12,
+      "industry": "電機機械",
+      "latest_volume_lot": 6133.92,
+      "multifactor_score": 93.95,
+      "name": "中砂",
+      "stock_id": "1560",
+      "sub_industry": "",
+      "trust_net_lot": 298.0,
+      "volume_ratio_1d": 4.0
+    },
+    {
+      "chg_1d_pct": 9.89,
+      "foreign_net_lot": 13229.17,
+      "industry": "半導體業",
+      "latest_volume_lot": 36727.86,
+      "multifactor_score": 81.41,
+      "name": "矽格",
+      "stock_id": "6257",
+      "sub_industry": "",
+      "trust_net_lot": 23.0,
+      "volume_ratio_1d": 3.81
+    },
+    {
+      "chg_1d_pct": 6.6,
+      "foreign_net_lot": 44.09,
+      "industry": "半導體業",
+      "latest_volume_lot": 3329.21,
+      "multifactor_score": 32.49,
+      "name": "鴻勁",
+      "stock_id": "7769",
+      "sub_industry": "",
+      "trust_net_lot": 2.35,
+      "volume_ratio_1d": 3.69
+    },
+    {
+      "chg_1d_pct": 8.31,
+      "foreign_net_lot": 391.4,
+      "industry": "其他電子業",
+      "latest_volume_lot": 1514.0,
+      "multifactor_score": 65.97,
+      "name": "安葆",
+      "stock_id": "7792",
+      "sub_industry": "",
+      "trust_net_lot": 0.0,
+      "volume_ratio_1d": 3.65
+    }
+  ],
+  "weak_sectors": [
+    {
+      "avg_chg_1d_pct": -1.85,
+      "avg_multifactor": 5.95,
+      "industry": "食品工業",
+      "inst_net_lot": -7021,
+      "is_sub": false,
+      "member_count": 41,
+      "name": "食品工業",
+      "up_count": 24,
+      "up_ratio_pct": 58.5
+    },
+    {
+      "avg_chg_1d_pct": -1.67,
+      "avg_multifactor": 2.91,
+      "industry": "生技醫療業",
+      "inst_net_lot": 1121,
+      "is_sub": false,
+      "member_count": 247,
+      "name": "生技醫療業",
+      "up_count": 120,
+      "up_ratio_pct": 48.6
+    },
+    {
+      "avg_chg_1d_pct": -1.03,
+      "avg_multifactor": -0.34,
+      "industry": "造紙工業",
+      "inst_net_lot": -1347,
+      "is_sub": false,
+      "member_count": 7,
+      "name": "造紙工業",
+      "up_count": 1,
+      "up_ratio_pct": 14.3
+    },
+    {
+      "avg_chg_1d_pct": -0.98,
+      "avg_multifactor": 70.11,
+      "industry": "金融保險業",
+      "inst_net_lot": -42999,
+      "is_sub": true,
+      "member_count": 12,
+      "name": "金控",
+      "up_count": 2,
+      "up_ratio_pct": 16.7
+    },
+    {
+      "avg_chg_1d_pct": -0.87,
+      "avg_multifactor": 10.64,
+      "industry": "數位雲端",
+      "inst_net_lot": 135,
+      "is_sub": false,
+      "member_count": 47,
+      "name": "數位雲端",
+      "up_count": 30,
+      "up_ratio_pct": 63.8
+    },
+    {
+      "avg_chg_1d_pct": -0.82,
+      "avg_multifactor": 3.23,
+      "industry": "橡膠工業",
+      "inst_net_lot": -8986,
+      "is_sub": false,
+      "member_count": 11,
+      "name": "橡膠工業",
+      "up_count": 4,
+      "up_ratio_pct": 36.4
+    },
+    {
+      "avg_chg_1d_pct": -0.81,
+      "avg_multifactor": 53.64,
+      "industry": "航運業",
+      "inst_net_lot": -1346,
+      "is_sub": true,
+      "member_count": 3,
+      "name": "貨櫃航運",
+      "up_count": 0,
+      "up_ratio_pct": 0.0
+    },
+    {
+      "avg_chg_1d_pct": -0.77,
+      "avg_multifactor": 44.92,
+      "industry": "航運業",
+      "inst_net_lot": -1570,
+      "is_sub": true,
+      "member_count": 3,
+      "name": "散裝航運",
+      "up_count": 1,
+      "up_ratio_pct": 33.3
+    }
+  ]
+}

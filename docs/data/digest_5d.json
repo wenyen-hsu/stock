@@ -1,0 +1,379 @@
+{
+  "days": 5,
+  "new_entrants": {
+    "big_holder_increase": [
+      {
+        "name": "力積電",
+        "rank_no": 6,
+        "score": 89.77,
+        "stock_id": "6770"
+      },
+      {
+        "name": "晟田",
+        "rank_no": 9,
+        "score": 69.06,
+        "stock_id": "4541"
+      },
+      {
+        "name": "百達-KY",
+        "rank_no": 13,
+        "score": 0.76,
+        "stock_id": "2236"
+      },
+      {
+        "name": "家登",
+        "rank_no": 17,
+        "score": 59.73,
+        "stock_id": "3680"
+      },
+      {
+        "name": "愛普*",
+        "rank_no": 18,
+        "score": 54.35,
+        "stock_id": "6531"
+      },
+      {
+        "name": "南茂",
+        "rank_no": 19,
+        "score": 89.95,
+        "stock_id": "8150"
+      }
+    ],
+    "momentum_inst_buy": [
+      {
+        "name": "頎邦",
+        "rank_no": 1,
+        "score": 89.13,
+        "stock_id": "6147"
+      },
+      {
+        "name": "矽格",
+        "rank_no": 2,
+        "score": 95.6,
+        "stock_id": "6257"
+      },
+      {
+        "name": "宏致",
+        "rank_no": 5,
+        "score": 70.7,
+        "stock_id": "3605"
+      },
+      {
+        "name": "聯嘉投控",
+        "rank_no": 6,
+        "score": 68.45,
+        "stock_id": "3717"
+      },
+      {
+        "name": "欣銓",
+        "rank_no": 7,
+        "score": 79.81,
+        "stock_id": "3264"
+      },
+      {
+        "name": "巨有科技",
+        "rank_no": 12,
+        "score": 78.59,
+        "stock_id": "8227"
+      },
+      {
+        "name": "佳大",
+        "rank_no": 13,
+        "score": 81.81,
+        "stock_id": "2033"
+      },
+      {
+        "name": "華經",
+        "rank_no": 14,
+        "score": 20.55,
+        "stock_id": "2468"
+      },
+      {
+        "name": "晶心科",
+        "rank_no": 15,
+        "score": 60.25,
+        "stock_id": "6533"
+      },
+      {
+        "name": "力士",
+        "rank_no": 16,
+        "score": 85.17,
+        "stock_id": "4923"
+      },
+      {
+        "name": "豪勉",
+        "rank_no": 17,
+        "score": 70.77,
+        "stock_id": "6218"
+      },
+      {
+        "name": "圓祥生技",
+        "rank_no": 18,
+        "score": 40.55,
+        "stock_id": "6945"
+      },
+      {
+        "name": "中揚光",
+        "rank_no": 19,
+        "score": 37.98,
+        "stock_id": "6668"
+      },
+      {
+        "name": "榮創",
+        "rank_no": 20,
+        "score": 19.8,
+        "stock_id": "3437"
+      }
+    ],
+    "multifactor_score": [
+      {
+        "name": "南亞科",
+        "rank_no": 1,
+        "score": 108.54,
+        "stock_id": "2408"
+      },
+      {
+        "name": "群聯",
+        "rank_no": 2,
+        "score": 108.3,
+        "stock_id": "8299"
+      },
+      {
+        "name": "聯電",
+        "rank_no": 4,
+        "score": 100.04,
+        "stock_id": "2303"
+      },
+      {
+        "name": "保瑞",
+        "rank_no": 5,
+        "score": 98.91,
+        "stock_id": "6472"
+      },
+      {
+        "name": "泰博",
+        "rank_no": 10,
+        "score": 96.98,
+        "stock_id": "4736"
+      },
+      {
+        "name": "千附",
+        "rank_no": 11,
+        "score": 96.25,
+        "stock_id": "8383"
+      },
+      {
+        "name": "精誠",
+        "rank_no": 12,
+        "score": 96.12,
+        "stock_id": "6214"
+      },
+      {
+        "name": "百徽",
+        "rank_no": 14,
+        "score": 96.06,
+        "stock_id": "6259"
+      },
+      {
+        "name": "矽格",
+        "rank_no": 15,
+        "score": 95.6,
+        "stock_id": "6257"
+      },
+      {
+        "name": "大聯大",
+        "rank_no": 16,
+        "score": 95.53,
+        "stock_id": "3702"
+      },
+      {
+        "name": "統新",
+        "rank_no": 17,
+        "score": 95.28,
+        "stock_id": "6426"
+      },
+      {
+        "name": "全宇昕",
+        "rank_no": 19,
+        "score": 95.06,
+        "stock_id": "6651"
+      },
+      {
+        "name": "豐祥-KY",
+        "rank_no": 20,
+        "score": 93.86,
+        "stock_id": "5288"
+      }
+    ]
+  },
+  "ranking_labels": {
+    "big_holder_increase": "大戶增持 + 法人買超",
+    "momentum_inst_buy": "動能 + 法人買超",
+    "multifactor_score": "多因子綜合分"
+  },
+  "signals": {
+    "big_holder": [
+      {
+        "name": "南亞科",
+        "stock_id": "2408",
+        "value": 0.88
+      },
+      {
+        "name": "群聯",
+        "stock_id": "8299",
+        "value": 0.59
+      },
+      {
+        "name": "聯電",
+        "stock_id": "2303",
+        "value": 0.65
+      },
+      {
+        "name": "千附",
+        "stock_id": "8383",
+        "value": 0.87
+      },
+      {
+        "name": "精誠",
+        "stock_id": "6214",
+        "value": 2.24
+      },
+      {
+        "name": "矽格",
+        "stock_id": "6257",
+        "value": 0.83
+      },
+      {
+        "name": "大聯大",
+        "stock_id": "3702",
+        "value": 0.41
+      },
+      {
+        "name": "統新",
+        "stock_id": "6426",
+        "value": 2.87
+      },
+      {
+        "name": "神基",
+        "stock_id": "3005",
+        "value": 0.42
+      },
+      {
+        "name": "上海商銀",
+        "stock_id": "5876",
+        "value": 0.39
+      }
+    ],
+    "branch_streak": [],
+    "day_trader": [],
+    "margin_down": [
+      {
+        "name": "千附",
+        "stock_id": "8383",
+        "value": -2
+      },
+      {
+        "name": "精誠",
+        "stock_id": "6214",
+        "value": -2
+      },
+      {
+        "name": "承啟",
+        "stock_id": "2425",
+        "value": -2
+      },
+      {
+        "name": "億光",
+        "stock_id": "2393",
+        "value": -4
+      },
+      {
+        "name": "立敦",
+        "stock_id": "6175",
+        "value": -7
+      },
+      {
+        "name": "倍微",
+        "stock_id": "6270",
+        "value": -2
+      },
+      {
+        "name": "天虹",
+        "stock_id": "6937",
+        "value": -2
+      },
+      {
+        "name": "宏璟",
+        "stock_id": "2527",
+        "value": -2
+      },
+      {
+        "name": "宇峻",
+        "stock_id": "3546",
+        "value": -4
+      },
+      {
+        "name": "李洲",
+        "stock_id": "3066",
+        "value": -3
+      }
+    ],
+    "margin_up": [
+      {
+        "name": "南亞科",
+        "stock_id": "2408",
+        "value": 4
+      },
+      {
+        "name": "群聯",
+        "stock_id": "8299",
+        "value": 4
+      },
+      {
+        "name": "潤泰新",
+        "stock_id": "9945",
+        "value": 2
+      },
+      {
+        "name": "矽格",
+        "stock_id": "6257",
+        "value": 3
+      },
+      {
+        "name": "統新",
+        "stock_id": "6426",
+        "value": 2
+      },
+      {
+        "name": "神基",
+        "stock_id": "3005",
+        "value": 2
+      },
+      {
+        "name": "豐祥-KY",
+        "stock_id": "5288",
+        "value": 2
+      },
+      {
+        "name": "大成鋼",
+        "stock_id": "2027",
+        "value": 2
+      },
+      {
+        "name": "廣積",
+        "stock_id": "8050",
+        "value": 2
+      },
+      {
+        "name": "彰源",
+        "stock_id": "2030",
+        "value": 4
+      }
+    ]
+  },
+  "snapshot_dates": [
+    "2026-09-18",
+    "2026-09-17"
+  ],
+  "state": "ready"
+}
