@@ -28,6 +28,21 @@
 
 頁面補上三欄對應的動作：追強等今開回檔、接刀等弱開再接、賣壓在開盤附近賣或避。賣壓榜來源是 `day_traders.json`，檔數少，頁面標「僅供參考」。
 
+## TypeSafe skill（已加入）
+
+專案技能目錄：`.cursor/skills/typesafe-ai/`。內容是官方 [typesafe-ai/skills](https://github.com/typesafe-ai/skills) 的完整 `skills/typesafe-ai` 目錄（目前只有 `SKILL.md` 與 `LICENSE`），給 Cursor / 其他 agent 讀 TypeSafe API 用。
+
+之後處理判斷、路由、或 fragile parsing 時，在 prompt 寫「use the TypeSafe skill」。文件索引：[docs.typesafe.ai/llms.txt](https://docs.typesafe.ai/llms.txt)。
+
+更新方式：整份目錄換成 GitHub 最新版。不要同時再用 `npx skills add`，避免重複副本。
+
+```bash
+curl -fsSL -o .cursor/skills/typesafe-ai/SKILL.md \
+  https://raw.githubusercontent.com/typesafe-ai/skills/main/skills/typesafe-ai/SKILL.md
+curl -fsSL -o .cursor/skills/typesafe-ai/LICENSE \
+  https://raw.githubusercontent.com/typesafe-ai/skills/main/skills/typesafe-ai/LICENSE
+```
+
 ## 每日更新監測（台北 03:00，固定執行）
 
 這則 Cloud Agent 對話每天 **03:00 Asia/Taipei**（UTC `0 19 * * *`）檢查前一晚管線；沒過就修到過。每次醒來結束前會**先退訂再重訂**同一支 timer，把 7 天到期往後推，不必再下指令。
