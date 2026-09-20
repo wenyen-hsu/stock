@@ -61,7 +61,7 @@ Cursor Cloud Agent 的環境已備妥，讓代理能直接跑應用與測試：
 - **install**（開機建置一次，idempotent）：
   1. `python3 -m pip install --break-system-packages -r requirements.txt -r requirements-dev.txt`（系統 Python 為 externally-managed，需 `--break-system-packages`）
   2. `npm install --no-save playwright` 並 `npx playwright install --with-deps chromium`（e2e 用）
-  3. 由 `stock_chip.gui.INDEX_HTML` 重新產生 `docs/index.html`（`STOCK_CHIP_STATIC=true`）。e2e 測的是**當前原始碼**產生的頁面，committed 的 `docs/index.html` 是較舊的發佈版，故每次都重生；這會讓 `docs/index.html` 在工作區呈現 modified，提交前可 `git checkout -- docs/index.html` 還原。
+  3. 由 `stock_chip.gui.INDEX_HTML` 重新產生 `docs/index.html`，切到靜態模式（把 HTML 內的 `window.STOCK_CHIP_STATIC = false;` 字串取代成 `true;`，與 CI 相同；並非環境變數）。e2e 測的是**當前原始碼**產生的頁面，committed 的 `docs/index.html` 是較舊的發佈版，故每次都重生；這會讓 `docs/index.html` 在工作區呈現 modified，提交前可 `git checkout -- docs/index.html` 還原。
 - **terminals**（常駐服務）：
   - `static-site`：`python3 -m http.server 9000 -d docs`（發佈用靜態站，含真實資料）
   - `local-gui`：`python3 -m stock_chip.gui --host 127.0.0.1 --port 8502`（本機 GUI；無 SQLite 時回傳 `state: insufficient` 空狀態）
