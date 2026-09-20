@@ -38,6 +38,22 @@
 
 若這則對話被封存，監測會停。要完全獨立於對話，到 [cursor.com/automations](https://cursor.com/automations) 建 cron `0 3 * * *`、時區台北，指示寫「照 monitor-daily-update skill」。
 
+## Cloud Agent 開發環境（已設定）
+
+Cursor Cloud Agent 的環境已備妥，讓代理能直接跑應用與測試：
+
+- **base image**：Cursor 預設映像（已含 Python 3.12、Node 22、npm、passwordless sudo）。
+- **install**（開機建置一次，idempotent）：
+  1. `python3 -m pip install --break-system-packages -r requirements.txt -r requirements-dev.txt`（系統 Python 為 externally-managed，需 `--break-system-packages`）
+  2. `npm install --no-save playwright` 並 `npx playwright install --with-deps chromium`（e2e 用）
+  3. 由 `stock_chip.gui.INDEX_HTML` 重新產生 `docs/index.html`（`STOCK_CHIP_STATIC=true`）。e2e 測的是**當前原始碼**產生的頁面，committed 的 `docs/index.html` 是較舊的發佈版，故每次都重生；這會讓 `docs/index.html` 在工作區呈現 modified，提交前可 `git checkout -- docs/index.html` 還原。
+- **terminals**（常駐服務）：
+  - `static-site`：`python3 -m http.server 9000 -d docs`（發佈用靜態站，含真實資料）
+  - `local-gui`：`python3 -m stock_chip.gui --host 127.0.0.1 --port 8502`（本機 GUI；無 SQLite 時回傳 `state: insufficient` 空狀態）
+- **驗證**：`python3 -m pytest tests/ -q`（173 passed，無網路／無 DB）與 `npm run e2e`（Playwright chromium 對 `docs/` 靜態站，6 支測試全綠）。
+
+本機 GUI 若要有真實資料，需先跑管線 `python3 -m stock_chip.daily` 灌 `data/stock_chip.sqlite`（會連台股資料源，需網路）。
+
 ## 日常指令（現況，整理後不變）
 
 ```bash
