@@ -1,0 +1,527 @@
+{
+  "days": 20,
+  "new_entrants": {
+    "big_holder_increase": [
+      {
+        "name": "佳大",
+        "rank_no": 1,
+        "score": 25.72,
+        "stock_id": "2033"
+      },
+      {
+        "name": "聯傑",
+        "rank_no": 2,
+        "score": 54.49,
+        "stock_id": "3094"
+      },
+      {
+        "name": "南茂",
+        "rank_no": 3,
+        "score": 93.48,
+        "stock_id": "8150"
+      },
+      {
+        "name": "友達",
+        "rank_no": 4,
+        "score": 48.91,
+        "stock_id": "2409"
+      },
+      {
+        "name": "嘉晶",
+        "rank_no": 5,
+        "score": 88.95,
+        "stock_id": "3016"
+      },
+      {
+        "name": "矽格",
+        "rank_no": 6,
+        "score": 69.34,
+        "stock_id": "6257"
+      },
+      {
+        "name": "GIS-KY",
+        "rank_no": 7,
+        "score": 28.54,
+        "stock_id": "6456"
+      },
+      {
+        "name": "京元電子",
+        "rank_no": 10,
+        "score": 45.03,
+        "stock_id": "2449"
+      },
+      {
+        "name": "濱川",
+        "rank_no": 11,
+        "score": 41.77,
+        "stock_id": "1569"
+      },
+      {
+        "name": "金橋",
+        "rank_no": 12,
+        "score": 48.81,
+        "stock_id": "6133"
+      },
+      {
+        "name": "智原",
+        "rank_no": 13,
+        "score": 74.22,
+        "stock_id": "3035"
+      },
+      {
+        "name": "聯嘉投控",
+        "rank_no": 14,
+        "score": 56.92,
+        "stock_id": "3717"
+      },
+      {
+        "name": "弘塑",
+        "rank_no": 15,
+        "score": 5.45,
+        "stock_id": "3131"
+      },
+      {
+        "name": "騰輝電子-KY",
+        "rank_no": 16,
+        "score": 85.29,
+        "stock_id": "6672"
+      },
+      {
+        "name": "AMAX-KY",
+        "rank_no": 17,
+        "score": 79.73,
+        "stock_id": "6933"
+      },
+      {
+        "name": "景碩",
+        "rank_no": 18,
+        "score": 62.08,
+        "stock_id": "3189"
+      },
+      {
+        "name": "十銓",
+        "rank_no": 19,
+        "score": 56.37,
+        "stock_id": "4967"
+      },
+      {
+        "name": "力積電",
+        "rank_no": 20,
+        "score": 51.89,
+        "stock_id": "6770"
+      }
+    ],
+    "momentum_inst_buy": [
+      {
+        "name": "佰鴻",
+        "rank_no": 1,
+        "score": 49.36,
+        "stock_id": "3031"
+      },
+      {
+        "name": "冠西電",
+        "rank_no": 4,
+        "score": 59.85,
+        "stock_id": "2466"
+      },
+      {
+        "name": "日月光投控",
+        "rank_no": 5,
+        "score": 74.93,
+        "stock_id": "3711"
+      },
+      {
+        "name": "騰輝電子-KY",
+        "rank_no": 6,
+        "score": 85.29,
+        "stock_id": "6672"
+      },
+      {
+        "name": "倚強科",
+        "rank_no": 7,
+        "score": 76.7,
+        "stock_id": "3219"
+      },
+      {
+        "name": "AMAX-KY",
+        "rank_no": 8,
+        "score": 79.73,
+        "stock_id": "6933"
+      },
+      {
+        "name": "GIS-KY",
+        "rank_no": 12,
+        "score": 28.54,
+        "stock_id": "6456"
+      },
+      {
+        "name": "東和鋼鐵",
+        "rank_no": 13,
+        "score": 84.39,
+        "stock_id": "2006"
+      },
+      {
+        "name": "偉詮電",
+        "rank_no": 14,
+        "score": 48.07,
+        "stock_id": "2436"
+      },
+      {
+        "name": "潤泰新",
+        "rank_no": 15,
+        "score": 73.45,
+        "stock_id": "9945"
+      },
+      {
+        "name": "聯電",
+        "rank_no": 16,
+        "score": 52.47,
+        "stock_id": "2303"
+      }
+    ],
+    "multifactor_score": [
+      {
+        "name": "廣積",
+        "rank_no": 2,
+        "score": 102.62,
+        "stock_id": "8050"
+      },
+      {
+        "name": "南茂",
+        "rank_no": 5,
+        "score": 93.48,
+        "stock_id": "8150"
+      },
+      {
+        "name": "嘉晶",
+        "rank_no": 8,
+        "score": 88.95,
+        "stock_id": "3016"
+      },
+      {
+        "name": "台驊控股",
+        "rank_no": 11,
+        "score": 86.3,
+        "stock_id": "2636"
+      },
+      {
+        "name": "騰輝電子-KY",
+        "rank_no": 12,
+        "score": 85.29,
+        "stock_id": "6672"
+      },
+      {
+        "name": "東和鋼鐵",
+        "rank_no": 13,
+        "score": 84.39,
+        "stock_id": "2006"
+      },
+      {
+        "name": "第一金",
+        "rank_no": 14,
+        "score": 84.15,
+        "stock_id": "2892"
+      },
+      {
+        "name": "達發",
+        "rank_no": 15,
+        "score": 82.43,
+        "stock_id": "6526"
+      },
+      {
+        "name": "中華電",
+        "rank_no": 18,
+        "score": 81.19,
+        "stock_id": "2412"
+      },
+      {
+        "name": "AMAX-KY",
+        "rank_no": 20,
+        "score": 79.73,
+        "stock_id": "6933"
+      }
+    ]
+  },
+  "ranking_labels": {
+    "big_holder_increase": "大戶增持 + 法人買超",
+    "momentum_inst_buy": "動能 + 法人買超",
+    "multifactor_score": "多因子綜合分"
+  },
+  "signals": {
+    "big_holder": [
+      {
+        "name": "統一證",
+        "stock_id": "2855",
+        "value": 0.7
+      },
+      {
+        "name": "廣積",
+        "stock_id": "8050",
+        "value": 0.54
+      },
+      {
+        "name": "福邦證",
+        "stock_id": "6026",
+        "value": 0.9
+      },
+      {
+        "name": "南茂",
+        "stock_id": "8150",
+        "value": 7.05
+      },
+      {
+        "name": "漢唐",
+        "stock_id": "2404",
+        "value": 1.65
+      },
+      {
+        "name": "嘉晶",
+        "stock_id": "3016",
+        "value": 5.42
+      },
+      {
+        "name": "騰輝電子-KY",
+        "stock_id": "6672",
+        "value": 3.11
+      },
+      {
+        "name": "達發",
+        "stock_id": "6526",
+        "value": 0.43
+      },
+      {
+        "name": "世界",
+        "stock_id": "5347",
+        "value": 0.36
+      },
+      {
+        "name": "AMAX-KY",
+        "stock_id": "6933",
+        "value": 2.66
+      }
+    ],
+    "branch_streak": [
+      {
+        "broker": "台灣摩根士丹利",
+        "name": "統一證",
+        "stock_id": "2855",
+        "value": 14
+      },
+      {
+        "broker": "美商高盛",
+        "name": "福邦證",
+        "stock_id": "6026",
+        "value": 11
+      },
+      {
+        "broker": "台灣摩根士丹利",
+        "name": "南茂",
+        "stock_id": "8150",
+        "value": 20
+      },
+      {
+        "broker": "美商高盛",
+        "name": "亞泥",
+        "stock_id": "1102",
+        "value": 15
+      },
+      {
+        "broker": "美商高盛",
+        "name": "嘉晶",
+        "stock_id": "3016",
+        "value": 20
+      },
+      {
+        "broker": "摩根大通",
+        "name": "復盛應用",
+        "stock_id": "6670",
+        "value": 8
+      },
+      {
+        "broker": "美商高盛",
+        "name": "永豐金",
+        "stock_id": "2890",
+        "value": 20
+      },
+      {
+        "broker": "台灣摩根士丹利",
+        "name": "台驊控股",
+        "stock_id": "2636",
+        "value": 7
+      },
+      {
+        "broker": "美商高盛",
+        "name": "騰輝電子-KY",
+        "stock_id": "6672",
+        "value": 20
+      },
+      {
+        "broker": "台灣摩根士丹利",
+        "name": "第一金",
+        "stock_id": "2892",
+        "value": 20
+      }
+    ],
+    "day_trader": [
+      {
+        "broker": "凱基-台北",
+        "name": "廣積",
+        "stock_id": "8050"
+      },
+      {
+        "broker": "凱基-台北",
+        "name": "東和鋼鐵",
+        "stock_id": "2006"
+      },
+      {
+        "broker": "凱基-台北",
+        "name": "遠傳",
+        "stock_id": "4904"
+      },
+      {
+        "broker": "凱基-台北",
+        "name": "金洲",
+        "stock_id": "4417"
+      },
+      {
+        "broker": "凱基-台北",
+        "name": "明安",
+        "stock_id": "8938"
+      },
+      {
+        "broker": "凱基-台北",
+        "name": "騰雲",
+        "stock_id": "6870"
+      },
+      {
+        "broker": "凱基-台北",
+        "name": "健椿",
+        "stock_id": "4561"
+      },
+      {
+        "broker": "凱基-台北",
+        "name": "迅德",
+        "stock_id": "6292"
+      },
+      {
+        "broker": "凱基-台北",
+        "name": "利華",
+        "stock_id": "1423"
+      },
+      {
+        "broker": "凱基-台北",
+        "name": "揚智",
+        "stock_id": "3041"
+      }
+    ],
+    "margin_down": [
+      {
+        "name": "精誠",
+        "stock_id": "6214",
+        "value": -2
+      },
+      {
+        "name": "台驊控股",
+        "stock_id": "2636",
+        "value": -3
+      },
+      {
+        "name": "達發",
+        "stock_id": "6526",
+        "value": -2
+      },
+      {
+        "name": "東鹼",
+        "stock_id": "1708",
+        "value": -2
+      },
+      {
+        "name": "祺驊",
+        "stock_id": "1593",
+        "value": -2
+      },
+      {
+        "name": "研華",
+        "stock_id": "2395",
+        "value": -2
+      },
+      {
+        "name": "明安",
+        "stock_id": "8938",
+        "value": -3
+      },
+      {
+        "name": "安普新",
+        "stock_id": "6743",
+        "value": -3
+      },
+      {
+        "name": "愛之味",
+        "stock_id": "1217",
+        "value": -2
+      },
+      {
+        "name": "達人網",
+        "stock_id": "7839",
+        "value": -3
+      }
+    ],
+    "margin_up": [
+      {
+        "name": "廣積",
+        "stock_id": "8050",
+        "value": 2
+      },
+      {
+        "name": "漢唐",
+        "stock_id": "2404",
+        "value": 2
+      },
+      {
+        "name": "嘉晶",
+        "stock_id": "3016",
+        "value": 4
+      },
+      {
+        "name": "騰輝電子-KY",
+        "stock_id": "6672",
+        "value": 2
+      },
+      {
+        "name": "世界",
+        "stock_id": "5347",
+        "value": 3
+      },
+      {
+        "name": "中砂",
+        "stock_id": "1560",
+        "value": 7
+      },
+      {
+        "name": "彰源",
+        "stock_id": "2030",
+        "value": 4
+      },
+      {
+        "name": "允強",
+        "stock_id": "2034",
+        "value": 2
+      },
+      {
+        "name": "健策",
+        "stock_id": "3653",
+        "value": 3
+      },
+      {
+        "name": "日月光投控",
+        "stock_id": "3711",
+        "value": 6
+      }
+    ]
+  },
+  "snapshot_dates": [
+    "2026-09-24",
+    "2026-09-23"
+  ],
+  "state": "ready"
+}
