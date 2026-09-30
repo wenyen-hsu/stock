@@ -37,9 +37,9 @@
 更新方式：整份目錄換成 GitHub 最新版。不要同時再用 `npx skills add`，避免重複副本。
 
 ```bash
-curl -fsSL -o .cursor/skills/typesafe-ai/SKILL.md \
+curl -fsSL --create-dirs -o .cursor/skills/typesafe-ai/SKILL.md \
   https://raw.githubusercontent.com/typesafe-ai/skills/main/skills/typesafe-ai/SKILL.md
-curl -fsSL -o .cursor/skills/typesafe-ai/LICENSE \
+curl -fsSL --create-dirs -o .cursor/skills/typesafe-ai/LICENSE \
   https://raw.githubusercontent.com/typesafe-ai/skills/main/skills/typesafe-ai/LICENSE
 ```
 
