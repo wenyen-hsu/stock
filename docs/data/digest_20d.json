@@ -1,0 +1,427 @@
+{
+  "days": 20,
+  "new_entrants": {
+    "big_holder_increase": [
+      {
+        "name": "中華化",
+        "rank_no": 8,
+        "score": 62.16,
+        "stock_id": "1727"
+      }
+    ],
+    "momentum_inst_buy": [
+      {
+        "name": "世界",
+        "rank_no": 2,
+        "score": 99.73,
+        "stock_id": "5347"
+      },
+      {
+        "name": "泰鼎-KY",
+        "rank_no": 4,
+        "score": 61.61,
+        "stock_id": "4927"
+      },
+      {
+        "name": "偉詮電",
+        "rank_no": 6,
+        "score": 52.95,
+        "stock_id": "2436"
+      },
+      {
+        "name": "力積電",
+        "rank_no": 8,
+        "score": 98.88,
+        "stock_id": "6770"
+      },
+      {
+        "name": "大同",
+        "rank_no": 9,
+        "score": 41.5,
+        "stock_id": "2371"
+      },
+      {
+        "name": "中鼎",
+        "rank_no": 10,
+        "score": 71.83,
+        "stock_id": "9933"
+      },
+      {
+        "name": "台半",
+        "rank_no": 11,
+        "score": 60.54,
+        "stock_id": "5425"
+      },
+      {
+        "name": "研揚",
+        "rank_no": 12,
+        "score": 49.31,
+        "stock_id": "6579"
+      },
+      {
+        "name": "健鼎",
+        "rank_no": 13,
+        "score": 60.28,
+        "stock_id": "3044"
+      },
+      {
+        "name": "盛群",
+        "rank_no": 14,
+        "score": 62.17,
+        "stock_id": "6202"
+      },
+      {
+        "name": "全新",
+        "rank_no": 15,
+        "score": 55.28,
+        "stock_id": "2455"
+      },
+      {
+        "name": "友達",
+        "rank_no": 16,
+        "score": 70.46,
+        "stock_id": "2409"
+      },
+      {
+        "name": "華新科",
+        "rank_no": 17,
+        "score": 56.02,
+        "stock_id": "2492"
+      },
+      {
+        "name": "朋億*",
+        "rank_no": 19,
+        "score": 84.16,
+        "stock_id": "6613"
+      },
+      {
+        "name": "聯陽",
+        "rank_no": 20,
+        "score": 63.92,
+        "stock_id": "3014"
+      }
+    ],
+    "multifactor_score": [
+      {
+        "name": "力積電",
+        "rank_no": 4,
+        "score": 98.88,
+        "stock_id": "6770"
+      },
+      {
+        "name": "意德士",
+        "rank_no": 5,
+        "score": 97.97,
+        "stock_id": "7556"
+      },
+      {
+        "name": "迅德",
+        "rank_no": 7,
+        "score": 97.02,
+        "stock_id": "6292"
+      },
+      {
+        "name": "神準",
+        "rank_no": 9,
+        "score": 95.61,
+        "stock_id": "3558"
+      },
+      {
+        "name": "全宇昕",
+        "rank_no": 14,
+        "score": 91.13,
+        "stock_id": "6651"
+      },
+      {
+        "name": "台塑化",
+        "rank_no": 18,
+        "score": 87.81,
+        "stock_id": "6505"
+      },
+      {
+        "name": "中砂",
+        "rank_no": 19,
+        "score": 87.12,
+        "stock_id": "1560"
+      },
+      {
+        "name": "矽格",
+        "rank_no": 20,
+        "score": 86.81,
+        "stock_id": "6257"
+      }
+    ]
+  },
+  "ranking_labels": {
+    "big_holder_increase": "大戶增持 + 法人買超",
+    "momentum_inst_buy": "動能 + 法人買超",
+    "multifactor_score": "多因子綜合分"
+  },
+  "signals": {
+    "big_holder": [
+      {
+        "name": "統一證",
+        "stock_id": "2855",
+        "value": 0.7
+      },
+      {
+        "name": "世界",
+        "stock_id": "5347",
+        "value": 0.36
+      },
+      {
+        "name": "福邦證",
+        "stock_id": "6026",
+        "value": 0.9
+      },
+      {
+        "name": "力積電",
+        "stock_id": "6770",
+        "value": 2.07
+      },
+      {
+        "name": "廣積",
+        "stock_id": "8050",
+        "value": 0.54
+      },
+      {
+        "name": "欣興",
+        "stock_id": "3037",
+        "value": 0.67
+      },
+      {
+        "name": "漢唐",
+        "stock_id": "2404",
+        "value": 1.65
+      },
+      {
+        "name": "南茂",
+        "stock_id": "8150",
+        "value": 7.05
+      },
+      {
+        "name": "矽格",
+        "stock_id": "6257",
+        "value": 4.91
+      },
+      {
+        "name": "景碩",
+        "stock_id": "3189",
+        "value": 2.65
+      }
+    ],
+    "branch_streak": [
+      {
+        "broker": "美商高盛",
+        "name": "統一證",
+        "stock_id": "2855",
+        "value": 20
+      },
+      {
+        "broker": "美商高盛",
+        "name": "福邦證",
+        "stock_id": "6026",
+        "value": 15
+      },
+      {
+        "broker": "美商高盛",
+        "name": "力積電",
+        "stock_id": "6770",
+        "value": 20
+      },
+      {
+        "broker": "台灣摩根士丹利",
+        "name": "意德士",
+        "stock_id": "7556",
+        "value": 16
+      },
+      {
+        "broker": "台灣摩根士丹利",
+        "name": "欣興",
+        "stock_id": "3037",
+        "value": 20
+      },
+      {
+        "broker": "美商高盛",
+        "name": "千興",
+        "stock_id": "2025",
+        "value": 15
+      },
+      {
+        "broker": "美商高盛",
+        "name": "南茂",
+        "stock_id": "8150",
+        "value": 19
+      },
+      {
+        "broker": "美商高盛",
+        "name": "博大",
+        "stock_id": "8109",
+        "value": 18
+      },
+      {
+        "broker": "法銀巴黎",
+        "name": "聯強",
+        "stock_id": "2347",
+        "value": 10
+      },
+      {
+        "broker": "新加坡商瑞銀",
+        "name": "帆宣",
+        "stock_id": "6196",
+        "value": 11
+      }
+    ],
+    "day_trader": [
+      {
+        "broker": "凱基-台北",
+        "name": "廣積",
+        "stock_id": "8050"
+      },
+      {
+        "broker": "凱基-台北",
+        "name": "迅德",
+        "stock_id": "6292"
+      },
+      {
+        "broker": "凱基-台北",
+        "name": "神準",
+        "stock_id": "3558"
+      },
+      {
+        "broker": "凱基-台北",
+        "name": "神基",
+        "stock_id": "3005"
+      },
+      {
+        "broker": "凱基-台北",
+        "name": "健椿",
+        "stock_id": "4561"
+      },
+      {
+        "broker": "凱基-台北",
+        "name": "揚智",
+        "stock_id": "3041"
+      },
+      {
+        "broker": "凱基-台北",
+        "name": "東鹼",
+        "stock_id": "1708"
+      },
+      {
+        "broker": "凱基-台北",
+        "name": "遠傳",
+        "stock_id": "4904"
+      }
+    ],
+    "margin_down": [
+      {
+        "name": "閎暉",
+        "stock_id": "3311",
+        "value": -2
+      },
+      {
+        "name": "安普新",
+        "stock_id": "6743",
+        "value": -3
+      },
+      {
+        "name": "倍微",
+        "stock_id": "6270",
+        "value": -2
+      },
+      {
+        "name": "洋基工程",
+        "stock_id": "6691",
+        "value": -2
+      },
+      {
+        "name": "承啟",
+        "stock_id": "2425",
+        "value": -2
+      },
+      {
+        "name": "晟楠",
+        "stock_id": "3631",
+        "value": -2
+      },
+      {
+        "name": "宏璟",
+        "stock_id": "2527",
+        "value": -2
+      },
+      {
+        "name": "天正國際",
+        "stock_id": "6654",
+        "value": -2
+      },
+      {
+        "name": "尚立",
+        "stock_id": "3360",
+        "value": -2
+      },
+      {
+        "name": "天虹",
+        "stock_id": "6937",
+        "value": -2
+      }
+    ],
+    "margin_up": [
+      {
+        "name": "世界",
+        "stock_id": "5347",
+        "value": 3
+      },
+      {
+        "name": "力積電",
+        "stock_id": "6770",
+        "value": 4
+      },
+      {
+        "name": "意德士",
+        "stock_id": "7556",
+        "value": 2
+      },
+      {
+        "name": "廣積",
+        "stock_id": "8050",
+        "value": 2
+      },
+      {
+        "name": "欣興",
+        "stock_id": "3037",
+        "value": 4
+      },
+      {
+        "name": "神準",
+        "stock_id": "3558",
+        "value": 2
+      },
+      {
+        "name": "漢唐",
+        "stock_id": "2404",
+        "value": 2
+      },
+      {
+        "name": "中砂",
+        "stock_id": "1560",
+        "value": 7
+      },
+      {
+        "name": "矽格",
+        "stock_id": "6257",
+        "value": 3
+      },
+      {
+        "name": "潤泰新",
+        "stock_id": "9945",
+        "value": 2
+      }
+    ]
+  },
+  "snapshot_dates": [
+    "2026-10-02",
+    "2026-10-01"
+  ],
+  "state": "ready"
+}

@@ -1,0 +1,349 @@
+{
+  "days": 5,
+  "new_entrants": {
+    "big_holder_increase": [
+      {
+        "name": "佳大",
+        "rank_no": 2,
+        "score": 36.49,
+        "stock_id": "2033"
+      },
+      {
+        "name": "友達",
+        "rank_no": 4,
+        "score": 60.92,
+        "stock_id": "2409"
+      },
+      {
+        "name": "濱川",
+        "rank_no": 8,
+        "score": 18.08,
+        "stock_id": "1569"
+      },
+      {
+        "name": "弘塑",
+        "rank_no": 11,
+        "score": 22.03,
+        "stock_id": "3131"
+      },
+      {
+        "name": "譜瑞-KY",
+        "rank_no": 17,
+        "score": 27.01,
+        "stock_id": "4966"
+      }
+    ],
+    "momentum_inst_buy": [
+      {
+        "name": "友達",
+        "rank_no": 1,
+        "score": 60.92,
+        "stock_id": "2409"
+      },
+      {
+        "name": "臻鼎-KY",
+        "rank_no": 2,
+        "score": 89.17,
+        "stock_id": "4958"
+      },
+      {
+        "name": "穩懋",
+        "rank_no": 3,
+        "score": 76.21,
+        "stock_id": "3105"
+      },
+      {
+        "name": "華新科",
+        "rank_no": 4,
+        "score": 77.02,
+        "stock_id": "2492"
+      },
+      {
+        "name": "漢磊",
+        "rank_no": 5,
+        "score": 58.26,
+        "stock_id": "3707"
+      },
+      {
+        "name": "南電",
+        "rank_no": 6,
+        "score": 108.73,
+        "stock_id": "8046"
+      },
+      {
+        "name": "達運",
+        "rank_no": 8,
+        "score": 52.91,
+        "stock_id": "6120"
+      },
+      {
+        "name": "尖點",
+        "rank_no": 9,
+        "score": 130.16,
+        "stock_id": "8021"
+      },
+      {
+        "name": "柏騰",
+        "rank_no": 11,
+        "score": 31.03,
+        "stock_id": "3518"
+      },
+      {
+        "name": "環宇-KY",
+        "rank_no": 12,
+        "score": 69.31,
+        "stock_id": "4991"
+      },
+      {
+        "name": "千如",
+        "rank_no": 13,
+        "score": 51.16,
+        "stock_id": "3236"
+      },
+      {
+        "name": "風青",
+        "rank_no": 14,
+        "score": 74.61,
+        "stock_id": "2061"
+      },
+      {
+        "name": "冠西電",
+        "rank_no": 15,
+        "score": 65.89,
+        "stock_id": "2466"
+      },
+      {
+        "name": "安碁",
+        "rank_no": 17,
+        "score": 81.39,
+        "stock_id": "6174"
+      },
+      {
+        "name": "好德",
+        "rank_no": 19,
+        "score": 51.41,
+        "stock_id": "3114"
+      },
+      {
+        "name": "勤凱",
+        "rank_no": 20,
+        "score": 62.07,
+        "stock_id": "4760"
+      }
+    ],
+    "multifactor_score": [
+      {
+        "name": "矽創",
+        "rank_no": 7,
+        "score": 100.38,
+        "stock_id": "8016"
+      },
+      {
+        "name": "力積電",
+        "rank_no": 10,
+        "score": 93.89,
+        "stock_id": "6770"
+      },
+      {
+        "name": "神準",
+        "rank_no": 13,
+        "score": 90.6,
+        "stock_id": "3558"
+      },
+      {
+        "name": "微星",
+        "rank_no": 16,
+        "score": 89.36,
+        "stock_id": "2377"
+      },
+      {
+        "name": "臻鼎-KY",
+        "rank_no": 17,
+        "score": 89.17,
+        "stock_id": "4958"
+      },
+      {
+        "name": "迅德",
+        "rank_no": 19,
+        "score": 87.97,
+        "stock_id": "6292"
+      },
+      {
+        "name": "鉅祥",
+        "rank_no": 20,
+        "score": 87.33,
+        "stock_id": "2476"
+      }
+    ]
+  },
+  "ranking_labels": {
+    "big_holder_increase": "大戶增持 + 法人買超",
+    "momentum_inst_buy": "動能 + 法人買超",
+    "multifactor_score": "多因子綜合分"
+  },
+  "signals": {
+    "big_holder": [
+      {
+        "name": "尖點",
+        "stock_id": "8021",
+        "value": 1.13
+      },
+      {
+        "name": "欣興",
+        "stock_id": "3037",
+        "value": 0.67
+      },
+      {
+        "name": "南電",
+        "stock_id": "8046",
+        "value": 0.57
+      },
+      {
+        "name": "景碩",
+        "stock_id": "3189",
+        "value": 2.65
+      },
+      {
+        "name": "創見",
+        "stock_id": "2451",
+        "value": 0.71
+      },
+      {
+        "name": "力積電",
+        "stock_id": "6770",
+        "value": 2.07
+      },
+      {
+        "name": "騰輝電子-KY",
+        "stock_id": "6672",
+        "value": 3.11
+      },
+      {
+        "name": "鉅祥",
+        "stock_id": "2476",
+        "value": 0.72
+      },
+      {
+        "name": "技嘉",
+        "stock_id": "2376",
+        "value": 0.89
+      },
+      {
+        "name": "洋基工程",
+        "stock_id": "6691",
+        "value": 2.8
+      }
+    ],
+    "branch_streak": [],
+    "day_trader": [],
+    "margin_down": [
+      {
+        "name": "天正國際",
+        "stock_id": "6654",
+        "value": -2
+      },
+      {
+        "name": "洋基工程",
+        "stock_id": "6691",
+        "value": -2
+      },
+      {
+        "name": "閎暉",
+        "stock_id": "3311",
+        "value": -2
+      },
+      {
+        "name": "台汽電",
+        "stock_id": "8926",
+        "value": -2
+      },
+      {
+        "name": "晟楠",
+        "stock_id": "3631",
+        "value": -2
+      },
+      {
+        "name": "宏璟",
+        "stock_id": "2527",
+        "value": -2
+      },
+      {
+        "name": "安普新",
+        "stock_id": "6743",
+        "value": -3
+      },
+      {
+        "name": "有成精密",
+        "stock_id": "4949",
+        "value": -2
+      },
+      {
+        "name": "泰碩",
+        "stock_id": "3338",
+        "value": -2
+      },
+      {
+        "name": "達發",
+        "stock_id": "6526",
+        "value": -2
+      }
+    ],
+    "margin_up": [
+      {
+        "name": "尖點",
+        "stock_id": "8021",
+        "value": 5
+      },
+      {
+        "name": "欣興",
+        "stock_id": "3037",
+        "value": 4
+      },
+      {
+        "name": "南電",
+        "stock_id": "8046",
+        "value": 6
+      },
+      {
+        "name": "日成-KY",
+        "stock_id": "4807",
+        "value": 3
+      },
+      {
+        "name": "矽創",
+        "stock_id": "8016",
+        "value": 3
+      },
+      {
+        "name": "創見",
+        "stock_id": "2451",
+        "value": 6
+      },
+      {
+        "name": "力積電",
+        "stock_id": "6770",
+        "value": 4
+      },
+      {
+        "name": "富致",
+        "stock_id": "6642",
+        "value": 3
+      },
+      {
+        "name": "騰輝電子-KY",
+        "stock_id": "6672",
+        "value": 2
+      },
+      {
+        "name": "神準",
+        "stock_id": "3558",
+        "value": 2
+      }
+    ]
+  },
+  "snapshot_dates": [
+    "2026-10-02",
+    "2026-10-01"
+  ],
+  "state": "ready"
+}
