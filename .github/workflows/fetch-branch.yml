@@ -79,6 +79,16 @@ jobs:
       # 65 是新增 3 個外資動向排行後重新量過的值——聯集 569 檔。
       - name: 抓取分點 Top 10（各排行前 65 聯集 + 總分前 300 + 自選股）
         continue-on-error: true
+        # 每步各自設上限，合計（55+55）加上前後置仍低於 job 的 120 分。
+        # 這是為了讓 job 層級的 timeout 永遠不會觸發——job timeout 會整個
+        # cancel，後面的「儲存快取」與「觸發重新匯出」會被 skipped，
+        # continue-on-error 對它無效。2026-10-01 與 10-05 兩次就是這樣：
+        # 單一步驟偶發變慢（Top10 衝到 90.7 分、單日衝到 84.4 分，正常各約
+        # 24-36 與 40-54 分）把預算吃光，整輪抓到的分點資料一筆都沒存進快取。
+        # 步驟層級逾時搭配 continue-on-error 則是「這步截斷、流程繼續」，
+        # 已抓到的部分照樣入庫並發布。兩個步驟都可續傳
+        # （--skip-existing / --only-missing），所以截斷只影響收斂速度。
+        timeout-minutes: 55
         env:
           TOP: ${{ github.event.inputs.top || '10' }}
           FROM_RANKINGS: ${{ github.event.inputs.from_rankings || '65' }}
@@ -92,6 +102,7 @@ jobs:
 
       - name: 抓取分點單日進出（各排行前 15 聯集 + 總分前 100 + 自選股，補齊近 20 天）
         continue-on-error: true
+        timeout-minutes: 55
         env:
           PYTHONUNBUFFERED: "1"
         # --only-missing：已入庫的日子自動跳過；首跑回補 20 天（~70 分鐘），
@@ -101,13 +112,18 @@ jobs:
             --from-rankings 15 --from-scan 100 --only-missing \
             --max-requests 600 --sleep 1.0 --retry-sleeps 3,8
 
+      # if: always()：純屬保險。步驟層級逾時已經讓 job timeout 不該再觸發，
+      # 但 runner 失聯或人工取消仍會 cancel job，那時這步若被 skipped，
+      # 前面抓到的分點就白抓了。存快取只要幾秒，取消的寬限期塞得進去。
       - name: 儲存 SQLite 快取（必須早於觸發重新匯出）
+        if: always()
         uses: actions/cache/save@v4
         with:
           path: data/stock_chip.sqlite
           key: stock-db-${{ github.run_id }}
 
       - name: 觸發重新匯出（把分點資料發布到網站）
+        if: always()
         run: |
           curl -sf -X POST \
             -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \

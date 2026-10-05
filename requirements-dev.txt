@@ -1,1 +1,4 @@
 pytest>=8.0
+# 僅測試用：tests/test_workflow_timeouts.py 用結構化解析而非正則比對
+# workflow 的逾時預算。先前兩次 review 都指出抓原始碼字串的測試很脆弱。
+PyYAML>=6.0
