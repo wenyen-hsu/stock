@@ -1,0 +1,415 @@
+{
+  "days": 5,
+  "new_entrants": {
+    "big_holder_increase": [
+      {
+        "name": "振樺電",
+        "rank_no": 1,
+        "score": 26.61,
+        "stock_id": "8114"
+      },
+      {
+        "name": "富喬",
+        "rank_no": 2,
+        "score": 64.86,
+        "stock_id": "1815"
+      },
+      {
+        "name": "宏捷科",
+        "rank_no": 3,
+        "score": 46.76,
+        "stock_id": "8086"
+      },
+      {
+        "name": "今國光",
+        "rank_no": 4,
+        "score": 69.96,
+        "stock_id": "6209"
+      },
+      {
+        "name": "泰鼎-KY",
+        "rank_no": 5,
+        "score": 44.61,
+        "stock_id": "4927"
+      },
+      {
+        "name": "大量",
+        "rank_no": 6,
+        "score": 96.09,
+        "stock_id": "3167"
+      },
+      {
+        "name": "光頡",
+        "rank_no": 7,
+        "score": 95.84,
+        "stock_id": "3624"
+      },
+      {
+        "name": "晟田",
+        "rank_no": 8,
+        "score": 37.27,
+        "stock_id": "4541"
+      },
+      {
+        "name": "漢磊",
+        "rank_no": 9,
+        "score": 48.85,
+        "stock_id": "3707"
+      },
+      {
+        "name": "艾姆勒",
+        "rank_no": 10,
+        "score": 97.19,
+        "stock_id": "2241"
+      },
+      {
+        "name": "百一",
+        "rank_no": 11,
+        "score": 67.9,
+        "stock_id": "6152"
+      },
+      {
+        "name": "萬潤",
+        "rank_no": 16,
+        "score": 76.63,
+        "stock_id": "6187"
+      },
+      {
+        "name": "矽格",
+        "rank_no": 17,
+        "score": 66.78,
+        "stock_id": "6257"
+      },
+      {
+        "name": "金橋",
+        "rank_no": 18,
+        "score": 34.65,
+        "stock_id": "6133"
+      },
+      {
+        "name": "台表科",
+        "rank_no": 19,
+        "score": 75.49,
+        "stock_id": "6278"
+      },
+      {
+        "name": "台半",
+        "rank_no": 20,
+        "score": 19.16,
+        "stock_id": "5425"
+      }
+    ],
+    "momentum_inst_buy": [
+      {
+        "name": "光頡",
+        "rank_no": 2,
+        "score": 95.84,
+        "stock_id": "3624"
+      },
+      {
+        "name": "台亞",
+        "rank_no": 3,
+        "score": 59.09,
+        "stock_id": "2340"
+      },
+      {
+        "name": "聯茂",
+        "rank_no": 5,
+        "score": 65.79,
+        "stock_id": "6213"
+      },
+      {
+        "name": "金像電",
+        "rank_no": 7,
+        "score": 58.3,
+        "stock_id": "2368"
+      },
+      {
+        "name": "德淵",
+        "rank_no": 9,
+        "score": 39.52,
+        "stock_id": "4720"
+      },
+      {
+        "name": "安碁",
+        "rank_no": 12,
+        "score": 55.26,
+        "stock_id": "6174"
+      },
+      {
+        "name": "勤凱",
+        "rank_no": 13,
+        "score": 40.47,
+        "stock_id": "4760"
+      },
+      {
+        "name": "其陽",
+        "rank_no": 14,
+        "score": 40.54,
+        "stock_id": "3564"
+      },
+      {
+        "name": "恆大",
+        "rank_no": 16,
+        "score": 13.93,
+        "stock_id": "1325"
+      },
+      {
+        "name": "金山電",
+        "rank_no": 17,
+        "score": 56.73,
+        "stock_id": "8042"
+      },
+      {
+        "name": "中纖",
+        "rank_no": 18,
+        "score": 52.33,
+        "stock_id": "1718"
+      },
+      {
+        "name": "高力",
+        "rank_no": 19,
+        "score": 75.71,
+        "stock_id": "8996"
+      },
+      {
+        "name": "松瑞藥",
+        "rank_no": 20,
+        "score": 90.15,
+        "stock_id": "4167"
+      }
+    ],
+    "multifactor_score": [
+      {
+        "name": "潤泰新",
+        "rank_no": 2,
+        "score": 120.96,
+        "stock_id": "9945"
+      },
+      {
+        "name": "中再保",
+        "rank_no": 5,
+        "score": 112.99,
+        "stock_id": "2851"
+      },
+      {
+        "name": "帆宣",
+        "rank_no": 10,
+        "score": 99.17,
+        "stock_id": "6196"
+      },
+      {
+        "name": "晟楠",
+        "rank_no": 11,
+        "score": 97.92,
+        "stock_id": "3631"
+      },
+      {
+        "name": "艾姆勒",
+        "rank_no": 12,
+        "score": 97.19,
+        "stock_id": "2241"
+      },
+      {
+        "name": "南亞科",
+        "rank_no": 13,
+        "score": 97.04,
+        "stock_id": "2408"
+      },
+      {
+        "name": "新產",
+        "rank_no": 14,
+        "score": 96.14,
+        "stock_id": "2850"
+      },
+      {
+        "name": "大量",
+        "rank_no": 15,
+        "score": 96.09,
+        "stock_id": "3167"
+      },
+      {
+        "name": "光頡",
+        "rank_no": 16,
+        "score": 95.84,
+        "stock_id": "3624"
+      },
+      {
+        "name": "凱基金",
+        "rank_no": 17,
+        "score": 95.28,
+        "stock_id": "2883"
+      }
+    ]
+  },
+  "ranking_labels": {
+    "big_holder_increase": "大戶增持 + 法人買超",
+    "momentum_inst_buy": "動能 + 法人買超",
+    "multifactor_score": "多因子綜合分"
+  },
+  "signals": {
+    "big_holder": [
+      {
+        "name": "精誠",
+        "stock_id": "6214",
+        "value": 0.63
+      },
+      {
+        "name": "台塑",
+        "stock_id": "1301",
+        "value": 1.31
+      },
+      {
+        "name": "健鼎",
+        "stock_id": "3044",
+        "value": 0.31
+      },
+      {
+        "name": "大聯大",
+        "stock_id": "3702",
+        "value": 0.51
+      },
+      {
+        "name": "艾姆勒",
+        "stock_id": "2241",
+        "value": 3.72
+      },
+      {
+        "name": "大量",
+        "stock_id": "3167",
+        "value": 5.03
+      },
+      {
+        "name": "光頡",
+        "stock_id": "3624",
+        "value": 5.01
+      },
+      {
+        "name": "嘉晶",
+        "stock_id": "3016",
+        "value": 0.86
+      },
+      {
+        "name": "臻鼎-KY",
+        "stock_id": "4958",
+        "value": 2.21
+      },
+      {
+        "name": "松瑞藥",
+        "stock_id": "4167",
+        "value": 0.49
+      }
+    ],
+    "branch_streak": [],
+    "day_trader": [],
+    "margin_down": [
+      {
+        "name": "精誠",
+        "stock_id": "6214",
+        "value": -2
+      },
+      {
+        "name": "洋基工程",
+        "stock_id": "6691",
+        "value": -2
+      },
+      {
+        "name": "晟楠",
+        "stock_id": "3631",
+        "value": -2
+      },
+      {
+        "name": "艾姆勒",
+        "stock_id": "2241",
+        "value": -2
+      },
+      {
+        "name": "台汽電",
+        "stock_id": "8926",
+        "value": -2
+      },
+      {
+        "name": "天正國際",
+        "stock_id": "6654",
+        "value": -2
+      },
+      {
+        "name": "昇達科",
+        "stock_id": "3491",
+        "value": -2
+      },
+      {
+        "name": "湧德",
+        "stock_id": "3689",
+        "value": -2
+      },
+      {
+        "name": "潤隆",
+        "stock_id": "1808",
+        "value": -2
+      },
+      {
+        "name": "建準",
+        "stock_id": "2421",
+        "value": -2
+      }
+    ],
+    "margin_up": [
+      {
+        "name": "潤泰新",
+        "stock_id": "9945",
+        "value": 2
+      },
+      {
+        "name": "台塑",
+        "stock_id": "1301",
+        "value": 3
+      },
+      {
+        "name": "世芯-KY",
+        "stock_id": "3661",
+        "value": 3
+      },
+      {
+        "name": "健鼎",
+        "stock_id": "3044",
+        "value": 2
+      },
+      {
+        "name": "南亞科",
+        "stock_id": "2408",
+        "value": 4
+      },
+      {
+        "name": "大量",
+        "stock_id": "3167",
+        "value": 9
+      },
+      {
+        "name": "光頡",
+        "stock_id": "3624",
+        "value": 3
+      },
+      {
+        "name": "嘉晶",
+        "stock_id": "3016",
+        "value": 4
+      },
+      {
+        "name": "致新",
+        "stock_id": "8081",
+        "value": 3
+      },
+      {
+        "name": "松瑞藥",
+        "stock_id": "4167",
+        "value": 2
+      }
+    ]
+  },
+  "snapshot_dates": [
+    "2026-10-08",
+    "2026-10-07"
+  ],
+  "state": "ready"
+}

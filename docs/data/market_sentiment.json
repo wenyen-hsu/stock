@@ -1,0 +1,25 @@
+{
+  "label": "中性偏空",
+  "latest_close": 49313.44,
+  "latest_date": "2026-10-08",
+  "ma20": 47687.85,
+  "ma5": 49426.03,
+  "ma60": 45726.78,
+  "parts": {
+    "dealer_hedge": -0.9,
+    "foreign_futures": -17.59,
+    "futures_trade": -2.68,
+    "index_trend": 12.0,
+    "market_margin": -2.67,
+    "trust_futures": 5.25
+  },
+  "reasons": [
+    "指數站上 MA20",
+    "中期趨勢偏多",
+    "外資期貨淨部位偏空",
+    "指數上漲但融資增加，追價風險上升"
+  ],
+  "risk_multiplier": 0.85,
+  "score": 43.41,
+  "updated_at": "2026-10-09 15:46:18"
+}

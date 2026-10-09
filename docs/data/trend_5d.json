@@ -1,0 +1,420 @@
+{
+  "clusters": [
+    {
+      "name": "生技醫療業",
+      "peers": [
+        {
+          "chg_1d_pct": 0.91,
+          "multifactor_score": 76.0,
+          "name": "基亞",
+          "stock_id": "3176"
+        },
+        {
+          "chg_1d_pct": 2.96,
+          "multifactor_score": 75.38,
+          "name": "永信",
+          "stock_id": "3705"
+        },
+        {
+          "chg_1d_pct": 2.5,
+          "multifactor_score": 71.77,
+          "name": "霈方",
+          "stock_id": "6574"
+        },
+        {
+          "chg_1d_pct": 4.28,
+          "multifactor_score": 69.2,
+          "name": "中化生",
+          "stock_id": "1762"
+        },
+        {
+          "chg_1d_pct": 3.5,
+          "multifactor_score": 66.76,
+          "name": "國光生",
+          "stock_id": "4142"
+        },
+        {
+          "chg_1d_pct": 1.61,
+          "multifactor_score": 64.17,
+          "name": "長佳智能",
+          "stock_id": "6841"
+        },
+        {
+          "chg_1d_pct": 0.75,
+          "multifactor_score": 63.26,
+          "name": "東洋",
+          "stock_id": "4105"
+        },
+        {
+          "chg_1d_pct": 4.29,
+          "multifactor_score": 61.67,
+          "name": "馬光-KY",
+          "stock_id": "4139"
+        }
+      ],
+      "spike_members": [
+        {
+          "chg_1d_pct": 14.64,
+          "foreign_net_lot": 0.0,
+          "industry": "生技醫療業",
+          "latest_volume_lot": 11122.45,
+          "multifactor_score": 33.5,
+          "name": "樂迦再生",
+          "stock_id": "6891",
+          "sub_industry": "",
+          "trust_net_lot": 0.0,
+          "volume_ratio_1d": 4.0
+        },
+        {
+          "chg_1d_pct": 7.58,
+          "foreign_net_lot": 2150.65,
+          "industry": "生技醫療業",
+          "latest_volume_lot": 9624.0,
+          "multifactor_score": 90.15,
+          "name": "松瑞藥",
+          "stock_id": "4167",
+          "sub_industry": "",
+          "trust_net_lot": 0.0,
+          "volume_ratio_1d": 3.05
+        }
+      ]
+    },
+    {
+      "name": "電腦及週邊設備業",
+      "peers": [
+        {
+          "chg_1d_pct": 0.42,
+          "multifactor_score": 86.94,
+          "name": "神基",
+          "stock_id": "3005"
+        },
+        {
+          "chg_1d_pct": 2.18,
+          "multifactor_score": 72.18,
+          "name": "宏正",
+          "stock_id": "6277"
+        },
+        {
+          "chg_1d_pct": 0.82,
+          "multifactor_score": 62.81,
+          "name": "鼎翰",
+          "stock_id": "3611"
+        },
+        {
+          "chg_1d_pct": 9.85,
+          "multifactor_score": 59.56,
+          "name": "全友",
+          "stock_id": "2305"
+        },
+        {
+          "chg_1d_pct": 0.28,
+          "multifactor_score": 58.01,
+          "name": "精聯",
+          "stock_id": "3652"
+        },
+        {
+          "chg_1d_pct": -0.23,
+          "multifactor_score": 56.69,
+          "name": "華擎",
+          "stock_id": "3515"
+        },
+        {
+          "chg_1d_pct": 2.59,
+          "multifactor_score": 55.58,
+          "name": "新漢",
+          "stock_id": "8234"
+        },
+        {
+          "chg_1d_pct": 0.53,
+          "multifactor_score": 45.04,
+          "name": "普安",
+          "stock_id": "2495"
+        }
+      ],
+      "spike_members": [
+        {
+          "chg_1d_pct": 28.95,
+          "foreign_net_lot": 0.0,
+          "industry": "電腦及週邊設備業",
+          "latest_volume_lot": 1033.49,
+          "multifactor_score": 23.05,
+          "name": "元鈦科",
+          "stock_id": "7892",
+          "sub_industry": "",
+          "trust_net_lot": 0.0,
+          "volume_ratio_1d": 3.73
+        },
+        {
+          "chg_1d_pct": 7.69,
+          "foreign_net_lot": 652.89,
+          "industry": "電腦及週邊設備業",
+          "latest_volume_lot": 1929.36,
+          "multifactor_score": 69.33,
+          "name": "融程電",
+          "stock_id": "3416",
+          "sub_industry": "",
+          "trust_net_lot": 0.0,
+          "volume_ratio_1d": 3.08
+        }
+      ]
+    }
+  ],
+  "days": 5,
+  "prev_date": "2026-10-07",
+  "state": "ready",
+  "strong_sectors": [
+    {
+      "avg_chg_1d_pct": 1.86,
+      "avg_multifactor": 25.09,
+      "industry": "91",
+      "inst_net_lot": -6989,
+      "is_sub": false,
+      "member_count": 4,
+      "name": "91",
+      "up_count": 2,
+      "up_ratio_pct": 50.0
+    },
+    {
+      "avg_chg_1d_pct": 1.3,
+      "avg_multifactor": 9.74,
+      "industry": "農業科技業",
+      "inst_net_lot": 27,
+      "is_sub": false,
+      "member_count": 7,
+      "name": "農業科技業",
+      "up_count": 3,
+      "up_ratio_pct": 42.9
+    },
+    {
+      "avg_chg_1d_pct": 1.14,
+      "avg_multifactor": 32.71,
+      "industry": "塑膠工業",
+      "inst_net_lot": 60598,
+      "is_sub": false,
+      "member_count": 24,
+      "name": "塑膠工業",
+      "up_count": 15,
+      "up_ratio_pct": 62.5
+    },
+    {
+      "avg_chg_1d_pct": 0.89,
+      "avg_multifactor": 17.85,
+      "industry": "化學工業",
+      "inst_net_lot": 927,
+      "is_sub": false,
+      "member_count": 49,
+      "name": "化學工業",
+      "up_count": 28,
+      "up_ratio_pct": 57.1
+    },
+    {
+      "avg_chg_1d_pct": 0.87,
+      "avg_multifactor": 27.38,
+      "industry": "半導體業",
+      "inst_net_lot": -9371,
+      "is_sub": true,
+      "member_count": 4,
+      "name": "封測",
+      "up_count": 3,
+      "up_ratio_pct": 75.0
+    },
+    {
+      "avg_chg_1d_pct": 0.84,
+      "avg_multifactor": -0.74,
+      "industry": "貿易百貨業",
+      "inst_net_lot": 1635,
+      "is_sub": false,
+      "member_count": 17,
+      "name": "貿易百貨業",
+      "up_count": 10,
+      "up_ratio_pct": 58.8
+    },
+    {
+      "avg_chg_1d_pct": 0.82,
+      "avg_multifactor": 70.35,
+      "industry": "航運業",
+      "inst_net_lot": 1678,
+      "is_sub": true,
+      "member_count": 3,
+      "name": "散裝航運",
+      "up_count": 3,
+      "up_ratio_pct": 100.0
+    },
+    {
+      "avg_chg_1d_pct": 0.78,
+      "avg_multifactor": 40.45,
+      "industry": "電子零組件業",
+      "inst_net_lot": 284,
+      "is_sub": true,
+      "member_count": 5,
+      "name": "散熱",
+      "up_count": 2,
+      "up_ratio_pct": 40.0
+    }
+  ],
+  "trade_date": "2026-10-08",
+  "volume_spikes": [
+    {
+      "chg_1d_pct": 14.64,
+      "foreign_net_lot": 0.0,
+      "industry": "生技醫療業",
+      "latest_volume_lot": 11122.45,
+      "multifactor_score": 33.5,
+      "name": "樂迦再生",
+      "stock_id": "6891",
+      "sub_industry": "",
+      "trust_net_lot": 0.0,
+      "volume_ratio_1d": 4.0
+    },
+    {
+      "chg_1d_pct": 28.95,
+      "foreign_net_lot": 0.0,
+      "industry": "電腦及週邊設備業",
+      "latest_volume_lot": 1033.49,
+      "multifactor_score": 23.05,
+      "name": "元鈦科",
+      "stock_id": "7892",
+      "sub_industry": "",
+      "trust_net_lot": 0.0,
+      "volume_ratio_1d": 3.73
+    },
+    {
+      "chg_1d_pct": 9.89,
+      "foreign_net_lot": 655.64,
+      "industry": "光電業",
+      "latest_volume_lot": 4397.0,
+      "multifactor_score": 79.08,
+      "name": "雷笛克光學",
+      "stock_id": "5230",
+      "sub_industry": "",
+      "trust_net_lot": 0.0,
+      "volume_ratio_1d": 3.46
+    },
+    {
+      "chg_1d_pct": 5.51,
+      "foreign_net_lot": 374.05,
+      "industry": "其他電子業",
+      "latest_volume_lot": 1381.0,
+      "multifactor_score": 61.11,
+      "name": "耕興",
+      "stock_id": "6146",
+      "sub_industry": "",
+      "trust_net_lot": -1.0,
+      "volume_ratio_1d": 3.37
+    },
+    {
+      "chg_1d_pct": 7.69,
+      "foreign_net_lot": 652.89,
+      "industry": "電腦及週邊設備業",
+      "latest_volume_lot": 1929.36,
+      "multifactor_score": 69.33,
+      "name": "融程電",
+      "stock_id": "3416",
+      "sub_industry": "",
+      "trust_net_lot": 0.0,
+      "volume_ratio_1d": 3.08
+    },
+    {
+      "chg_1d_pct": 7.58,
+      "foreign_net_lot": 2150.65,
+      "industry": "生技醫療業",
+      "latest_volume_lot": 9624.0,
+      "multifactor_score": 90.15,
+      "name": "松瑞藥",
+      "stock_id": "4167",
+      "sub_industry": "",
+      "trust_net_lot": 0.0,
+      "volume_ratio_1d": 3.05
+    }
+  ],
+  "weak_sectors": [
+    {
+      "avg_chg_1d_pct": -6.32,
+      "avg_multifactor": 10.14,
+      "industry": "文化創意業",
+      "inst_net_lot": 486,
+      "is_sub": false,
+      "member_count": 32,
+      "name": "文化創意業",
+      "up_count": 13,
+      "up_ratio_pct": 40.6
+    },
+    {
+      "avg_chg_1d_pct": -3.0,
+      "avg_multifactor": -25.73,
+      "industry": "光電業",
+      "inst_net_lot": -82491,
+      "is_sub": true,
+      "member_count": 3,
+      "name": "面板",
+      "up_count": 0,
+      "up_ratio_pct": 0.0
+    },
+    {
+      "avg_chg_1d_pct": -2.42,
+      "avg_multifactor": 25.18,
+      "industry": "電子通路業",
+      "inst_net_lot": -1815,
+      "is_sub": false,
+      "member_count": 40,
+      "name": "電子通路業",
+      "up_count": 15,
+      "up_ratio_pct": 37.5
+    },
+    {
+      "avg_chg_1d_pct": -2.15,
+      "avg_multifactor": 10.79,
+      "industry": "數位雲端",
+      "inst_net_lot": 758,
+      "is_sub": false,
+      "member_count": 48,
+      "name": "數位雲端",
+      "up_count": 20,
+      "up_ratio_pct": 41.7
+    },
+    {
+      "avg_chg_1d_pct": -2.01,
+      "avg_multifactor": -23.96,
+      "industry": "通信網路業",
+      "inst_net_lot": -2417,
+      "is_sub": true,
+      "member_count": 4,
+      "name": "光通訊",
+      "up_count": 0,
+      "up_ratio_pct": 0.0
+    },
+    {
+      "avg_chg_1d_pct": -1.96,
+      "avg_multifactor": 36.72,
+      "industry": "光電業",
+      "inst_net_lot": -1775,
+      "is_sub": true,
+      "member_count": 3,
+      "name": "光學鏡頭",
+      "up_count": 0,
+      "up_ratio_pct": 0.0
+    },
+    {
+      "avg_chg_1d_pct": -1.77,
+      "avg_multifactor": 51.29,
+      "industry": "金融保險業",
+      "inst_net_lot": -59459,
+      "is_sub": true,
+      "member_count": 12,
+      "name": "金控",
+      "up_count": 0,
+      "up_ratio_pct": 0.0
+    },
+    {
+      "avg_chg_1d_pct": -1.45,
+      "avg_multifactor": 24.89,
+      "industry": "電腦及週邊設備業",
+      "inst_net_lot": -3250,
+      "is_sub": true,
+      "member_count": 3,
+      "name": "電源供應器",
+      "up_count": 0,
+      "up_ratio_pct": 0.0
+    }
+  ]
+}

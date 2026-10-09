@@ -1,0 +1,502 @@
+{
+  "days": 20,
+  "new_entrants": {
+    "big_holder_increase": [
+      {
+        "name": "宏捷科",
+        "rank_no": 1,
+        "score": 45.11,
+        "stock_id": "8086"
+      },
+      {
+        "name": "今國光",
+        "rank_no": 2,
+        "score": 69.05,
+        "stock_id": "6209"
+      },
+      {
+        "name": "泰鼎-KY",
+        "rank_no": 3,
+        "score": 50.3,
+        "stock_id": "4927"
+      },
+      {
+        "name": "光頡",
+        "rank_no": 4,
+        "score": 68.26,
+        "stock_id": "3624"
+      },
+      {
+        "name": "晟田",
+        "rank_no": 5,
+        "score": 29.88,
+        "stock_id": "4541"
+      },
+      {
+        "name": "漢磊",
+        "rank_no": 6,
+        "score": 42.13,
+        "stock_id": "3707"
+      },
+      {
+        "name": "艾姆勒",
+        "rank_no": 7,
+        "score": 71.07,
+        "stock_id": "2241"
+      },
+      {
+        "name": "百一",
+        "rank_no": 8,
+        "score": 76.42,
+        "stock_id": "6152"
+      },
+      {
+        "name": "矽格",
+        "rank_no": 13,
+        "score": 85.72,
+        "stock_id": "6257"
+      },
+      {
+        "name": "金橋",
+        "rank_no": 14,
+        "score": 40.54,
+        "stock_id": "6133"
+      },
+      {
+        "name": "台表科",
+        "rank_no": 15,
+        "score": 80.8,
+        "stock_id": "6278"
+      },
+      {
+        "name": "台半",
+        "rank_no": 16,
+        "score": 38.6,
+        "stock_id": "5425"
+      },
+      {
+        "name": "臻鼎-KY",
+        "rank_no": 17,
+        "score": 61.54,
+        "stock_id": "4958"
+      },
+      {
+        "name": "州巧",
+        "rank_no": 18,
+        "score": 31.23,
+        "stock_id": "3543"
+      },
+      {
+        "name": "運錩",
+        "rank_no": 19,
+        "score": 42.32,
+        "stock_id": "2069"
+      },
+      {
+        "name": "台玻",
+        "rank_no": 20,
+        "score": 49.33,
+        "stock_id": "1802"
+      }
+    ],
+    "momentum_inst_buy": [
+      {
+        "name": "統一證",
+        "rank_no": 3,
+        "score": 141.46,
+        "stock_id": "2855"
+      },
+      {
+        "name": "高力",
+        "rank_no": 4,
+        "score": 47.58,
+        "stock_id": "8996"
+      },
+      {
+        "name": "億光",
+        "rank_no": 5,
+        "score": 50.45,
+        "stock_id": "2393"
+      },
+      {
+        "name": "美律",
+        "rank_no": 6,
+        "score": 52.92,
+        "stock_id": "2439"
+      },
+      {
+        "name": "國際中橡",
+        "rank_no": 7,
+        "score": 47.19,
+        "stock_id": "2104"
+      },
+      {
+        "name": "台耀",
+        "rank_no": 8,
+        "score": 36.41,
+        "stock_id": "4746"
+      },
+      {
+        "name": "穩懋",
+        "rank_no": 9,
+        "score": 53.16,
+        "stock_id": "3105"
+      },
+      {
+        "name": "中美晶",
+        "rank_no": 10,
+        "score": 64.77,
+        "stock_id": "5483"
+      },
+      {
+        "name": "允強",
+        "rank_no": 11,
+        "score": 55.94,
+        "stock_id": "2034"
+      },
+      {
+        "name": "達發",
+        "rank_no": 12,
+        "score": 74.17,
+        "stock_id": "6526"
+      },
+      {
+        "name": "鑽石投資",
+        "rank_no": 16,
+        "score": 44.63,
+        "stock_id": "6901"
+      },
+      {
+        "name": "加高",
+        "rank_no": 17,
+        "score": 51.82,
+        "stock_id": "8182"
+      },
+      {
+        "name": "磐亞",
+        "rank_no": 19,
+        "score": 33.28,
+        "stock_id": "4707"
+      }
+    ],
+    "multifactor_score": [
+      {
+        "name": "大聯大",
+        "rank_no": 5,
+        "score": 95.78,
+        "stock_id": "3702"
+      },
+      {
+        "name": "松瑞藥",
+        "rank_no": 7,
+        "score": 93.65,
+        "stock_id": "4167"
+      },
+      {
+        "name": "晟楠",
+        "rank_no": 8,
+        "score": 93.64,
+        "stock_id": "3631"
+      },
+      {
+        "name": "帆宣",
+        "rank_no": 11,
+        "score": 89.92,
+        "stock_id": "6196"
+      },
+      {
+        "name": "尖點",
+        "rank_no": 12,
+        "score": 89.2,
+        "stock_id": "8021"
+      },
+      {
+        "name": "福邦證",
+        "rank_no": 13,
+        "score": 89.14,
+        "stock_id": "6026"
+      },
+      {
+        "name": "千興",
+        "rank_no": 16,
+        "score": 86.72,
+        "stock_id": "2025"
+      },
+      {
+        "name": "致新",
+        "rank_no": 17,
+        "score": 86.66,
+        "stock_id": "8081"
+      },
+      {
+        "name": "洋基工程",
+        "rank_no": 18,
+        "score": 86.22,
+        "stock_id": "6691"
+      },
+      {
+        "name": "同協",
+        "rank_no": 19,
+        "score": 85.85,
+        "stock_id": "5460"
+      }
+    ]
+  },
+  "ranking_labels": {
+    "big_holder_increase": "大戶增持 + 法人買超",
+    "momentum_inst_buy": "動能 + 法人買超",
+    "multifactor_score": "多因子綜合分"
+  },
+  "signals": {
+    "big_holder": [
+      {
+        "name": "台塑",
+        "stock_id": "1301",
+        "value": 1.31
+      },
+      {
+        "name": "精誠",
+        "stock_id": "6214",
+        "value": 0.63
+      },
+      {
+        "name": "大聯大",
+        "stock_id": "3702",
+        "value": 0.51
+      },
+      {
+        "name": "松瑞藥",
+        "stock_id": "4167",
+        "value": 0.49
+      },
+      {
+        "name": "台橡",
+        "stock_id": "2103",
+        "value": 1.08
+      },
+      {
+        "name": "尖點",
+        "stock_id": "8021",
+        "value": 0.43
+      },
+      {
+        "name": "福邦證",
+        "stock_id": "6026",
+        "value": 0.3
+      },
+      {
+        "name": "漢唐",
+        "stock_id": "2404",
+        "value": 0.38
+      },
+      {
+        "name": "千興",
+        "stock_id": "2025",
+        "value": 1.25
+      },
+      {
+        "name": "同協",
+        "stock_id": "5460",
+        "value": 0.65
+      }
+    ],
+    "branch_streak": [
+      {
+        "broker": "美商高盛",
+        "name": "統一證",
+        "stock_id": "2855",
+        "value": 20
+      },
+      {
+        "broker": "美商高盛",
+        "name": "潤泰新",
+        "stock_id": "9945",
+        "value": 14
+      },
+      {
+        "broker": "美商高盛",
+        "name": "台塑",
+        "stock_id": "1301",
+        "value": 11
+      },
+      {
+        "broker": "摩根大通",
+        "name": "大聯大",
+        "stock_id": "3702",
+        "value": 9
+      },
+      {
+        "broker": "摩根大通",
+        "name": "神基",
+        "stock_id": "3005",
+        "value": 3
+      },
+      {
+        "broker": "台灣摩根士丹利",
+        "name": "松瑞藥",
+        "stock_id": "4167",
+        "value": 18
+      },
+      {
+        "broker": "台灣摩根士丹利",
+        "name": "帆宣",
+        "stock_id": "6196",
+        "value": 7
+      },
+      {
+        "broker": "台灣摩根士丹利",
+        "name": "福邦證",
+        "stock_id": "6026",
+        "value": 15
+      },
+      {
+        "broker": "台灣摩根士丹利",
+        "name": "漢唐",
+        "stock_id": "2404",
+        "value": 17
+      },
+      {
+        "broker": "台灣摩根士丹利",
+        "name": "千興",
+        "stock_id": "2025",
+        "value": 11
+      }
+    ],
+    "day_trader": [
+      {
+        "broker": "凱基-台北",
+        "name": "東洋",
+        "stock_id": "4105"
+      },
+      {
+        "broker": "凱基-台北",
+        "name": "神準",
+        "stock_id": "3558"
+      },
+      {
+        "broker": "國票-敦北法人",
+        "name": "意德士",
+        "stock_id": "7556"
+      },
+      {
+        "broker": "凱基-台北",
+        "name": "湧德",
+        "stock_id": "3689"
+      },
+      {
+        "broker": "凱基-台北",
+        "name": "健椿",
+        "stock_id": "4561"
+      }
+    ],
+    "margin_down": [
+      {
+        "name": "精誠",
+        "stock_id": "6214",
+        "value": -2
+      },
+      {
+        "name": "晟楠",
+        "stock_id": "3631",
+        "value": -2
+      },
+      {
+        "name": "洋基工程",
+        "stock_id": "6691",
+        "value": -2
+      },
+      {
+        "name": "天正國際",
+        "stock_id": "6654",
+        "value": -2
+      },
+      {
+        "name": "湧德",
+        "stock_id": "3689",
+        "value": -2
+      },
+      {
+        "name": "東鹼",
+        "stock_id": "1708",
+        "value": -2
+      },
+      {
+        "name": "達發",
+        "stock_id": "6526",
+        "value": -2
+      },
+      {
+        "name": "國統",
+        "stock_id": "8936",
+        "value": -3
+      },
+      {
+        "name": "艾姆勒",
+        "stock_id": "2241",
+        "value": -2
+      },
+      {
+        "name": "宏璟",
+        "stock_id": "2527",
+        "value": -2
+      }
+    ],
+    "margin_up": [
+      {
+        "name": "潤泰新",
+        "stock_id": "9945",
+        "value": 2
+      },
+      {
+        "name": "台塑",
+        "stock_id": "1301",
+        "value": 3
+      },
+      {
+        "name": "神基",
+        "stock_id": "3005",
+        "value": 2
+      },
+      {
+        "name": "松瑞藥",
+        "stock_id": "4167",
+        "value": 2
+      },
+      {
+        "name": "台橡",
+        "stock_id": "2103",
+        "value": 4
+      },
+      {
+        "name": "尖點",
+        "stock_id": "8021",
+        "value": 5
+      },
+      {
+        "name": "漢唐",
+        "stock_id": "2404",
+        "value": 2
+      },
+      {
+        "name": "致新",
+        "stock_id": "8081",
+        "value": 3
+      },
+      {
+        "name": "同協",
+        "stock_id": "5460",
+        "value": 2
+      },
+      {
+        "name": "矽格",
+        "stock_id": "6257",
+        "value": 3
+      }
+    ]
+  },
+  "snapshot_dates": [
+    "2026-10-08",
+    "2026-10-07"
+  ],
+  "state": "ready"
+}
