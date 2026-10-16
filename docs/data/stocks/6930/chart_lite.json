@@ -1,0 +1,72 @@
+{
+  "daily": [
+    {
+      "avg_price": 50.99,
+      "close": 49.95,
+      "date": "2026-10-16",
+      "dealer_net_lot": 0.0,
+      "dividend_yield": null,
+      "foreign_net_lot": 0.0,
+      "pb_ratio": null,
+      "pe_ratio": null,
+      "trust_net_lot": 0.0,
+      "volume_lot": 1521.74
+    },
+    {
+      "avg_price": 52.99,
+      "close": 56.8,
+      "date": "2026-10-15",
+      "dealer_net_lot": 0.0,
+      "dividend_yield": null,
+      "foreign_net_lot": 0.0,
+      "pb_ratio": null,
+      "pe_ratio": null,
+      "trust_net_lot": 0.0,
+      "volume_lot": 3418.89
+    }
+  ],
+  "margin": [],
+  "revenues": [
+    {
+      "cumulative_revenue_million": 13.9,
+      "cumulative_yoy_pct": null,
+      "last_year_cumulative_revenue_million": null,
+      "last_year_revenue_million": null,
+      "mom_pct": 28.26,
+      "prev_month_revenue_million": 6.09,
+      "revenue_million": 7.81,
+      "revenue_month": "2026-09",
+      "source": "finmind",
+      "yoy_pct": null
+    },
+    {
+      "cumulative_revenue_million": 6.09,
+      "cumulative_yoy_pct": null,
+      "last_year_cumulative_revenue_million": null,
+      "last_year_revenue_million": null,
+      "mom_pct": null,
+      "prev_month_revenue_million": null,
+      "revenue_million": 6.09,
+      "revenue_month": "2026-08",
+      "source": "finmind",
+      "yoy_pct": null
+    }
+  ],
+  "rows": [
+    {
+      "close": 56.8,
+      "date": "2026-10-15",
+      "high": 63.1,
+      "low": 44.0,
+      "open": null
+    },
+    {
+      "close": 49.95,
+      "date": "2026-10-16",
+      "high": 56.9,
+      "low": 47.0,
+      "open": null
+    }
+  ],
+  "stock_id": "6930"
+}

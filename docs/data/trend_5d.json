@@ -1,0 +1,353 @@
+{
+  "clusters": [
+    {
+      "name": "光電業",
+      "peers": [
+        {
+          "chg_1d_pct": -1.49,
+          "multifactor_score": 94.47,
+          "name": "台表科",
+          "stock_id": "6278"
+        },
+        {
+          "chg_1d_pct": 1.1,
+          "multifactor_score": 63.73,
+          "name": "奇偶",
+          "stock_id": "3356"
+        },
+        {
+          "chg_1d_pct": -0.99,
+          "multifactor_score": 59.62,
+          "name": "全台",
+          "stock_id": "3038"
+        },
+        {
+          "chg_1d_pct": 0.73,
+          "multifactor_score": 59.01,
+          "name": "憶聲",
+          "stock_id": "3024"
+        },
+        {
+          "chg_1d_pct": 1.4,
+          "multifactor_score": 53.16,
+          "name": "星亞",
+          "stock_id": "7753"
+        },
+        {
+          "chg_1d_pct": 0.79,
+          "multifactor_score": 50.37,
+          "name": "光聯",
+          "stock_id": "5315"
+        },
+        {
+          "chg_1d_pct": 0.52,
+          "multifactor_score": 49.16,
+          "name": "華凌",
+          "stock_id": "6916"
+        },
+        {
+          "chg_1d_pct": 0.42,
+          "multifactor_score": 48.49,
+          "name": "中環",
+          "stock_id": "2323"
+        }
+      ],
+      "spike_members": [
+        {
+          "chg_1d_pct": 0.47,
+          "foreign_net_lot": 291.92,
+          "industry": "光電業",
+          "latest_volume_lot": 23033.0,
+          "multifactor_score": -14.63,
+          "name": "茂迪",
+          "stock_id": "6244",
+          "sub_industry": "",
+          "trust_net_lot": 0.0,
+          "volume_ratio_1d": 3.37
+        },
+        {
+          "chg_1d_pct": -13.82,
+          "foreign_net_lot": 0.0,
+          "industry": "光電業",
+          "latest_volume_lot": 2631.16,
+          "multifactor_score": 20.55,
+          "name": "山太士",
+          "stock_id": "3595",
+          "sub_industry": "",
+          "trust_net_lot": 0.0,
+          "volume_ratio_1d": 3.0
+        }
+      ]
+    }
+  ],
+  "days": 5,
+  "prev_date": "2026-10-15",
+  "state": "ready",
+  "strong_sectors": [
+    {
+      "avg_chg_1d_pct": 4.34,
+      "avg_multifactor": 47.09,
+      "industry": "通信網路業",
+      "inst_net_lot": 11044,
+      "is_sub": true,
+      "member_count": 6,
+      "name": "網通設備",
+      "up_count": 6,
+      "up_ratio_pct": 100.0
+    },
+    {
+      "avg_chg_1d_pct": 3.79,
+      "avg_multifactor": -3.87,
+      "industry": "半導體業",
+      "inst_net_lot": 9426,
+      "is_sub": true,
+      "member_count": 4,
+      "name": "記憶體",
+      "up_count": 4,
+      "up_ratio_pct": 100.0
+    },
+    {
+      "avg_chg_1d_pct": 2.82,
+      "avg_multifactor": 84.82,
+      "industry": "航運業",
+      "inst_net_lot": 18285,
+      "is_sub": true,
+      "member_count": 3,
+      "name": "貨櫃航運",
+      "up_count": 3,
+      "up_ratio_pct": 100.0
+    },
+    {
+      "avg_chg_1d_pct": 2.6,
+      "avg_multifactor": 27.5,
+      "industry": "半導體業",
+      "inst_net_lot": 251,
+      "is_sub": true,
+      "member_count": 4,
+      "name": "矽智財",
+      "up_count": 2,
+      "up_ratio_pct": 50.0
+    },
+    {
+      "avg_chg_1d_pct": 2.5,
+      "avg_multifactor": 20.21,
+      "industry": "電子零組件業",
+      "inst_net_lot": 639,
+      "is_sub": true,
+      "member_count": 5,
+      "name": "散熱",
+      "up_count": 4,
+      "up_ratio_pct": 80.0
+    },
+    {
+      "avg_chg_1d_pct": 2.45,
+      "avg_multifactor": 26.09,
+      "industry": "航運業",
+      "inst_net_lot": 3774,
+      "is_sub": true,
+      "member_count": 3,
+      "name": "軍工航太",
+      "up_count": 3,
+      "up_ratio_pct": 100.0
+    },
+    {
+      "avg_chg_1d_pct": 2.43,
+      "avg_multifactor": 37.7,
+      "industry": "電腦及週邊設備業",
+      "inst_net_lot": 31691,
+      "is_sub": true,
+      "member_count": 7,
+      "name": "AI伺服器/組裝",
+      "up_count": 7,
+      "up_ratio_pct": 100.0
+    },
+    {
+      "avg_chg_1d_pct": 2.16,
+      "avg_multifactor": 22.54,
+      "industry": "電子零組件業",
+      "inst_net_lot": 18039,
+      "is_sub": true,
+      "member_count": 10,
+      "name": "PCB",
+      "up_count": 7,
+      "up_ratio_pct": 70.0
+    }
+  ],
+  "trade_date": "2026-10-16",
+  "volume_spikes": [
+    {
+      "chg_1d_pct": -3.56,
+      "foreign_net_lot": -272.18,
+      "industry": "其他業",
+      "latest_volume_lot": 9997.0,
+      "multifactor_score": 19.97,
+      "name": "大甲",
+      "stock_id": "2221",
+      "sub_industry": "",
+      "trust_net_lot": 0.0,
+      "volume_ratio_1d": 4.14
+    },
+    {
+      "chg_1d_pct": 8.13,
+      "foreign_net_lot": 1369.45,
+      "industry": "資訊服務業",
+      "latest_volume_lot": 8850.15,
+      "multifactor_score": 73.22,
+      "name": "邁達特",
+      "stock_id": "6112",
+      "sub_industry": "",
+      "trust_net_lot": 0.0,
+      "volume_ratio_1d": 3.6
+    },
+    {
+      "chg_1d_pct": 9.93,
+      "foreign_net_lot": -2154.47,
+      "industry": "電子零組件業",
+      "latest_volume_lot": 22253.0,
+      "multifactor_score": 5.05,
+      "name": "凱崴",
+      "stock_id": "5498",
+      "sub_industry": "",
+      "trust_net_lot": 0.0,
+      "volume_ratio_1d": 3.47
+    },
+    {
+      "chg_1d_pct": -4.08,
+      "foreign_net_lot": -1501.93,
+      "industry": "電子通路業",
+      "latest_volume_lot": 9481.63,
+      "multifactor_score": -31.15,
+      "name": "蔚華科",
+      "stock_id": "3055",
+      "sub_industry": "",
+      "trust_net_lot": 0.0,
+      "volume_ratio_1d": 3.47
+    },
+    {
+      "chg_1d_pct": 0.47,
+      "foreign_net_lot": 291.92,
+      "industry": "光電業",
+      "latest_volume_lot": 23033.0,
+      "multifactor_score": -14.63,
+      "name": "茂迪",
+      "stock_id": "6244",
+      "sub_industry": "",
+      "trust_net_lot": 0.0,
+      "volume_ratio_1d": 3.37
+    },
+    {
+      "chg_1d_pct": 4.9,
+      "foreign_net_lot": 399.19,
+      "industry": "生技醫療業",
+      "latest_volume_lot": 1649.0,
+      "multifactor_score": 64.38,
+      "name": "益安",
+      "stock_id": "6499",
+      "sub_industry": "",
+      "trust_net_lot": 0.0,
+      "volume_ratio_1d": 3.09
+    },
+    {
+      "chg_1d_pct": -13.82,
+      "foreign_net_lot": 0.0,
+      "industry": "光電業",
+      "latest_volume_lot": 2631.16,
+      "multifactor_score": 20.55,
+      "name": "山太士",
+      "stock_id": "3595",
+      "sub_industry": "",
+      "trust_net_lot": 0.0,
+      "volume_ratio_1d": 3.0
+    }
+  ],
+  "weak_sectors": [
+    {
+      "avg_chg_1d_pct": -5.42,
+      "avg_multifactor": 7.94,
+      "industry": "綠能環保",
+      "inst_net_lot": 2499,
+      "is_sub": false,
+      "member_count": 72,
+      "name": "綠能環保",
+      "up_count": 30,
+      "up_ratio_pct": 41.7
+    },
+    {
+      "avg_chg_1d_pct": -2.57,
+      "avg_multifactor": 12.55,
+      "industry": "居家生活",
+      "inst_net_lot": 3215,
+      "is_sub": false,
+      "member_count": 38,
+      "name": "居家生活",
+      "up_count": 18,
+      "up_ratio_pct": 47.4
+    },
+    {
+      "avg_chg_1d_pct": -2.24,
+      "avg_multifactor": 19.48,
+      "industry": "食品工業",
+      "inst_net_lot": 5454,
+      "is_sub": false,
+      "member_count": 40,
+      "name": "食品工業",
+      "up_count": 21,
+      "up_ratio_pct": 52.5
+    },
+    {
+      "avg_chg_1d_pct": -2.12,
+      "avg_multifactor": 15.1,
+      "industry": "電子零組件業",
+      "inst_net_lot": -6066,
+      "is_sub": true,
+      "member_count": 4,
+      "name": "被動元件",
+      "up_count": 0,
+      "up_ratio_pct": 0.0
+    },
+    {
+      "avg_chg_1d_pct": -1.96,
+      "avg_multifactor": -1.08,
+      "industry": "91",
+      "inst_net_lot": -2774,
+      "is_sub": false,
+      "member_count": 4,
+      "name": "91",
+      "up_count": 0,
+      "up_ratio_pct": 0.0
+    },
+    {
+      "avg_chg_1d_pct": -1.58,
+      "avg_multifactor": -21.23,
+      "industry": "通信網路業",
+      "inst_net_lot": -4156,
+      "is_sub": true,
+      "member_count": 4,
+      "name": "光通訊",
+      "up_count": 1,
+      "up_ratio_pct": 25.0
+    },
+    {
+      "avg_chg_1d_pct": -1.34,
+      "avg_multifactor": 4.94,
+      "industry": "觀光餐旅",
+      "inst_net_lot": 418,
+      "is_sub": false,
+      "member_count": 62,
+      "name": "觀光餐旅",
+      "up_count": 30,
+      "up_ratio_pct": 48.4
+    },
+    {
+      "avg_chg_1d_pct": -1.23,
+      "avg_multifactor": 17.02,
+      "industry": "其他業",
+      "inst_net_lot": 10058,
+      "is_sub": false,
+      "member_count": 108,
+      "name": "其他業",
+      "up_count": 56,
+      "up_ratio_pct": 51.9
+    }
+  ]
+}
