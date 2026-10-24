@@ -1,0 +1,268 @@
+{
+  "days": 20,
+  "new_entrants": {},
+  "ranking_labels": {
+    "big_holder_increase": "大戶增持 + 法人買超",
+    "momentum_inst_buy": "動能 + 法人買超",
+    "multifactor_score": "多因子綜合分"
+  },
+  "signals": {
+    "big_holder": [
+      {
+        "name": "大成鋼",
+        "stock_id": "2027",
+        "value": 0.48
+      },
+      {
+        "name": "宏碁資訊",
+        "stock_id": "6811",
+        "value": 2.5
+      },
+      {
+        "name": "致新",
+        "stock_id": "8081",
+        "value": 0.44
+      },
+      {
+        "name": "零壹",
+        "stock_id": "3029",
+        "value": 0.87
+      },
+      {
+        "name": "中鋼",
+        "stock_id": "2002",
+        "value": 0.43
+      },
+      {
+        "name": "視陽",
+        "stock_id": "6782",
+        "value": 0.39
+      },
+      {
+        "name": "神基",
+        "stock_id": "3005",
+        "value": 0.65
+      },
+      {
+        "name": "廣宇",
+        "stock_id": "2328",
+        "value": 3.25
+      },
+      {
+        "name": "融程電",
+        "stock_id": "3416",
+        "value": 1.2
+      },
+      {
+        "name": "微星",
+        "stock_id": "2377",
+        "value": 1.08
+      }
+    ],
+    "branch_streak": [
+      {
+        "broker": "台灣摩根士丹利",
+        "name": "宏碁資訊",
+        "stock_id": "6811",
+        "value": 17
+      },
+      {
+        "broker": "台灣摩根士丹利",
+        "name": "天鈺",
+        "stock_id": "4961",
+        "value": 3
+      },
+      {
+        "broker": "台灣摩根士丹利",
+        "name": "新光鋼",
+        "stock_id": "2031",
+        "value": 20
+      },
+      {
+        "broker": "摩根大通",
+        "name": "零壹",
+        "stock_id": "3029",
+        "value": 3
+      },
+      {
+        "broker": "元大證券",
+        "name": "長榮",
+        "stock_id": "2603",
+        "value": 20
+      },
+      {
+        "broker": "台灣摩根士丹利",
+        "name": "中鋼",
+        "stock_id": "2002",
+        "value": 11
+      },
+      {
+        "broker": "台灣摩根士丹利",
+        "name": "大聯大",
+        "stock_id": "3702",
+        "value": 18
+      },
+      {
+        "broker": "新加坡商瑞銀",
+        "name": "潤泰新",
+        "stock_id": "9945",
+        "value": 17
+      },
+      {
+        "broker": "元大證券",
+        "name": "神基",
+        "stock_id": "3005",
+        "value": 3
+      },
+      {
+        "broker": "美商高盛",
+        "name": "玉山金",
+        "stock_id": "2884",
+        "value": 20
+      }
+    ],
+    "day_trader": [
+      {
+        "broker": "凱基-台北",
+        "name": "中華電",
+        "stock_id": "2412"
+      },
+      {
+        "broker": "凱基-台北",
+        "name": "遠傳",
+        "stock_id": "4904"
+      },
+      {
+        "broker": "凱基-台北",
+        "name": "永彰",
+        "stock_id": "4523"
+      },
+      {
+        "broker": "凱基-台北",
+        "name": "夆典",
+        "stock_id": "3052"
+      },
+      {
+        "broker": "凱基-台北",
+        "name": "運錩",
+        "stock_id": "2069"
+      },
+      {
+        "broker": "凱基-台北",
+        "name": "工信",
+        "stock_id": "5521"
+      },
+      {
+        "broker": "凱基-台北",
+        "name": "榮剛",
+        "stock_id": "5009"
+      }
+    ],
+    "margin_down": [
+      {
+        "name": "精誠",
+        "stock_id": "6214",
+        "value": -2
+      },
+      {
+        "name": "千附",
+        "stock_id": "8383",
+        "value": -2
+      },
+      {
+        "name": "瑞鼎",
+        "stock_id": "3592",
+        "value": -2
+      },
+      {
+        "name": "暉盛-創",
+        "stock_id": "7730",
+        "value": -2
+      },
+      {
+        "name": "敦陽科",
+        "stock_id": "2480",
+        "value": -3
+      },
+      {
+        "name": "海悅",
+        "stock_id": "2348",
+        "value": -2
+      },
+      {
+        "name": "宏璟",
+        "stock_id": "2527",
+        "value": -2
+      },
+      {
+        "name": "美吾華",
+        "stock_id": "1731",
+        "value": -2
+      },
+      {
+        "name": "寶成",
+        "stock_id": "9904",
+        "value": -3
+      },
+      {
+        "name": "台驊控股",
+        "stock_id": "2636",
+        "value": -3
+      }
+    ],
+    "margin_up": [
+      {
+        "name": "大成鋼",
+        "stock_id": "2027",
+        "value": 2
+      },
+      {
+        "name": "宏碁資訊",
+        "stock_id": "6811",
+        "value": 2
+      },
+      {
+        "name": "致新",
+        "stock_id": "8081",
+        "value": 3
+      },
+      {
+        "name": "潤泰新",
+        "stock_id": "9945",
+        "value": 2
+      },
+      {
+        "name": "神基",
+        "stock_id": "3005",
+        "value": 2
+      },
+      {
+        "name": "矽創",
+        "stock_id": "8016",
+        "value": 3
+      },
+      {
+        "name": "宏正",
+        "stock_id": "6277",
+        "value": 2
+      },
+      {
+        "name": "新鼎",
+        "stock_id": "5209",
+        "value": 2
+      },
+      {
+        "name": "微星",
+        "stock_id": "2377",
+        "value": 2
+      },
+      {
+        "name": "東台",
+        "stock_id": "4526",
+        "value": 2
+      }
+    ]
+  },
+  "snapshot_dates": [],
+  "state": "accumulating"
+}
