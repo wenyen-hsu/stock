@@ -1,0 +1,319 @@
+{
+  "days": 5,
+  "new_entrants": {
+    "big_holder_increase": [
+      {
+        "name": "八方雲集",
+        "rank_no": 5,
+        "score": 20.61,
+        "stock_id": "2753"
+      },
+      {
+        "name": "光頡",
+        "rank_no": 9,
+        "score": 51.33,
+        "stock_id": "3624"
+      },
+      {
+        "name": "競國",
+        "rank_no": 12,
+        "score": 26.16,
+        "stock_id": "6108"
+      },
+      {
+        "name": "雷科",
+        "rank_no": 15,
+        "score": 18.47,
+        "stock_id": "6207"
+      },
+      {
+        "name": "東台",
+        "rank_no": 19,
+        "score": 80.63,
+        "stock_id": "4526"
+      },
+      {
+        "name": "運錩",
+        "rank_no": 20,
+        "score": 48.72,
+        "stock_id": "2069"
+      }
+    ],
+    "momentum_inst_buy": [
+      {
+        "name": "東台",
+        "rank_no": 1,
+        "score": 80.63,
+        "stock_id": "4526"
+      },
+      {
+        "name": "味全",
+        "rank_no": 2,
+        "score": 57.61,
+        "stock_id": "1201"
+      },
+      {
+        "name": "冠西電",
+        "rank_no": 3,
+        "score": 54.25,
+        "stock_id": "2466"
+      },
+      {
+        "name": "東捷資訊",
+        "rank_no": 5,
+        "score": 46.87,
+        "stock_id": "6697"
+      },
+      {
+        "name": "晶豪科",
+        "rank_no": 9,
+        "score": 90.04,
+        "stock_id": "3006"
+      },
+      {
+        "name": "意藍",
+        "rank_no": 12,
+        "score": 41.5,
+        "stock_id": "6925"
+      },
+      {
+        "name": "吉祥全",
+        "rank_no": 15,
+        "score": 37.9,
+        "stock_id": "2491"
+      },
+      {
+        "name": "巨鎧精密-創",
+        "rank_no": 16,
+        "score": 30.85,
+        "stock_id": "2254"
+      },
+      {
+        "name": "長榮",
+        "rank_no": 18,
+        "score": 125.25,
+        "stock_id": "2603"
+      },
+      {
+        "name": "裕民",
+        "rank_no": 19,
+        "score": 73.06,
+        "stock_id": "2606"
+      },
+      {
+        "name": "百一",
+        "rank_no": 20,
+        "score": 40.88,
+        "stock_id": "6152"
+      }
+    ],
+    "multifactor_score": [
+      {
+        "name": "鉅陞",
+        "rank_no": 2,
+        "score": 103.08,
+        "stock_id": "5529"
+      },
+      {
+        "name": "合庫金",
+        "rank_no": 11,
+        "score": 91.95,
+        "stock_id": "5880"
+      },
+      {
+        "name": "神基",
+        "rank_no": 12,
+        "score": 91.61,
+        "stock_id": "3005"
+      },
+      {
+        "name": "豐祥-KY",
+        "rank_no": 13,
+        "score": 90.92,
+        "stock_id": "5288"
+      },
+      {
+        "name": "台灣大",
+        "rank_no": 19,
+        "score": 88.12,
+        "stock_id": "3045"
+      },
+      {
+        "name": "陽明",
+        "rank_no": 20,
+        "score": 87.49,
+        "stock_id": "2609"
+      }
+    ]
+  },
+  "ranking_labels": {
+    "big_holder_increase": "大戶增持 + 法人買超",
+    "momentum_inst_buy": "動能 + 法人買超",
+    "multifactor_score": "多因子綜合分"
+  },
+  "signals": {
+    "big_holder": [
+      {
+        "name": "大成鋼",
+        "stock_id": "2027",
+        "value": 0.48
+      },
+      {
+        "name": "創見",
+        "stock_id": "2451",
+        "value": 0.35
+      },
+      {
+        "name": "志信",
+        "stock_id": "2611",
+        "value": 0.63
+      },
+      {
+        "name": "和碩",
+        "stock_id": "4938",
+        "value": 0.54
+      },
+      {
+        "name": "神基",
+        "stock_id": "3005",
+        "value": 0.65
+      },
+      {
+        "name": "晶豪科",
+        "stock_id": "3006",
+        "value": 0.38
+      },
+      {
+        "name": "藥華藥",
+        "stock_id": "6446",
+        "value": 0.3
+      },
+      {
+        "name": "鈺創",
+        "stock_id": "5351",
+        "value": 0.38
+      },
+      {
+        "name": "東台",
+        "stock_id": "4526",
+        "value": 1.06
+      },
+      {
+        "name": "致新",
+        "stock_id": "8081",
+        "value": 0.44
+      }
+    ],
+    "branch_streak": [],
+    "day_trader": [],
+    "margin_down": [
+      {
+        "name": "潤隆",
+        "stock_id": "1808",
+        "value": -2
+      },
+      {
+        "name": "台驊控股",
+        "stock_id": "2636",
+        "value": -3
+      },
+      {
+        "name": "科定",
+        "stock_id": "6655",
+        "value": -2
+      },
+      {
+        "name": "旭富",
+        "stock_id": "4119",
+        "value": -2
+      },
+      {
+        "name": "英業達",
+        "stock_id": "2356",
+        "value": -2
+      },
+      {
+        "name": "華豐",
+        "stock_id": "2109",
+        "value": -2
+      },
+      {
+        "name": "智擎",
+        "stock_id": "4162",
+        "value": -3
+      },
+      {
+        "name": "台汽電",
+        "stock_id": "8926",
+        "value": -2
+      },
+      {
+        "name": "敦陽科",
+        "stock_id": "2480",
+        "value": -3
+      },
+      {
+        "name": "鑫龍騰",
+        "stock_id": "3188",
+        "value": -3
+      }
+    ],
+    "margin_up": [
+      {
+        "name": "大成鋼",
+        "stock_id": "2027",
+        "value": 2
+      },
+      {
+        "name": "創見",
+        "stock_id": "2451",
+        "value": 6
+      },
+      {
+        "name": "和碩",
+        "stock_id": "4938",
+        "value": 2
+      },
+      {
+        "name": "川湖",
+        "stock_id": "2059",
+        "value": 3
+      },
+      {
+        "name": "神基",
+        "stock_id": "3005",
+        "value": 2
+      },
+      {
+        "name": "豐祥-KY",
+        "stock_id": "5288",
+        "value": 2
+      },
+      {
+        "name": "晶豪科",
+        "stock_id": "3006",
+        "value": 4
+      },
+      {
+        "name": "華邦電",
+        "stock_id": "2344",
+        "value": 2
+      },
+      {
+        "name": "台灣大",
+        "stock_id": "3045",
+        "value": 2
+      },
+      {
+        "name": "陽明",
+        "stock_id": "2609",
+        "value": 2
+      }
+    ]
+  },
+  "snapshot_dates": [
+    "2026-10-30",
+    "2026-10-29"
+  ],
+  "state": "ready"
+}

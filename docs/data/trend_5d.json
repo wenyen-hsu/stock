@@ -1,0 +1,182 @@
+{
+  "clusters": [],
+  "days": 5,
+  "prev_date": "2026-10-29",
+  "state": "ready",
+  "strong_sectors": [
+    {
+      "avg_chg_1d_pct": 3.6,
+      "avg_multifactor": 98.53,
+      "industry": "航運業",
+      "inst_net_lot": 28954,
+      "is_sub": true,
+      "member_count": 3,
+      "name": "貨櫃航運",
+      "up_count": 3,
+      "up_ratio_pct": 100.0
+    },
+    {
+      "avg_chg_1d_pct": 0.4,
+      "avg_multifactor": 30.29,
+      "industry": "油電燃氣業",
+      "inst_net_lot": 644,
+      "is_sub": false,
+      "member_count": 12,
+      "name": "油電燃氣業",
+      "up_count": 5,
+      "up_ratio_pct": 41.7
+    },
+    {
+      "avg_chg_1d_pct": 0.24,
+      "avg_multifactor": 48.16,
+      "industry": "航運業",
+      "inst_net_lot": 2466,
+      "is_sub": true,
+      "member_count": 3,
+      "name": "散裝航運",
+      "up_count": 1,
+      "up_ratio_pct": 33.3
+    }
+  ],
+  "trade_date": "2026-10-30",
+  "volume_spikes": [
+    {
+      "chg_1d_pct": -6.9,
+      "foreign_net_lot": 24.09,
+      "industry": "其他業",
+      "latest_volume_lot": 23590.0,
+      "multifactor_score": 64.05,
+      "name": "大甲",
+      "stock_id": "2221",
+      "sub_industry": "",
+      "trust_net_lot": 0.0,
+      "volume_ratio_1d": 4.2
+    },
+    {
+      "chg_1d_pct": 3.56,
+      "foreign_net_lot": 528.35,
+      "industry": "半導體業",
+      "latest_volume_lot": 20726.0,
+      "multifactor_score": 66.6,
+      "name": "旺玖",
+      "stock_id": "6233",
+      "sub_industry": "",
+      "trust_net_lot": 0.0,
+      "volume_ratio_1d": 3.34
+    },
+    {
+      "chg_1d_pct": -1.03,
+      "foreign_net_lot": -285.0,
+      "industry": "數位雲端",
+      "latest_volume_lot": 3428.53,
+      "multifactor_score": -14.12,
+      "name": "浪凡",
+      "stock_id": "6165",
+      "sub_industry": "",
+      "trust_net_lot": 0.0,
+      "volume_ratio_1d": 3.19
+    },
+    {
+      "chg_1d_pct": -1.58,
+      "foreign_net_lot": -156.35,
+      "industry": "造紙工業",
+      "latest_volume_lot": 7428.43,
+      "multifactor_score": 31.71,
+      "name": "永豐餘",
+      "stock_id": "1907",
+      "sub_industry": "",
+      "trust_net_lot": 0.0,
+      "volume_ratio_1d": 3.11
+    }
+  ],
+  "weak_sectors": [
+    {
+      "avg_chg_1d_pct": -8.18,
+      "avg_multifactor": 13.29,
+      "industry": "電子零組件業",
+      "inst_net_lot": -27089,
+      "is_sub": true,
+      "member_count": 5,
+      "name": "被動元件",
+      "up_count": 0,
+      "up_ratio_pct": 0.0
+    },
+    {
+      "avg_chg_1d_pct": -7.75,
+      "avg_multifactor": 17.73,
+      "industry": "光電業",
+      "inst_net_lot": 943,
+      "is_sub": true,
+      "member_count": 3,
+      "name": "光學鏡頭",
+      "up_count": 0,
+      "up_ratio_pct": 0.0
+    },
+    {
+      "avg_chg_1d_pct": -7.27,
+      "avg_multifactor": -10.19,
+      "industry": "光電業",
+      "inst_net_lot": -43345,
+      "is_sub": true,
+      "member_count": 3,
+      "name": "面板",
+      "up_count": 0,
+      "up_ratio_pct": 0.0
+    },
+    {
+      "avg_chg_1d_pct": -6.69,
+      "avg_multifactor": 9.7,
+      "industry": "半導體業",
+      "inst_net_lot": -505,
+      "is_sub": true,
+      "member_count": 4,
+      "name": "半導體設備",
+      "up_count": 0,
+      "up_ratio_pct": 0.0
+    },
+    {
+      "avg_chg_1d_pct": -5.99,
+      "avg_multifactor": -1.1,
+      "industry": "電子零組件業",
+      "inst_net_lot": -13268,
+      "is_sub": true,
+      "member_count": 10,
+      "name": "PCB",
+      "up_count": 0,
+      "up_ratio_pct": 0.0
+    },
+    {
+      "avg_chg_1d_pct": -5.56,
+      "avg_multifactor": -19.26,
+      "industry": "電腦及週邊設備業",
+      "inst_net_lot": -14815,
+      "is_sub": true,
+      "member_count": 3,
+      "name": "電源供應器",
+      "up_count": 0,
+      "up_ratio_pct": 0.0
+    },
+    {
+      "avg_chg_1d_pct": -5.56,
+      "avg_multifactor": 35.63,
+      "industry": "電子零組件業",
+      "inst_net_lot": -2019,
+      "is_sub": true,
+      "member_count": 5,
+      "name": "散熱",
+      "up_count": 0,
+      "up_ratio_pct": 0.0
+    },
+    {
+      "avg_chg_1d_pct": -5.47,
+      "avg_multifactor": 15.79,
+      "industry": "數位雲端",
+      "inst_net_lot": -322,
+      "is_sub": false,
+      "member_count": 48,
+      "name": "數位雲端",
+      "up_count": 7,
+      "up_ratio_pct": 14.6
+    }
+  ]
+}
