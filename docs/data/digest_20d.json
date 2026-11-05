@@ -9,124 +9,119 @@
   "signals": {
     "big_holder": [
       {
-        "name": "大成鋼",
-        "stock_id": "2027",
-        "value": 0.48
-      },
-      {
-        "name": "宏碁資訊",
-        "stock_id": "6811",
-        "value": 2.5
-      },
-      {
-        "name": "致新",
-        "stock_id": "8081",
-        "value": 0.44
-      },
-      {
-        "name": "零壹",
-        "stock_id": "3029",
-        "value": 0.87
-      },
-      {
-        "name": "中鋼",
-        "stock_id": "2002",
-        "value": 0.43
+        "name": "中鼎",
+        "stock_id": "9933",
+        "value": 0.37
       },
       {
         "name": "視陽",
         "stock_id": "6782",
-        "value": 0.39
+        "value": 2.29
       },
       {
-        "name": "神基",
-        "stock_id": "3005",
+        "name": "利勤",
+        "stock_id": "4426",
+        "value": 0.59
+      },
+      {
+        "name": "寶雅*",
+        "stock_id": "5904",
+        "value": 0.3
+      },
+      {
+        "name": "永信建",
+        "stock_id": "5508",
+        "value": 0.46
+      },
+      {
+        "name": "潤隆",
+        "stock_id": "1808",
         "value": 0.65
       },
       {
-        "name": "廣宇",
-        "stock_id": "2328",
-        "value": 3.25
+        "name": "聯詠",
+        "stock_id": "3034",
+        "value": 0.48
       },
       {
-        "name": "融程電",
-        "stock_id": "3416",
-        "value": 1.2
+        "name": "喬山",
+        "stock_id": "1736",
+        "value": 0.34
       },
       {
-        "name": "微星",
-        "stock_id": "2377",
-        "value": 1.08
+        "name": "達欣工",
+        "stock_id": "2535",
+        "value": 0.49
+      },
+      {
+        "name": "鈺齊-KY",
+        "stock_id": "9802",
+        "value": 1.23
       }
     ],
     "branch_streak": [
       {
-        "broker": "台灣摩根士丹利",
-        "name": "宏碁資訊",
-        "stock_id": "6811",
-        "value": 17
-      },
-      {
-        "broker": "台灣摩根士丹利",
-        "name": "天鈺",
-        "stock_id": "4961",
-        "value": 3
-      },
-      {
-        "broker": "台灣摩根士丹利",
-        "name": "新光鋼",
-        "stock_id": "2031",
-        "value": 20
-      },
-      {
         "broker": "摩根大通",
-        "name": "零壹",
-        "stock_id": "3029",
-        "value": 3
-      },
-      {
-        "broker": "元大證券",
         "name": "長榮",
         "stock_id": "2603",
         "value": 20
       },
       {
-        "broker": "台灣摩根士丹利",
-        "name": "中鋼",
-        "stock_id": "2002",
-        "value": 11
+        "broker": "美商高盛",
+        "name": "中華電",
+        "stock_id": "2412",
+        "value": 8
       },
       {
         "broker": "台灣摩根士丹利",
-        "name": "大聯大",
-        "stock_id": "3702",
-        "value": 18
+        "name": "合庫金",
+        "stock_id": "5880",
+        "value": 20
+      },
+      {
+        "broker": "台灣摩根士丹利",
+        "name": "鼎固-KY",
+        "stock_id": "2923",
+        "value": 5
+      },
+      {
+        "broker": "花旗環球",
+        "name": "台灣大",
+        "stock_id": "3045",
+        "value": 13
+      },
+      {
+        "broker": "台灣摩根士丹利",
+        "name": "安泰銀",
+        "stock_id": "2849",
+        "value": 6
+      },
+      {
+        "broker": "台灣摩根士丹利",
+        "name": "華航",
+        "stock_id": "2610",
+        "value": 14
       },
       {
         "broker": "新加坡商瑞銀",
         "name": "潤泰新",
         "stock_id": "9945",
-        "value": 17
+        "value": 20
       },
       {
-        "broker": "元大證券",
-        "name": "神基",
-        "stock_id": "3005",
-        "value": 3
+        "broker": "台灣摩根士丹利",
+        "name": "統一",
+        "stock_id": "1216",
+        "value": 20
       },
       {
-        "broker": "美商高盛",
-        "name": "玉山金",
-        "stock_id": "2884",
+        "broker": "台灣摩根士丹利",
+        "name": "新鼎",
+        "stock_id": "5209",
         "value": 20
       }
     ],
     "day_trader": [
-      {
-        "broker": "凱基-台北",
-        "name": "中華電",
-        "stock_id": "2412"
-      },
       {
         "broker": "凱基-台北",
         "name": "遠傳",
@@ -134,64 +129,69 @@
       },
       {
         "broker": "凱基-台北",
-        "name": "永彰",
-        "stock_id": "4523"
+        "name": "生泰",
+        "stock_id": "1777"
       },
       {
         "broker": "凱基-台北",
-        "name": "夆典",
-        "stock_id": "3052"
+        "name": "三星",
+        "stock_id": "5007"
       },
       {
         "broker": "凱基-台北",
-        "name": "運錩",
-        "stock_id": "2069"
+        "name": "統領",
+        "stock_id": "2910"
       },
       {
         "broker": "凱基-台北",
-        "name": "工信",
-        "stock_id": "5521"
+        "name": "味王",
+        "stock_id": "1203"
       },
       {
         "broker": "凱基-台北",
-        "name": "榮剛",
-        "stock_id": "5009"
+        "name": "新海",
+        "stock_id": "9926"
+      },
+      {
+        "broker": "凱基-台北",
+        "name": "順天",
+        "stock_id": "5525"
+      },
+      {
+        "broker": "元大-土城永寧",
+        "name": "展碁國際",
+        "stock_id": "6776"
+      },
+      {
+        "broker": "凱基-台北",
+        "name": "美吾華",
+        "stock_id": "1731"
+      },
+      {
+        "broker": "凱基-台北",
+        "name": "晟德",
+        "stock_id": "4123"
       }
     ],
     "margin_down": [
       {
-        "name": "精誠",
-        "stock_id": "6214",
+        "name": "寶雅*",
+        "stock_id": "5904",
         "value": -2
       },
       {
-        "name": "千附",
-        "stock_id": "8383",
+        "name": "微端",
+        "stock_id": "3285",
         "value": -2
       },
       {
-        "name": "瑞鼎",
-        "stock_id": "3592",
+        "name": "正隆",
+        "stock_id": "1904",
         "value": -2
       },
       {
-        "name": "暉盛-創",
-        "stock_id": "7730",
-        "value": -2
-      },
-      {
-        "name": "敦陽科",
-        "stock_id": "2480",
-        "value": -3
-      },
-      {
-        "name": "海悅",
-        "stock_id": "2348",
-        "value": -2
-      },
-      {
-        "name": "宏璟",
-        "stock_id": "2527",
+        "name": "潤隆",
+        "stock_id": "1808",
         "value": -2
       },
       {
@@ -200,31 +200,46 @@
         "value": -2
       },
       {
-        "name": "寶成",
-        "stock_id": "9904",
-        "value": -3
+        "name": "昇陽",
+        "stock_id": "3266",
+        "value": -2
       },
       {
-        "name": "台驊控股",
-        "stock_id": "2636",
-        "value": -3
+        "name": "高興昌",
+        "stock_id": "2008",
+        "value": -2
+      },
+      {
+        "name": "旭富",
+        "stock_id": "4119",
+        "value": -2
+      },
+      {
+        "name": "普鴻",
+        "stock_id": "6590",
+        "value": -2
+      },
+      {
+        "name": "宇峻",
+        "stock_id": "3546",
+        "value": -4
       }
     ],
     "margin_up": [
       {
-        "name": "大成鋼",
-        "stock_id": "2027",
-        "value": 2
-      },
-      {
-        "name": "宏碁資訊",
-        "stock_id": "6811",
-        "value": 2
-      },
-      {
-        "name": "致新",
-        "stock_id": "8081",
+        "name": "鼎固-KY",
+        "stock_id": "2923",
         "value": 3
+      },
+      {
+        "name": "鋼聯",
+        "stock_id": "6581",
+        "value": 3
+      },
+      {
+        "name": "台灣大",
+        "stock_id": "3045",
+        "value": 2
       },
       {
         "name": "潤泰新",
@@ -232,18 +247,8 @@
         "value": 2
       },
       {
-        "name": "神基",
-        "stock_id": "3005",
-        "value": 2
-      },
-      {
-        "name": "矽創",
-        "stock_id": "8016",
-        "value": 3
-      },
-      {
-        "name": "宏正",
-        "stock_id": "6277",
+        "name": "統一",
+        "stock_id": "1216",
         "value": 2
       },
       {
@@ -252,14 +257,24 @@
         "value": 2
       },
       {
-        "name": "微星",
-        "stock_id": "2377",
+        "name": "大成鋼",
+        "stock_id": "2027",
         "value": 2
       },
       {
-        "name": "東台",
-        "stock_id": "4526",
-        "value": 2
+        "name": "廣寰科",
+        "stock_id": "3287",
+        "value": 3
+      },
+      {
+        "name": "欣高",
+        "stock_id": "9931",
+        "value": 3
+      },
+      {
+        "name": "中鼎",
+        "stock_id": "9933",
+        "value": 4
       }
     ]
   },

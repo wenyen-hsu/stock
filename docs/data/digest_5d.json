@@ -9,62 +9,82 @@
   "signals": {
     "big_holder": [
       {
-        "name": "大成鋼",
-        "stock_id": "2027",
-        "value": 0.48
+        "name": "富世達",
+        "stock_id": "6805",
+        "value": 1.78
       },
       {
-        "name": "宏碁資訊",
-        "stock_id": "6811",
-        "value": 2.5
+        "name": "利勤",
+        "stock_id": "4426",
+        "value": 0.59
       },
       {
-        "name": "創見",
-        "stock_id": "2451",
-        "value": 0.35
+        "name": "志信",
+        "stock_id": "2611",
+        "value": 0.69
       },
       {
-        "name": "聯陽",
-        "stock_id": "3014",
-        "value": 1.17
+        "name": "鈺齊-KY",
+        "stock_id": "9802",
+        "value": 1.23
       },
       {
-        "name": "中鋼",
-        "stock_id": "2002",
-        "value": 0.43
+        "name": "寶雅*",
+        "stock_id": "5904",
+        "value": 0.3
       },
       {
-        "name": "王品",
-        "stock_id": "2727",
-        "value": 0.37
+        "name": "潤隆",
+        "stock_id": "1808",
+        "value": 0.65
       },
       {
-        "name": "零壹",
-        "stock_id": "3029",
-        "value": 0.87
+        "name": "允強",
+        "stock_id": "2034",
+        "value": 0.61
       },
       {
-        "name": "瑞鼎",
-        "stock_id": "3592",
-        "value": 0.46
+        "name": "喬山",
+        "stock_id": "1736",
+        "value": 0.34
       },
       {
-        "name": "創意",
-        "stock_id": "3443",
-        "value": 0.81
+        "name": "望隼",
+        "stock_id": "4771",
+        "value": 1.75
       },
       {
-        "name": "東台",
-        "stock_id": "4526",
-        "value": 1.06
+        "name": "視陽",
+        "stock_id": "6782",
+        "value": 2.29
       }
     ],
     "branch_streak": [],
     "day_trader": [],
     "margin_down": [
       {
-        "name": "精誠",
-        "stock_id": "6214",
+        "name": "倚天酷碁-創",
+        "stock_id": "2432",
+        "value": -2
+      },
+      {
+        "name": "普鴻",
+        "stock_id": "6590",
+        "value": -2
+      },
+      {
+        "name": "正隆",
+        "stock_id": "1904",
+        "value": -2
+      },
+      {
+        "name": "寶雅*",
+        "stock_id": "5904",
+        "value": -2
+      },
+      {
+        "name": "鐿鈦",
+        "stock_id": "4163",
         "value": -2
       },
       {
@@ -73,51 +93,41 @@
         "value": -2
       },
       {
-        "name": "海悅",
-        "stock_id": "2348",
-        "value": -2
-      },
-      {
-        "name": "瑞鼎",
-        "stock_id": "3592",
-        "value": -2
-      },
-      {
-        "name": "千附",
-        "stock_id": "8383",
-        "value": -2
-      },
-      {
-        "name": "億光",
-        "stock_id": "2393",
+        "name": "宇峻",
+        "stock_id": "3546",
         "value": -4
       },
       {
-        "name": "暉盛-創",
-        "stock_id": "7730",
+        "name": "大山",
+        "stock_id": "1615",
         "value": -2
       },
       {
-        "name": "敦陽科",
-        "stock_id": "2480",
+        "name": "台驊控股",
+        "stock_id": "2636",
         "value": -3
       },
       {
-        "name": "威強電",
-        "stock_id": "3022",
-        "value": -2
-      },
-      {
-        "name": "明泰",
-        "stock_id": "3380",
+        "name": "材料*-KY",
+        "stock_id": "4763",
         "value": -2
       }
     ],
     "margin_up": [
       {
-        "name": "大成鋼",
-        "stock_id": "2027",
+        "name": "廣寰科",
+        "stock_id": "3287",
+        "value": 3
+      },
+      {
+        "name": "台灣大",
+        "stock_id": "3045",
         "value": 2
+      },
+      {
+        "name": "川湖",
+        "stock_id": "2059",
+        "value": 3
       },
       {
         "name": "潤泰新",
@@ -125,43 +135,33 @@
         "value": 2
       },
       {
-        "name": "宏碁資訊",
-        "stock_id": "6811",
+        "name": "中華",
+        "stock_id": "2204",
         "value": 2
       },
       {
-        "name": "創見",
-        "stock_id": "2451",
+        "name": "鼎固-KY",
+        "stock_id": "2923",
+        "value": 3
+      },
+      {
+        "name": "富世達",
+        "stock_id": "6805",
         "value": 6
       },
       {
-        "name": "允強",
-        "stock_id": "2034",
-        "value": 2
-      },
-      {
-        "name": "冠德",
-        "stock_id": "2520",
+        "name": "永信",
+        "stock_id": "3705",
         "value": 3
       },
       {
-        "name": "東台",
-        "stock_id": "4526",
+        "name": "大成鋼",
+        "stock_id": "2027",
         "value": 2
       },
       {
-        "name": "運錩",
-        "stock_id": "2069",
-        "value": 3
-      },
-      {
-        "name": "神基",
-        "stock_id": "3005",
-        "value": 2
-      },
-      {
-        "name": "新鼎",
-        "stock_id": "5209",
+        "name": "統一",
+        "stock_id": "1216",
         "value": 2
       }
     ]
