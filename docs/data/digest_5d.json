@@ -1,0 +1,343 @@
+{
+  "days": 5,
+  "new_entrants": {
+    "big_holder_increase": [
+      {
+        "name": "精材",
+        "rank_no": 9,
+        "score": 28.24,
+        "stock_id": "3374"
+      },
+      {
+        "name": "鼎元",
+        "rank_no": 10,
+        "score": 24.93,
+        "stock_id": "2426"
+      },
+      {
+        "name": "雙鴻",
+        "rank_no": 14,
+        "score": 32.8,
+        "stock_id": "3324"
+      },
+      {
+        "name": "宜特",
+        "rank_no": 16,
+        "score": 5.57,
+        "stock_id": "3289"
+      }
+    ],
+    "momentum_inst_buy": [
+      {
+        "name": "元晶",
+        "rank_no": 2,
+        "score": 10.32,
+        "stock_id": "6443"
+      },
+      {
+        "name": "保瑞",
+        "rank_no": 3,
+        "score": 67.86,
+        "stock_id": "6472"
+      },
+      {
+        "name": "聯合再生",
+        "rank_no": 4,
+        "score": 36.06,
+        "stock_id": "3576"
+      },
+      {
+        "name": "伸興",
+        "rank_no": 5,
+        "score": 80.64,
+        "stock_id": "1558"
+      },
+      {
+        "name": "藥華藥",
+        "rank_no": 6,
+        "score": 106.32,
+        "stock_id": "6446"
+      },
+      {
+        "name": "來億-KY",
+        "rank_no": 11,
+        "score": 87.59,
+        "stock_id": "6890"
+      },
+      {
+        "name": "元創精密",
+        "rank_no": 12,
+        "score": 35.62,
+        "stock_id": "3685"
+      },
+      {
+        "name": "是方",
+        "rank_no": 13,
+        "score": 43.29,
+        "stock_id": "6561"
+      },
+      {
+        "name": "美利達",
+        "rank_no": 14,
+        "score": 48.87,
+        "stock_id": "9914"
+      },
+      {
+        "name": "中華電",
+        "rank_no": 15,
+        "score": 118.07,
+        "stock_id": "2412"
+      },
+      {
+        "name": "豐泰",
+        "rank_no": 16,
+        "score": 64.24,
+        "stock_id": "9910"
+      },
+      {
+        "name": "寶雅*",
+        "rank_no": 17,
+        "score": 80.41,
+        "stock_id": "5904"
+      },
+      {
+        "name": "泓德能源",
+        "rank_no": 18,
+        "score": 3.84,
+        "stock_id": "6873"
+      },
+      {
+        "name": "倉和",
+        "rank_no": 20,
+        "score": 33.63,
+        "stock_id": "6538"
+      }
+    ],
+    "multifactor_score": [
+      {
+        "name": "藥華藥",
+        "rank_no": 2,
+        "score": 106.32,
+        "stock_id": "6446"
+      },
+      {
+        "name": "志信",
+        "rank_no": 6,
+        "score": 89.61,
+        "stock_id": "2611"
+      },
+      {
+        "name": "來億-KY",
+        "rank_no": 7,
+        "score": 87.59,
+        "stock_id": "6890"
+      },
+      {
+        "name": "和泰車",
+        "rank_no": 10,
+        "score": 84.22,
+        "stock_id": "2207"
+      },
+      {
+        "name": "國建",
+        "rank_no": 14,
+        "score": 81.94,
+        "stock_id": "2501"
+      },
+      {
+        "name": "陽明",
+        "rank_no": 15,
+        "score": 81.6,
+        "stock_id": "2609"
+      },
+      {
+        "name": "允強",
+        "rank_no": 18,
+        "score": 81.02,
+        "stock_id": "2034"
+      },
+      {
+        "name": "神基",
+        "rank_no": 19,
+        "score": 80.98,
+        "stock_id": "3005"
+      },
+      {
+        "name": "伸興",
+        "rank_no": 20,
+        "score": 80.64,
+        "stock_id": "1558"
+      }
+    ]
+  },
+  "ranking_labels": {
+    "big_holder_increase": "大戶增持 + 法人買超",
+    "momentum_inst_buy": "動能 + 法人買超",
+    "multifactor_score": "多因子綜合分"
+  },
+  "signals": {
+    "big_holder": [
+      {
+        "name": "志信",
+        "stock_id": "2611",
+        "value": 0.69
+      },
+      {
+        "name": "允強",
+        "stock_id": "2034",
+        "value": 0.61
+      },
+      {
+        "name": "寶雅*",
+        "stock_id": "5904",
+        "value": 0.3
+      },
+      {
+        "name": "視陽",
+        "stock_id": "6782",
+        "value": 2.29
+      },
+      {
+        "name": "望隼",
+        "stock_id": "4771",
+        "value": 1.75
+      },
+      {
+        "name": "潤隆",
+        "stock_id": "1808",
+        "value": 0.65
+      },
+      {
+        "name": "鈺齊-KY",
+        "stock_id": "9802",
+        "value": 1.23
+      },
+      {
+        "name": "永信建",
+        "stock_id": "5508",
+        "value": 0.46
+      },
+      {
+        "name": "富世達",
+        "stock_id": "6805",
+        "value": 1.78
+      },
+      {
+        "name": "信立",
+        "stock_id": "4303",
+        "value": 0.79
+      }
+    ],
+    "branch_streak": [],
+    "day_trader": [],
+    "margin_down": [
+      {
+        "name": "寶雅*",
+        "stock_id": "5904",
+        "value": -2
+      },
+      {
+        "name": "宇峻",
+        "stock_id": "3546",
+        "value": -4
+      },
+      {
+        "name": "材料*-KY",
+        "stock_id": "4763",
+        "value": -2
+      },
+      {
+        "name": "潤隆",
+        "stock_id": "1808",
+        "value": -2
+      },
+      {
+        "name": "大武山",
+        "stock_id": "6952",
+        "value": -2
+      },
+      {
+        "name": "海悅",
+        "stock_id": "2348",
+        "value": -2
+      },
+      {
+        "name": "燦坤",
+        "stock_id": "2430",
+        "value": -2
+      },
+      {
+        "name": "大山",
+        "stock_id": "1615",
+        "value": -2
+      },
+      {
+        "name": "和康生",
+        "stock_id": "1783",
+        "value": -2
+      },
+      {
+        "name": "建新國際",
+        "stock_id": "8367",
+        "value": -2
+      }
+    ],
+    "margin_up": [
+      {
+        "name": "中華",
+        "stock_id": "2204",
+        "value": 2
+      },
+      {
+        "name": "廣寰科",
+        "stock_id": "3287",
+        "value": 3
+      },
+      {
+        "name": "陽明",
+        "stock_id": "2609",
+        "value": 2
+      },
+      {
+        "name": "鼎固-KY",
+        "stock_id": "2923",
+        "value": 3
+      },
+      {
+        "name": "川湖",
+        "stock_id": "2059",
+        "value": 3
+      },
+      {
+        "name": "允強",
+        "stock_id": "2034",
+        "value": 2
+      },
+      {
+        "name": "神基",
+        "stock_id": "3005",
+        "value": 2
+      },
+      {
+        "name": "台灣大",
+        "stock_id": "3045",
+        "value": 2
+      },
+      {
+        "name": "南港",
+        "stock_id": "2101",
+        "value": 3
+      },
+      {
+        "name": "永信",
+        "stock_id": "3705",
+        "value": 3
+      }
+    ]
+  },
+  "snapshot_dates": [
+    "2026-11-06",
+    "2026-11-05"
+  ],
+  "state": "ready"
+}

@@ -1,0 +1,124 @@
+{
+  "clusters": [],
+  "days": 5,
+  "prev_date": "2026-11-05",
+  "state": "ready",
+  "strong_sectors": [],
+  "trade_date": "2026-11-06",
+  "volume_spikes": [
+    {
+      "chg_1d_pct": 9.18,
+      "foreign_net_lot": 73.09,
+      "industry": "電機機械",
+      "latest_volume_lot": 1196.15,
+      "multifactor_score": 80.64,
+      "name": "伸興",
+      "stock_id": "1558",
+      "sub_industry": "",
+      "trust_net_lot": 0.0,
+      "volume_ratio_1d": 3.99
+    },
+    {
+      "chg_1d_pct": -4.11,
+      "foreign_net_lot": -385.67,
+      "industry": "數位雲端",
+      "latest_volume_lot": 8325.0,
+      "multifactor_score": 45.5,
+      "name": "意藍",
+      "stock_id": "6925",
+      "sub_industry": "",
+      "trust_net_lot": 0.0,
+      "volume_ratio_1d": 3.15
+    }
+  ],
+  "weak_sectors": [
+    {
+      "avg_chg_1d_pct": -15.43,
+      "avg_multifactor": 1.42,
+      "industry": "農業科技業",
+      "inst_net_lot": 8,
+      "is_sub": false,
+      "member_count": 7,
+      "name": "農業科技業",
+      "up_count": 0,
+      "up_ratio_pct": 0.0
+    },
+    {
+      "avg_chg_1d_pct": -8.57,
+      "avg_multifactor": 22.07,
+      "industry": "電子零組件業",
+      "inst_net_lot": 351,
+      "is_sub": true,
+      "member_count": 5,
+      "name": "散熱",
+      "up_count": 0,
+      "up_ratio_pct": 0.0
+    },
+    {
+      "avg_chg_1d_pct": -8.56,
+      "avg_multifactor": 16.93,
+      "industry": "電子零組件業",
+      "inst_net_lot": 1706,
+      "is_sub": true,
+      "member_count": 5,
+      "name": "被動元件",
+      "up_count": 0,
+      "up_ratio_pct": 0.0
+    },
+    {
+      "avg_chg_1d_pct": -8.53,
+      "avg_multifactor": 6.14,
+      "industry": "通信網路業",
+      "inst_net_lot": 2283,
+      "is_sub": true,
+      "member_count": 4,
+      "name": "光通訊",
+      "up_count": 0,
+      "up_ratio_pct": 0.0
+    },
+    {
+      "avg_chg_1d_pct": -7.94,
+      "avg_multifactor": 24.72,
+      "industry": "半導體業",
+      "inst_net_lot": 84,
+      "is_sub": true,
+      "member_count": 4,
+      "name": "半導體設備",
+      "up_count": 0,
+      "up_ratio_pct": 0.0
+    },
+    {
+      "avg_chg_1d_pct": -7.64,
+      "avg_multifactor": -4.52,
+      "industry": "半導體業",
+      "inst_net_lot": -12722,
+      "is_sub": true,
+      "member_count": 4,
+      "name": "封測",
+      "up_count": 0,
+      "up_ratio_pct": 0.0
+    },
+    {
+      "avg_chg_1d_pct": -6.59,
+      "avg_multifactor": -0.5,
+      "industry": "電子零組件業",
+      "inst_net_lot": -3403,
+      "is_sub": true,
+      "member_count": 10,
+      "name": "PCB",
+      "up_count": 0,
+      "up_ratio_pct": 0.0
+    },
+    {
+      "avg_chg_1d_pct": -5.87,
+      "avg_multifactor": -12.1,
+      "industry": "電腦及週邊設備業",
+      "inst_net_lot": -6945,
+      "is_sub": true,
+      "member_count": 3,
+      "name": "電源供應器",
+      "up_count": 0,
+      "up_ratio_pct": 0.0
+    }
+  ]
+}
