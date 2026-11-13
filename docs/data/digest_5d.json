@@ -1,0 +1,373 @@
+{
+  "days": 5,
+  "new_entrants": {
+    "big_holder_increase": [
+      {
+        "name": "華宏",
+        "rank_no": 15,
+        "score": 49.65,
+        "stock_id": "8240"
+      },
+      {
+        "name": "協易機",
+        "rank_no": 16,
+        "score": 73.05,
+        "stock_id": "4533"
+      },
+      {
+        "name": "晶心科",
+        "rank_no": 17,
+        "score": 53.53,
+        "stock_id": "6533"
+      },
+      {
+        "name": "長榮航",
+        "rank_no": 18,
+        "score": 84.91,
+        "stock_id": "2618"
+      },
+      {
+        "name": "捷敏-KY",
+        "rank_no": 19,
+        "score": 29.72,
+        "stock_id": "6525"
+      },
+      {
+        "name": "寶成",
+        "rank_no": 20,
+        "score": 63.48,
+        "stock_id": "9904"
+      }
+    ],
+    "momentum_inst_buy": [
+      {
+        "name": "事欣科",
+        "rank_no": 2,
+        "score": 100.72,
+        "stock_id": "4916"
+      },
+      {
+        "name": "世紀*",
+        "rank_no": 3,
+        "score": 57.0,
+        "stock_id": "5314"
+      },
+      {
+        "name": "高僑",
+        "rank_no": 4,
+        "score": 93.82,
+        "stock_id": "6234"
+      },
+      {
+        "name": "華經",
+        "rank_no": 5,
+        "score": 40.96,
+        "stock_id": "2468"
+      },
+      {
+        "name": "世芯-KY",
+        "rank_no": 6,
+        "score": 100.56,
+        "stock_id": "3661"
+      },
+      {
+        "name": "華電網",
+        "rank_no": 7,
+        "score": 61.07,
+        "stock_id": "6163"
+      },
+      {
+        "name": "穩懋",
+        "rank_no": 8,
+        "score": 50.76,
+        "stock_id": "3105"
+      },
+      {
+        "name": "零壹",
+        "rank_no": 9,
+        "score": 86.38,
+        "stock_id": "3029"
+      },
+      {
+        "name": "精材",
+        "rank_no": 11,
+        "score": 65.66,
+        "stock_id": "3374"
+      },
+      {
+        "name": "碩天",
+        "rank_no": 12,
+        "score": 113.41,
+        "stock_id": "3617"
+      },
+      {
+        "name": "共信-KY",
+        "rank_no": 13,
+        "score": 82.83,
+        "stock_id": "6617"
+      },
+      {
+        "name": "奇鋐",
+        "rank_no": 14,
+        "score": 68.64,
+        "stock_id": "3017"
+      },
+      {
+        "name": "萬泰科",
+        "rank_no": 15,
+        "score": 43.73,
+        "stock_id": "6190"
+      },
+      {
+        "name": "創意",
+        "rank_no": 16,
+        "score": 80.93,
+        "stock_id": "3443"
+      },
+      {
+        "name": "仁大資訊",
+        "rank_no": 18,
+        "score": 51.87,
+        "stock_id": "7767"
+      },
+      {
+        "name": "萊德光電-KY",
+        "rank_no": 19,
+        "score": 36.27,
+        "stock_id": "7717"
+      },
+      {
+        "name": "東捷資訊",
+        "rank_no": 20,
+        "score": 44.16,
+        "stock_id": "6697"
+      }
+    ],
+    "multifactor_score": [
+      {
+        "name": "麗臺",
+        "rank_no": 2,
+        "score": 106.64,
+        "stock_id": "2465"
+      },
+      {
+        "name": "潤弘",
+        "rank_no": 3,
+        "score": 102.2,
+        "stock_id": "2597"
+      },
+      {
+        "name": "中鼎",
+        "rank_no": 6,
+        "score": 96.11,
+        "stock_id": "9933"
+      },
+      {
+        "name": "旺旺保",
+        "rank_no": 9,
+        "score": 92.59,
+        "stock_id": "2816"
+      },
+      {
+        "name": "慶豐富",
+        "rank_no": 10,
+        "score": 92.5,
+        "stock_id": "9935"
+      },
+      {
+        "name": "榮運",
+        "rank_no": 13,
+        "score": 89.45,
+        "stock_id": "2607"
+      },
+      {
+        "name": "是方",
+        "rank_no": 16,
+        "score": 86.49,
+        "stock_id": "6561"
+      },
+      {
+        "name": "零壹",
+        "rank_no": 17,
+        "score": 86.38,
+        "stock_id": "3029"
+      },
+      {
+        "name": "中華資安",
+        "rank_no": 18,
+        "score": 85.44,
+        "stock_id": "7765"
+      }
+    ]
+  },
+  "ranking_labels": {
+    "big_holder_increase": "大戶增持 + 法人買超",
+    "momentum_inst_buy": "動能 + 法人買超",
+    "multifactor_score": "多因子綜合分"
+  },
+  "signals": {
+    "big_holder": [
+      {
+        "name": "事欣科",
+        "stock_id": "4916",
+        "value": 0.32
+      },
+      {
+        "name": "中鼎",
+        "stock_id": "9933",
+        "value": 0.64
+      },
+      {
+        "name": "慶豐富",
+        "stock_id": "9935",
+        "value": 0.5
+      },
+      {
+        "name": "台玻",
+        "stock_id": "1802",
+        "value": 1.02
+      },
+      {
+        "name": "榮運",
+        "stock_id": "2607",
+        "value": 0.7
+      },
+      {
+        "name": "東洋",
+        "stock_id": "4105",
+        "value": 0.82
+      },
+      {
+        "name": "長榮航",
+        "stock_id": "2618",
+        "value": 0.93
+      },
+      {
+        "name": "華航",
+        "stock_id": "2610",
+        "value": 1.29
+      },
+      {
+        "name": "大眾控",
+        "stock_id": "3701",
+        "value": 0.46
+      },
+      {
+        "name": "精測",
+        "stock_id": "6510",
+        "value": 0.69
+      }
+    ],
+    "branch_streak": [],
+    "day_trader": [],
+    "margin_down": [
+      {
+        "name": "潤弘",
+        "stock_id": "2597",
+        "value": -2
+      },
+      {
+        "name": "達發",
+        "stock_id": "6526",
+        "value": -2
+      },
+      {
+        "name": "敦陽科",
+        "stock_id": "2480",
+        "value": -3
+      },
+      {
+        "name": "是方",
+        "stock_id": "6561",
+        "value": -2
+      },
+      {
+        "name": "大眾控",
+        "stock_id": "3701",
+        "value": -4
+      },
+      {
+        "name": "千附",
+        "stock_id": "8383",
+        "value": -2
+      },
+      {
+        "name": "倚天酷碁-創",
+        "stock_id": "2432",
+        "value": -2
+      },
+      {
+        "name": "微端",
+        "stock_id": "3285",
+        "value": -2
+      },
+      {
+        "name": "普鴻",
+        "stock_id": "6590",
+        "value": -2
+      },
+      {
+        "name": "中磊",
+        "stock_id": "5388",
+        "value": -5
+      }
+    ],
+    "margin_up": [
+      {
+        "name": "碩天",
+        "stock_id": "3617",
+        "value": 2
+      },
+      {
+        "name": "麗臺",
+        "stock_id": "2465",
+        "value": 3
+      },
+      {
+        "name": "事欣科",
+        "stock_id": "4916",
+        "value": 2
+      },
+      {
+        "name": "世芯-KY",
+        "stock_id": "3661",
+        "value": 3
+      },
+      {
+        "name": "中鼎",
+        "stock_id": "9933",
+        "value": 4
+      },
+      {
+        "name": "高僑",
+        "stock_id": "6234",
+        "value": 3
+      },
+      {
+        "name": "台玻",
+        "stock_id": "1802",
+        "value": 4
+      },
+      {
+        "name": "盟立",
+        "stock_id": "2464",
+        "value": 2
+      },
+      {
+        "name": "南港",
+        "stock_id": "2101",
+        "value": 3
+      },
+      {
+        "name": "雷笛克光學",
+        "stock_id": "5230",
+        "value": 4
+      }
+    ]
+  },
+  "snapshot_dates": [
+    "2026-11-13",
+    "2026-11-12"
+  ],
+  "state": "ready"
+}

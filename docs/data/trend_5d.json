@@ -1,0 +1,227 @@
+{
+  "clusters": [],
+  "days": 5,
+  "prev_date": "2026-11-12",
+  "state": "ready",
+  "strong_sectors": [
+    {
+      "avg_chg_1d_pct": 8.74,
+      "avg_multifactor": 56.15,
+      "industry": "半導體業",
+      "inst_net_lot": 1251,
+      "is_sub": true,
+      "member_count": 4,
+      "name": "矽智財",
+      "up_count": 4,
+      "up_ratio_pct": 100.0
+    },
+    {
+      "avg_chg_1d_pct": 3.74,
+      "avg_multifactor": 28.39,
+      "industry": "半導體業",
+      "inst_net_lot": 3904,
+      "is_sub": true,
+      "member_count": 5,
+      "name": "IC設計",
+      "up_count": 5,
+      "up_ratio_pct": 100.0
+    },
+    {
+      "avg_chg_1d_pct": 3.72,
+      "avg_multifactor": 23.38,
+      "industry": "光電業",
+      "inst_net_lot": 535,
+      "is_sub": true,
+      "member_count": 3,
+      "name": "光學鏡頭",
+      "up_count": 3,
+      "up_ratio_pct": 100.0
+    },
+    {
+      "avg_chg_1d_pct": 3.63,
+      "avg_multifactor": 64.88,
+      "industry": "航運業",
+      "inst_net_lot": 3465,
+      "is_sub": true,
+      "member_count": 3,
+      "name": "散裝航運",
+      "up_count": 3,
+      "up_ratio_pct": 100.0
+    },
+    {
+      "avg_chg_1d_pct": 2.84,
+      "avg_multifactor": 2.6,
+      "industry": "光電業",
+      "inst_net_lot": -4319,
+      "is_sub": true,
+      "member_count": 3,
+      "name": "面板",
+      "up_count": 3,
+      "up_ratio_pct": 100.0
+    },
+    {
+      "avg_chg_1d_pct": 2.74,
+      "avg_multifactor": 13.35,
+      "industry": "電子零組件業",
+      "inst_net_lot": 31924,
+      "is_sub": true,
+      "member_count": 10,
+      "name": "PCB",
+      "up_count": 8,
+      "up_ratio_pct": 80.0
+    },
+    {
+      "avg_chg_1d_pct": 2.59,
+      "avg_multifactor": 14.89,
+      "industry": "電子零組件業",
+      "inst_net_lot": 840,
+      "is_sub": true,
+      "member_count": 5,
+      "name": "連接器",
+      "up_count": 3,
+      "up_ratio_pct": 60.0
+    },
+    {
+      "avg_chg_1d_pct": 2.55,
+      "avg_multifactor": 12.73,
+      "industry": "電子零組件業",
+      "inst_net_lot": 1358,
+      "is_sub": true,
+      "member_count": 5,
+      "name": "被動元件",
+      "up_count": 5,
+      "up_ratio_pct": 100.0
+    }
+  ],
+  "trade_date": "2026-11-13",
+  "volume_spikes": [
+    {
+      "chg_1d_pct": -2.37,
+      "foreign_net_lot": -102.71,
+      "industry": "資訊服務業",
+      "latest_volume_lot": 4015.0,
+      "multifactor_score": 38.84,
+      "name": "智聯服務",
+      "stock_id": "6751",
+      "sub_industry": "",
+      "trust_net_lot": 0.0,
+      "volume_ratio_1d": 4.11
+    },
+    {
+      "chg_1d_pct": -9.13,
+      "foreign_net_lot": -5551.05,
+      "industry": "造紙工業",
+      "latest_volume_lot": 12684.47,
+      "multifactor_score": -7.1,
+      "name": "正隆",
+      "stock_id": "1904",
+      "sub_industry": "",
+      "trust_net_lot": 0.0,
+      "volume_ratio_1d": 3.55
+    },
+    {
+      "chg_1d_pct": 23.24,
+      "foreign_net_lot": 0.0,
+      "industry": "通信網路業",
+      "latest_volume_lot": 600.59,
+      "multifactor_score": 22.12,
+      "name": "昆桐",
+      "stock_id": "7965",
+      "sub_industry": "",
+      "trust_net_lot": 0.0,
+      "volume_ratio_1d": 3.14
+    },
+    {
+      "chg_1d_pct": -1.22,
+      "foreign_net_lot": 2447.07,
+      "industry": "電腦及週邊設備業",
+      "latest_volume_lot": 26898.87,
+      "multifactor_score": 106.64,
+      "name": "麗臺",
+      "stock_id": "2465",
+      "sub_industry": "",
+      "trust_net_lot": 0.0,
+      "volume_ratio_1d": 3.02
+    },
+    {
+      "chg_1d_pct": 4.33,
+      "foreign_net_lot": 8074.86,
+      "industry": "電子零組件業",
+      "latest_volume_lot": 25215.55,
+      "multifactor_score": 84.76,
+      "name": "競國",
+      "stock_id": "6108",
+      "sub_industry": "",
+      "trust_net_lot": 0.0,
+      "volume_ratio_1d": 3.01
+    }
+  ],
+  "weak_sectors": [
+    {
+      "avg_chg_1d_pct": -2.15,
+      "avg_multifactor": 12.48,
+      "industry": "電子通路業",
+      "inst_net_lot": -4909,
+      "is_sub": false,
+      "member_count": 40,
+      "name": "電子通路業",
+      "up_count": 25,
+      "up_ratio_pct": 62.5
+    },
+    {
+      "avg_chg_1d_pct": -1.3,
+      "avg_multifactor": -24.98,
+      "industry": "造紙工業",
+      "inst_net_lot": -6825,
+      "is_sub": false,
+      "member_count": 7,
+      "name": "造紙工業",
+      "up_count": 3,
+      "up_ratio_pct": 42.9
+    },
+    {
+      "avg_chg_1d_pct": -0.84,
+      "avg_multifactor": -16.21,
+      "industry": "電腦及週邊設備業",
+      "inst_net_lot": -28197,
+      "is_sub": true,
+      "member_count": 7,
+      "name": "AI伺服器/組裝",
+      "up_count": 2,
+      "up_ratio_pct": 28.6
+    },
+    {
+      "avg_chg_1d_pct": -0.05,
+      "avg_multifactor": -7.99,
+      "industry": "食品工業",
+      "inst_net_lot": 4205,
+      "is_sub": false,
+      "member_count": 39,
+      "name": "食品工業",
+      "up_count": 25,
+      "up_ratio_pct": 64.1
+    },
+    {
+      "avg_chg_1d_pct": -0.05,
+      "avg_multifactor": 9.55,
+      "industry": "電機機械",
+      "inst_net_lot": 3994,
+      "is_sub": false,
+      "member_count": 107,
+      "name": "電機機械",
+      "up_count": 71,
+      "up_ratio_pct": 66.4
+    },
+    {
+      "avg_chg_1d_pct": -0.01,
+      "avg_multifactor": 1.28,
+      "industry": "鋼鐵工業",
+      "inst_net_lot": -83047,
+      "is_sub": false,
+      "member_count": 50,
+      "name": "鋼鐵工業",
+      "up_count": 26,
+      "up_ratio_pct": 52.0
+    }
+  ]
+}
