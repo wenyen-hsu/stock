@@ -1,0 +1,25 @@
+{
+  "label": "中性偏空",
+  "latest_close": 36033.29,
+  "latest_date": "2026-11-20",
+  "ma20": 42719.57,
+  "ma5": 39157.46,
+  "ma60": 45710.92,
+  "parts": {
+    "dealer_hedge": -0.74,
+    "foreign_futures": -17.84,
+    "futures_trade": 0.1,
+    "index_trend": -12.0,
+    "market_margin": 6.0,
+    "trust_futures": 5.07
+  },
+  "reasons": [
+    "指數跌破 MA20",
+    "中期趨勢偏空",
+    "外資期貨淨部位偏空",
+    "融資下降，籌碼較乾淨"
+  ],
+  "risk_multiplier": 0.85,
+  "score": 30.59,
+  "updated_at": "2026-11-20 16:24:30"
+}

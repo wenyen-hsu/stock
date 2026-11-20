@@ -1,0 +1,180 @@
+{
+  "checked_at": "2026-11-20T16:42:41",
+  "fail_count": 0,
+  "latest_trading_day": "2026-11-20",
+  "ok": true,
+  "sources": [
+    {
+      "expected": "2026-11-20",
+      "key": "data_freshness",
+      "label": "資料新鮮度",
+      "latest": "2026-11-20",
+      "note": "",
+      "rows_at_latest": 0,
+      "status": "ok"
+    },
+    {
+      "expected": "2026-11-20",
+      "key": "daily_prices",
+      "label": "日行情",
+      "latest": "2026-11-20",
+      "note": "",
+      "rows_at_latest": 2361,
+      "status": "ok"
+    },
+    {
+      "expected": "2026-11-20",
+      "key": "institutional_trades",
+      "label": "三大法人",
+      "latest": "2026-11-20",
+      "note": "",
+      "rows_at_latest": 1887,
+      "status": "ok"
+    },
+    {
+      "expected": "2026-11-20",
+      "key": "margin_trades",
+      "label": "融資融券",
+      "latest": "2026-11-20",
+      "note": "",
+      "rows_at_latest": 1869,
+      "status": "ok"
+    },
+    {
+      "expected": "2026-11-19",
+      "key": "market_index_daily",
+      "label": "大盤指數",
+      "latest": "2026-11-20",
+      "note": "",
+      "rows_at_latest": 1,
+      "status": "ok"
+    },
+    {
+      "expected": "2026-10",
+      "key": "monthly_revenues",
+      "label": "月營收",
+      "latest": "2026-10",
+      "note": "",
+      "rows_at_latest": 2361,
+      "status": "ok"
+    },
+    {
+      "expected": "2026-11-18",
+      "key": "broker_branch_topn",
+      "label": "分點排行",
+      "latest": "2026-11-20",
+      "note": "",
+      "rows_at_latest": 13320,
+      "status": "ok"
+    },
+    {
+      "expected": "2026-11-18",
+      "key": "broker_branch_daily",
+      "label": "分點每日明細",
+      "latest": "2026-11-19",
+      "note": "",
+      "rows_at_latest": 2845,
+      "status": "ok"
+    },
+    {
+      "expected": "2026-11-17",
+      "key": "mops_events",
+      "label": "MOPS 重大事件",
+      "latest": "2026-11-20",
+      "note": "",
+      "rows_at_latest": 194,
+      "status": "ok"
+    },
+    {
+      "expected": "2026-11-06",
+      "key": "shareholding_dispersion",
+      "label": "TDCC 股權分散",
+      "latest": "2026-11-13",
+      "note": "",
+      "rows_at_latest": 70125,
+      "status": "ok"
+    },
+    {
+      "expected": "2026-11-06",
+      "key": "dividend_events",
+      "label": "除權息事件",
+      "latest": "2027-01-05",
+      "note": "",
+      "rows_at_latest": 1,
+      "status": "ok"
+    },
+    {
+      "expected": "2026-11-19",
+      "key": "etf_universe",
+      "label": "ETF 資金流",
+      "latest": "2026-11-19",
+      "note": "",
+      "rows_at_latest": 281,
+      "status": "ok"
+    },
+    {
+      "expected": "2026Q3",
+      "key": "quarterly_financials",
+      "label": "季度財報",
+      "latest": "2026Q3",
+      "note": "",
+      "rows_at_latest": 2020,
+      "status": "ok"
+    },
+    {
+      "expected": "2026-11-19",
+      "key": "ranking_snapshots",
+      "label": "排行快照",
+      "latest": "2026-11-20",
+      "note": "",
+      "rows_at_latest": 1992,
+      "status": "ok"
+    },
+    {
+      "expected": "0 筆",
+      "key": "fetch_failures",
+      "label": "抓取失敗紀錄",
+      "latest": null,
+      "note": "",
+      "rows_at_latest": 0,
+      "status": "ok"
+    },
+    {
+      "expected": "2026-11-19",
+      "key": "futures_institution_oi",
+      "label": "期貨多空",
+      "latest": "2026-11-20",
+      "note": "",
+      "rows_at_latest": 9,
+      "status": "ok"
+    },
+    {
+      "expected": "2026-11-06",
+      "key": "etf_holdings",
+      "label": "ETF 成分股",
+      "latest": "2026-11-20",
+      "note": "",
+      "rows_at_latest": 463,
+      "status": "ok"
+    },
+    {
+      "expected": "2026-11-20",
+      "key": "day_trade_stats",
+      "label": "當沖統計",
+      "latest": "2026-11-20",
+      "note": "",
+      "rows_at_latest": 1001,
+      "status": "ok"
+    },
+    {
+      "expected": "2026-11-19",
+      "key": "stock_news",
+      "label": "個股新聞",
+      "latest": "2026-11-20",
+      "note": "",
+      "rows_at_latest": 3866,
+      "status": "ok"
+    }
+  ],
+  "warn_count": 0
+}

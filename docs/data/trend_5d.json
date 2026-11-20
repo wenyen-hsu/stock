@@ -1,0 +1,99 @@
+{
+  "clusters": [],
+  "days": 5,
+  "prev_date": "2026-11-19",
+  "state": "ready",
+  "strong_sectors": [],
+  "trade_date": "2026-11-20",
+  "volume_spikes": [],
+  "weak_sectors": [
+    {
+      "avg_chg_1d_pct": -18.61,
+      "avg_multifactor": 6.56,
+      "industry": "農業科技業",
+      "inst_net_lot": 40,
+      "is_sub": false,
+      "member_count": 7,
+      "name": "農業科技業",
+      "up_count": 0,
+      "up_ratio_pct": 0.0
+    },
+    {
+      "avg_chg_1d_pct": -9.91,
+      "avg_multifactor": 10.74,
+      "industry": "通信網路業",
+      "inst_net_lot": 179,
+      "is_sub": true,
+      "member_count": 4,
+      "name": "光通訊",
+      "up_count": 0,
+      "up_ratio_pct": 0.0
+    },
+    {
+      "avg_chg_1d_pct": -9.8,
+      "avg_multifactor": -19.61,
+      "industry": "半導體業",
+      "inst_net_lot": -2970,
+      "is_sub": true,
+      "member_count": 4,
+      "name": "封測",
+      "up_count": 0,
+      "up_ratio_pct": 0.0
+    },
+    {
+      "avg_chg_1d_pct": -9.77,
+      "avg_multifactor": -0.34,
+      "industry": "電子零組件業",
+      "inst_net_lot": 9486,
+      "is_sub": true,
+      "member_count": 10,
+      "name": "PCB",
+      "up_count": 0,
+      "up_ratio_pct": 0.0
+    },
+    {
+      "avg_chg_1d_pct": -9.67,
+      "avg_multifactor": 20.31,
+      "industry": "電子零組件業",
+      "inst_net_lot": 241,
+      "is_sub": true,
+      "member_count": 5,
+      "name": "散熱",
+      "up_count": 0,
+      "up_ratio_pct": 0.0
+    },
+    {
+      "avg_chg_1d_pct": -9.67,
+      "avg_multifactor": 10.91,
+      "industry": "半導體業",
+      "inst_net_lot": 107,
+      "is_sub": true,
+      "member_count": 4,
+      "name": "矽智財",
+      "up_count": 0,
+      "up_ratio_pct": 0.0
+    },
+    {
+      "avg_chg_1d_pct": -9.56,
+      "avg_multifactor": -14.66,
+      "industry": "半導體業",
+      "inst_net_lot": -155,
+      "is_sub": true,
+      "member_count": 4,
+      "name": "半導體設備",
+      "up_count": 0,
+      "up_ratio_pct": 0.0
+    },
+    {
+      "avg_chg_1d_pct": -9.51,
+      "avg_multifactor": -3.56,
+      "industry": "電子零組件業",
+      "inst_net_lot": -652,
+      "is_sub": true,
+      "member_count": 5,
+      "name": "被動元件",
+      "up_count": 0,
+      "up_ratio_pct": 0.0
+    }
+  ]
+}

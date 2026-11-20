@@ -1,0 +1,346 @@
+{
+  "days": 20,
+  "new_entrants": {
+    "big_holder_increase": [
+      {
+        "name": "聯一光",
+        "rank_no": 9,
+        "score": 23.42,
+        "stock_id": "3441"
+      }
+    ],
+    "momentum_inst_buy": [
+      {
+        "name": "儒鴻",
+        "rank_no": 3,
+        "score": 101.21,
+        "stock_id": "1476"
+      },
+      {
+        "name": "巨鎧精密-創",
+        "rank_no": 4,
+        "score": 26.91,
+        "stock_id": "2254"
+      },
+      {
+        "name": "大國鋼",
+        "rank_no": 6,
+        "score": 66.5,
+        "stock_id": "8415"
+      },
+      {
+        "name": "資通",
+        "rank_no": 10,
+        "score": 67.63,
+        "stock_id": "2471"
+      },
+      {
+        "name": "仁大資訊",
+        "rank_no": 14,
+        "score": 60.89,
+        "stock_id": "7767"
+      },
+      {
+        "name": "浩鼎",
+        "rank_no": 15,
+        "score": 20.14,
+        "stock_id": "4174"
+      },
+      {
+        "name": "遠雄",
+        "rank_no": 20,
+        "score": 82.96,
+        "stock_id": "5522"
+      }
+    ],
+    "multifactor_score": [
+      {
+        "name": "聚陽",
+        "rank_no": 8,
+        "score": 88.81,
+        "stock_id": "1477"
+      },
+      {
+        "name": "遠雄",
+        "rank_no": 11,
+        "score": 82.96,
+        "stock_id": "5522"
+      },
+      {
+        "name": "長榮航",
+        "rank_no": 12,
+        "score": 82.49,
+        "stock_id": "2618"
+      },
+      {
+        "name": "微端",
+        "rank_no": 13,
+        "score": 80.08,
+        "stock_id": "3285"
+      },
+      {
+        "name": "永裕",
+        "rank_no": 14,
+        "score": 79.53,
+        "stock_id": "1323"
+      },
+      {
+        "name": "信立",
+        "rank_no": 15,
+        "score": 78.13,
+        "stock_id": "4303"
+      },
+      {
+        "name": "中華資安",
+        "rank_no": 16,
+        "score": 78.04,
+        "stock_id": "7765"
+      },
+      {
+        "name": "上海商銀",
+        "rank_no": 17,
+        "score": 76.05,
+        "stock_id": "5876"
+      },
+      {
+        "name": "大統益",
+        "rank_no": 18,
+        "score": 75.93,
+        "stock_id": "1232"
+      },
+      {
+        "name": "天鈺",
+        "rank_no": 19,
+        "score": 75.78,
+        "stock_id": "4961"
+      },
+      {
+        "name": "競國",
+        "rank_no": 20,
+        "score": 75.38,
+        "stock_id": "6108"
+      }
+    ]
+  },
+  "ranking_labels": {
+    "big_holder_increase": "大戶增持 + 法人買超",
+    "momentum_inst_buy": "動能 + 法人買超",
+    "multifactor_score": "多因子綜合分"
+  },
+  "signals": {
+    "big_holder": [
+      {
+        "name": "視陽",
+        "stock_id": "6782",
+        "value": 0.32
+      },
+      {
+        "name": "中鼎",
+        "stock_id": "9933",
+        "value": 1.99
+      },
+      {
+        "name": "儒鴻",
+        "stock_id": "1476",
+        "value": 0.3
+      },
+      {
+        "name": "聚陽",
+        "stock_id": "1477",
+        "value": 0.34
+      },
+      {
+        "name": "中磊",
+        "stock_id": "5388",
+        "value": 0.89
+      },
+      {
+        "name": "長榮航",
+        "stock_id": "2618",
+        "value": 0.76
+      },
+      {
+        "name": "信立",
+        "stock_id": "4303",
+        "value": 0.91
+      },
+      {
+        "name": "天鈺",
+        "stock_id": "4961",
+        "value": 0.7
+      },
+      {
+        "name": "競國",
+        "stock_id": "6108",
+        "value": 1.39
+      },
+      {
+        "name": "雙美",
+        "stock_id": "4728",
+        "value": 0.52
+      }
+    ],
+    "branch_streak": [],
+    "day_trader": [
+      {
+        "broker": "凱基-台北",
+        "name": "慶豐富",
+        "stock_id": "9935"
+      },
+      {
+        "broker": "凱基-台北",
+        "name": "競國",
+        "stock_id": "6108"
+      },
+      {
+        "broker": "凱基-台北",
+        "name": "宇峻",
+        "stock_id": "3546"
+      },
+      {
+        "broker": "凱基-台北",
+        "name": "新美齊",
+        "stock_id": "2442"
+      },
+      {
+        "broker": "凱基-台北",
+        "name": "青雲",
+        "stock_id": "5386"
+      },
+      {
+        "broker": "凱基-台北",
+        "name": "佳醫",
+        "stock_id": "4104"
+      },
+      {
+        "broker": "凱基-台北",
+        "name": "坤悅",
+        "stock_id": "5206"
+      },
+      {
+        "broker": "凱基-台北",
+        "name": "台灣大",
+        "stock_id": "3045"
+      },
+      {
+        "broker": "凱基-台北",
+        "name": "圓剛",
+        "stock_id": "2417"
+      },
+      {
+        "broker": "凱基-台北",
+        "name": "新紡",
+        "stock_id": "1419"
+      }
+    ],
+    "margin_down": [
+      {
+        "name": "遠雄",
+        "stock_id": "5522",
+        "value": -2
+      },
+      {
+        "name": "倚天酷碁-創",
+        "stock_id": "2432",
+        "value": -3
+      },
+      {
+        "name": "晶碩",
+        "stock_id": "6491",
+        "value": -2
+      },
+      {
+        "name": "大武山",
+        "stock_id": "6952",
+        "value": -3
+      },
+      {
+        "name": "東洋",
+        "stock_id": "4105",
+        "value": -2
+      },
+      {
+        "name": "青雲",
+        "stock_id": "5386",
+        "value": -2
+      },
+      {
+        "name": "天品",
+        "stock_id": "6199",
+        "value": -2
+      },
+      {
+        "name": "和椿",
+        "stock_id": "6215",
+        "value": -2
+      },
+      {
+        "name": "材料*-KY",
+        "stock_id": "4763",
+        "value": -2
+      },
+      {
+        "name": "科定",
+        "stock_id": "6655",
+        "value": -3
+      }
+    ],
+    "margin_up": [
+      {
+        "name": "日成-KY",
+        "stock_id": "4807",
+        "value": 3
+      },
+      {
+        "name": "鼎固-KY",
+        "stock_id": "2923",
+        "value": 3
+      },
+      {
+        "name": "慶豐富",
+        "stock_id": "9935",
+        "value": 2
+      },
+      {
+        "name": "永裕",
+        "stock_id": "1323",
+        "value": 4
+      },
+      {
+        "name": "信立",
+        "stock_id": "4303",
+        "value": 2
+      },
+      {
+        "name": "大統益",
+        "stock_id": "1232",
+        "value": 2
+      },
+      {
+        "name": "競國",
+        "stock_id": "6108",
+        "value": 2
+      },
+      {
+        "name": "雙美",
+        "stock_id": "4728",
+        "value": 3
+      },
+      {
+        "name": "愛山林",
+        "stock_id": "2540",
+        "value": 2
+      },
+      {
+        "name": "國建",
+        "stock_id": "2501",
+        "value": 2
+      }
+    ]
+  },
+  "snapshot_dates": [
+    "2026-11-20",
+    "2026-11-19"
+  ],
+  "state": "ready"
+}
