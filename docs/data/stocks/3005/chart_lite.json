@@ -1,0 +1,2559 @@
+{
+  "daily": [
+    {
+      "avg_price": 100.91594854392774,
+      "close": 100.5,
+      "date": "2026-11-27",
+      "dealer_net_lot": -259.17,
+      "dividend_yield": 6.76,
+      "foreign_net_lot": 139.5,
+      "pb_ratio": 2.32,
+      "pe_ratio": 12.01,
+      "trust_net_lot": -11.0,
+      "volume_lot": 1254.2
+    },
+    {
+      "avg_price": 99.9636619019127,
+      "close": 100.5,
+      "date": "2026-11-26",
+      "dealer_net_lot": 100.36,
+      "dividend_yield": 6.76,
+      "foreign_net_lot": 30.11,
+      "pb_ratio": 2.32,
+      "pe_ratio": 12.01,
+      "trust_net_lot": -5.65,
+      "volume_lot": 1216.71
+    },
+    {
+      "avg_price": 97.39974372990542,
+      "close": 97.7,
+      "date": "2026-11-25",
+      "dealer_net_lot": 153.99,
+      "dividend_yield": 6.95,
+      "foreign_net_lot": -502.39,
+      "pb_ratio": 2.26,
+      "pe_ratio": 11.67,
+      "trust_net_lot": -5.0,
+      "volume_lot": 2551.99
+    },
+    {
+      "avg_price": 100.62293942672243,
+      "close": 100.5,
+      "date": "2026-11-24",
+      "dealer_net_lot": -41.66,
+      "dividend_yield": 6.76,
+      "foreign_net_lot": -1224.64,
+      "pb_ratio": 2.32,
+      "pe_ratio": 12.01,
+      "trust_net_lot": -37.22,
+      "volume_lot": 3580.01
+    },
+    {
+      "avg_price": 92.0532345661771,
+      "close": 93.3,
+      "date": "2026-11-23",
+      "dealer_net_lot": 328.02,
+      "dividend_yield": 7.28,
+      "foreign_net_lot": -557.02,
+      "pb_ratio": 2.16,
+      "pe_ratio": 11.15,
+      "trust_net_lot": -5.0,
+      "volume_lot": 2577.78
+    },
+    {
+      "avg_price": 91.70449475046837,
+      "close": 90.3,
+      "date": "2026-11-20",
+      "dealer_net_lot": -783.63,
+      "dividend_yield": 7.52,
+      "foreign_net_lot": -1593.9,
+      "pb_ratio": 2.09,
+      "pe_ratio": 10.79,
+      "trust_net_lot": -0.06,
+      "volume_lot": 6114.35
+    },
+    {
+      "avg_price": 97.86827966336098,
+      "close": 96.6,
+      "date": "2026-11-19",
+      "dealer_net_lot": 39.24,
+      "dividend_yield": 7.03,
+      "foreign_net_lot": 1939.73,
+      "pb_ratio": 2.23,
+      "pe_ratio": 11.54,
+      "trust_net_lot": 53.0,
+      "volume_lot": 6384.76
+    },
+    {
+      "avg_price": 100.05840858482293,
+      "close": 101.0,
+      "date": "2026-11-18",
+      "dealer_net_lot": 155.37,
+      "dividend_yield": 6.72,
+      "foreign_net_lot": -559.99,
+      "pb_ratio": 2.34,
+      "pe_ratio": 12.07,
+      "trust_net_lot": 82.55,
+      "volume_lot": 3087.87
+    },
+    {
+      "avg_price": 101.5256754140647,
+      "close": 100.5,
+      "date": "2026-11-17",
+      "dealer_net_lot": 108.54,
+      "dividend_yield": 6.76,
+      "foreign_net_lot": -1352.35,
+      "pb_ratio": 2.32,
+      "pe_ratio": 12.01,
+      "trust_net_lot": 71.28,
+      "volume_lot": 3393.73
+    },
+    {
+      "avg_price": 105.81069034853404,
+      "close": 103.5,
+      "date": "2026-11-16",
+      "dealer_net_lot": -2.51,
+      "dividend_yield": 6.56,
+      "foreign_net_lot": -1089.54,
+      "pb_ratio": 2.39,
+      "pe_ratio": 12.37,
+      "trust_net_lot": -28.6,
+      "volume_lot": 3909.49
+    },
+    {
+      "avg_price": 108.85822015581252,
+      "close": 109.5,
+      "date": "2026-11-13",
+      "dealer_net_lot": 34.92,
+      "dividend_yield": 6.2,
+      "foreign_net_lot": 357.24,
+      "pb_ratio": 2.53,
+      "pe_ratio": 13.08,
+      "trust_net_lot": 58.38,
+      "volume_lot": 1907.55
+    },
+    {
+      "avg_price": 106.79734095105503,
+      "close": 106.0,
+      "date": "2026-11-12",
+      "dealer_net_lot": -41.91,
+      "dividend_yield": 6.41,
+      "foreign_net_lot": -1983.82,
+      "pb_ratio": 2.6,
+      "pe_ratio": 12.59,
+      "trust_net_lot": 68.66,
+      "volume_lot": 4361.41
+    },
+    {
+      "avg_price": 108.21647998231826,
+      "close": 109.5,
+      "date": "2026-11-11",
+      "dealer_net_lot": 11.95,
+      "dividend_yield": 6.2,
+      "foreign_net_lot": -226.49,
+      "pb_ratio": 2.68,
+      "pe_ratio": 13.0,
+      "trust_net_lot": 32.78,
+      "volume_lot": 1773.58
+    },
+    {
+      "avg_price": 109.57915103088474,
+      "close": 107.0,
+      "date": "2026-11-10",
+      "dealer_net_lot": -67.74,
+      "dividend_yield": 6.35,
+      "foreign_net_lot": -3371.08,
+      "pb_ratio": 2.62,
+      "pe_ratio": 12.71,
+      "trust_net_lot": -3.9,
+      "volume_lot": 8589.81
+    },
+    {
+      "avg_price": 117.95638105645843,
+      "close": 116.5,
+      "date": "2026-11-09",
+      "dealer_net_lot": 67.53,
+      "dividend_yield": 5.83,
+      "foreign_net_lot": -138.07,
+      "pb_ratio": 2.85,
+      "pe_ratio": 13.84,
+      "trust_net_lot": -8.42,
+      "volume_lot": 1848.44
+    },
+    {
+      "avg_price": 114.24152868769853,
+      "close": 116.5,
+      "date": "2026-11-06",
+      "dealer_net_lot": 114.93,
+      "dividend_yield": 5.83,
+      "foreign_net_lot": 355.38,
+      "pb_ratio": 2.85,
+      "pe_ratio": 13.84,
+      "trust_net_lot": 6.0,
+      "volume_lot": 3840.08
+    },
+    {
+      "avg_price": 121.02216884454756,
+      "close": 119.5,
+      "date": "2026-11-05",
+      "dealer_net_lot": 123.77,
+      "dividend_yield": 5.68,
+      "foreign_net_lot": 397.43,
+      "pb_ratio": 2.93,
+      "pe_ratio": 14.19,
+      "trust_net_lot": -3.0,
+      "volume_lot": 2136.56
+    },
+    {
+      "avg_price": 120.6461705202077,
+      "close": 122.0,
+      "date": "2026-11-04",
+      "dealer_net_lot": 81.34,
+      "dividend_yield": 5.57,
+      "foreign_net_lot": 630.32,
+      "pb_ratio": 2.99,
+      "pe_ratio": 14.49,
+      "trust_net_lot": 37.89,
+      "volume_lot": 3073.41
+    },
+    {
+      "avg_price": 122.80273466266134,
+      "close": 122.0,
+      "date": "2026-11-03",
+      "dealer_net_lot": 188.07,
+      "dividend_yield": 5.57,
+      "foreign_net_lot": 963.79,
+      "pb_ratio": 2.99,
+      "pe_ratio": 14.49,
+      "trust_net_lot": 38.2,
+      "volume_lot": 3170.78
+    },
+    {
+      "avg_price": 123.77978050447987,
+      "close": 124.0,
+      "date": "2026-11-02",
+      "dealer_net_lot": 41.15,
+      "dividend_yield": 5.48,
+      "foreign_net_lot": 299.45,
+      "pb_ratio": 3.04,
+      "pe_ratio": 14.73,
+      "trust_net_lot": 20.0,
+      "volume_lot": 1389.55
+    }
+  ],
+  "margin": [
+    {
+      "date": "2026-11-27",
+      "margin_balance_lot": 2986,
+      "margin_buy_lot": 12,
+      "margin_cash_repay_lot": 5,
+      "margin_change_lot": -40,
+      "margin_prev_balance_lot": 3026,
+      "margin_sell_lot": 47,
+      "note": "",
+      "offset_lot": 1,
+      "short_balance_lot": 8,
+      "short_buy_lot": 0,
+      "short_change_lot": 0,
+      "short_prev_balance_lot": 8,
+      "short_sell_lot": 0,
+      "short_stock_repay_lot": 0
+    },
+    {
+      "date": "2026-11-26",
+      "margin_balance_lot": 3026,
+      "margin_buy_lot": 15,
+      "margin_cash_repay_lot": 0,
+      "margin_change_lot": -16,
+      "margin_prev_balance_lot": 3042,
+      "margin_sell_lot": 31,
+      "note": "",
+      "offset_lot": 1,
+      "short_balance_lot": 8,
+      "short_buy_lot": 0,
+      "short_change_lot": 2,
+      "short_prev_balance_lot": 6,
+      "short_sell_lot": 2,
+      "short_stock_repay_lot": 0
+    },
+    {
+      "date": "2026-11-25",
+      "margin_balance_lot": 3042,
+      "margin_buy_lot": 26,
+      "margin_cash_repay_lot": 14,
+      "margin_change_lot": -86,
+      "margin_prev_balance_lot": 3128,
+      "margin_sell_lot": 98,
+      "note": "",
+      "offset_lot": 0,
+      "short_balance_lot": 6,
+      "short_buy_lot": 3,
+      "short_change_lot": -3,
+      "short_prev_balance_lot": 9,
+      "short_sell_lot": 0,
+      "short_stock_repay_lot": 0
+    },
+    {
+      "date": "2026-11-24",
+      "margin_balance_lot": 3128,
+      "margin_buy_lot": 89,
+      "margin_cash_repay_lot": 0,
+      "margin_change_lot": 12,
+      "margin_prev_balance_lot": 3116,
+      "margin_sell_lot": 77,
+      "note": "",
+      "offset_lot": 0,
+      "short_balance_lot": 9,
+      "short_buy_lot": 1,
+      "short_change_lot": 2,
+      "short_prev_balance_lot": 7,
+      "short_sell_lot": 3,
+      "short_stock_repay_lot": 0
+    },
+    {
+      "date": "2026-11-23",
+      "margin_balance_lot": 3116,
+      "margin_buy_lot": 128,
+      "margin_cash_repay_lot": 0,
+      "margin_change_lot": -56,
+      "margin_prev_balance_lot": 3172,
+      "margin_sell_lot": 184,
+      "note": "",
+      "offset_lot": 2,
+      "short_balance_lot": 7,
+      "short_buy_lot": 2,
+      "short_change_lot": -2,
+      "short_prev_balance_lot": 9,
+      "short_sell_lot": 0,
+      "short_stock_repay_lot": 0
+    },
+    {
+      "date": "2026-11-20",
+      "margin_balance_lot": 3172,
+      "margin_buy_lot": 118,
+      "margin_cash_repay_lot": 2,
+      "margin_change_lot": -71,
+      "margin_prev_balance_lot": 3243,
+      "margin_sell_lot": 187,
+      "note": "",
+      "offset_lot": 0,
+      "short_balance_lot": 9,
+      "short_buy_lot": 2,
+      "short_change_lot": -2,
+      "short_prev_balance_lot": 11,
+      "short_sell_lot": 0,
+      "short_stock_repay_lot": 0
+    },
+    {
+      "date": "2026-11-19",
+      "margin_balance_lot": 3243,
+      "margin_buy_lot": 126,
+      "margin_cash_repay_lot": 1,
+      "margin_change_lot": -3163,
+      "margin_prev_balance_lot": 6406,
+      "margin_sell_lot": 3288,
+      "note": "",
+      "offset_lot": 0,
+      "short_balance_lot": 11,
+      "short_buy_lot": 3,
+      "short_change_lot": -1,
+      "short_prev_balance_lot": 12,
+      "short_sell_lot": 2,
+      "short_stock_repay_lot": 0
+    },
+    {
+      "date": "2026-11-18",
+      "margin_balance_lot": 6406,
+      "margin_buy_lot": 31,
+      "margin_cash_repay_lot": 0,
+      "margin_change_lot": -254,
+      "margin_prev_balance_lot": 6660,
+      "margin_sell_lot": 285,
+      "note": "",
+      "offset_lot": 1,
+      "short_balance_lot": 12,
+      "short_buy_lot": 3,
+      "short_change_lot": -1,
+      "short_prev_balance_lot": 13,
+      "short_sell_lot": 2,
+      "short_stock_repay_lot": 0
+    },
+    {
+      "date": "2026-11-17",
+      "margin_balance_lot": 6660,
+      "margin_buy_lot": 37,
+      "margin_cash_repay_lot": 2,
+      "margin_change_lot": -18,
+      "margin_prev_balance_lot": 6678,
+      "margin_sell_lot": 53,
+      "note": "",
+      "offset_lot": 2,
+      "short_balance_lot": 13,
+      "short_buy_lot": 2,
+      "short_change_lot": -1,
+      "short_prev_balance_lot": 14,
+      "short_sell_lot": 1,
+      "short_stock_repay_lot": 0
+    },
+    {
+      "date": "2026-11-16",
+      "margin_balance_lot": 6678,
+      "margin_buy_lot": 67,
+      "margin_cash_repay_lot": 2,
+      "margin_change_lot": -179,
+      "margin_prev_balance_lot": 6857,
+      "margin_sell_lot": 244,
+      "note": "",
+      "offset_lot": 0,
+      "short_balance_lot": 14,
+      "short_buy_lot": 8,
+      "short_change_lot": -4,
+      "short_prev_balance_lot": 18,
+      "short_sell_lot": 4,
+      "short_stock_repay_lot": 0
+    },
+    {
+      "date": "2026-11-13",
+      "margin_balance_lot": 6857,
+      "margin_buy_lot": 5,
+      "margin_cash_repay_lot": 1,
+      "margin_change_lot": -61,
+      "margin_prev_balance_lot": 6918,
+      "margin_sell_lot": 65,
+      "note": "",
+      "offset_lot": 0,
+      "short_balance_lot": 18,
+      "short_buy_lot": 2,
+      "short_change_lot": 4,
+      "short_prev_balance_lot": 14,
+      "short_sell_lot": 6,
+      "short_stock_repay_lot": 0
+    },
+    {
+      "date": "2026-11-12",
+      "margin_balance_lot": 6918,
+      "margin_buy_lot": 52,
+      "margin_cash_repay_lot": 1,
+      "margin_change_lot": -2,
+      "margin_prev_balance_lot": 6920,
+      "margin_sell_lot": 53,
+      "note": "",
+      "offset_lot": 0,
+      "short_balance_lot": 14,
+      "short_buy_lot": 6,
+      "short_change_lot": -5,
+      "short_prev_balance_lot": 19,
+      "short_sell_lot": 1,
+      "short_stock_repay_lot": 0
+    },
+    {
+      "date": "2026-11-11",
+      "margin_balance_lot": 6920,
+      "margin_buy_lot": 68,
+      "margin_cash_repay_lot": 2,
+      "margin_change_lot": -55,
+      "margin_prev_balance_lot": 6975,
+      "margin_sell_lot": 121,
+      "note": "",
+      "offset_lot": 0,
+      "short_balance_lot": 19,
+      "short_buy_lot": 11,
+      "short_change_lot": -2,
+      "short_prev_balance_lot": 21,
+      "short_sell_lot": 9,
+      "short_stock_repay_lot": 0
+    },
+    {
+      "date": "2026-11-10",
+      "margin_balance_lot": 6975,
+      "margin_buy_lot": 489,
+      "margin_cash_repay_lot": 0,
+      "margin_change_lot": 333,
+      "margin_prev_balance_lot": 6642,
+      "margin_sell_lot": 156,
+      "note": "",
+      "offset_lot": 1,
+      "short_balance_lot": 21,
+      "short_buy_lot": 35,
+      "short_change_lot": -18,
+      "short_prev_balance_lot": 39,
+      "short_sell_lot": 17,
+      "short_stock_repay_lot": 0
+    },
+    {
+      "date": "2026-11-09",
+      "margin_balance_lot": 6642,
+      "margin_buy_lot": 47,
+      "margin_cash_repay_lot": 0,
+      "margin_change_lot": 18,
+      "margin_prev_balance_lot": 6624,
+      "margin_sell_lot": 29,
+      "note": "",
+      "offset_lot": 0,
+      "short_balance_lot": 39,
+      "short_buy_lot": 0,
+      "short_change_lot": 0,
+      "short_prev_balance_lot": 39,
+      "short_sell_lot": 0,
+      "short_stock_repay_lot": 0
+    },
+    {
+      "date": "2026-11-06",
+      "margin_balance_lot": 6624,
+      "margin_buy_lot": 63,
+      "margin_cash_repay_lot": 5,
+      "margin_change_lot": -110,
+      "margin_prev_balance_lot": 6734,
+      "margin_sell_lot": 168,
+      "note": "",
+      "offset_lot": 1,
+      "short_balance_lot": 39,
+      "short_buy_lot": 7,
+      "short_change_lot": 16,
+      "short_prev_balance_lot": 23,
+      "short_sell_lot": 23,
+      "short_stock_repay_lot": 0
+    },
+    {
+      "date": "2026-11-05",
+      "margin_balance_lot": 6734,
+      "margin_buy_lot": 52,
+      "margin_cash_repay_lot": 4,
+      "margin_change_lot": 1,
+      "margin_prev_balance_lot": 6733,
+      "margin_sell_lot": 47,
+      "note": "",
+      "offset_lot": 0,
+      "short_balance_lot": 23,
+      "short_buy_lot": 5,
+      "short_change_lot": -3,
+      "short_prev_balance_lot": 26,
+      "short_sell_lot": 2,
+      "short_stock_repay_lot": 0
+    },
+    {
+      "date": "2026-11-04",
+      "margin_balance_lot": 6733,
+      "margin_buy_lot": 55,
+      "margin_cash_repay_lot": 0,
+      "margin_change_lot": 8,
+      "margin_prev_balance_lot": 6725,
+      "margin_sell_lot": 47,
+      "note": "",
+      "offset_lot": 0,
+      "short_balance_lot": 26,
+      "short_buy_lot": 1,
+      "short_change_lot": 1,
+      "short_prev_balance_lot": 25,
+      "short_sell_lot": 2,
+      "short_stock_repay_lot": 0
+    },
+    {
+      "date": "2026-11-03",
+      "margin_balance_lot": 6725,
+      "margin_buy_lot": 56,
+      "margin_cash_repay_lot": 0,
+      "margin_change_lot": -72,
+      "margin_prev_balance_lot": 6797,
+      "margin_sell_lot": 128,
+      "note": "",
+      "offset_lot": 1,
+      "short_balance_lot": 25,
+      "short_buy_lot": 0,
+      "short_change_lot": 0,
+      "short_prev_balance_lot": 25,
+      "short_sell_lot": 0,
+      "short_stock_repay_lot": 0
+    },
+    {
+      "date": "2026-11-02",
+      "margin_balance_lot": 6797,
+      "margin_buy_lot": 16,
+      "margin_cash_repay_lot": 0,
+      "margin_change_lot": -94,
+      "margin_prev_balance_lot": 6891,
+      "margin_sell_lot": 110,
+      "note": "",
+      "offset_lot": 0,
+      "short_balance_lot": 25,
+      "short_buy_lot": 0,
+      "short_change_lot": 1,
+      "short_prev_balance_lot": 24,
+      "short_sell_lot": 1,
+      "short_stock_repay_lot": 0
+    }
+  ],
+  "revenues": [
+    {
+      "cumulative_revenue_million": 35775.01,
+      "cumulative_yoy_pct": 10.17,
+      "last_year_cumulative_revenue_million": 32472.51,
+      "last_year_revenue_million": 3337.97,
+      "mom_pct": -10.73,
+      "prev_month_revenue_million": 3946.67,
+      "revenue_million": 3523.04,
+      "revenue_month": "2026-10",
+      "source": "finmind",
+      "yoy_pct": 5.54
+    },
+    {
+      "cumulative_revenue_million": 32251.97,
+      "cumulative_yoy_pct": 10.7,
+      "last_year_cumulative_revenue_million": 29134.54,
+      "last_year_revenue_million": 3392.37,
+      "mom_pct": 2.22,
+      "prev_month_revenue_million": 3861.01,
+      "revenue_million": 3946.67,
+      "revenue_month": "2026-09",
+      "source": "finmind",
+      "yoy_pct": 16.34
+    },
+    {
+      "cumulative_revenue_million": 28305.29,
+      "cumulative_yoy_pct": 9.96,
+      "last_year_cumulative_revenue_million": 25742.17,
+      "last_year_revenue_million": 3261.3,
+      "mom_pct": 6.56,
+      "prev_month_revenue_million": 3623.37,
+      "revenue_million": 3861.01,
+      "revenue_month": "2026-08",
+      "source": "finmind",
+      "yoy_pct": 18.39
+    },
+    {
+      "cumulative_revenue_million": 24444.28,
+      "cumulative_yoy_pct": 8.73,
+      "last_year_cumulative_revenue_million": 22480.87,
+      "last_year_revenue_million": 3119.72,
+      "mom_pct": -14.82,
+      "prev_month_revenue_million": 4253.71,
+      "revenue_million": 3623.37,
+      "revenue_month": "2026-07",
+      "source": "finmind",
+      "yoy_pct": 16.14
+    },
+    {
+      "cumulative_revenue_million": 20820.91,
+      "cumulative_yoy_pct": 7.54,
+      "last_year_cumulative_revenue_million": 19361.15,
+      "last_year_revenue_million": 3307.98,
+      "mom_pct": 15.09,
+      "prev_month_revenue_million": 3696.02,
+      "revenue_million": 4253.71,
+      "revenue_month": "2026-06",
+      "source": "finmind",
+      "yoy_pct": 28.59
+    },
+    {
+      "cumulative_revenue_million": 16567.19,
+      "cumulative_yoy_pct": 3.2,
+      "last_year_cumulative_revenue_million": 16053.17,
+      "last_year_revenue_million": 3212.07,
+      "mom_pct": 3.74,
+      "prev_month_revenue_million": 3562.91,
+      "revenue_million": 3696.02,
+      "revenue_month": "2026-05",
+      "source": "finmind",
+      "yoy_pct": 15.07
+    },
+    {
+      "cumulative_revenue_million": 12871.18,
+      "cumulative_yoy_pct": 0.23,
+      "last_year_cumulative_revenue_million": 12841.1,
+      "last_year_revenue_million": 3288.91,
+      "mom_pct": 2.03,
+      "prev_month_revenue_million": 3492.1,
+      "revenue_million": 3562.91,
+      "revenue_month": "2026-04",
+      "source": "finmind",
+      "yoy_pct": 8.33
+    },
+    {
+      "cumulative_revenue_million": 9308.27,
+      "cumulative_yoy_pct": -2.55,
+      "last_year_cumulative_revenue_million": 9552.19,
+      "last_year_revenue_million": 3769.57,
+      "mom_pct": 32.88,
+      "prev_month_revenue_million": 2627.94,
+      "revenue_million": 3492.1,
+      "revenue_month": "2026-03",
+      "source": "finmind",
+      "yoy_pct": -7.36
+    },
+    {
+      "cumulative_revenue_million": 5816.17,
+      "cumulative_yoy_pct": 0.58,
+      "last_year_cumulative_revenue_million": 5782.62,
+      "last_year_revenue_million": 2628.36,
+      "mom_pct": -17.57,
+      "prev_month_revenue_million": 3188.23,
+      "revenue_million": 2627.94,
+      "revenue_month": "2026-02",
+      "source": "finmind",
+      "yoy_pct": -0.02
+    },
+    {
+      "cumulative_revenue_million": 3188.23,
+      "cumulative_yoy_pct": 1.08,
+      "last_year_cumulative_revenue_million": 3154.26,
+      "last_year_revenue_million": 3154.26,
+      "mom_pct": -4.98,
+      "prev_month_revenue_million": 3355.26,
+      "revenue_million": 3188.23,
+      "revenue_month": "2026-01",
+      "source": "finmind",
+      "yoy_pct": 1.08
+    },
+    {
+      "cumulative_revenue_million": 39447.84,
+      "cumulative_yoy_pct": 10.6,
+      "last_year_cumulative_revenue_million": 35668.39,
+      "last_year_revenue_million": 3032.83,
+      "mom_pct": -7.32,
+      "prev_month_revenue_million": 3620.07,
+      "revenue_million": 3355.26,
+      "revenue_month": "2025-12",
+      "source": "finmind",
+      "yoy_pct": 10.63
+    },
+    {
+      "cumulative_revenue_million": 36092.58,
+      "cumulative_yoy_pct": 10.59,
+      "last_year_cumulative_revenue_million": 32635.55,
+      "last_year_revenue_million": 3131.43,
+      "mom_pct": 8.45,
+      "prev_month_revenue_million": 3337.97,
+      "revenue_million": 3620.07,
+      "revenue_month": "2025-11",
+      "source": "finmind",
+      "yoy_pct": 15.6
+    },
+    {
+      "cumulative_revenue_million": 32472.51,
+      "cumulative_yoy_pct": 10.06,
+      "last_year_cumulative_revenue_million": 29504.12,
+      "last_year_revenue_million": 3008.9,
+      "mom_pct": -1.6,
+      "prev_month_revenue_million": 3392.37,
+      "revenue_million": 3337.97,
+      "revenue_month": "2025-10",
+      "source": "finmind",
+      "yoy_pct": 10.94
+    },
+    {
+      "cumulative_revenue_million": 29134.54,
+      "cumulative_yoy_pct": 9.96,
+      "last_year_cumulative_revenue_million": 26495.22,
+      "last_year_revenue_million": 3099.27,
+      "mom_pct": 4.02,
+      "prev_month_revenue_million": 3261.3,
+      "revenue_million": 3392.37,
+      "revenue_month": "2025-09",
+      "source": "finmind",
+      "yoy_pct": 9.46
+    },
+    {
+      "cumulative_revenue_million": 25742.17,
+      "cumulative_yoy_pct": 10.03,
+      "last_year_cumulative_revenue_million": 23395.95,
+      "last_year_revenue_million": 2983.8,
+      "mom_pct": 4.54,
+      "prev_month_revenue_million": 3119.72,
+      "revenue_million": 3261.3,
+      "revenue_month": "2025-08",
+      "source": "finmind",
+      "yoy_pct": 9.3
+    },
+    {
+      "cumulative_revenue_million": 22480.87,
+      "cumulative_yoy_pct": 10.13,
+      "last_year_cumulative_revenue_million": 20412.15,
+      "last_year_revenue_million": 3052.99,
+      "mom_pct": -5.69,
+      "prev_month_revenue_million": 3307.98,
+      "revenue_million": 3119.72,
+      "revenue_month": "2025-07",
+      "source": "finmind",
+      "yoy_pct": 2.19
+    },
+    {
+      "cumulative_revenue_million": 19361.15,
+      "cumulative_yoy_pct": 11.53,
+      "last_year_cumulative_revenue_million": 17359.16,
+      "last_year_revenue_million": 2753.72,
+      "mom_pct": 2.99,
+      "prev_month_revenue_million": 3212.07,
+      "revenue_million": 3307.98,
+      "revenue_month": "2025-06",
+      "source": "finmind",
+      "yoy_pct": 20.13
+    },
+    {
+      "cumulative_revenue_million": 16053.17,
+      "cumulative_yoy_pct": 9.91,
+      "last_year_cumulative_revenue_million": 14605.43,
+      "last_year_revenue_million": 2822.47,
+      "mom_pct": -2.34,
+      "prev_month_revenue_million": 3288.91,
+      "revenue_million": 3212.07,
+      "revenue_month": "2025-05",
+      "source": "finmind",
+      "yoy_pct": 13.8
+    },
+    {
+      "cumulative_revenue_million": 12841.1,
+      "cumulative_yoy_pct": 8.98,
+      "last_year_cumulative_revenue_million": 11782.97,
+      "last_year_revenue_million": 3077.59,
+      "mom_pct": -12.75,
+      "prev_month_revenue_million": 3769.57,
+      "revenue_million": 3288.91,
+      "revenue_month": "2025-04",
+      "source": "finmind",
+      "yoy_pct": 6.87
+    },
+    {
+      "cumulative_revenue_million": 9552.19,
+      "cumulative_yoy_pct": 9.73,
+      "last_year_cumulative_revenue_million": 8705.37,
+      "last_year_revenue_million": 2925.87,
+      "mom_pct": 43.42,
+      "prev_month_revenue_million": 2628.36,
+      "revenue_million": 3769.57,
+      "revenue_month": "2025-03",
+      "source": "finmind",
+      "yoy_pct": 28.84
+    },
+    {
+      "cumulative_revenue_million": 5782.62,
+      "cumulative_yoy_pct": 0.05,
+      "last_year_cumulative_revenue_million": 5779.51,
+      "last_year_revenue_million": 2464.16,
+      "mom_pct": -16.67,
+      "prev_month_revenue_million": 3154.26,
+      "revenue_million": 2628.36,
+      "revenue_month": "2025-02",
+      "source": "finmind",
+      "yoy_pct": 6.66
+    },
+    {
+      "cumulative_revenue_million": 3154.26,
+      "cumulative_yoy_pct": -4.86,
+      "last_year_cumulative_revenue_million": 3315.34,
+      "last_year_revenue_million": 3315.34,
+      "mom_pct": 4.0,
+      "prev_month_revenue_million": 3032.83,
+      "revenue_million": 3154.26,
+      "revenue_month": "2025-01",
+      "source": "finmind",
+      "yoy_pct": -4.86
+    },
+    {
+      "cumulative_revenue_million": 35668.39,
+      "cumulative_yoy_pct": 136.45,
+      "last_year_cumulative_revenue_million": 15085.25,
+      "last_year_revenue_million": 2733.78,
+      "mom_pct": -3.15,
+      "prev_month_revenue_million": 3131.43,
+      "revenue_million": 3032.83,
+      "revenue_month": "2024-12",
+      "source": "finmind",
+      "yoy_pct": 10.94
+    },
+    {
+      "cumulative_revenue_million": 32635.55,
+      "cumulative_yoy_pct": 164.22,
+      "last_year_cumulative_revenue_million": 12351.47,
+      "last_year_revenue_million": 3063.37,
+      "mom_pct": 4.07,
+      "prev_month_revenue_million": 3008.9,
+      "revenue_million": 3131.43,
+      "revenue_month": "2024-11",
+      "source": "finmind",
+      "yoy_pct": 2.22
+    }
+  ],
+  "rows": [
+    {
+      "close": 124.0,
+      "date": "2025-12-01",
+      "high": 126.0,
+      "low": 123.0,
+      "open": 125.5
+    },
+    {
+      "close": 122.0,
+      "date": "2025-12-02",
+      "high": 124.5,
+      "low": 122.0,
+      "open": 124.5
+    },
+    {
+      "close": 122.0,
+      "date": "2025-12-03",
+      "high": 124.5,
+      "low": 121.5,
+      "open": 123.0
+    },
+    {
+      "close": 121.5,
+      "date": "2025-12-04",
+      "high": 123.0,
+      "low": 120.5,
+      "open": 122.0
+    },
+    {
+      "close": 121.5,
+      "date": "2025-12-05",
+      "high": 122.0,
+      "low": 120.5,
+      "open": 121.5
+    },
+    {
+      "close": 122.5,
+      "date": "2025-12-08",
+      "high": 123.5,
+      "low": 122.0,
+      "open": 123.0
+    },
+    {
+      "close": 120.5,
+      "date": "2025-12-09",
+      "high": 122.5,
+      "low": 119.5,
+      "open": 122.5
+    },
+    {
+      "close": 122.0,
+      "date": "2025-12-10",
+      "high": 123.5,
+      "low": 121.5,
+      "open": 121.5
+    },
+    {
+      "close": 121.0,
+      "date": "2025-12-11",
+      "high": 123.5,
+      "low": 120.5,
+      "open": 122.5
+    },
+    {
+      "close": 120.0,
+      "date": "2025-12-12",
+      "high": 121.5,
+      "low": 119.0,
+      "open": 121.0
+    },
+    {
+      "close": 118.5,
+      "date": "2025-12-15",
+      "high": 120.0,
+      "low": 118.0,
+      "open": 119.0
+    },
+    {
+      "close": 117.0,
+      "date": "2025-12-16",
+      "high": 118.0,
+      "low": 116.0,
+      "open": 117.5
+    },
+    {
+      "close": 116.5,
+      "date": "2025-12-17",
+      "high": 119.0,
+      "low": 115.5,
+      "open": 117.5
+    },
+    {
+      "close": 116.5,
+      "date": "2025-12-18",
+      "high": 118.0,
+      "low": 116.0,
+      "open": 116.5
+    },
+    {
+      "close": 116.5,
+      "date": "2025-12-19",
+      "high": 118.0,
+      "low": 116.0,
+      "open": 116.5
+    },
+    {
+      "close": 118.5,
+      "date": "2025-12-22",
+      "high": 119.5,
+      "low": 116.5,
+      "open": 116.5
+    },
+    {
+      "close": 119.0,
+      "date": "2025-12-23",
+      "high": 120.0,
+      "low": 118.0,
+      "open": 118.5
+    },
+    {
+      "close": 118.0,
+      "date": "2025-12-24",
+      "high": 120.5,
+      "low": 118.0,
+      "open": 119.5
+    },
+    {
+      "close": 116.5,
+      "date": "2025-12-26",
+      "high": 119.0,
+      "low": 116.5,
+      "open": 119.0
+    },
+    {
+      "close": 118.0,
+      "date": "2025-12-29",
+      "high": 119.5,
+      "low": 117.0,
+      "open": 117.5
+    },
+    {
+      "close": 117.5,
+      "date": "2025-12-30",
+      "high": 119.0,
+      "low": 116.0,
+      "open": 118.0
+    },
+    {
+      "close": 117.0,
+      "date": "2025-12-31",
+      "high": 118.5,
+      "low": 116.5,
+      "open": 118.0
+    },
+    {
+      "close": 117.5,
+      "date": "2026-01-02",
+      "high": 118.5,
+      "low": 116.0,
+      "open": 117.0
+    },
+    {
+      "close": 113.5,
+      "date": "2026-01-05",
+      "high": 118.0,
+      "low": 113.0,
+      "open": 118.0
+    },
+    {
+      "close": 115.5,
+      "date": "2026-01-06",
+      "high": 116.0,
+      "low": 112.5,
+      "open": 113.5
+    },
+    {
+      "close": 115.5,
+      "date": "2026-01-07",
+      "high": 116.5,
+      "low": 114.0,
+      "open": 115.5
+    },
+    {
+      "close": 114.5,
+      "date": "2026-01-08",
+      "high": 116.0,
+      "low": 114.0,
+      "open": 115.5
+    },
+    {
+      "close": 116.5,
+      "date": "2026-01-09",
+      "high": 117.0,
+      "low": 114.0,
+      "open": 116.0
+    },
+    {
+      "close": 116.5,
+      "date": "2026-01-12",
+      "high": 118.0,
+      "low": 116.0,
+      "open": 117.0
+    },
+    {
+      "close": 115.5,
+      "date": "2026-01-13",
+      "high": 117.5,
+      "low": 114.5,
+      "open": 117.0
+    },
+    {
+      "close": 117.0,
+      "date": "2026-01-14",
+      "high": 118.5,
+      "low": 115.5,
+      "open": 115.5
+    },
+    {
+      "close": 117.5,
+      "date": "2026-01-15",
+      "high": 119.0,
+      "low": 117.0,
+      "open": 117.5
+    },
+    {
+      "close": 117.0,
+      "date": "2026-01-16",
+      "high": 118.5,
+      "low": 116.5,
+      "open": 117.5
+    },
+    {
+      "close": 116.5,
+      "date": "2026-01-19",
+      "high": 119.5,
+      "low": 116.5,
+      "open": 117.5
+    },
+    {
+      "close": 118.0,
+      "date": "2026-01-20",
+      "high": 120.5,
+      "low": 116.0,
+      "open": 116.5
+    },
+    {
+      "close": 115.5,
+      "date": "2026-01-21",
+      "high": 118.0,
+      "low": 115.5,
+      "open": 117.5
+    },
+    {
+      "close": 118.5,
+      "date": "2026-01-22",
+      "high": 119.0,
+      "low": 116.0,
+      "open": 117.0
+    },
+    {
+      "close": 117.0,
+      "date": "2026-01-23",
+      "high": 120.0,
+      "low": 116.0,
+      "open": 119.5
+    },
+    {
+      "close": 115.0,
+      "date": "2026-01-26",
+      "high": 118.0,
+      "low": 115.0,
+      "open": 117.5
+    },
+    {
+      "close": 113.0,
+      "date": "2026-01-27",
+      "high": 116.0,
+      "low": 113.0,
+      "open": 116.0
+    },
+    {
+      "close": 114.5,
+      "date": "2026-01-28",
+      "high": 115.5,
+      "low": 113.5,
+      "open": 114.0
+    },
+    {
+      "close": 113.5,
+      "date": "2026-01-29",
+      "high": 115.5,
+      "low": 113.0,
+      "open": 114.5
+    },
+    {
+      "close": 112.5,
+      "date": "2026-01-30",
+      "high": 114.0,
+      "low": 111.5,
+      "open": 113.5
+    },
+    {
+      "close": 111.0,
+      "date": "2026-02-02",
+      "high": 113.0,
+      "low": 110.0,
+      "open": 112.5
+    },
+    {
+      "close": 112.0,
+      "date": "2026-02-03",
+      "high": 113.0,
+      "low": 111.0,
+      "open": 112.0
+    },
+    {
+      "close": 112.0,
+      "date": "2026-02-04",
+      "high": 113.0,
+      "low": 111.5,
+      "open": 112.5
+    },
+    {
+      "close": 112.0,
+      "date": "2026-02-05",
+      "high": 113.5,
+      "low": 111.5,
+      "open": 112.0
+    },
+    {
+      "close": 112.5,
+      "date": "2026-02-06",
+      "high": 113.0,
+      "low": 109.5,
+      "open": 112.0
+    },
+    {
+      "close": 111.5,
+      "date": "2026-02-09",
+      "high": 114.0,
+      "low": 111.5,
+      "open": 114.0
+    },
+    {
+      "close": 110.0,
+      "date": "2026-02-10",
+      "high": 112.5,
+      "low": 109.5,
+      "open": 111.5
+    },
+    {
+      "close": 110.5,
+      "date": "2026-02-11",
+      "high": 111.0,
+      "low": 109.0,
+      "open": 110.5
+    },
+    {
+      "close": 110.5,
+      "date": "2026-02-23",
+      "high": 112.0,
+      "low": 109.0,
+      "open": 112.0
+    },
+    {
+      "close": 111.5,
+      "date": "2026-02-24",
+      "high": 112.0,
+      "low": 110.0,
+      "open": 110.5
+    },
+    {
+      "close": 114.0,
+      "date": "2026-02-25",
+      "high": 114.0,
+      "low": 111.0,
+      "open": 112.5
+    },
+    {
+      "close": 113.0,
+      "date": "2026-02-26",
+      "high": 114.5,
+      "low": 112.0,
+      "open": 114.0
+    },
+    {
+      "close": 124.0,
+      "date": "2026-03-02",
+      "high": 124.0,
+      "low": 115.0,
+      "open": 115.0
+    },
+    {
+      "close": 123.0,
+      "date": "2026-03-03",
+      "high": 126.5,
+      "low": 122.0,
+      "open": 125.0
+    },
+    {
+      "close": 121.0,
+      "date": "2026-03-04",
+      "high": 126.0,
+      "low": 120.0,
+      "open": 122.5
+    },
+    {
+      "close": 123.5,
+      "date": "2026-03-05",
+      "high": 127.5,
+      "low": 123.0,
+      "open": 125.0
+    },
+    {
+      "close": 123.0,
+      "date": "2026-03-06",
+      "high": 124.5,
+      "low": 121.5,
+      "open": 123.5
+    },
+    {
+      "close": 124.5,
+      "date": "2026-03-09",
+      "high": 124.5,
+      "low": 116.5,
+      "open": 119.5
+    },
+    {
+      "close": 129.0,
+      "date": "2026-03-10",
+      "high": 129.0,
+      "low": 124.0,
+      "open": 126.0
+    },
+    {
+      "close": 132.0,
+      "date": "2026-03-11",
+      "high": 135.0,
+      "low": 127.5,
+      "open": 130.0
+    },
+    {
+      "close": 136.0,
+      "date": "2026-03-12",
+      "high": 138.0,
+      "low": 130.5,
+      "open": 130.5
+    },
+    {
+      "close": 136.0,
+      "date": "2026-03-13",
+      "high": 136.5,
+      "low": 132.5,
+      "open": 135.0
+    },
+    {
+      "close": 135.5,
+      "date": "2026-03-16",
+      "high": 137.5,
+      "low": 132.5,
+      "open": 137.5
+    },
+    {
+      "close": 138.0,
+      "date": "2026-03-17",
+      "high": 138.0,
+      "low": 134.0,
+      "open": 136.0
+    },
+    {
+      "close": 136.0,
+      "date": "2026-03-18",
+      "high": 139.5,
+      "low": 135.5,
+      "open": 137.0
+    },
+    {
+      "close": 131.5,
+      "date": "2026-03-19",
+      "high": 136.5,
+      "low": 131.5,
+      "open": 135.0
+    },
+    {
+      "close": 128.5,
+      "date": "2026-03-20",
+      "high": 132.5,
+      "low": 127.0,
+      "open": 131.5
+    },
+    {
+      "close": 129.0,
+      "date": "2026-03-23",
+      "high": 129.5,
+      "low": 124.5,
+      "open": 126.5
+    },
+    {
+      "close": 127.0,
+      "date": "2026-03-24",
+      "high": 132.5,
+      "low": 127.0,
+      "open": 132.5
+    },
+    {
+      "close": 112.5,
+      "date": "2026-03-25",
+      "high": 120.0,
+      "low": 112.0,
+      "open": 119.0
+    },
+    {
+      "close": 109.5,
+      "date": "2026-03-26",
+      "high": 113.5,
+      "low": 109.0,
+      "open": 113.0
+    },
+    {
+      "close": 107.0,
+      "date": "2026-03-27",
+      "high": 109.5,
+      "low": 104.5,
+      "open": 109.5
+    },
+    {
+      "close": 100.0,
+      "date": "2026-03-30",
+      "high": 104.5,
+      "low": 99.8,
+      "open": 104.5
+    },
+    {
+      "close": 97.5,
+      "date": "2026-03-31",
+      "high": 100.5,
+      "low": 96.3,
+      "open": 99.5
+    },
+    {
+      "close": 97.7,
+      "date": "2026-04-01",
+      "high": 101.0,
+      "low": 96.8,
+      "open": 100.0
+    },
+    {
+      "close": 98.7,
+      "date": "2026-04-02",
+      "high": 100.0,
+      "low": 97.5,
+      "open": 99.0
+    },
+    {
+      "close": 98.9,
+      "date": "2026-04-07",
+      "high": 100.5,
+      "low": 97.7,
+      "open": 100.5
+    },
+    {
+      "close": 101.0,
+      "date": "2026-04-08",
+      "high": 101.0,
+      "low": 99.0,
+      "open": 99.4
+    },
+    {
+      "close": 100.5,
+      "date": "2026-04-09",
+      "high": 101.5,
+      "low": 99.6,
+      "open": 101.0
+    },
+    {
+      "close": 100.0,
+      "date": "2026-04-10",
+      "high": 101.5,
+      "low": 99.2,
+      "open": 101.0
+    },
+    {
+      "close": 98.5,
+      "date": "2026-04-13",
+      "high": 99.3,
+      "low": 96.6,
+      "open": 99.3
+    },
+    {
+      "close": 98.1,
+      "date": "2026-04-14",
+      "high": 99.4,
+      "low": 97.6,
+      "open": 99.4
+    },
+    {
+      "close": 97.5,
+      "date": "2026-04-15",
+      "high": 98.1,
+      "low": 96.7,
+      "open": 98.1
+    },
+    {
+      "close": 98.4,
+      "date": "2026-04-16",
+      "high": 99.2,
+      "low": 97.4,
+      "open": 97.9
+    },
+    {
+      "close": 98.9,
+      "date": "2026-04-17",
+      "high": 101.0,
+      "low": 98.8,
+      "open": 99.0
+    },
+    {
+      "close": 100.5,
+      "date": "2026-04-20",
+      "high": 101.0,
+      "low": 98.6,
+      "open": 98.9
+    },
+    {
+      "close": 101.0,
+      "date": "2026-04-21",
+      "high": 101.5,
+      "low": 99.9,
+      "open": 101.0
+    },
+    {
+      "close": 102.0,
+      "date": "2026-04-22",
+      "high": 103.0,
+      "low": 101.0,
+      "open": 101.5
+    },
+    {
+      "close": 98.0,
+      "date": "2026-04-23",
+      "high": 103.5,
+      "low": 97.2,
+      "open": 103.5
+    },
+    {
+      "close": 96.6,
+      "date": "2026-04-24",
+      "high": 99.1,
+      "low": 96.3,
+      "open": 99.1
+    },
+    {
+      "close": 97.0,
+      "date": "2026-04-27",
+      "high": 97.3,
+      "low": 95.1,
+      "open": 97.3
+    },
+    {
+      "close": 97.4,
+      "date": "2026-04-28",
+      "high": 97.7,
+      "low": 96.4,
+      "open": 97.6
+    },
+    {
+      "close": 98.2,
+      "date": "2026-04-29",
+      "high": 98.5,
+      "low": 97.2,
+      "open": 97.5
+    },
+    {
+      "close": 97.6,
+      "date": "2026-04-30",
+      "high": 98.3,
+      "low": 97.2,
+      "open": 98.3
+    },
+    {
+      "close": 98.4,
+      "date": "2026-05-04",
+      "high": 99.2,
+      "low": 98.1,
+      "open": 98.4
+    },
+    {
+      "close": 98.2,
+      "date": "2026-05-05",
+      "high": 98.6,
+      "low": 97.8,
+      "open": 98.6
+    },
+    {
+      "close": 97.5,
+      "date": "2026-05-06",
+      "high": 98.8,
+      "low": 97.0,
+      "open": 98.8
+    },
+    {
+      "close": 99.1,
+      "date": "2026-05-07",
+      "high": 99.3,
+      "low": 97.5,
+      "open": 97.7
+    },
+    {
+      "close": 98.2,
+      "date": "2026-05-08",
+      "high": 100.0,
+      "low": 97.5,
+      "open": 99.0
+    },
+    {
+      "close": 99.8,
+      "date": "2026-05-11",
+      "high": 99.8,
+      "low": 97.5,
+      "open": 98.7
+    },
+    {
+      "close": 98.5,
+      "date": "2026-05-12",
+      "high": 100.5,
+      "low": 98.2,
+      "open": 100.0
+    },
+    {
+      "close": 97.9,
+      "date": "2026-05-13",
+      "high": 98.4,
+      "low": 97.4,
+      "open": 98.4
+    },
+    {
+      "close": 103.5,
+      "date": "2026-05-14",
+      "high": 107.0,
+      "low": 98.5,
+      "open": 98.5
+    },
+    {
+      "close": 99.5,
+      "date": "2026-05-15",
+      "high": 104.5,
+      "low": 99.5,
+      "open": 104.0
+    },
+    {
+      "close": 99.6,
+      "date": "2026-05-18",
+      "high": 101.5,
+      "low": 97.5,
+      "open": 100.5
+    },
+    {
+      "close": 98.5,
+      "date": "2026-05-19",
+      "high": 102.0,
+      "low": 98.5,
+      "open": 99.8
+    },
+    {
+      "close": 98.5,
+      "date": "2026-05-20",
+      "high": 99.2,
+      "low": 97.5,
+      "open": 98.7
+    },
+    {
+      "close": 102.0,
+      "date": "2026-05-21",
+      "high": 104.0,
+      "low": 99.5,
+      "open": 99.7
+    },
+    {
+      "close": 104.0,
+      "date": "2026-05-22",
+      "high": 105.0,
+      "low": 102.0,
+      "open": 103.5
+    },
+    {
+      "close": 103.5,
+      "date": "2026-05-25",
+      "high": 105.5,
+      "low": 103.0,
+      "open": 105.0
+    },
+    {
+      "close": 104.0,
+      "date": "2026-05-26",
+      "high": 105.0,
+      "low": 102.5,
+      "open": 103.5
+    },
+    {
+      "close": 103.0,
+      "date": "2026-05-27",
+      "high": 105.0,
+      "low": 102.5,
+      "open": 105.0
+    },
+    {
+      "close": 103.0,
+      "date": "2026-05-28",
+      "high": 104.5,
+      "low": 102.5,
+      "open": 103.0
+    },
+    {
+      "close": 104.0,
+      "date": "2026-05-29",
+      "high": 106.5,
+      "low": 104.0,
+      "open": 104.0
+    },
+    {
+      "close": 107.0,
+      "date": "2026-06-01",
+      "high": 108.0,
+      "low": 104.5,
+      "open": 104.5
+    },
+    {
+      "close": 108.5,
+      "date": "2026-06-02",
+      "high": 109.5,
+      "low": 106.5,
+      "open": 108.0
+    },
+    {
+      "close": 110.5,
+      "date": "2026-06-03",
+      "high": 112.5,
+      "low": 109.0,
+      "open": 112.0
+    },
+    {
+      "close": 110.0,
+      "date": "2026-06-04",
+      "high": 111.0,
+      "low": 108.0,
+      "open": 109.0
+    },
+    {
+      "close": 109.0,
+      "date": "2026-06-05",
+      "high": 111.5,
+      "low": 109.0,
+      "open": 110.0
+    },
+    {
+      "close": 104.5,
+      "date": "2026-06-08",
+      "high": 105.0,
+      "low": 102.0,
+      "open": 104.0
+    },
+    {
+      "close": 105.5,
+      "date": "2026-06-09",
+      "high": 106.5,
+      "low": 105.0,
+      "open": 105.5
+    },
+    {
+      "close": 104.0,
+      "date": "2026-06-10",
+      "high": 108.5,
+      "low": 104.0,
+      "open": 106.0
+    },
+    {
+      "close": 104.5,
+      "date": "2026-06-11",
+      "high": 105.0,
+      "low": 103.0,
+      "open": 104.0
+    },
+    {
+      "close": 105.5,
+      "date": "2026-06-12",
+      "high": 109.0,
+      "low": 105.5,
+      "open": 106.0
+    },
+    {
+      "close": 104.0,
+      "date": "2026-06-15",
+      "high": 107.0,
+      "low": 104.0,
+      "open": 107.0
+    },
+    {
+      "close": 101.5,
+      "date": "2026-06-16",
+      "high": 105.0,
+      "low": 101.0,
+      "open": 104.5
+    },
+    {
+      "close": 102.5,
+      "date": "2026-06-17",
+      "high": 104.0,
+      "low": 100.0,
+      "open": 101.0
+    },
+    {
+      "close": 101.5,
+      "date": "2026-06-18",
+      "high": 103.5,
+      "low": 101.0,
+      "open": 102.5
+    },
+    {
+      "close": 100.5,
+      "date": "2026-06-22",
+      "high": 102.5,
+      "low": 100.5,
+      "open": 102.5
+    },
+    {
+      "close": 100.0,
+      "date": "2026-06-23",
+      "high": 101.5,
+      "low": 99.5,
+      "open": 101.5
+    },
+    {
+      "close": 99.5,
+      "date": "2026-06-24",
+      "high": 100.5,
+      "low": 98.7,
+      "open": 99.5
+    },
+    {
+      "close": 98.2,
+      "date": "2026-06-25",
+      "high": 101.0,
+      "low": 98.2,
+      "open": 100.0
+    },
+    {
+      "close": 96.0,
+      "date": "2026-06-26",
+      "high": 98.5,
+      "low": 95.8,
+      "open": 98.5
+    },
+    {
+      "close": 98.5,
+      "date": "2026-06-29",
+      "high": 98.7,
+      "low": 95.8,
+      "open": 96.1
+    },
+    {
+      "close": 101.0,
+      "date": "2026-06-30",
+      "high": 102.5,
+      "low": 98.0,
+      "open": 99.5
+    },
+    {
+      "close": 106.5,
+      "date": "2026-07-01",
+      "high": 111.0,
+      "low": 102.5,
+      "open": 103.0
+    },
+    {
+      "close": 102.5,
+      "date": "2026-07-02",
+      "high": 106.5,
+      "low": 102.0,
+      "open": 105.0
+    },
+    {
+      "close": 107.0,
+      "date": "2026-07-03",
+      "high": 108.0,
+      "low": 101.0,
+      "open": 101.5
+    },
+    {
+      "close": 110.0,
+      "date": "2026-07-06",
+      "high": 113.0,
+      "low": 108.0,
+      "open": 109.5
+    },
+    {
+      "close": 107.0,
+      "date": "2026-07-07",
+      "high": 111.0,
+      "low": 106.0,
+      "open": 110.5
+    },
+    {
+      "close": 107.5,
+      "date": "2026-07-08",
+      "high": 108.5,
+      "low": 106.0,
+      "open": 107.0
+    },
+    {
+      "close": 112.0,
+      "date": "2026-07-09",
+      "high": 116.5,
+      "low": 112.0,
+      "open": 114.0
+    },
+    {
+      "close": 115.0,
+      "date": "2026-07-13",
+      "high": 117.5,
+      "low": 112.0,
+      "open": 114.0
+    },
+    {
+      "close": 114.5,
+      "date": "2026-07-14",
+      "high": 115.0,
+      "low": 110.5,
+      "open": 114.5
+    },
+    {
+      "close": 115.5,
+      "date": "2026-07-15",
+      "high": 116.0,
+      "low": 113.5,
+      "open": 115.5
+    },
+    {
+      "close": 113.5,
+      "date": "2026-07-16",
+      "high": 116.0,
+      "low": 113.5,
+      "open": 115.0
+    },
+    {
+      "close": 110.0,
+      "date": "2026-07-17",
+      "high": 114.5,
+      "low": 109.0,
+      "open": 111.0
+    },
+    {
+      "close": 109.5,
+      "date": "2026-07-20",
+      "high": 112.0,
+      "low": 108.5,
+      "open": 112.0
+    },
+    {
+      "close": 116.5,
+      "date": "2026-07-21",
+      "high": 120.0,
+      "low": 110.0,
+      "open": 110.5
+    },
+    {
+      "close": 114.5,
+      "date": "2026-07-22",
+      "high": 118.5,
+      "low": 114.0,
+      "open": 115.5
+    },
+    {
+      "close": 113.5,
+      "date": "2026-07-23",
+      "high": 116.0,
+      "low": 112.5,
+      "open": 115.5
+    },
+    {
+      "close": 113.0,
+      "date": "2026-07-24",
+      "high": 115.0,
+      "low": 112.5,
+      "open": 113.0
+    },
+    {
+      "close": 112.5,
+      "date": "2026-07-27",
+      "high": 114.0,
+      "low": 111.0,
+      "open": 114.0
+    },
+    {
+      "close": 110.0,
+      "date": "2026-07-28",
+      "high": 112.5,
+      "low": 109.0,
+      "open": 111.5
+    },
+    {
+      "close": 107.0,
+      "date": "2026-07-29",
+      "high": 111.5,
+      "low": 104.0,
+      "open": 110.0
+    },
+    {
+      "close": 110.0,
+      "date": "2026-07-30",
+      "high": 110.5,
+      "low": 105.5,
+      "open": 106.0
+    },
+    {
+      "close": 114.0,
+      "date": "2026-07-31",
+      "high": 117.5,
+      "low": 114.0,
+      "open": 114.0
+    },
+    {
+      "close": 114.5,
+      "date": "2026-08-03",
+      "high": 116.5,
+      "low": 112.5,
+      "open": 113.0
+    },
+    {
+      "close": 114.0,
+      "date": "2026-08-04",
+      "high": 114.5,
+      "low": 112.5,
+      "open": 113.0
+    },
+    {
+      "close": 115.0,
+      "date": "2026-08-05",
+      "high": 116.0,
+      "low": 114.5,
+      "open": 115.0
+    },
+    {
+      "close": 115.5,
+      "date": "2026-08-06",
+      "high": 116.0,
+      "low": 113.5,
+      "open": 114.5
+    },
+    {
+      "close": 115.0,
+      "date": "2026-08-07",
+      "high": 117.0,
+      "low": 114.5,
+      "open": 115.5
+    },
+    {
+      "close": 114.5,
+      "date": "2026-08-10",
+      "high": 115.0,
+      "low": 112.0,
+      "open": 114.0
+    },
+    {
+      "close": 114.5,
+      "date": "2026-08-11",
+      "high": 115.0,
+      "low": 112.5,
+      "open": 114.0
+    },
+    {
+      "close": 114.5,
+      "date": "2026-08-12",
+      "high": 116.0,
+      "low": 114.0,
+      "open": 114.0
+    },
+    {
+      "close": 114.5,
+      "date": "2026-08-13",
+      "high": 117.0,
+      "low": 114.0,
+      "open": 116.5
+    },
+    {
+      "close": 116.5,
+      "date": "2026-08-14",
+      "high": 117.5,
+      "low": 114.0,
+      "open": 114.5
+    },
+    {
+      "close": 121.5,
+      "date": "2026-08-17",
+      "high": 125.0,
+      "low": 116.5,
+      "open": 118.0
+    },
+    {
+      "close": 117.5,
+      "date": "2026-08-18",
+      "high": 123.0,
+      "low": 116.5,
+      "open": 122.0
+    },
+    {
+      "close": 117.5,
+      "date": "2026-08-19",
+      "high": 119.0,
+      "low": 115.0,
+      "open": 116.5
+    },
+    {
+      "close": 117.5,
+      "date": "2026-08-20",
+      "high": 119.0,
+      "low": 117.0,
+      "open": 118.5
+    },
+    {
+      "close": 117.0,
+      "date": "2026-08-21",
+      "high": 118.5,
+      "low": 116.0,
+      "open": 117.0
+    },
+    {
+      "close": 116.0,
+      "date": "2026-08-24",
+      "high": 117.0,
+      "low": 115.5,
+      "open": 117.0
+    },
+    {
+      "close": 115.0,
+      "date": "2026-08-25",
+      "high": 116.0,
+      "low": 113.5,
+      "open": 115.5
+    },
+    {
+      "close": 116.0,
+      "date": "2026-08-26",
+      "high": 116.5,
+      "low": 115.0,
+      "open": 115.5
+    },
+    {
+      "close": 116.0,
+      "date": "2026-08-27",
+      "high": 117.0,
+      "low": 115.5,
+      "open": 116.5
+    },
+    {
+      "close": 116.0,
+      "date": "2026-08-28",
+      "high": 117.0,
+      "low": 115.0,
+      "open": 116.5
+    },
+    {
+      "close": 117.0,
+      "date": "2026-08-31",
+      "high": 119.0,
+      "low": 114.5,
+      "open": 114.5
+    },
+    {
+      "close": 118.5,
+      "date": "2026-09-01",
+      "high": 119.0,
+      "low": 117.0,
+      "open": 117.0
+    },
+    {
+      "close": 116.0,
+      "date": "2026-09-02",
+      "high": 118.0,
+      "low": 116.0,
+      "open": 118.0
+    },
+    {
+      "close": 113.0,
+      "date": "2026-09-03",
+      "high": 116.5,
+      "low": 113.0,
+      "open": 116.0
+    },
+    {
+      "close": 115.0,
+      "date": "2026-09-04",
+      "high": 115.0,
+      "low": 112.5,
+      "open": 113.5
+    },
+    {
+      "close": 113.0,
+      "date": "2026-09-07",
+      "high": 116.0,
+      "low": 112.0,
+      "open": 115.5
+    },
+    {
+      "close": 112.5,
+      "date": "2026-09-08",
+      "high": 113.5,
+      "low": 112.0,
+      "open": 113.0
+    },
+    {
+      "close": 115.0,
+      "date": "2026-09-09",
+      "high": 116.0,
+      "low": 113.0,
+      "open": 113.0
+    },
+    {
+      "close": 115.0,
+      "date": "2026-09-10",
+      "high": 115.5,
+      "low": 114.5,
+      "open": 115.0
+    },
+    {
+      "close": 115.5,
+      "date": "2026-09-11",
+      "high": 116.0,
+      "low": 113.0,
+      "open": 114.0
+    },
+    {
+      "close": 116.5,
+      "date": "2026-09-14",
+      "high": 118.0,
+      "low": 114.0,
+      "open": 114.0
+    },
+    {
+      "close": 115.0,
+      "date": "2026-09-15",
+      "high": 117.0,
+      "low": 114.5,
+      "open": 116.5
+    },
+    {
+      "close": 115.0,
+      "date": "2026-09-16",
+      "high": 117.0,
+      "low": 115.0,
+      "open": 116.0
+    },
+    {
+      "close": 118.0,
+      "date": "2026-09-17",
+      "high": 118.5,
+      "low": 116.0,
+      "open": 116.0
+    },
+    {
+      "close": 118.5,
+      "date": "2026-09-18",
+      "high": 119.0,
+      "low": 117.0,
+      "open": 119.0
+    },
+    {
+      "close": 119.0,
+      "date": "2026-09-21",
+      "high": 120.0,
+      "low": 116.5,
+      "open": 119.0
+    },
+    {
+      "close": 118.5,
+      "date": "2026-09-22",
+      "high": 119.5,
+      "low": 117.0,
+      "open": 119.5
+    },
+    {
+      "close": 117.5,
+      "date": "2026-09-23",
+      "high": 118.5,
+      "low": 116.5,
+      "open": 118.5
+    },
+    {
+      "close": 116.5,
+      "date": "2026-09-24",
+      "high": 117.0,
+      "low": 116.0,
+      "open": 117.0
+    },
+    {
+      "close": 117.0,
+      "date": "2026-09-29",
+      "high": 117.5,
+      "low": 116.0,
+      "open": 116.5
+    },
+    {
+      "close": 116.5,
+      "date": "2026-09-30",
+      "high": 118.0,
+      "low": 116.0,
+      "open": 117.5
+    },
+    {
+      "close": 117.5,
+      "date": "2026-10-01",
+      "high": 117.5,
+      "low": 116.5,
+      "open": 117.0
+    },
+    {
+      "close": 117.5,
+      "date": "2026-10-02",
+      "high": 117.5,
+      "low": 116.5,
+      "open": 117.0
+    },
+    {
+      "close": 117.0,
+      "date": "2026-10-05",
+      "high": 117.5,
+      "low": 116.5,
+      "open": 117.5
+    },
+    {
+      "close": 118.5,
+      "date": "2026-10-06",
+      "high": 119.0,
+      "low": 116.5,
+      "open": 117.5
+    },
+    {
+      "close": 118.0,
+      "date": "2026-10-07",
+      "high": 119.0,
+      "low": 117.5,
+      "open": 118.5
+    },
+    {
+      "close": 118.5,
+      "date": "2026-10-08",
+      "high": 118.5,
+      "low": 117.0,
+      "open": 118.0
+    },
+    {
+      "close": 118.5,
+      "date": "2026-10-12",
+      "high": 119.5,
+      "low": 118.0,
+      "open": 118.5
+    },
+    {
+      "close": 119.0,
+      "date": "2026-10-13",
+      "high": 119.5,
+      "low": 117.5,
+      "open": 118.0
+    },
+    {
+      "close": 120.5,
+      "date": "2026-10-14",
+      "high": 121.0,
+      "low": 119.0,
+      "open": 119.0
+    },
+    {
+      "close": 121.0,
+      "date": "2026-10-15",
+      "high": 122.0,
+      "low": 119.5,
+      "open": 120.5
+    },
+    {
+      "close": 122.5,
+      "date": "2026-10-16",
+      "high": 124.5,
+      "low": 121.5,
+      "open": 121.5
+    },
+    {
+      "close": 120.0,
+      "date": "2026-10-19",
+      "high": 122.5,
+      "low": 119.0,
+      "open": 122.0
+    },
+    {
+      "close": 123.0,
+      "date": "2026-10-20",
+      "high": 125.0,
+      "low": 119.0,
+      "open": 119.0
+    },
+    {
+      "close": 124.5,
+      "date": "2026-10-21",
+      "high": 125.5,
+      "low": 123.0,
+      "open": 123.0
+    },
+    {
+      "close": 125.5,
+      "date": "2026-10-22",
+      "high": 127.0,
+      "low": 124.0,
+      "open": 125.0
+    },
+    {
+      "close": 126.5,
+      "date": "2026-10-27",
+      "high": 127.5,
+      "low": 124.0,
+      "open": 125.5
+    },
+    {
+      "close": 125.0,
+      "date": "2026-10-28",
+      "high": 127.5,
+      "low": 124.5,
+      "open": 127.5
+    },
+    {
+      "close": 123.0,
+      "date": "2026-10-29",
+      "high": 125.0,
+      "low": 122.5,
+      "open": 125.0
+    },
+    {
+      "close": 123.0,
+      "date": "2026-10-30",
+      "high": 123.5,
+      "low": 121.0,
+      "open": 123.0
+    },
+    {
+      "close": 124.0,
+      "date": "2026-11-02",
+      "high": 125.0,
+      "low": 123.0,
+      "open": 123.0
+    },
+    {
+      "close": 122.0,
+      "date": "2026-11-03",
+      "high": 126.0,
+      "low": 121.0,
+      "open": 123.0
+    },
+    {
+      "close": 122.0,
+      "date": "2026-11-04",
+      "high": 124.0,
+      "low": 118.0,
+      "open": 123.5
+    },
+    {
+      "close": 119.5,
+      "date": "2026-11-05",
+      "high": 123.0,
+      "low": 119.0,
+      "open": 122.5
+    },
+    {
+      "close": 116.5,
+      "date": "2026-11-06",
+      "high": 118.0,
+      "low": 110.0,
+      "open": 111.0
+    },
+    {
+      "close": 116.5,
+      "date": "2026-11-09",
+      "high": 120.0,
+      "low": 116.5,
+      "open": 117.5
+    },
+    {
+      "close": 107.0,
+      "date": "2026-11-10",
+      "high": 117.0,
+      "low": 106.0,
+      "open": 117.0
+    },
+    {
+      "close": 109.5,
+      "date": "2026-11-11",
+      "high": 110.0,
+      "low": 106.0,
+      "open": 107.0
+    },
+    {
+      "close": 106.0,
+      "date": "2026-11-12",
+      "high": 109.5,
+      "low": 105.0,
+      "open": 109.0
+    },
+    {
+      "close": 109.5,
+      "date": "2026-11-13",
+      "high": 110.5,
+      "low": 106.0,
+      "open": 106.5
+    },
+    {
+      "close": 103.5,
+      "date": "2026-11-16",
+      "high": 110.0,
+      "low": 103.5,
+      "open": 110.0
+    },
+    {
+      "close": 100.5,
+      "date": "2026-11-17",
+      "high": 103.5,
+      "low": 100.5,
+      "open": 102.5
+    },
+    {
+      "close": 101.0,
+      "date": "2026-11-18",
+      "high": 102.5,
+      "low": 98.2,
+      "open": 102.0
+    },
+    {
+      "close": 96.6,
+      "date": "2026-11-19",
+      "high": 102.5,
+      "low": 96.3,
+      "open": 101.0
+    },
+    {
+      "close": 90.3,
+      "date": "2026-11-20",
+      "high": 96.7,
+      "low": 90.2,
+      "open": 96.7
+    },
+    {
+      "close": 93.3,
+      "date": "2026-11-23",
+      "high": 93.8,
+      "low": 89.7,
+      "open": 90.3
+    },
+    {
+      "close": 100.5,
+      "date": "2026-11-24",
+      "high": 101.5,
+      "low": 98.8,
+      "open": 101.0
+    },
+    {
+      "close": 97.7,
+      "date": "2026-11-25",
+      "high": 99.9,
+      "low": 95.0,
+      "open": 97.3
+    },
+    {
+      "close": 100.5,
+      "date": "2026-11-26",
+      "high": 101.5,
+      "low": 98.0,
+      "open": 98.7
+    },
+    {
+      "close": 100.5,
+      "date": "2026-11-27",
+      "high": 102.5,
+      "low": 99.6,
+      "open": 101.0
+    }
+  ],
+  "stock_id": "3005"
+}

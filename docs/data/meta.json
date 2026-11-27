@@ -1,0 +1,87 @@
+{
+  "branch_coverage_by_days": {
+    "20": {
+      "branch_covered": 648,
+      "rows": [
+        {
+          "attempted": 215,
+          "empty_count": 0,
+          "failed_count": 0,
+          "market": "TPEX",
+          "no_branch": 715,
+          "not_attempted": 715,
+          "remaining": 715,
+          "stocks_with_branch": 215,
+          "total_stocks": 930
+        },
+        {
+          "attempted": 433,
+          "empty_count": 0,
+          "failed_count": 0,
+          "market": "TWSE",
+          "no_branch": 685,
+          "not_attempted": 685,
+          "remaining": 685,
+          "stocks_with_branch": 433,
+          "total_stocks": 1118
+        }
+      ]
+    },
+    "5": {
+      "branch_covered": 0,
+      "rows": [
+        {
+          "attempted": 0,
+          "empty_count": 0,
+          "failed_count": 0,
+          "market": "TPEX",
+          "no_branch": 930,
+          "not_attempted": 930,
+          "remaining": 930,
+          "stocks_with_branch": 0,
+          "total_stocks": 930
+        },
+        {
+          "attempted": 0,
+          "empty_count": 0,
+          "failed_count": 0,
+          "market": "TWSE",
+          "no_branch": 1118,
+          "not_attempted": 1118,
+          "remaining": 1118,
+          "stocks_with_branch": 0,
+          "total_stocks": 1118
+        }
+      ]
+    }
+  },
+  "branch_covered": 648,
+  "days": [
+    5,
+    20
+  ],
+  "esb_count": 385,
+  "exported_at": "2026-11-27 16:13:46",
+  "include_all_details": false,
+  "latest_date": "2026-11-27",
+  "missing_details": [],
+  "search_market_counts": {
+    "ESB": 377,
+    "TPEX": 896,
+    "TWSE": 1092
+  },
+  "static_search_count_by_days": {
+    "20": 2365,
+    "5": 2365
+  },
+  "static_stock_count": 964,
+  "stock_count": 2048,
+  "tpex_count": 930,
+  "twse_count": 1118,
+  "watchlist": [
+    "2376",
+    "2382",
+    "2324",
+    "6196"
+  ]
+}

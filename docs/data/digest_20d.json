@@ -1,0 +1,374 @@
+{
+  "days": 20,
+  "new_entrants": {
+    "big_holder_increase": [
+      {
+        "name": "陽程",
+        "rank_no": 8,
+        "score": 19.55,
+        "stock_id": "3498"
+      }
+    ],
+    "momentum_inst_buy": [
+      {
+        "name": "國建",
+        "rank_no": 2,
+        "score": 74.01,
+        "stock_id": "2501"
+      },
+      {
+        "name": "元創精密",
+        "rank_no": 6,
+        "score": 7.64,
+        "stock_id": "3685"
+      },
+      {
+        "name": "國產",
+        "rank_no": 7,
+        "score": 65.83,
+        "stock_id": "2504"
+      },
+      {
+        "name": "群光",
+        "rank_no": 8,
+        "score": 45.25,
+        "stock_id": "2385"
+      },
+      {
+        "name": "微端",
+        "rank_no": 12,
+        "score": 85.07,
+        "stock_id": "3285"
+      },
+      {
+        "name": "長榮鋼",
+        "rank_no": 16,
+        "score": 62.73,
+        "stock_id": "2211"
+      },
+      {
+        "name": "昇達科",
+        "rank_no": 17,
+        "score": 30.41,
+        "stock_id": "3491"
+      },
+      {
+        "name": "信邦",
+        "rank_no": 19,
+        "score": 48.17,
+        "stock_id": "3023"
+      },
+      {
+        "name": "萬泰科",
+        "rank_no": 20,
+        "score": 38.93,
+        "stock_id": "6190"
+      }
+    ],
+    "multifactor_score": [
+      {
+        "name": "寬宏藝術",
+        "rank_no": 6,
+        "score": 74.26,
+        "stock_id": "6596"
+      },
+      {
+        "name": "立萬利",
+        "rank_no": 11,
+        "score": 70.0,
+        "stock_id": "3054"
+      },
+      {
+        "name": "大統益",
+        "rank_no": 15,
+        "score": 68.3,
+        "stock_id": "1232"
+      },
+      {
+        "name": "鼎固-KY",
+        "rank_no": 16,
+        "score": 68.01,
+        "stock_id": "2923"
+      },
+      {
+        "name": "日成-KY",
+        "rank_no": 18,
+        "score": 67.37,
+        "stock_id": "4807"
+      },
+      {
+        "name": "新海",
+        "rank_no": 20,
+        "score": 66.68,
+        "stock_id": "9926"
+      }
+    ]
+  },
+  "ranking_labels": {
+    "big_holder_increase": "大戶增持 + 法人買超",
+    "momentum_inst_buy": "動能 + 法人買超",
+    "multifactor_score": "多因子綜合分"
+  },
+  "signals": {
+    "big_holder": [
+      {
+        "name": "長榮航",
+        "stock_id": "2618",
+        "value": 0.45
+      },
+      {
+        "name": "中鼎",
+        "stock_id": "9933",
+        "value": 1.74
+      },
+      {
+        "name": "國建",
+        "stock_id": "2501",
+        "value": 0.4
+      },
+      {
+        "name": "台驊控股",
+        "stock_id": "2636",
+        "value": 0.88
+      },
+      {
+        "name": "競國",
+        "stock_id": "6108",
+        "value": 4.04
+      },
+      {
+        "name": "新美齊",
+        "stock_id": "2442",
+        "value": 0.62
+      },
+      {
+        "name": "三洋電",
+        "stock_id": "1614",
+        "value": 0.38
+      },
+      {
+        "name": "華航",
+        "stock_id": "2610",
+        "value": 0.76
+      },
+      {
+        "name": "大成",
+        "stock_id": "1210",
+        "value": 0.51
+      },
+      {
+        "name": "中磊",
+        "stock_id": "5388",
+        "value": 0.95
+      }
+    ],
+    "branch_streak": [
+      {
+        "broker": "摩根大通",
+        "name": "潤弘",
+        "stock_id": "2597",
+        "value": 20
+      },
+      {
+        "broker": "新加坡商瑞銀",
+        "name": "長榮航",
+        "stock_id": "2618",
+        "value": 20
+      },
+      {
+        "broker": "台灣摩根士丹利",
+        "name": "中鼎",
+        "stock_id": "9933",
+        "value": 20
+      },
+      {
+        "broker": "台灣摩根士丹利",
+        "name": "寬宏藝術",
+        "stock_id": "6596",
+        "value": 4
+      },
+      {
+        "broker": "美商高盛",
+        "name": "國建",
+        "stock_id": "2501",
+        "value": 10
+      },
+      {
+        "broker": "凱基",
+        "name": "中華電",
+        "stock_id": "2412",
+        "value": 11
+      },
+      {
+        "broker": "凱基-東勢",
+        "name": "立萬利",
+        "stock_id": "3054",
+        "value": 12
+      },
+      {
+        "broker": "摩根大通",
+        "name": "儒鴻",
+        "stock_id": "1476",
+        "value": 20
+      },
+      {
+        "broker": "台灣摩根士丹利",
+        "name": "鼎固-KY",
+        "stock_id": "2923",
+        "value": 5
+      },
+      {
+        "broker": "美商高盛",
+        "name": "競國",
+        "stock_id": "6108",
+        "value": 12
+      }
+    ],
+    "day_trader": [
+      {
+        "broker": "凱基-台北",
+        "name": "慶豐富",
+        "stock_id": "9935"
+      },
+      {
+        "broker": "凱基-台北",
+        "name": "新美齊",
+        "stock_id": "2442"
+      },
+      {
+        "broker": "凱基-台北",
+        "name": "中磊",
+        "stock_id": "5388"
+      },
+      {
+        "broker": "凱基-台北",
+        "name": "長榮鋼",
+        "stock_id": "2211"
+      },
+      {
+        "broker": "凱基-台北",
+        "name": "商億-KY",
+        "stock_id": "8482"
+      },
+      {
+        "broker": "國票-敦北法人",
+        "name": "信邦",
+        "stock_id": "3023"
+      },
+      {
+        "broker": "凱基-台北",
+        "name": "豪展",
+        "stock_id": "4735"
+      }
+    ],
+    "margin_down": [
+      {
+        "name": "榮運",
+        "stock_id": "2607",
+        "value": -2
+      },
+      {
+        "name": "東洋",
+        "stock_id": "4105",
+        "value": -2
+      },
+      {
+        "name": "科定",
+        "stock_id": "6655",
+        "value": -3
+      },
+      {
+        "name": "天品",
+        "stock_id": "6199",
+        "value": -2
+      },
+      {
+        "name": "倚天酷碁-創",
+        "stock_id": "2432",
+        "value": -3
+      },
+      {
+        "name": "櫻花建",
+        "stock_id": "2539",
+        "value": -2
+      },
+      {
+        "name": "大世科",
+        "stock_id": "8099",
+        "value": -2
+      },
+      {
+        "name": "遠雄",
+        "stock_id": "5522",
+        "value": -2
+      },
+      {
+        "name": "訊達",
+        "stock_id": "6140",
+        "value": -2
+      },
+      {
+        "name": "大武山",
+        "stock_id": "6952",
+        "value": -3
+      }
+    ],
+    "margin_up": [
+      {
+        "name": "國建",
+        "stock_id": "2501",
+        "value": 2
+      },
+      {
+        "name": "慶豐富",
+        "stock_id": "9935",
+        "value": 2
+      },
+      {
+        "name": "大統益",
+        "stock_id": "1232",
+        "value": 2
+      },
+      {
+        "name": "鼎固-KY",
+        "stock_id": "2923",
+        "value": 3
+      },
+      {
+        "name": "日成-KY",
+        "stock_id": "4807",
+        "value": 3
+      },
+      {
+        "name": "競國",
+        "stock_id": "6108",
+        "value": 2
+      },
+      {
+        "name": "新海",
+        "stock_id": "9926",
+        "value": 3
+      },
+      {
+        "name": "三洋電",
+        "stock_id": "1614",
+        "value": 2
+      },
+      {
+        "name": "富林-KY",
+        "stock_id": "1341",
+        "value": 2
+      },
+      {
+        "name": "愛山林",
+        "stock_id": "2540",
+        "value": 2
+      }
+    ]
+  },
+  "snapshot_dates": [
+    "2026-11-27",
+    "2026-11-26"
+  ],
+  "state": "ready"
+}

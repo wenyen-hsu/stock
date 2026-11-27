@@ -1,0 +1,201 @@
+{
+  "clusters": [],
+  "days": 5,
+  "prev_date": "2026-11-26",
+  "state": "ready",
+  "strong_sectors": [
+    {
+      "avg_chg_1d_pct": 3.09,
+      "avg_multifactor": -21.14,
+      "industry": "航運業",
+      "inst_net_lot": -63,
+      "is_sub": true,
+      "member_count": 3,
+      "name": "軍工航太",
+      "up_count": 3,
+      "up_ratio_pct": 100.0
+    },
+    {
+      "avg_chg_1d_pct": 1.16,
+      "avg_multifactor": -11.24,
+      "industry": "造紙工業",
+      "inst_net_lot": -241,
+      "is_sub": false,
+      "member_count": 7,
+      "name": "造紙工業",
+      "up_count": 5,
+      "up_ratio_pct": 71.4
+    },
+    {
+      "avg_chg_1d_pct": 1.1,
+      "avg_multifactor": 20.32,
+      "industry": "油電燃氣業",
+      "inst_net_lot": 2611,
+      "is_sub": false,
+      "member_count": 12,
+      "name": "油電燃氣業",
+      "up_count": 9,
+      "up_ratio_pct": 75.0
+    },
+    {
+      "avg_chg_1d_pct": 0.96,
+      "avg_multifactor": 1.63,
+      "industry": "水泥工業",
+      "inst_net_lot": 5342,
+      "is_sub": false,
+      "member_count": 7,
+      "name": "水泥工業",
+      "up_count": 5,
+      "up_ratio_pct": 71.4
+    },
+    {
+      "avg_chg_1d_pct": 0.51,
+      "avg_multifactor": 11.74,
+      "industry": "汽車工業",
+      "inst_net_lot": 312,
+      "is_sub": false,
+      "member_count": 44,
+      "name": "汽車工業",
+      "up_count": 26,
+      "up_ratio_pct": 59.1
+    },
+    {
+      "avg_chg_1d_pct": 0.48,
+      "avg_multifactor": 12.27,
+      "industry": "居家生活",
+      "inst_net_lot": -497,
+      "is_sub": false,
+      "member_count": 35,
+      "name": "居家生活",
+      "up_count": 16,
+      "up_ratio_pct": 45.7
+    },
+    {
+      "avg_chg_1d_pct": 0.42,
+      "avg_multifactor": 11.65,
+      "industry": "貿易百貨業",
+      "inst_net_lot": -531,
+      "is_sub": false,
+      "member_count": 18,
+      "name": "貿易百貨業",
+      "up_count": 9,
+      "up_ratio_pct": 50.0
+    },
+    {
+      "avg_chg_1d_pct": 0.41,
+      "avg_multifactor": 5.39,
+      "industry": "紡織纖維",
+      "inst_net_lot": -535,
+      "is_sub": false,
+      "member_count": 51,
+      "name": "紡織纖維",
+      "up_count": 29,
+      "up_ratio_pct": 56.9
+    }
+  ],
+  "trade_date": "2026-11-27",
+  "volume_spikes": [
+    {
+      "chg_1d_pct": 9.92,
+      "foreign_net_lot": -298.0,
+      "industry": "通信網路業",
+      "latest_volume_lot": 3735.0,
+      "multifactor_score": -3.1,
+      "name": "台嘉碩",
+      "stock_id": "3221",
+      "sub_industry": "",
+      "trust_net_lot": 0.0,
+      "volume_ratio_1d": 3.02
+    }
+  ],
+  "weak_sectors": [
+    {
+      "avg_chg_1d_pct": -4.74,
+      "avg_multifactor": -0.17,
+      "industry": "半導體業",
+      "inst_net_lot": -415,
+      "is_sub": true,
+      "member_count": 4,
+      "name": "矽智財",
+      "up_count": 0,
+      "up_ratio_pct": 0.0
+    },
+    {
+      "avg_chg_1d_pct": -4.57,
+      "avg_multifactor": -4.18,
+      "industry": "通信網路業",
+      "inst_net_lot": 513,
+      "is_sub": true,
+      "member_count": 4,
+      "name": "光通訊",
+      "up_count": 0,
+      "up_ratio_pct": 0.0
+    },
+    {
+      "avg_chg_1d_pct": -4.53,
+      "avg_multifactor": 7.82,
+      "industry": "光電業",
+      "inst_net_lot": -263,
+      "is_sub": true,
+      "member_count": 3,
+      "name": "光學鏡頭",
+      "up_count": 0,
+      "up_ratio_pct": 0.0
+    },
+    {
+      "avg_chg_1d_pct": -4.26,
+      "avg_multifactor": 15.17,
+      "industry": "運動休閒",
+      "inst_net_lot": 420,
+      "is_sub": false,
+      "member_count": 30,
+      "name": "運動休閒",
+      "up_count": 7,
+      "up_ratio_pct": 23.3
+    },
+    {
+      "avg_chg_1d_pct": -2.57,
+      "avg_multifactor": 7.8,
+      "industry": "電機機械",
+      "inst_net_lot": 982,
+      "is_sub": false,
+      "member_count": 109,
+      "name": "電機機械",
+      "up_count": 36,
+      "up_ratio_pct": 33.0
+    },
+    {
+      "avg_chg_1d_pct": -2.53,
+      "avg_multifactor": 5.45,
+      "industry": "綠能環保",
+      "inst_net_lot": 74,
+      "is_sub": false,
+      "member_count": 76,
+      "name": "綠能環保",
+      "up_count": 27,
+      "up_ratio_pct": 35.5
+    },
+    {
+      "avg_chg_1d_pct": -2.32,
+      "avg_multifactor": 8.2,
+      "industry": "食品工業",
+      "inst_net_lot": 1502,
+      "is_sub": false,
+      "member_count": 40,
+      "name": "食品工業",
+      "up_count": 18,
+      "up_ratio_pct": 45.0
+    },
+    {
+      "avg_chg_1d_pct": -1.98,
+      "avg_multifactor": 18.2,
+      "industry": "航運業",
+      "inst_net_lot": -955,
+      "is_sub": true,
+      "member_count": 3,
+      "name": "散裝航運",
+      "up_count": 0,
+      "up_ratio_pct": 0.0
+    }
+  ]
+}
